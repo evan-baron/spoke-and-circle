@@ -10,11 +10,11 @@ const FORMATS = ['In-person', 'Virtual', 'Hybrid'];
 const VIRTUAL_PLATFORMS = ['Zwift', 'Strava', 'TrainerRoad', 'Other'];
 const SCHEDULES = ['Weekly', 'Monthly', 'Annually'];
 const PACES = ['Casual', 'Steady', 'Competitive'];
-const SEGMENTATIONS = ['A Group', 'B Group', 'C Group', 'N/A'];
 const DROP_POLICIES = ['Drop', 'No-drop'];
 const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced'];
 const RANKING_SYSTEMS = ['Captains', 'Ride Leaders', 'Liaison', 'N/A'];
 const PERSONA_OPTIONS = [
+	{ value: 'allAllowed', label: 'All allowed' },
 	{ value: 'womenOnly', label: 'Women only' },
 	{ value: 'menOnly', label: 'Men only' },
 	{ value: 'lgbtOnly', label: 'LGBT only' },
@@ -87,6 +87,10 @@ export default function NewTeamPage() {
 	const [personaOtherText, setPersonaOtherText] = useState('');
 	const [virtualPlatforms, setVirtualPlatforms] = useState<string[]>([]);
 	const [virtualPlatformOtherText, setVirtualPlatformOtherText] = useState('');
+	const [hasSegmentation, setHasSegmentation] = useState<'yes' | 'no' | null>(
+		null,
+	);
+	const [segmentationDescription, setSegmentationDescription] = useState('');
 
 	function handleSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
@@ -103,6 +107,10 @@ export default function NewTeamPage() {
 				prev.filter((platform) => platform !== value)
 			:	[...prev, value],
 		);
+	}
+
+	function handleSegmentationChange(value: 'yes' | 'no') {
+		setHasSegmentation((prev) => (prev === value ? null : value));
 	}
 
 	if (submitted) {
@@ -437,7 +445,7 @@ export default function NewTeamPage() {
 							</div>
 						</div>
 					</Section>
-
+					{/* 
 					<Section title='Ride details'>
 						<Field label='Schedule'>
 							<select
@@ -473,19 +481,39 @@ export default function NewTeamPage() {
 								))}
 							</select>
 						</Field>
-						<Field label='Skill/Speed Segmentation'>
-							<select
-								name='segmentation'
-								defaultValue='N/A'
-								className={styles.input}
-							>
-								{SEGMENTATIONS.map((option) => (
-									<option key={option} value={option}>
-										{option}
-									</option>
-								))}
-							</select>
-						</Field>
+						<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
+							<span className={styles.fieldLabel}>
+								Skill/Speed Segmentation
+							</span>
+							<div className={styles.checkboxRow}>
+								<Checkbox
+									label='Yes'
+									name='hasSegmentation'
+									value='yes'
+									checked={hasSegmentation === 'yes'}
+									onChange={() => handleSegmentationChange('yes')}
+								/>
+								<Checkbox
+									label='No'
+									name='hasSegmentation'
+									value='no'
+									checked={hasSegmentation === 'no'}
+									onChange={() => handleSegmentationChange('no')}
+								/>
+							</div>
+							{hasSegmentation === 'yes' && (
+								<input
+									type='text'
+									name='segmentationDescription'
+									placeholder='A Group, B Group, etc.'
+									value={segmentationDescription}
+									onChange={(event) =>
+										setSegmentationDescription(event.target.value)
+									}
+									className={styles.input}
+								/>
+							)}
+						</div>
 						<Field label='Typical distance' hint='Miles'>
 							<input
 								type='number'
@@ -525,7 +553,7 @@ export default function NewTeamPage() {
 								<option value='Private'>Private</option>
 							</select>
 						</Field>
-					</Section>
+					</Section> */}
 
 					<Section title='Team / club details'>
 						<Field label='Competitive or casual'>
