@@ -1,6 +1,34 @@
 :root {
-	--color-primary: hsl(0, 0%, 10%);
-	--color-accent: hsl(25, 100%, 50%);
+	--color-ink: hsl(0, 0%, 12%);
+	--color-ink-soft: hsl(0, 0%, 38%);
+	--color-paper: hsl(38, 45%, 96%);
+	--color-paper-raised: hsl(36, 40%, 91%);
+	--color-line: hsl(32, 18%, 80%);
+
+	--color-rust: hsl(18, 78%, 46%);
+	--color-rust-soft: hsl(18, 70%, 92%);
+	--color-forest: hsl(152, 38%, 22%);
+	--color-forest-soft: hsl(152, 38%, 91%);
+	--color-gold: hsl(42, 88%, 38%);
+	--color-gold-soft: hsl(42, 80%, 90%);
+	--color-ink-soft-bg: hsl(0, 0%, 90%);
+
+	--font-serif: var(--font-domine), 'Iowan Old Style', Georgia, serif;
+	--font-mono:
+		ui-monospace, 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace;
+
+	--space-3xs: 0.25rem;
+	--space-2xs: 0.5rem;
+	--space-xs: 0.75rem;
+	--space-sm: 1rem;
+	--space-md: 1.5rem;
+	--space-lg: 2.25rem;
+	--space-xl: 3.5rem;
+	--space-2xl: 5rem;
+
+	--content-width: 72rem;
+	--radius: 3px;
+	--shadow-offset: 3px;
 }
 
 html,
@@ -9,11 +37,26 @@ body {
 	width: 100%;
 }
 
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
 body {
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
-	font-family: var(--font-domine), sans-serif;
+	font-family: var(--font-serif);
+	color: var(--color-ink);
+	background-color: var(--color-paper);
+	background-image: radial-gradient(circle, hsl(30, 20%, 45%, 0.14) 1px, transparent 1px);
+	background-size: 24px 24px;
+}
+
+::selection {
+	background: var(--color-rust);
+	color: var(--color-paper);
 }
 
 main {
@@ -21,14 +64,46 @@ main {
 	flex-direction: column;
 	align-items: center;
 	flex-grow: 1;
-	padding: 0 1rem;
+	width: 100%;
+	padding: var(--space-lg) var(--space-sm) var(--space-xl);
+
+	@media screen and (min-width: 768px) {
+		padding: var(--space-2xl) var(--space-lg) var(--space-xl);
+	}
 }
 
 h1,
 h2,
 h3,
-h4,
+h4 {
+	font-family: var(--font-serif);
+	font-weight: 700;
+	line-height: 1.1;
+	letter-spacing: -0.01em;
+}
+
+h1 {
+	font-size: clamp(2.25rem, 1.7rem + 2.2vw, 3.75rem);
+}
+
+h2 {
+	font-size: clamp(1.5rem, 1.3rem + 1vw, 2.25rem);
+}
+
+h3 {
+	font-size: clamp(1.15rem, 1.05rem + 0.5vw, 1.4rem);
+}
+
 p,
 li {
 	text-wrap: pretty;
+	line-height: 1.55;
+}
+
+a {
+	color: inherit;
+}
+
+button {
+	font-family: inherit;
 }

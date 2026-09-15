@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import { Domine } from 'next/font/google';
-import { AuthProvider } from '@/lib/auth-context';
 import Header from '@/components/Header/Header';
 import { Footer } from '@/components/Footer/Footer';
 import './reset.css';
@@ -25,11 +24,9 @@ export default function RootLayout({
 	return (
 		<html lang='en' className={domine.variable}>
 			<body>
-				<AuthProvider>
-					<Header />
-					<main>{children}</main>
-					<Footer />
-				</AuthProvider>
+				<Header />
+				<main>{children}</main>
+				<Footer />
 			</body>
 		</html>
 	);

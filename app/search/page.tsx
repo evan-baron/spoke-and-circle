@@ -4,6 +4,7 @@ import { ResultsTable } from '@/components/ResultsTable/ResultsTable';
 import { SearchLocationTracker } from '@/components/SearchLocationTracker/SearchLocationTracker';
 import { searchTeams } from '@/lib/search';
 import type { BikeType, ClubType } from '@/lib/types';
+import styles from './search.module.scss';
 
 const CLUB_TYPES: ClubType[] = ['Team', 'Club', 'Group', 'Organization'];
 const BIKE_TYPES: BikeType[] = [
@@ -64,9 +65,9 @@ export default async function SearchPage({
 	const results = searchTeams(params);
 
 	return (
-		<main>
+		<main className={styles.page}>
 			<SearchLocationTracker />
-			<div>
+			<div className={styles.wrap}>
 				<h1>Search results</h1>
 
 				<FilterBar
@@ -76,7 +77,7 @@ export default async function SearchPage({
 					defaultBikeType={params.bikeType ?? ''}
 				/>
 
-				<p>
+				<p className={styles.count}>
 					{results.length} {results.length === 1 ? 'team' : 'teams'} found
 					{params.q && <> for &ldquo;{params.q}&rdquo;</>}
 					{params.location && <> near &ldquo;{params.location}&rdquo;</>}

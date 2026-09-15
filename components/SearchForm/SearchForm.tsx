@@ -1,3 +1,5 @@
+import styles from "./searchForm.module.scss";
+
 interface SearchFormProps {
   defaultQ?: string;
   defaultLocation?: string;
@@ -8,9 +10,9 @@ const TYPE_OPTIONS = ["Team", "Club", "Group", "Organization"];
 
 export function SearchForm({ defaultQ = "", defaultLocation = "", defaultType = "" }: SearchFormProps) {
   return (
-    <form action="/search" method="GET">
-      <div>
-        <label htmlFor="q">
+    <form action="/search" method="GET" className={styles.form}>
+      <div className={`${styles.field} ${styles.fieldWide}`}>
+        <label htmlFor="q" className={styles.label}>
           Keyword
         </label>
         <input
@@ -19,10 +21,11 @@ export function SearchForm({ defaultQ = "", defaultLocation = "", defaultType = 
           type="text"
           defaultValue={defaultQ}
           placeholder="e.g. gravel, women only, no-drop&hellip;"
+          className={styles.input}
         />
       </div>
-      <div>
-        <label htmlFor="location">
+      <div className={styles.field}>
+        <label htmlFor="location" className={styles.label}>
           Location
         </label>
         <input
@@ -31,13 +34,14 @@ export function SearchForm({ defaultQ = "", defaultLocation = "", defaultType = 
           type="text"
           defaultValue={defaultLocation}
           placeholder="City or state"
+          className={styles.input}
         />
       </div>
-      <div>
-        <label htmlFor="type">
+      <div className={styles.field}>
+        <label htmlFor="type" className={styles.label}>
           Type
         </label>
-        <select id="type" name="type" defaultValue={defaultType}>
+        <select id="type" name="type" defaultValue={defaultType} className={styles.input}>
           <option value="">Any type</option>
           {TYPE_OPTIONS.map((option) => (
             <option key={option} value={option}>
@@ -46,7 +50,7 @@ export function SearchForm({ defaultQ = "", defaultLocation = "", defaultType = 
           ))}
         </select>
       </div>
-      <button type="submit">
+      <button type="submit" className={styles.submit}>
         Find teams
       </button>
     </form>

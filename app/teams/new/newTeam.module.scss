@@ -1,0 +1,203 @@
+@use '@/styles/mixins' as *;
+
+.page {
+	align-items: stretch;
+}
+
+.wrap {
+	@include container;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-md);
+}
+
+.backLink {
+	font-family: var(--font-mono);
+	font-size: 0.8125rem;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--color-ink-soft);
+	width: fit-content;
+
+	&:hover {
+		color: var(--color-rust);
+	}
+}
+
+.header {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2xs);
+
+	p {
+		color: var(--color-ink-soft);
+	}
+}
+
+.eyebrow {
+	@include eyebrow;
+	color: var(--color-rust);
+}
+
+.form {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-lg);
+}
+
+.section {
+	@include card;
+	padding: var(--space-md);
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+}
+
+.sectionTitle {
+	@include eyebrow;
+	padding: 0 var(--space-2xs);
+}
+
+.sectionDescription {
+	color: var(--color-ink-soft);
+	font-size: 0.9375rem;
+}
+
+.sectionGrid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--space-sm) var(--space-md);
+
+	@include from($bp-md) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+}
+
+.fieldFull {
+	@include from($bp-md) {
+		grid-column: 1 / -1;
+	}
+}
+
+.fieldLabel {
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	color: var(--color-ink-soft);
+}
+
+.fieldHint {
+	font-size: 0.8125rem;
+	color: var(--color-ink-soft);
+	font-style: italic;
+}
+
+.input {
+	@include field-input;
+}
+
+textarea.input {
+	resize: vertical;
+	min-height: 4.5rem;
+}
+
+.checkboxGroup {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.checkboxRow {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-xs) var(--space-md);
+}
+
+.checkbox {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.45rem;
+	font-size: 0.9375rem;
+
+	input {
+		accent-color: var(--color-rust);
+		width: 1.05rem;
+		height: 1.05rem;
+	}
+}
+
+.submitRow {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+	align-items: flex-start;
+	padding-top: var(--space-sm);
+	border-top: 1.5px dashed var(--color-line);
+
+	p {
+		font-size: 0.875rem;
+		color: var(--color-ink-soft);
+		font-style: italic;
+	}
+
+	@include from($bp-md) {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+	}
+}
+
+.buttonSolid {
+	@include button-solid;
+}
+
+.buttonOutline {
+	@include button-outline;
+}
+
+.confirmation {
+	align-items: center;
+	justify-content: center;
+	flex-grow: 1;
+	min-height: 60vh;
+}
+
+.confirmationCard {
+	@include card;
+	max-width: 30rem;
+	padding: var(--space-xl) var(--space-lg);
+	text-align: center;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+	align-items: center;
+}
+
+.confirmationMark {
+	font-family: var(--font-mono);
+	font-size: 2rem;
+	color: var(--color-forest);
+	background: var(--color-forest-soft);
+	width: 3.5rem;
+	height: 3.5rem;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.confirmationActions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-sm);
+	justify-content: center;
+	margin-top: var(--space-2xs);
+}

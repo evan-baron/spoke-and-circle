@@ -1,12 +1,27 @@
-.logo {
-	font-weight: bold;
-	font-size: 1.5rem;
-	.left {
-		color: var(--color-primary);
-	}
+@use '@/styles/mixins' as *;
 
-	.and,
-	.right {
-		color: var(--color-accent);
+.logo {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	text-decoration: none;
+}
+
+.wordmark {
+	font-weight: 700;
+	font-size: 1.25rem;
+	letter-spacing: -0.01em;
+
+	@include from($bp-md) {
+		font-size: 1.4rem;
 	}
+}
+
+.left {
+	color: var(--color-paper);
+}
+
+.and,
+.right {
+	color: var(--color-rust);
 }

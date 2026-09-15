@@ -1,0 +1,43 @@
+@use '@/styles/mixins' as *;
+
+.section {
+	@include card;
+	padding: var(--space-md);
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+}
+
+.title {
+	@include eyebrow;
+}
+
+.grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--space-xs) var(--space-md);
+
+	@include from($bp-sm) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+.row {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+	padding-bottom: var(--space-2xs);
+	border-bottom: 1px solid var(--color-line);
+}
+
+.rowLabel {
+	font-family: var(--font-mono);
+	font-size: 0.6875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--color-ink-soft);
+}
+
+.rowValue {
+	font-size: 0.9375rem;
+}

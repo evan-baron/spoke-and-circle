@@ -14,6 +14,7 @@ import {
 } from "@/lib/format";
 import { getAllTeams, getTeamById } from "@/lib/teams";
 import { toneForPace, toneForVisibility } from "@/lib/tone";
+import styles from "./team.module.scss";
 
 interface TeamPageParams {
   teamId: string;
@@ -51,35 +52,35 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
   const hasSocial = Object.values(team.social).some(Boolean);
 
   return (
-    <main>
-      <div>
+    <main className={styles.page}>
+      <div className={styles.wrap}>
         <BackButton />
 
-        <header>
-          <div>
+        <header className={styles.header}>
+          <div className={styles.badgeRow}>
             <Badge tone="ink">{team.type}</Badge>
             <Badge tone={toneForVisibility(team.visibility)}>{team.visibility}</Badge>
             <Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
             <Badge tone="gold">{team.bikeType}</Badge>
           </div>
           <h1>{team.name}</h1>
-          <p>
+          <p className={styles.subline}>
             {team.location} &middot; Founded {team.founded} &middot;{" "}
             {formatMemberCount(team.memberCount)}
           </p>
-          {team.missionStatement && <p>&ldquo;{team.missionStatement}&rdquo;</p>}
+          {team.missionStatement && <p className={styles.mission}>&ldquo;{team.missionStatement}&rdquo;</p>}
         </header>
 
-        <div>
-          <aside>
-            <div>
-              <p>How to join</p>
+        <div className={styles.body}>
+          <aside className={styles.aside}>
+            <div className={styles.asideCard}>
+              <p className={styles.asideTitle}>How to join</p>
               <p>{team.howToJoin}</p>
-              {team.waitlist && <p>Currently accepting waitlist signups only.</p>}
+              {team.waitlist && <p className={styles.waitlistNote}>Currently accepting waitlist signups only.</p>}
               {joinFlags.length > 0 && (
-                <div>
+                <div className={styles.flagRow}>
                   {joinFlags.map((flag) => (
-                    <span key={flag}>
+                    <span key={flag} className={styles.flag}>
                       {flag}
                     </span>
                   ))}
@@ -87,9 +88,9 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
               )}
             </div>
 
-            <div>
-              <p>Quick facts</p>
-              <dl>
+            <div className={styles.asideCard}>
+              <p className={styles.asideTitle}>Quick facts</p>
+              <dl className={styles.factList}>
                 <dt>Location</dt>
                 <dd>{team.location}</dd>
                 {team.additionalLocations && team.additionalLocations.length > 0 && (
@@ -135,7 +136,7 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
             </div>
           </aside>
 
-          <div>
+          <div className={styles.main}>
             <DetailSection title="Format & membership">
               <DetailRow label="Virtual or in-person" value={team.format} />
               {team.virtualPlatform && <DetailRow label="Virtual platform" value={team.virtualPlatform} />}

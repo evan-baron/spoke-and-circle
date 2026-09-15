@@ -1,3 +1,5 @@
+import styles from "./badge.module.scss";
+
 export type BadgeTone = "forest" | "rust" | "gold" | "ink";
 
 interface BadgeProps {
@@ -5,6 +7,6 @@ interface BadgeProps {
   tone?: BadgeTone;
 }
 
-export function Badge({ children }: BadgeProps) {
-  return <span>{children}</span>;
+export function Badge({ children, tone = "ink" }: BadgeProps) {
+  return <span className={`${styles.badge} ${styles[tone]}`}>{children}</span>;
 }

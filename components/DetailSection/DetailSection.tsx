@@ -1,3 +1,5 @@
+import styles from "./detailSection.module.scss";
+
 interface DetailSectionProps {
   title: string;
   children: React.ReactNode;
@@ -5,9 +7,9 @@ interface DetailSectionProps {
 
 export function DetailSection({ title, children }: DetailSectionProps) {
   return (
-    <section>
-      <h2>{title}</h2>
-      <div>{children}</div>
+    <section className={styles.section}>
+      <h2 className={styles.title}>{title}</h2>
+      <div className={styles.grid}>{children}</div>
     </section>
   );
 }
@@ -19,9 +21,9 @@ interface DetailRowProps {
 
 export function DetailRow({ label, value }: DetailRowProps) {
   return (
-    <div>
-      <span>{label}</span>
-      <div>{value}</div>
+    <div className={styles.row}>
+      <span className={styles.rowLabel}>{label}</span>
+      <div className={styles.rowValue}>{value}</div>
     </div>
   );
 }

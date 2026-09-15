@@ -1,6 +1,7 @@
 "use client";
 
 import type { FormEvent } from "react";
+import styles from "./filterBar.module.scss";
 
 interface FilterBarProps {
   defaultQ?: string;
@@ -23,13 +24,14 @@ export function FilterBar({
   defaultBikeType = "",
 }: FilterBarProps) {
   return (
-    <form action="/search" method="GET">
+    <form action="/search" method="GET" className={styles.form}>
       <input
         name="q"
         type="text"
         defaultValue={defaultQ}
         placeholder="Keyword&hellip;"
         aria-label="Keyword"
+        className={styles.input}
       />
       <input
         name="location"
@@ -37,12 +39,14 @@ export function FilterBar({
         defaultValue={defaultLocation}
         placeholder="Location&hellip;"
         aria-label="Location"
+        className={styles.input}
       />
       <select
         name="type"
         defaultValue={defaultType}
         aria-label="Type"
         onChange={autoSubmit}
+        className={styles.input}
       >
         <option value="">Any type</option>
         {TYPE_OPTIONS.map((option) => (
@@ -56,6 +60,7 @@ export function FilterBar({
         defaultValue={defaultBikeType}
         aria-label="Bike type"
         onChange={autoSubmit}
+        className={styles.input}
       >
         <option value="">Any bike type</option>
         {BIKE_TYPE_OPTIONS.map((option) => (
@@ -64,7 +69,7 @@ export function FilterBar({
           </option>
         ))}
       </select>
-      <button type="submit">
+      <button type="submit" className={styles.submit}>
         Apply
       </button>
     </form>

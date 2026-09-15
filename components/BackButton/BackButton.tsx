@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { LAST_SEARCH_KEY } from "@/components/SearchLocationTracker/SearchLocationTracker";
+import styles from "./backButton.module.scss";
 
 export function BackButton() {
   const router = useRouter();
@@ -17,7 +18,7 @@ export function BackButton() {
   }
 
   return (
-    <button type="button" onClick={handleClick}>
+    <button type="button" onClick={handleClick} className={styles.back}>
       &larr; Back to search
     </button>
   );

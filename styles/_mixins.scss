@@ -1,0 +1,111 @@
+// Shared breakpoints + primitives for the "field guide" design system.
+// Mobile-first: base styles target small screens, `from()` layers on larger ones.
+
+$bp-sm: 480px;
+$bp-md: 768px;
+$bp-lg: 1024px;
+$bp-xl: 1280px;
+
+@mixin from($breakpoint) {
+	@media screen and (min-width: $breakpoint) {
+		@content;
+	}
+}
+
+@mixin container {
+	width: 100%;
+	max-width: var(--content-width);
+	margin-inline: auto;
+}
+
+@mixin eyebrow {
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	font-weight: 600;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: var(--color-ink-soft);
+}
+
+@mixin button-solid {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	font-family: var(--font-mono);
+	font-size: 0.8125rem;
+	font-weight: 600;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+	white-space: nowrap;
+	padding: 0.85rem 1.35rem;
+	border: 1.5px solid var(--color-ink);
+	border-radius: var(--radius);
+	background: var(--color-ink);
+	color: var(--color-paper);
+	box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--color-rust);
+	cursor: pointer;
+	transition:
+		transform 0.15s ease,
+		box-shadow 0.15s ease;
+
+	&:hover {
+		transform: translate(-2px, -2px);
+		box-shadow: calc(var(--shadow-offset) + 2px) calc(var(--shadow-offset) + 2px) 0
+			var(--color-rust);
+	}
+
+	&:active {
+		transform: translate(0, 0);
+		box-shadow: 1px 1px 0 var(--color-rust);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--color-rust);
+		outline-offset: 2px;
+	}
+}
+
+@mixin button-outline {
+	@include button-solid;
+	background: transparent;
+	color: var(--color-ink);
+	box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--color-ink);
+
+	&:hover {
+		box-shadow: calc(var(--shadow-offset) + 2px) calc(var(--shadow-offset) + 2px) 0
+			var(--color-ink);
+	}
+}
+
+@mixin field-input {
+	width: 100%;
+	font-family: var(--font-serif);
+	font-size: 1rem;
+	padding: 0.7rem 0.85rem;
+	border: 1.5px solid var(--color-line);
+	border-radius: var(--radius);
+	background: var(--color-paper);
+	color: var(--color-ink);
+	transition:
+		border-color 0.15s ease,
+		box-shadow 0.15s ease;
+
+	&::placeholder {
+		color: var(--color-ink-soft);
+		opacity: 0.7;
+	}
+
+	&:focus-visible {
+		outline: none;
+		border-color: var(--color-rust);
+		box-shadow: 0 0 0 3px var(--color-rust-soft);
+	}
+}
+
+@mixin card {
+	background: var(--color-paper);
+	border: 1.5px solid var(--color-ink);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--color-line);
+}

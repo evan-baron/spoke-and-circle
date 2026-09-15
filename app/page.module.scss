@@ -1,0 +1,126 @@
+@use '@/styles/mixins' as *;
+
+.hero {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.heroInner {
+	@include container;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--space-sm);
+	animation: rise 0.5s ease both;
+
+	h1 {
+		max-width: 20ch;
+	}
+}
+
+.eyebrow {
+	@include eyebrow;
+}
+
+.heroCopy {
+	color: var(--color-ink-soft);
+	font-size: 1.0625rem;
+	max-width: 42ch;
+}
+
+.searchWrap {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--space-xs);
+	margin-top: var(--space-2xs);
+}
+
+.submitLink {
+	@include button-outline;
+}
+
+.quickLinks {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-2xs) var(--space-xs);
+	margin-top: var(--space-xs);
+}
+
+.quickLinksLabel {
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--color-ink-soft);
+}
+
+.quickLink {
+	font-family: var(--font-mono);
+	font-size: 0.8125rem;
+	padding: 0.3rem 0.65rem;
+	border: 1px solid var(--color-line);
+	border-radius: var(--radius);
+	background: var(--color-paper-raised);
+	transition:
+		border-color 0.15s ease,
+		color 0.15s ease;
+
+	&:hover {
+		border-color: var(--color-rust);
+		color: var(--color-rust);
+	}
+}
+
+.explainer {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	margin-top: var(--space-2xl);
+}
+
+.explainerGrid {
+	@include container;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--space-md);
+
+	@include from($bp-md) {
+		grid-template-columns: repeat(3, 1fr);
+	}
+}
+
+.explainerCard {
+	@include card;
+	padding: var(--space-md);
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+
+	p {
+		color: var(--color-ink-soft);
+		font-size: 0.9375rem;
+	}
+}
+
+.explainerNumber {
+	font-family: var(--font-mono);
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var(--color-rust);
+	letter-spacing: 0.04em;
+}
+
+@keyframes rise {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}

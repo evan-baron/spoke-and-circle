@@ -1,0 +1,124 @@
+@use '@/styles/mixins' as *;
+
+.page {
+	align-items: stretch;
+}
+
+.wrap {
+	@include container;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-md);
+}
+
+.header {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2xs);
+	padding-bottom: var(--space-md);
+	border-bottom: 1.5px dashed var(--color-line);
+}
+
+.badgeRow {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.4rem;
+	margin-bottom: 0.15rem;
+}
+
+.subline {
+	color: var(--color-ink-soft);
+	font-family: var(--font-mono);
+	font-size: 0.875rem;
+}
+
+.mission {
+	font-style: italic;
+	color: var(--color-ink-soft);
+	max-width: 48ch;
+	margin-top: 0.25rem;
+}
+
+.body {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--space-md);
+
+	@include from($bp-lg) {
+		grid-template-columns: 20rem 1fr;
+		gap: var(--space-lg);
+		align-items: start;
+	}
+}
+
+.aside {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+
+	@include from($bp-lg) {
+		position: sticky;
+		top: calc(3.75rem + var(--space-md));
+	}
+}
+
+.asideCard {
+	@include card;
+	padding: var(--space-sm) var(--space-md);
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+}
+
+.asideTitle {
+	@include eyebrow;
+}
+
+.waitlistNote {
+	font-size: 0.875rem;
+	color: var(--color-rust);
+}
+
+.flagRow {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0.35rem;
+	margin-top: 0.2rem;
+}
+
+.flag {
+	font-family: var(--font-mono);
+	font-size: 0.6875rem;
+	text-transform: uppercase;
+	letter-spacing: 0.03em;
+	padding: 0.2rem 0.5rem;
+	border: 1px solid var(--color-line);
+	border-radius: var(--radius);
+	color: var(--color-ink-soft);
+}
+
+.factList {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 0.35rem var(--space-2xs);
+	font-size: 0.875rem;
+
+	dt {
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+		color: var(--color-ink-soft);
+		white-space: nowrap;
+	}
+
+	dd {
+		word-break: break-word;
+	}
+}
+
+.main {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-md);
+}

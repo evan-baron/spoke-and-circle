@@ -1,0 +1,45 @@
+@use '@/styles/mixins' as *;
+
+.form {
+	@include card;
+	width: 100%;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--space-sm);
+	padding: var(--space-md);
+
+	@include from($bp-md) {
+		grid-template-columns: 2fr 1.3fr 1fr auto;
+		align-items: end;
+		padding: var(--space-md) var(--space-lg);
+	}
+}
+
+.field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+}
+
+.fieldWide {
+	@include from($bp-md) {
+		grid-column: span 1;
+	}
+}
+
+.label {
+	@include eyebrow;
+}
+
+.input {
+	@include field-input;
+}
+
+.submit {
+	@include button-solid;
+	width: 100%;
+
+	@include from($bp-md) {
+		width: auto;
+	}
+}

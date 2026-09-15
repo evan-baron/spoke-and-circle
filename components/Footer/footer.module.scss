@@ -1,0 +1,28 @@
+@use '@/styles/mixins' as *;
+
+.footer {
+	width: 100%;
+	border-top: 1.5px solid var(--color-ink);
+	background: var(--color-paper-raised);
+}
+
+.wrap {
+	@include container;
+	padding: var(--space-md) var(--space-sm);
+
+	@include from($bp-md) {
+		padding: var(--space-md) var(--space-lg);
+	}
+
+	p {
+		font-family: var(--font-mono);
+		font-size: 0.75rem;
+		letter-spacing: 0.02em;
+		color: var(--color-ink-soft);
+		text-align: center;
+
+		@include from($bp-md) {
+			text-align: left;
+		}
+	}
+}

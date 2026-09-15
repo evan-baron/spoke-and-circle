@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { SearchForm } from '@/components/SearchForm/SearchForm';
 import { getAllTeams } from '@/lib/teams';
+import styles from './page.module.scss';
 
 const QUICK_LINKS = [
 	{ label: 'Gravel', href: '/search?q=gravel' },
@@ -16,21 +17,28 @@ export default function HomePage() {
 
 	return (
 		<>
-			<section>
-				<div>
-					<p>A field guide to group rides</p>
+			<section className={styles.hero}>
+				<div className={styles.heroInner}>
+					<p className={styles.eyebrow}>A field guide to group rides</p>
 					<h1>Find the team that matches your cadence.</h1>
-					<p>
+					<p className={styles.heroCopy}>
 						Search {teamCount} sample teams, clubs, and groups by keyword,
 						location, or type &mdash; then share the exact results with a link.
 					</p>
-					<div>
+					<div className={styles.searchWrap}>
 						<SearchForm />
+						<Link href='/teams/new' className={styles.submitLink}>
+							+ Submit your team
+						</Link>
 					</div>
-					<div>
-						<span>Try:</span>
+					<div className={styles.quickLinks}>
+						<span className={styles.quickLinksLabel}>Try:</span>
 						{QUICK_LINKS.map((link) => (
-							<Link key={link.href} href={link.href}>
+							<Link
+								key={link.href}
+								href={link.href}
+								className={styles.quickLink}
+							>
 								{link.label}
 							</Link>
 						))}
@@ -38,26 +46,26 @@ export default function HomePage() {
 				</div>
 			</section>
 
-			<section>
-				<div>
-					<div>
-						<span>01</span>
+			<section className={styles.explainer}>
+				<div className={styles.explainerGrid}>
+					<div className={styles.explainerCard}>
+						<span className={styles.explainerNumber}>01</span>
 						<h3>Search</h3>
 						<p>
 							Filter by keyword, location, or club type. Every combination is a
 							URL you can send.
 						</p>
 					</div>
-					<div>
-						<span>02</span>
+					<div className={styles.explainerCard}>
+						<span className={styles.explainerNumber}>02</span>
 						<h3>Compare</h3>
 						<p>
 							Scan pace, skill level, schedule, and membership details side by
 							side in one table.
 						</p>
 					</div>
-					<div>
-						<span>03</span>
+					<div className={styles.explainerCard}>
+						<span className={styles.explainerNumber}>03</span>
 						<h3>Join</h3>
 						<p>
 							Open a team&rsquo;s full profile for mission, requirements, and

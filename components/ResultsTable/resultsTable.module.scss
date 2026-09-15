@@ -1,0 +1,109 @@
+@use '@/styles/mixins' as *;
+
+.empty {
+	@include card;
+	width: 100%;
+	padding: var(--space-lg);
+	text-align: center;
+	color: var(--color-ink-soft);
+}
+
+// Mobile: card list
+.cardList {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2xs);
+	width: 100%;
+
+	@include from($bp-lg) {
+		display: none;
+	}
+}
+
+.card {
+	@include card;
+	overflow: hidden;
+}
+
+.cardLink {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+	padding: var(--space-sm);
+	text-decoration: none;
+}
+
+.cardHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-2xs);
+}
+
+.cardName {
+	font-weight: 700;
+	font-size: 1.0625rem;
+}
+
+.cardLocation {
+	color: var(--color-ink-soft);
+	font-size: 0.875rem;
+}
+
+.cardBadges {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.4rem;
+	margin-top: 0.15rem;
+}
+
+.cardMeta {
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	color: var(--color-ink-soft);
+}
+
+// Desktop: real table
+.table {
+	display: none;
+	width: 100%;
+	border-collapse: collapse;
+
+	@include from($bp-lg) {
+		display: table;
+	}
+
+	th {
+		text-align: left;
+		font-family: var(--font-mono);
+		font-size: 0.6875rem;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--color-ink-soft);
+		padding: 0.6rem var(--space-xs);
+		border-bottom: 1.5px solid var(--color-ink);
+	}
+
+	td {
+		padding: 0.75rem var(--space-xs);
+		border-bottom: 1px solid var(--color-line);
+		font-size: 0.9375rem;
+	}
+
+	tbody tr {
+		transition: background 0.12s ease;
+
+		&:hover {
+			background: var(--color-paper-raised);
+		}
+	}
+}
+
+.rowLink {
+	font-weight: 600;
+
+	&:hover {
+		color: var(--color-rust);
+	}
+}
