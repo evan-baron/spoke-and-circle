@@ -1,0 +1,129 @@
+// Data shape mirrors the club/team intake form, grouped into the same
+// four sections so the detail page can render section-for-section.
+
+export type ClubType = "Team" | "Club" | "Group" | "Organization";
+
+export type BikeType =
+  | "Road"
+  | "Gravel"
+  | "MTB"
+  | "Track"
+  | "Tri"
+  | "E-bike"
+  | "Mixed";
+
+export type Format = "In-person" | "Virtual" | "Hybrid";
+
+export type VirtualPlatform = "Zwift" | "Strava" | "TrainerRoad" | "Other";
+
+export type Pace = "Casual" | "Steady" | "Competitive";
+
+export type SkillLevel = "Beginner" | "Intermediate" | "Advanced";
+
+export type Segmentation = "A Group" | "B Group" | "C Group" | "N/A";
+
+export type ScheduleFrequency = "Weekly" | "Monthly" | "Annually";
+
+export type DropPolicy = "Drop" | "No-drop";
+
+export type RankingSystem = "Captains" | "Ride Leaders" | "Liaison" | "N/A";
+
+export type Visibility = "Public" | "Private";
+
+export interface AgeRequirement {
+  min?: number;
+  max?: number;
+}
+
+export interface MileageRequirement {
+  min: number;
+  frequency: ScheduleFrequency;
+}
+
+export interface JoinRequirements {
+  tryouts: boolean;
+  referralRequired: boolean;
+  inviteOnly: boolean;
+  open: boolean;
+}
+
+export interface ContactInfo {
+  phone?: string;
+  email?: string;
+}
+
+export interface SocialLinks {
+  instagram?: string;
+  facebook?: string;
+  strava?: string;
+  discord?: string;
+}
+
+export interface Team {
+  id: string;
+
+  // -- Generic Info --
+  name: string;
+  type: ClubType;
+  missionStatement?: string;
+  codeOfConduct?: string;
+  affiliation?: string;
+  location: string;
+  additionalLocations?: string[];
+  founded: number;
+  visibility: Visibility;
+  contact: ContactInfo;
+  primaryLanguage?: string;
+
+  // -- Details --
+  bikeType: BikeType;
+  eBikeAllowed: boolean;
+  format: Format;
+  virtualPlatform?: VirtualPlatform;
+  homeBaseAffiliation?: string;
+  website?: string;
+  social: SocialLinks;
+  ageRequirement?: AgeRequirement;
+  personaRestrictions?: string[];
+  memberCount: number;
+  memberLimit?: number;
+  waitlist: boolean;
+  howToJoin: string;
+
+  // -- Ride Details --
+  rideSchedule: ScheduleFrequency;
+  startTimes?: string[];
+  pace: Pace;
+  segmentation: Segmentation;
+  typicalDistanceMiles: number;
+  typicalElevationGainFt: number;
+  dropPolicy: DropPolicy;
+  rideVisibility: Visibility;
+
+  // -- Team/Club Details --
+  competitiveOrCasual: "Competitive" | "Casual";
+  skillLevel: SkillLevel;
+  instructional: boolean;
+  duesRequired: boolean;
+  duesAmount?: string;
+  duesSchedule?: ScheduleFrequency;
+  requiredRides: boolean;
+  requiredRaces?: number;
+  mileageRequirement?: MileageRequirement;
+  requiredKit: boolean;
+  rankingSystem: RankingSystem;
+  hasRoster: boolean;
+  sponsors?: string[];
+  eventTypes?: string[];
+  joinRequirements: JoinRequirements;
+
+  // -- Search aid, not part of the intake form --
+  tags: string[];
+}
+
+export interface SearchParams {
+  q?: string;
+  location?: string;
+  type?: ClubType;
+  bikeType?: BikeType;
+}

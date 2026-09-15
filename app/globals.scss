@@ -1,0 +1,34 @@
+:root {
+	--color-primary: hsl(0, 0%, 10%);
+	--color-accent: hsl(25, 100%, 50%);
+}
+
+html,
+body {
+	box-sizing: border-box;
+	width: 100%;
+}
+
+body {
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	font-family: var(--font-domine), sans-serif;
+}
+
+main {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	flex-grow: 1;
+	padding: 0 1rem;
+}
+
+h1,
+h2,
+h3,
+h4,
+p,
+li {
+	text-wrap: pretty;
+}

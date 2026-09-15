@@ -1,0 +1,12 @@
+.logo {
+	font-weight: bold;
+	font-size: 1.5rem;
+	.left {
+		color: var(--color-primary);
+	}
+
+	.and,
+	.right {
+		color: var(--color-accent);
+	}
+}
