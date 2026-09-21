@@ -1,7 +1,7 @@
 // Data shape mirrors the club/team intake form, grouped into the same
 // four sections so the detail page can render section-for-section.
 
-export type ClubType = "Team" | "Club" | "Group" | "Organization";
+export type ClubType = "Team" | "Club" | "Group Ride" | "Youth Program" | "Organization";
 
 export type BikeType =
   | "Road"
@@ -19,6 +19,8 @@ export type VirtualPlatform = "Zwift" | "Strava" | "TrainerRoad" | "Other";
 export type Pace = "Casual" | "Steady" | "Competitive";
 
 export type SkillLevel = "Beginner" | "Intermediate" | "Advanced";
+
+export type MtbDiscipline = "Cross-country" | "Trail" | "Enduro" | "Downhill" | "All-mountain";
 
 export type Segmentation = "A Group" | "B Group" | "C Group" | "N/A";
 
@@ -75,8 +77,14 @@ export interface Team {
   contact: ContactInfo;
   primaryLanguage?: string;
 
+  // -- Trust & verification (shown so riders can tell a listing is current,
+  // not an abandoned Facebook group) --
+  verified: boolean;
+  lastActiveYear: number;
+
   // -- Details --
   bikeType: BikeType;
+  discipline?: MtbDiscipline;
   eBikeAllowed: boolean;
   format: Format;
   virtualPlatform?: VirtualPlatform;
@@ -126,4 +134,10 @@ export interface SearchParams {
   location?: string;
   type?: ClubType;
   bikeType?: BikeType;
+  discipline?: MtbDiscipline;
+  skillLevel?: SkillLevel;
+  competitiveOrCasual?: "Competitive" | "Casual";
+  womensOnly?: boolean;
+  youthOnly?: boolean;
+  acceptingNewRiders?: boolean;
 }

@@ -32,3 +32,7 @@ export function formatList(items?: string[]): string {
 export function formatYesNo(value: boolean): string {
   return value ? "Yes" : "No";
 }
+
+export function formatVerification(verified: boolean, lastActiveYear: number): string {
+  return verified ? `Verified · Active ${lastActiveYear}` : `Unverified · Last updated ${lastActiveYear}`;
+}

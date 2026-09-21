@@ -5,8 +5,8 @@ export function Footer() {
 		<footer className={styles.footer}>
 			<div className={styles.wrap}>
 				<p>
-					Spoke &amp; Circle — a wireframe. All teams, routes, and rosters shown
-					are sample data.
+					Spoke &amp; Circle is a wireframe. All teams, routes, and rosters
+					shown are sample data.
 				</p>
 			</div>
 		</footer>

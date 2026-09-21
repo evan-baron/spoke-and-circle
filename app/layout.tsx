@@ -11,7 +11,7 @@ const domine = Domine({
 });
 
 export const metadata: Metadata = {
-	title: 'Spoke & Circle — Find your bike team',
+	title: 'Spoke & Circle | Find your bike team',
 	description:
 		'Search sample bike teams, clubs, and groups by location, type, or keyword.',
 };

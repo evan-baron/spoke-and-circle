@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { BackButton } from "@/components/BackButton/BackButton";
 import { Badge } from "@/components/Badge/Badge";
 import { DetailRow, DetailSection } from "@/components/DetailSection/DetailSection";
+import { getPrimaryContact } from "@/lib/contact";
 import {
   formatAgeRequirement,
   formatDistance,
@@ -10,10 +11,11 @@ import {
   formatList,
   formatMemberCount,
   formatMileageRequirement,
+  formatVerification,
   formatYesNo,
 } from "@/lib/format";
 import { getAllTeams, getTeamById } from "@/lib/teams";
-import { toneForPace, toneForVisibility } from "@/lib/tone";
+import { toneForPace, toneForVerified, toneForVisibility } from "@/lib/tone";
 import styles from "./team.module.scss";
 
 interface TeamPageParams {
@@ -31,7 +33,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { teamId } = await params;
   const team = getTeamById(teamId);
-  return { title: team ? `${team.name} — Spoke & Circle` : "Team not found — Spoke & Circle" };
+  return { title: team ? `${team.name} | Spoke & Circle` : "Team not found | Spoke & Circle" };
 }
 
 export default async function TeamPage({ params }: { params: Promise<TeamPageParams> }) {
@@ -50,6 +52,7 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
   ].filter(Boolean) as string[];
 
   const hasSocial = Object.values(team.social).some(Boolean);
+  const primaryContact = getPrimaryContact(team);
 
   return (
     <main className={styles.page}>
@@ -62,6 +65,10 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
             <Badge tone={toneForVisibility(team.visibility)}>{team.visibility}</Badge>
             <Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
             <Badge tone="gold">{team.bikeType}</Badge>
+            {team.discipline && <Badge tone="gold">{team.discipline}</Badge>}
+            <Badge tone={toneForVerified(team.verified)}>
+              {formatVerification(team.verified, team.lastActiveYear)}
+            </Badge>
           </div>
           <h1>{team.name}</h1>
           <p className={styles.subline}>
@@ -74,6 +81,14 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
         <div className={styles.body}>
           <aside className={styles.aside}>
             <div className={styles.asideCard}>
+              {primaryContact && (
+                <div className={styles.contactButtonWrap}>
+                  <a href={primaryContact.href} className={styles.contactButton}>
+                    Contact team
+                  </a>
+                  <span className={styles.contactChannel}>{primaryContact.channel}</span>
+                </div>
+              )}
               <p className={styles.asideTitle}>How to join</p>
               <p>{team.howToJoin}</p>
               {team.waitlist && <p className={styles.waitlistNote}>Currently accepting waitlist signups only.</p>}
@@ -139,6 +154,7 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
           <div className={styles.main}>
             <DetailSection title="Format & membership">
               <DetailRow label="Virtual or in-person" value={team.format} />
+              {team.discipline && <DetailRow label="Riding style" value={team.discipline} />}
               {team.virtualPlatform && <DetailRow label="Virtual platform" value={team.virtualPlatform} />}
               {team.homeBaseAffiliation && (
                 <DetailRow label="Home-base affiliation" value={team.homeBaseAffiliation} />

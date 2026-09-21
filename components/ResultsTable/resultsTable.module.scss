@@ -64,6 +64,21 @@
 	color: var(--color-ink-soft);
 }
 
+.cardVerification {
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	color: var(--color-ink-soft);
+	margin-top: 0.15rem;
+
+	&[data-verified='true'] {
+		color: var(--color-forest);
+	}
+
+	&[data-verified='false'] {
+		color: var(--color-rust);
+	}
+}
+
 // Desktop: real table
 .table {
 	display: none;

@@ -10,3 +10,7 @@ export function toneForPace(pace: Pace): BadgeTone {
 export function toneForVisibility(visibility: Visibility): BadgeTone {
   return visibility === "Private" ? "rust" : "forest";
 }
+
+export function toneForVerified(verified: boolean): BadgeTone {
+  return verified ? "forest" : "ink";
+}

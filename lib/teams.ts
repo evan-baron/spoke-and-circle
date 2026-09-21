@@ -3,6 +3,7 @@ import type {
   ClubType,
   DropPolicy,
   Format,
+  MtbDiscipline,
   Pace,
   ScheduleFrequency,
   Segmentation,
@@ -39,6 +40,8 @@ function makeTeam(input: TeamInput): Team {
     ...rest,
     visibility: "Public",
     rideVisibility: "Public",
+    verified: true,
+    lastActiveYear: 2026,
     eBikeAllowed: input.bikeType === "E-bike",
     waitlist: false,
     instructional: false,
@@ -78,7 +81,7 @@ export const teams: Team[] = [
     dropPolicy: "No-drop",
     rideSchedule: "Weekly",
     segmentation: "N/A",
-    howToJoin: "Show up to any Tuesday or Saturday ride — no sign-up required.",
+    howToJoin: "Show up to any Tuesday or Saturday ride, no sign-up required.",
     tags: ["road", "social", "no-drop", "weeknight rides", "beginner-friendly"],
     missionStatement:
       "Keep Portland's road riding scene welcoming, low-ego, and fun regardless of pace.",
@@ -94,7 +97,7 @@ export const teams: Team[] = [
   makeTeam({
     id: "mile-high-gravel-grinders",
     name: "Mile High Gravel Grinders",
-    type: "Group",
+    type: "Group Ride",
     location: "Denver, CO",
     founded: 2018,
     bikeType: "Gravel",
@@ -177,12 +180,42 @@ export const teams: Team[] = [
     dropPolicy: "No-drop",
     rideSchedule: "Weekly",
     segmentation: "N/A",
-    howToJoin: "Come to a Saturday trailhead meetup — helmets and full-suspension recommended.",
+    howToJoin: "Come to a Saturday trailhead meetup; helmets and full-suspension recommended.",
     tags: ["mtb", "singletrack", "climbing", "trails"],
     overrides: {
+      discipline: "Trail",
       startTimes: ["Sat 9:00 AM"],
       rankingSystem: "Ride Leaders",
       social: { instagram: "@frontrangemtb" },
+    },
+  }),
+
+  makeTeam({
+    id: "cascadia-enduro-collective",
+    name: "Cascadia Enduro Collective",
+    type: "Team",
+    location: "Bend, OR",
+    founded: 2017,
+    bikeType: "MTB",
+    format: "In-person",
+    pace: "Competitive",
+    skillLevel: "Advanced",
+    competitiveOrCasual: "Competitive",
+    memberCount: 28,
+    typicalDistanceMiles: 12,
+    typicalElevationGainFt: 2600,
+    dropPolicy: "Drop",
+    rideSchedule: "Weekly",
+    segmentation: "A Group",
+    howToJoin: "Come session Phil's Trail with us on a Thursday before applying; we want to see you ride.",
+    tags: ["mtb", "enduro", "racing", "full-suspension", "competitive"],
+    missionStatement: "Race enduro at a regional level while keeping Central Oregon's trail community tight-knit.",
+    overrides: {
+      discipline: "Enduro",
+      requiredKit: true,
+      rankingSystem: "Captains",
+      social: { instagram: "@cascadiaenduro" },
+      eventTypes: ["Team-specific Events", "Public Events"],
     },
   }),
 
@@ -245,7 +278,7 @@ export const teams: Team[] = [
   makeTeam({
     id: "velocity-ebike-social-club",
     name: "Velocity E-Bike Social Club",
-    type: "Group",
+    type: "Group Ride",
     location: "Sacramento, CA",
     founded: 2021,
     bikeType: "E-bike",
@@ -261,10 +294,12 @@ export const teams: Team[] = [
     segmentation: "N/A",
     howToJoin: "Message us on Facebook to be added to the next ride.",
     tags: ["e-bike", "accessible", "low-impact", "social"],
-    missionStatement: "Prove that e-bikes belong on every group ride — accessible cycling for all ages.",
+    missionStatement: "Prove that e-bikes belong on every group ride: accessible cycling for all ages.",
     overrides: {
       ageRequirement: { min: 18 },
       social: { facebook: "VelocityEBikeSocial" },
+      verified: false,
+      lastActiveYear: 2023,
     },
   }),
 
@@ -315,7 +350,7 @@ export const teams: Team[] = [
     dropPolicy: "No-drop",
     rideSchedule: "Weekly",
     segmentation: "N/A",
-    howToJoin: "Open to all — introduce yourself at our monthly meetup ride.",
+    howToJoin: "Open to all: introduce yourself at our monthly meetup ride.",
     tags: ["women", "road", "community", "beginner-friendly"],
     missionStatement: "Build confidence and community for women on bikes, from first ride to first race.",
     overrides: {
@@ -329,7 +364,7 @@ export const teams: Team[] = [
   makeTeam({
     id: "bay-area-pride-peloton",
     name: "Bay Area Pride Peloton",
-    type: "Group",
+    type: "Group Ride",
     location: "San Francisco, CA",
     founded: 2020,
     bikeType: "Mixed",
@@ -343,7 +378,7 @@ export const teams: Team[] = [
     dropPolicy: "No-drop",
     rideSchedule: "Weekly",
     segmentation: "N/A",
-    howToJoin: "Everyone welcome — check our Instagram for the next meetup spot.",
+    howToJoin: "Everyone welcome; check our Instagram for the next meetup spot.",
     tags: ["lgbt", "inclusive", "social", "beginner-friendly"],
     missionStatement: "A safe, joyful space to ride for LGBTQ+ cyclists and allies of every level.",
     overrides: {
@@ -355,7 +390,7 @@ export const teams: Team[] = [
   makeTeam({
     id: "motor-city-messengers",
     name: "Motor City Messengers",
-    type: "Group",
+    type: "Group Ride",
     location: "Detroit, MI",
     founded: 2013,
     bikeType: "Road",
@@ -369,7 +404,7 @@ export const teams: Team[] = [
     dropPolicy: "No-drop",
     rideSchedule: "Weekly",
     segmentation: "N/A",
-    howToJoin: "Roll up to the Friday night meetup — lights required after dark.",
+    howToJoin: "Roll up to the Friday night meetup; lights required after dark.",
     tags: ["urban", "commuter", "night rides", "social"],
     overrides: {
       startTimes: ["Fri 8:00 PM"],
@@ -427,11 +462,13 @@ export const teams: Team[] = [
     dropPolicy: "No-drop",
     rideSchedule: "Weekly",
     segmentation: "N/A",
-    howToJoin: "Bring the whole family to any Saturday morning ride — trailers and kid bikes welcome.",
+    howToJoin: "Bring the whole family to any Saturday morning ride; trailers and kid bikes welcome.",
     tags: ["family-friendly", "kids-ok", "weekend", "social", "beginner-friendly"],
     overrides: {
       ageRequirement: { min: 8 },
       social: { facebook: "CascadeFamilyCruisers" },
+      verified: false,
+      lastActiveYear: 2024,
     },
   }),
 
@@ -452,7 +489,7 @@ export const teams: Team[] = [
     dropPolicy: "No-drop",
     rideSchedule: "Weekly",
     segmentation: "B Group",
-    howToJoin: "Early risers welcome — meet at the trailhead before sunrise heat sets in.",
+    howToJoin: "Early risers welcome; meet at the trailhead before sunrise heat sets in.",
     tags: ["gravel", "endurance", "desert", "early-morning"],
     overrides: {
       startTimes: ["Sat 5:30 AM"],
@@ -480,10 +517,12 @@ export const teams: Team[] = [
     tags: ["randonneuring", "brevet", "long-distance", "endurance"],
     missionStatement: "Preserve and promote long-distance unsupported randonneuring in the Green Mountains.",
     overrides: {
-      affiliation: "Randonneurs USA — Vermont Chapter",
+      affiliation: "Randonneurs USA, Vermont Chapter",
       requiredRides: true,
       mileageRequirement: { min: 200, frequency: "Monthly" },
       rankingSystem: "Liaison",
+      verified: false,
+      lastActiveYear: 2024,
     },
   }),
 
@@ -504,7 +543,7 @@ export const teams: Team[] = [
     dropPolicy: "No-drop",
     rideSchedule: "Weekly",
     segmentation: "N/A",
-    howToJoin: "Meet at Monroe Harbor any Wednesday evening — no drop, no stress.",
+    howToJoin: "Meet at Monroe Harbor any Wednesday evening, no drop, no stress.",
     tags: ["casual", "scenic", "beginner-friendly", "social"],
     overrides: {
       startTimes: ["Wed 6:30 PM"],
@@ -514,7 +553,7 @@ export const teams: Team[] = [
   makeTeam({
     id: "twin-cities-gravel-collective",
     name: "Twin Cities Gravel Collective",
-    type: "Group",
+    type: "Group Ride",
     location: "Minneapolis, MN",
     founded: 2018,
     bikeType: "Gravel",
@@ -538,7 +577,7 @@ export const teams: Team[] = [
   makeTeam({
     id: "rocky-mountain-junior-racers",
     name: "Rocky Mountain Junior Racers",
-    type: "Team",
+    type: "Youth Program",
     location: "Denver, CO",
     founded: 2014,
     bikeType: "Road",
@@ -581,7 +620,7 @@ export const teams: Team[] = [
     dropPolicy: "No-drop",
     rideSchedule: "Weekly",
     segmentation: "N/A",
-    howToJoin: "Se habla español — join any Saturday clinic to meet the club.",
+    howToJoin: "Se habla español. Join any Saturday clinic to meet the club.",
     tags: ["triathlon", "bilingual", "beginner-friendly", "coached"],
     overrides: {
       instructional: true,
@@ -592,7 +631,7 @@ export const teams: Team[] = [
   makeTeam({
     id: "brooklyn-fixed-gear-crew",
     name: "Brooklyn Fixed Gear Crew",
-    type: "Group",
+    type: "Group Ride",
     location: "Brooklyn, NY",
     founded: 2012,
     bikeType: "Track",
@@ -606,18 +645,20 @@ export const teams: Team[] = [
     dropPolicy: "Drop",
     rideSchedule: "Weekly",
     segmentation: "N/A",
-    howToJoin: "Find us through Instagram — fixed gear only, brakes recommended but not required.",
+    howToJoin: "Find us through Instagram; fixed gear only, brakes recommended but not required.",
     tags: ["fixed-gear", "urban", "alleycat", "night-rides", "social"],
     overrides: {
       startTimes: ["Fri 9:00 PM"],
       social: { instagram: "@bkfixedcrew" },
+      verified: false,
+      lastActiveYear: 2023,
     },
   }),
 
   makeTeam({
     id: "golden-gate-e-bike-adventurers",
     name: "Golden Gate E-Bike Adventurers",
-    type: "Group",
+    type: "Group Ride",
     location: "San Francisco, CA",
     founded: 2022,
     bikeType: "E-bike",
@@ -631,7 +672,7 @@ export const teams: Team[] = [
     dropPolicy: "No-drop",
     rideSchedule: "Weekly",
     segmentation: "N/A",
-    howToJoin: "RSVP through Meetup — rental e-bikes available for first-timers.",
+    howToJoin: "RSVP through Meetup; rental e-bikes available for first-timers.",
     tags: ["e-bike", "hills", "adventure", "beginner-friendly"],
     overrides: {
       ageRequirement: { min: 16 },
@@ -712,7 +753,7 @@ export const teams: Team[] = [
     dropPolicy: "No-drop",
     rideSchedule: "Weekly",
     segmentation: "N/A",
-    howToJoin: "Built for first-time group riders — no experience or gear judgment, ever.",
+    howToJoin: "Built for first-time group riders; no experience or gear judgment, ever.",
     tags: ["beginner-friendly", "instructional", "no-drop", "social"],
     missionStatement: "Teach brand-new riders group-riding skills in a truly no-drop, no-judgment space.",
     overrides: {
@@ -737,7 +778,7 @@ export const teams: Team[] = [
     dropPolicy: "No-drop",
     rideSchedule: "Weekly",
     segmentation: "N/A",
-    howToJoin: "Contact us directly — we match riders and pilots based on needs and equipment.",
+    howToJoin: "Contact us directly; we match riders and pilots based on needs and equipment.",
     tags: ["adaptive", "inclusive", "tandem", "accessible"],
     missionStatement: "Make group cycling genuinely accessible for riders of all abilities.",
     overrides: {
@@ -779,7 +820,7 @@ export const teams: Team[] = [
   makeTeam({
     id: "blue-ridge-bikepacking-society",
     name: "Blue Ridge Bikepacking Society",
-    type: "Group",
+    type: "Group Ride",
     location: "Asheville, NC",
     founded: 2019,
     bikeType: "Gravel",

@@ -4,7 +4,13 @@ import Link from 'next/link';
 import { type ChangeEvent, type FormEvent, useState } from 'react';
 import styles from './newTeam.module.scss';
 
-const CLUB_TYPES = ['Team', 'Club', 'Group', 'Organization'];
+const CLUB_TYPES = [
+	'Team',
+	'Club',
+	'Group Ride',
+	'Youth Program',
+	'Organization',
+];
 const BIKE_TYPES = ['Road', 'Gravel', 'MTB', 'Track', 'Tri', 'E-bike', 'Mixed'];
 const FORMATS = ['In-person', 'Virtual', 'Hybrid'];
 const VIRTUAL_PLATFORMS = ['Zwift', 'Strava', 'TrainerRoad', 'Other'];
@@ -151,10 +157,10 @@ export default function NewTeamPage() {
 				</Link>
 
 				<header className={styles.header}>
-					<p className={styles.eyebrow}>Submit a team</p>
-					<h1>Submit a new team</h1>
+					<p className={styles.eyebrow}>Submit a group</p>
+					<h1>Submit a new group</h1>
 					<p>
-						Send a team, club, or group for an admin to review. They may follow
+						Send a group, club, or team for an admin to review. They may follow
 						up with you before it goes live.
 					</p>
 				</header>
@@ -689,9 +695,7 @@ export default function NewTeamPage() {
 					</Section>
 
 					<div className={styles.submitRow}>
-						<p>
-							This is a wireframe &mdash; submitting won&rsquo;t save any data.
-						</p>
+						<p>This is a wireframe; submitting won&rsquo;t save any data.</p>
 						<button type='submit' className={styles.buttonSolid}>
 							Submit for review
 						</button>

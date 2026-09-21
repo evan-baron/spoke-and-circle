@@ -20,15 +20,16 @@ export default function HomePage() {
 			<section className={styles.hero}>
 				<div className={styles.heroInner}>
 					<p className={styles.eyebrow}>A field guide to group rides</p>
-					<h1>Find the team that matches your cadence.</h1>
+					<h1>Find the team, club, or group ride that matches your cadence.</h1>
 					<p className={styles.heroCopy}>
-						Search {teamCount} sample teams, clubs, and groups by keyword,
-						location, or type &mdash; then share the exact results with a link.
+						Whether you race, ride no-drop on Saturdays, or coach juniors,
+						search {teamCount} sample teams, clubs, group rides, and youth
+						programs by keyword, location, or type.
 					</p>
 					<div className={styles.searchWrap}>
 						<SearchForm />
 						<Link href='/teams/new' className={styles.submitLink}>
-							+ Submit your team
+							+ Submit your team, club, or group ride
 						</Link>
 					</div>
 					<div className={styles.quickLinks}>

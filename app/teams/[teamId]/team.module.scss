@@ -70,6 +70,25 @@
 	gap: 0.4rem;
 }
 
+.contactButtonWrap {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 0.3rem;
+	margin-bottom: 0.2rem;
+}
+
+.contactButton {
+	@include button-solid;
+	width: 100%;
+}
+
+.contactChannel {
+	font-family: var(--font-mono);
+	font-size: 0.75rem;
+	color: var(--color-ink-soft);
+}
+
 .asideTitle {
 	@include eyebrow;
 }
