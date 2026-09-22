@@ -1,75 +1,218 @@
 @use '@/styles/mixins' as *;
 
+// ----------------------------------------------------------------------
+// .form IS the flex container for every control (no extra wrapper div).
+// Mobile is a plain column, so source order already matches the visual
+// order: keyword, location, "Filters" toggle, type/bike-type (collapsed),
+// skill/race/discipline + toggles (collapsed), Search — last, below every
+// filter. Desktop switches to a wrapping row and only *then* needs `order`
+// overrides, for the handful of items that regroup (type/bike-type rejoin
+// row 1; Search rejoins row 1; .moreFilters becomes row 2) — see each
+// class below for its own desktop override.
+// ----------------------------------------------------------------------
 .form {
 	@include card;
 	width: 100%;
 	display: flex;
 	flex-direction: column;
-	gap: var(--space-2xs);
+	gap: var(--space-xs);
 	padding: var(--space-sm);
-}
-
-.row {
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: var(--space-2xs);
 
 	@include from($bp-md) {
-		grid-template-columns: 1.6fr 1.2fr 1fr 1fr auto;
+		flex-direction: row;
+		flex-wrap: wrap;
 		align-items: center;
-	}
-}
-
-.rowFilters {
-	@include from($bp-md) {
-		grid-template-columns: repeat(3, 1fr);
+		padding: var(--space-md);
 	}
 }
 
 .input {
 	@include field-input;
 	font-size: 0.9375rem;
-	padding: 0.55rem 0.75rem;
+	padding: 0.6rem 0.85rem;
 }
 
-.submit {
-	@include button-outline;
-	padding: 0.55rem 1.1rem;
+.keywordInput {
+	min-width: 0;
+
+	@include from($bp-md) {
+		flex: 1.6 1 10rem;
+	}
+}
+
+.locationInput {
+	min-width: 0;
+
+	@include from($bp-md) {
+		flex: 1.2 1 8rem;
+	}
+}
+
+.searchBtn {
+	@include button-solid;
+
+	@include from($bp-md) {
+		flex: 0 0 auto;
+		order: 5;
+	}
+}
+
+// Collapsed (display: none) on mobile unless .open; at $bp-md the wrapper
+// itself disappears from the box tree via display:contents, so .typeSelect
+// and .checkboxDropdown become direct items of .form and take their own
+// `order` there instead of the wrapper's.
+.typeBikeGroup {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2xs);
+
+	@include from($bp-md) {
+		display: contents;
+	}
+}
+
+@media screen and (max-width: #{$bp-md - 1px}) {
+	.typeBikeGroup:not(.open) {
+		display: none;
+	}
+}
+
+.typeSelect {
+	min-width: 0;
+
+	@include from($bp-md) {
+		flex: 1 1 7rem;
+		order: 3;
+	}
+}
+
+// ----------------------------------------------------------------------
+// "Filters" toggle only exists to save space on narrow screens — from
+// $bp-md up there's room to show every filter inline, so the trigger hides.
+// ----------------------------------------------------------------------
+.filtersToggle {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+	align-self: flex-start;
+	font-size: 0.8125rem;
+	font-weight: 700;
+	color: var(--color-ink);
+	background: var(--color-paper-raised);
+	border: 1px solid var(--color-line);
+	border-radius: var(--radius-pill);
+	padding: 0.5rem 0.9rem;
+	cursor: pointer;
+	transition:
+		border-color 0.15s ease,
+		color 0.15s ease;
+
+	&:hover {
+		border-color: var(--color-coral);
+		color: var(--color-coral);
+	}
+
+	@include from($bp-md) {
+		display: none;
+	}
+}
+
+.filtersCount {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 1.15rem;
+	height: 1.15rem;
+	padding-inline: 0.3rem;
+	border-radius: var(--radius-pill);
+	background: var(--gradient-cta);
+	color: var(--on-gradient);
+	font-size: 0.6875rem;
+	font-weight: 800;
+}
+
+.filtersCaret {
+	font-size: 0.7rem;
+	color: var(--color-ink-soft);
+	transition: transform 0.2s ease;
+}
+
+.filtersToggle[aria-expanded='true'] .filtersCaret {
+	transform: rotate(180deg);
+}
+
+// ----------------------------------------------------------------------
+// Skill level / race-or-casual / riding style + the three toggles. Same
+// collapse mechanism as .typeBikeGroup, but this group never rejoins row 1
+// — at $bp-md it's forced onto its own full-width row 2 underneath,
+// matching the original desktop layout.
+// ----------------------------------------------------------------------
+.moreFilters {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+
+	@include from($bp-md) {
+		flex: 1 1 100%;
+		order: 6;
+	}
+}
+
+@media screen and (max-width: #{$bp-md - 1px}) {
+	.moreFilters:not(.open) {
+		display: none;
+	}
+}
+
+.filterGrid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--space-2xs);
+
+	@include from($bp-md) {
+		grid-template-columns: repeat(3, 1fr);
+	}
 }
 
 .toggleRow {
 	display: flex;
 	flex-wrap: wrap;
 	gap: var(--space-xs);
-	padding-top: 0.15rem;
 }
 
 .toggle {
 	display: inline-flex;
 	align-items: center;
 	gap: 0.4rem;
-	font-family: var(--font-mono);
 	font-size: 0.8125rem;
+	font-weight: 600;
 	color: var(--color-ink-soft);
 	cursor: pointer;
 
 	input {
-		accent-color: var(--color-rust);
+		accent-color: var(--color-coral);
 	}
 }
 
 .checkboxDropdown {
 	position: relative;
+	min-width: 0;
+
+	@include from($bp-md) {
+		flex: 1 1 7rem;
+		order: 4;
+	}
 }
 
 .checkboxDropdownTrigger {
 	@include field-input;
+	width: 100%;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	gap: 0.5rem;
 	font-size: 0.9375rem;
-	padding: 0.55rem 0.75rem;
+	padding: 0.6rem 0.85rem;
 	text-align: left;
 	cursor: pointer;
 
@@ -114,7 +257,7 @@
 	align-items: center;
 	gap: 0.5rem;
 	padding: 0.4rem 0.5rem;
-	border-radius: var(--radius);
+	border-radius: var(--radius-sm);
 	font-size: 0.875rem;
 	white-space: nowrap;
 	cursor: pointer;
@@ -124,6 +267,6 @@
 	}
 
 	input {
-		accent-color: var(--color-rust);
+		accent-color: var(--color-coral);
 	}
 }

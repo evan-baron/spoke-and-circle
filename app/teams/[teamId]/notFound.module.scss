@@ -18,9 +18,8 @@
 }
 
 .code {
-	font-family: var(--font-mono);
 	font-size: 3.5rem;
-	font-weight: 700;
+	font-weight: 800;
 	color: var(--color-line);
 	line-height: 1;
 }
@@ -31,9 +30,7 @@
 
 .link {
 	margin-top: var(--space-sm);
-	font-family: var(--font-mono);
 	font-size: 0.8125rem;
-	text-transform: uppercase;
-	letter-spacing: 0.04em;
-	color: var(--color-rust);
+	font-weight: 700;
+	color: var(--color-coral);
 }

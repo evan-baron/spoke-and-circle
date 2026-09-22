@@ -5,6 +5,7 @@ interface SearchFormProps {
 	defaultQ?: string;
 	defaultLocation?: string;
 	defaultType?: string;
+	onGradient?: boolean;
 }
 
 const TYPE_OPTIONS = [
@@ -19,9 +20,14 @@ export function SearchForm({
 	defaultQ = '',
 	defaultLocation = '',
 	defaultType = '',
+	onGradient = false,
 }: SearchFormProps) {
 	return (
-		<form action='/search' method='GET' className={styles.form}>
+		<form
+			action='/search'
+			method='GET'
+			className={`${styles.form} ${onGradient ? styles.onGradient : ''}`}
+		>
 			<div className={styles['search-fields']}>
 				<div className={`${styles.field} ${styles.fieldWide}`}>
 					<label htmlFor='q' className={styles.label}>

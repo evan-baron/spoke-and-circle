@@ -17,7 +17,7 @@
 	flex-direction: column;
 	gap: var(--space-2xs);
 	padding-bottom: var(--space-md);
-	border-bottom: 1.5px dashed var(--color-line);
+	border-bottom: 1px solid var(--color-line);
 }
 
 .badgeRow {
@@ -29,8 +29,8 @@
 
 .subline {
 	color: var(--color-ink-soft);
-	font-family: var(--font-mono);
-	font-size: 0.875rem;
+	font-size: 0.9375rem;
+	font-weight: 600;
 }
 
 .mission {
@@ -43,11 +43,10 @@
 .body {
 	display: grid;
 	grid-template-columns: 1fr;
-	gap: var(--space-md);
+	gap: var(--space-lg);
 
 	@include from($bp-lg) {
 		grid-template-columns: 20rem 1fr;
-		gap: var(--space-lg);
 		align-items: start;
 	}
 }
@@ -55,7 +54,7 @@
 .aside {
 	display: flex;
 	flex-direction: column;
-	gap: var(--space-sm);
+	gap: var(--space-md);
 
 	@include from($bp-lg) {
 		position: sticky;
@@ -65,38 +64,46 @@
 
 .asideCard {
 	@include card;
-	padding: var(--space-sm) var(--space-md);
+	padding: var(--space-md);
 	display: flex;
 	flex-direction: column;
-	gap: 0.4rem;
+	gap: 0.5rem;
 }
 
-.contactButtonWrap {
-	display: flex;
-	flex-direction: column;
-	align-items: flex-start;
-	gap: 0.3rem;
-	margin-bottom: 0.2rem;
+// The contact/join card is the single most important thing on the page —
+// give it a stronger border + lift than the purely informational cards
+// around it, instead of every card competing at the same visual weight.
+.contactCard {
+	border-color: var(--color-coral);
+	box-shadow: var(--shadow-md);
 }
 
-.contactButton {
-	@include button-solid;
-	width: 100%;
-}
-
-.contactChannel {
-	font-family: var(--font-mono);
-	font-size: 0.75rem;
-	color: var(--color-ink-soft);
-}
-
+// Matches DetailSection's title treatment (styles/DetailSection) so "How
+// to join" and "Quick facts" carry the same real heading weight, instead
+// of the small uppercase eyebrow label they shared with every field label
+// on the page.
 .asideTitle {
-	@include eyebrow;
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.9375rem;
+	font-weight: 800;
+	letter-spacing: -0.005em;
+	color: var(--color-ink);
+
+	&::before {
+		content: '';
+		flex-shrink: 0;
+		width: 0.5rem;
+		height: 0.5rem;
+		border-radius: 50%;
+		background: var(--color-coral);
+	}
 }
 
 .waitlistNote {
 	font-size: 0.875rem;
-	color: var(--color-rust);
+	color: var(--color-coral);
 }
 
 .flagRow {
@@ -107,13 +114,13 @@
 }
 
 .flag {
-	font-family: var(--font-mono);
 	font-size: 0.6875rem;
+	font-weight: 600;
 	text-transform: uppercase;
 	letter-spacing: 0.03em;
-	padding: 0.2rem 0.5rem;
+	padding: 0.22rem 0.6rem;
 	border: 1px solid var(--color-line);
-	border-radius: var(--radius);
+	border-radius: var(--radius-pill);
 	color: var(--color-ink-soft);
 }
 
@@ -124,8 +131,8 @@
 	font-size: 0.875rem;
 
 	dt {
-		font-family: var(--font-mono);
 		font-size: 0.6875rem;
+		font-weight: 700;
 		text-transform: uppercase;
 		letter-spacing: 0.03em;
 		color: var(--color-ink-soft);
@@ -140,5 +147,5 @@
 .main {
 	display: flex;
 	flex-direction: column;
-	gap: var(--space-md);
+	gap: var(--space-lg);
 }

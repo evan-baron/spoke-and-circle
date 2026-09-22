@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { BackButton } from "@/components/BackButton/BackButton";
 import { Badge } from "@/components/Badge/Badge";
+import { ContactModal } from "@/components/ContactModal/ContactModal";
 import { DetailRow, DetailSection } from "@/components/DetailSection/DetailSection";
-import { getPrimaryContact } from "@/lib/contact";
 import {
   formatAgeRequirement,
   formatDistance,
@@ -52,7 +52,6 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
   ].filter(Boolean) as string[];
 
   const hasSocial = Object.values(team.social).some(Boolean);
-  const primaryContact = getPrimaryContact(team);
 
   return (
     <div className={styles.page}>
@@ -80,15 +79,7 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
 
         <div className={styles.body}>
           <aside className={styles.aside}>
-            <div className={styles.asideCard}>
-              {primaryContact && (
-                <div className={styles.contactButtonWrap}>
-                  <a href={primaryContact.href} className={styles.contactButton}>
-                    Contact team
-                  </a>
-                  <span className={styles.contactChannel}>{primaryContact.channel}</span>
-                </div>
-              )}
+            <div className={`${styles.asideCard} ${styles.contactCard}`}>
               <p className={styles.asideTitle}>How to join</p>
               <p>{team.howToJoin}</p>
               {team.waitlist && <p className={styles.waitlistNote}>Currently accepting waitlist signups only.</p>}
@@ -101,6 +92,12 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
                   ))}
                 </div>
               )}
+              <ContactModal
+                teamName={team.name}
+                email={team.contact.email}
+                phone={team.contact.phone}
+                website={team.website}
+              />
             </div>
 
             <div className={styles.asideCard}>

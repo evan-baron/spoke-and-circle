@@ -5,8 +5,7 @@
 	top: 0;
 	z-index: 10;
 	width: 100%;
-	background: var(--color-ink);
-	border-bottom: 3px solid var(--color-rust);
+	background: var(--color-primary);
 
 	nav {
 		@include container;
@@ -51,17 +50,20 @@
 }
 
 .navLink {
-	@include eyebrow;
-	color: var(--color-paper);
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: hsl(0, 0%, 100%, 0.88);
+	transition: color 0.15s ease;
 
 	&:hover {
-		color: var(--color-rust);
+		color: var(--on-gradient);
 	}
 }
 
 .navUser {
-	@include eyebrow;
-	color: var(--color-ink-soft-bg);
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: hsl(0, 0%, 100%, 0.65);
 	max-width: 10rem;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -69,17 +71,24 @@
 }
 
 .navCta {
-	@include eyebrow;
-	color: var(--color-paper);
-	padding: 0.5rem 0.85rem;
-	border: 1.5px solid var(--color-paper);
-	border-radius: var(--radius);
+	display: inline-flex;
+	align-items: center;
+	font-size: 0.8125rem;
+	font-weight: 700;
+	color: var(--color-primary);
+	background: var(--on-gradient);
+	padding: 0.5rem 1rem;
+	border-radius: var(--radius-pill);
 	transition:
-		border-color 0.15s ease,
-		color 0.15s ease;
+		transform 0.15s ease,
+		box-shadow 0.15s ease;
 
 	&:hover {
-		border-color: var(--color-rust);
-		color: var(--color-rust);
+		box-shadow: var(--shadow-sm);
+		transform: translateY(-1px);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
 	}
 }

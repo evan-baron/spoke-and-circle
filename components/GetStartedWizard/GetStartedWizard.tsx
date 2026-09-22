@@ -32,6 +32,11 @@ const LOOKING_FOR_OPTIONS: NonNullable<RiderPreferences['lookingFor']>[] = [
 const STEPS = ['zipCode', 'discipline', 'skillLevel', 'lookingFor'] as const;
 type StepKey = (typeof STEPS)[number];
 
+// Read (and cleared) by FilterBar on mount: the quiz already asked what the
+// rider wants, so /search shouldn't immediately re-confront them with the
+// filters panel open, even though the quiz's answers land as active filters.
+export const CAME_FROM_QUIZ_KEY = 'cameFromQuiz';
+
 const EMPTY_ANSWERS: RiderPreferences = {
 	zipCode: '',
 	disciplines: [],
@@ -61,6 +66,7 @@ export function GetStartedWizard() {
 
 		try {
 			window.sessionStorage.setItem('riderZipCode', finalAnswers.zipCode);
+			window.sessionStorage.setItem(CAME_FROM_QUIZ_KEY, 'true');
 		} catch {
 			// sessionStorage unavailable (private browsing, etc.) — non-critical
 		}

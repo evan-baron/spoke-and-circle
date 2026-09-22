@@ -1,9 +1,27 @@
 @use '@/styles/mixins' as *;
 
+// Horizontal full-bleed only: cancel out `main`'s side padding so the
+// gradient band runs edge-to-edge, while .explainer right below it keeps
+// the normal gutter. main itself has no top padding (that's `page-base`'s
+// job, which this page doesn't use), so .hero already sits flush under the
+// header with no vertical offset needed here.
 .hero {
-	width: 100%;
+	width: calc(100% + var(--space-sm) * 2);
+	margin-inline: calc(-1 * var(--space-sm));
 	display: flex;
 	justify-content: center;
+	background: var(--gradient-hero);
+	color: var(--on-gradient);
+	animation: rise 0.5s ease both;
+
+	@include from($bp-md) {
+		width: calc(100% + var(--space-lg) * 2);
+		margin-inline: calc(-1 * var(--space-lg));
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		animation: none;
+	}
 }
 
 .heroInner {
@@ -12,20 +30,31 @@
 	flex-direction: column;
 	align-items: flex-start;
 	gap: var(--space-sm);
-	animation: rise 0.5s ease both;
+	padding: var(--space-lg) var(--space-sm);
+
+	@include from($bp-md) {
+		padding: var(--space-xl) var(--space-lg);
+	}
 
 	h1 {
 		max-width: 24ch;
+		color: var(--on-gradient);
+		// Smaller floor than the global h1 clamp: at phone widths the full
+		// headline was wrapping into 4-5 ragged lines against the gradient
+		// band. This lets it settle into ~3 balanced lines instead.
+		font-size: clamp(1.625rem, 1.15rem + 3.6vw, 3.75rem);
 	}
 }
 
 .eyebrow {
 	@include eyebrow;
+	color: hsl(0, 0%, 100%, 0.82);
 }
 
 .heroCopy {
-	color: var(--color-ink-soft);
+	color: hsl(0, 0%, 100%, 0.85);
 	font-size: 1.0625rem;
+	max-width: 56ch;
 }
 
 .searchWrap {
@@ -50,7 +79,30 @@
 }
 
 .submitLink {
-	@include button-outline;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	font-size: 0.875rem;
+	font-weight: 700;
+	white-space: nowrap;
+	padding: 0.8rem 1.45rem;
+	border: 1.5px solid hsl(0, 0%, 100%, 0.45);
+	border-radius: var(--radius-pill);
+	color: var(--on-gradient);
+	transition:
+		border-color 0.2s ease,
+		background-color 0.2s ease;
+
+	&:hover {
+		border-color: hsl(0, 0%, 100%, 0.8);
+		background: hsl(0, 0%, 100%, 0.12);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--on-gradient);
+		outline-offset: 2px;
+	}
 }
 
 .quickLinks {
@@ -62,27 +114,28 @@
 }
 
 .quickLinksLabel {
-	font-family: var(--font-mono);
 	font-size: 0.75rem;
+	font-weight: 700;
 	text-transform: uppercase;
-	letter-spacing: 0.04em;
-	color: var(--color-ink-soft);
+	letter-spacing: 0.06em;
+	color: hsl(0, 0%, 100%, 0.7);
 }
 
 .quickLink {
-	font-family: var(--font-mono);
 	font-size: 0.8125rem;
-	padding: 0.3rem 0.65rem;
-	border: 1px solid var(--color-line);
-	border-radius: var(--radius);
-	background: var(--color-paper-raised);
+	font-weight: 600;
+	padding: 0.35rem 0.75rem;
+	border: 1px solid hsl(0, 0%, 100%, 0.3);
+	border-radius: var(--radius-pill);
+	background: hsl(0, 0%, 100%, 0.1);
+	color: hsl(0, 0%, 100%, 0.92);
 	transition:
-		border-color 0.15s ease,
-		color 0.15s ease;
+		background-color 0.15s ease,
+		border-color 0.15s ease;
 
 	&:hover {
-		border-color: var(--color-rust);
-		color: var(--color-rust);
+		background: hsl(0, 0%, 100%, 0.22);
+		border-color: hsl(0, 0%, 100%, 0.55);
 	}
 }
 
@@ -90,7 +143,6 @@
 	width: 100%;
 	display: flex;
 	justify-content: center;
-	margin-top: var(--space-2xl);
 }
 
 .explainerGrid {
@@ -110,18 +162,29 @@
 	display: flex;
 	flex-direction: column;
 	gap: 0.35rem;
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
+
+	&:hover {
+		transform: translateY(-2px);
+		box-shadow: var(--shadow-md);
+	}
 
 	p {
 		color: var(--color-ink-soft);
 		font-size: 0.9375rem;
 	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
 }
 
 .explainerNumber {
-	font-family: var(--font-mono);
 	font-size: 0.8125rem;
-	font-weight: 600;
-	color: var(--color-rust);
+	font-weight: 800;
+	color: var(--color-coral);
 	letter-spacing: 0.04em;
 }
 

@@ -13,15 +13,13 @@
 }
 
 .backLink {
-	font-family: var(--font-mono);
 	font-size: 0.8125rem;
-	text-transform: uppercase;
-	letter-spacing: 0.04em;
+	font-weight: 700;
 	color: var(--color-ink-soft);
 	width: fit-content;
 
 	&:hover {
-		color: var(--color-rust);
+		color: var(--color-coral);
 	}
 }
 
@@ -37,7 +35,7 @@
 
 .eyebrow {
 	@include eyebrow;
-	color: var(--color-rust);
+	color: var(--color-coral);
 }
 
 .form {
@@ -87,9 +85,8 @@
 }
 
 .fieldLabel {
-	font-family: var(--font-mono);
 	font-size: 0.75rem;
-	font-weight: 600;
+	font-weight: 700;
 	letter-spacing: 0.03em;
 	text-transform: uppercase;
 	color: var(--color-ink-soft);
@@ -129,7 +126,7 @@ textarea.input {
 	font-size: 0.9375rem;
 
 	input {
-		accent-color: var(--color-rust);
+		accent-color: var(--color-coral);
 		width: 1.05rem;
 		height: 1.05rem;
 	}
@@ -141,7 +138,7 @@ textarea.input {
 	gap: var(--space-sm);
 	align-items: flex-start;
 	padding-top: var(--space-sm);
-	border-top: 1.5px dashed var(--color-line);
+	border-top: 1px solid var(--color-line);
 
 	p {
 		font-size: 0.875rem;
@@ -183,10 +180,9 @@ textarea.input {
 }
 
 .confirmationMark {
-	font-family: var(--font-mono);
 	font-size: 2rem;
-	color: var(--color-forest);
-	background: var(--color-forest-soft);
+	color: var(--color-calm);
+	background: var(--color-calm-soft);
 	width: 3.5rem;
 	height: 3.5rem;
 	border-radius: 50%;

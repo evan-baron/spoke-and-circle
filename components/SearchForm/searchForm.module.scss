@@ -27,14 +27,14 @@
 }
 
 .quizLink {
-	font-family: var(--font-mono);
 	font-size: 0.8125rem;
+	font-weight: 600;
 	color: var(--color-ink-soft);
 	text-decoration: underline;
 	text-underline-offset: 2px;
 
 	&:hover {
-		color: var(--color-rust);
+		color: var(--color-coral);
 	}
 }
 
@@ -64,5 +64,39 @@
 
 	@include from($bp-md) {
 		width: auto;
+	}
+}
+
+// Variant for sitting directly on the gradient hero band: a translucent
+// glass panel instead of a solid card, so the gradient shows through.
+.onGradient {
+	background: hsl(0, 0%, 100%, 0.14);
+	border-color: hsl(0, 0%, 100%, 0.32);
+	backdrop-filter: blur(10px);
+	-webkit-backdrop-filter: blur(10px);
+	box-shadow: none;
+
+	.label {
+		color: hsl(0, 0%, 100%, 0.85);
+	}
+
+	.input {
+		background: var(--color-paper);
+		border-color: transparent;
+	}
+
+	.quizLink {
+		color: hsl(0, 0%, 100%, 0.82);
+
+		&:hover {
+			color: var(--on-gradient);
+		}
+	}
+
+	// The CTA gradient (coral → gold) shares hues with the hero gradient
+	// behind it, so the button can disappear into the background without
+	// this. Same translucent white border as the glass panel itself above.
+	.submit {
+		border: 1.5px solid hsl(0, 0%, 100%, 0.45);
 	}
 }

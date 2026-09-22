@@ -23,6 +23,18 @@
 .card {
 	@include card;
 	overflow: hidden;
+	transition:
+		transform 0.2s ease,
+		box-shadow 0.2s ease;
+
+	&:hover {
+		transform: translateY(-2px);
+		box-shadow: var(--shadow-md);
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
 }
 
 .cardLink {
@@ -59,23 +71,22 @@
 }
 
 .cardMeta {
-	font-family: var(--font-mono);
 	font-size: 0.75rem;
 	color: var(--color-ink-soft);
 }
 
 .cardVerification {
-	font-family: var(--font-mono);
 	font-size: 0.75rem;
+	font-weight: 600;
 	color: var(--color-ink-soft);
 	margin-top: 0.15rem;
 
 	&[data-verified='true'] {
-		color: var(--color-forest);
+		color: var(--color-calm);
 	}
 
 	&[data-verified='false'] {
-		color: var(--color-rust);
+		color: var(--color-coral);
 	}
 }
 
@@ -91,13 +102,13 @@
 
 	th {
 		text-align: left;
-		font-family: var(--font-mono);
 		font-size: 0.6875rem;
+		font-weight: 700;
 		text-transform: uppercase;
 		letter-spacing: 0.05em;
 		color: var(--color-ink-soft);
 		padding: 0.6rem var(--space-xs);
-		border-bottom: 1.5px solid var(--color-ink);
+		border-bottom: 1.5px solid var(--color-line);
 	}
 
 	td {
@@ -119,6 +130,6 @@
 	font-weight: 600;
 
 	&:hover {
-		color: var(--color-rust);
+		color: var(--color-coral);
 	}
 }

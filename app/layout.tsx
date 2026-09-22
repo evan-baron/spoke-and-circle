@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
-import { Domine } from 'next/font/google';
+import { Plus_Jakarta_Sans } from 'next/font/google';
 import Header from '@/components/Header/Header';
 import { Footer } from '@/components/Footer/Footer';
 import './reset.css';
 import './globals.scss';
 
-const domine = Domine({
+const jakarta = Plus_Jakarta_Sans({
 	subsets: ['latin'],
-	variable: '--font-domine',
+	variable: '--font-jakarta',
 });
 
 export const metadata: Metadata = {
@@ -22,7 +22,7 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang='en' className={domine.variable}>
+		<html lang='en' className={jakarta.variable}>
 			<body>
 				<Header />
 				<main>{children}</main>

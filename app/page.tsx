@@ -27,7 +27,7 @@ export default function HomePage() {
 						programs by keyword, location, or type.
 					</p>
 					<div className={styles.searchWrap}>
-						<SearchForm />
+						<SearchForm onGradient />
 						<div className={styles.searchWrapLinks}>
 							<Link href='/teams/new' className={styles.submitLink}>
 								+ Submit your team, club, or group ride

@@ -3,7 +3,12 @@ import { FilterBar } from '@/components/FilterBar/FilterBar';
 import { ResultsTable } from '@/components/ResultsTable/ResultsTable';
 import { SearchLocationTracker } from '@/components/SearchLocationTracker/SearchLocationTracker';
 import { searchTeams } from '@/lib/search';
-import type { BikeType, ClubType, MtbDiscipline, SkillLevel } from '@/lib/types';
+import type {
+	BikeType,
+	ClubType,
+	MtbDiscipline,
+	SkillLevel,
+} from '@/lib/types';
 import styles from './search.module.scss';
 
 const CLUB_TYPES: ClubType[] = [
@@ -29,7 +34,12 @@ const DISCIPLINES: MtbDiscipline[] = [
 	'Downhill',
 	'All-mountain',
 ];
-const SKILL_LEVELS: SkillLevel[] = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
+const SKILL_LEVELS: SkillLevel[] = [
+	'Beginner',
+	'Intermediate',
+	'Advanced',
+	'Expert',
+];
 const RACING_OPTIONS = ['Competitive', 'Casual'] as const;
 
 type RawSearchParams = Record<string, string | string[] | undefined>;
@@ -131,7 +141,7 @@ export default async function SearchPage({
 				/>
 
 				<p className={styles.count}>
-					{results.length} {results.length === 1 ? 'team' : 'teams'} found
+					{results.length} {results.length === 1 ? 'result' : 'results'}
 					{params.q && <> for &ldquo;{params.q}&rdquo;</>}
 					{params.location && <> near &ldquo;{params.location}&rdquo;</>}
 					{params.bikeTypes.length > 1 && (

@@ -22,13 +22,13 @@
 .progressSegment {
 	flex: 1;
 	height: 4px;
-	border-radius: var(--radius);
+	border-radius: var(--radius-pill);
 	background: var(--color-line);
 	transition: background-color 0.2s ease;
 }
 
 .progressActive {
-	background: var(--color-rust);
+	background: var(--gradient-cta);
 }
 
 .stepBody {
@@ -78,6 +78,13 @@
 	animation: slideInLeft 0.25s ease both;
 }
 
+@media (prefers-reduced-motion: reduce) {
+	.slideInRight,
+	.slideInLeft {
+		animation: none;
+	}
+}
+
 .zipForm {
 	display: flex;
 	flex-direction: column;
@@ -101,7 +108,8 @@
 		opacity: 0.5;
 		cursor: not-allowed;
 		transform: none;
-		box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--color-rust);
+		filter: none;
+		box-shadow: none;
 	}
 }
 
@@ -114,28 +122,27 @@
 .optionCard {
 	@include card;
 	padding: var(--space-sm);
-	font-family: var(--font-serif);
 	font-size: 0.9375rem;
+	font-weight: 600;
 	text-align: left;
 	cursor: pointer;
-	box-shadow: none;
 	transition:
 		border-color 0.15s ease,
 		background-color 0.15s ease;
 
 	&:hover {
-		border-color: var(--color-rust);
+		border-color: var(--color-coral);
 	}
 
 	&:focus-visible {
-		outline: 2px solid var(--color-rust);
+		outline: 2px solid var(--color-coral);
 		outline-offset: 2px;
 	}
 }
 
 .optionSelected {
-	border-color: var(--color-rust);
-	background: var(--color-rust-soft);
+	border-color: var(--color-coral);
+	background: var(--color-coral-soft);
 }
 
 .finishBtn {
@@ -146,7 +153,8 @@
 		opacity: 0.5;
 		cursor: not-allowed;
 		transform: none;
-		box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--color-rust);
+		filter: none;
+		box-shadow: none;
 	}
 }
 
@@ -165,12 +173,12 @@
 	cursor: pointer;
 
 	&:hover {
-		color: var(--color-rust);
+		color: var(--color-coral);
 	}
 }
 
 .footer {
-	border-top: 1.5px solid var(--color-line);
+	border-top: 1px solid var(--color-line);
 	padding-top: var(--space-sm);
 
 	p {
@@ -180,7 +188,7 @@
 	}
 
 	a {
-		color: var(--color-rust);
+		color: var(--color-coral);
 		text-decoration: underline;
 	}
 }

@@ -1,25 +1,26 @@
 .badge {
 	display: inline-flex;
 	align-items: center;
-	font-family: var(--font-mono);
 	font-size: 0.6875rem;
-	font-weight: 600;
-	letter-spacing: 0.04em;
-	text-transform: uppercase;
-	padding: 0.25rem 0.55rem;
-	border-radius: var(--radius);
+	font-weight: 700;
+	letter-spacing: 0.02em;
+	padding: 0.28rem 0.65rem;
+	border-radius: var(--radius-pill);
 	line-height: 1.4;
 	white-space: nowrap;
 }
 
+// "forest" = calm / positive status (casual pace, public visibility, verified).
+// Kept as a small muted sage — a conventional status color, not a brand hue.
 .forest {
-	background: var(--color-forest-soft);
-	color: var(--color-forest);
+	background: var(--color-calm-soft);
+	color: var(--color-calm);
 }
 
+// "rust" = higher-intensity status (competitive pace, private visibility).
 .rust {
-	background: var(--color-rust-soft);
-	color: var(--color-rust);
+	background: var(--color-coral-soft);
+	color: var(--color-coral);
 }
 
 .gold {

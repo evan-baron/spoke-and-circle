@@ -1,21 +1,63 @@
 :root {
-	--color-ink: hsl(0, 0%, 12%);
-	--color-ink-soft: hsl(0, 0%, 38%);
-	--color-paper: hsl(38, 45%, 96%);
-	--color-paper-raised: hsl(36, 40%, 91%);
-	--color-line: hsl(32, 18%, 80%);
+	/* ===== Sunrise Climb — active theme =====
+	   Plum-to-coral-to-gold, like alpenglow on an early climb. The gradient
+	   is reserved for the hero band and the primary CTA; everything else
+	   (cards, badges, body text) stays solid so it reads as lively, not loud. */
+	--color-ink: hsl(291, 25%, 15%);
+	--color-ink-soft: hsl(281, 8%, 42%);
+	--color-ink-soft-bg: hsl(300, 12%, 92%);
+	--color-paper: hsl(33, 45%, 97%);
+	--color-paper-raised: hsl(15, 30%, 94%);
+	--color-line: hsl(325, 20%, 90%);
 
-	--color-rust: hsl(18, 78%, 46%);
-	--color-rust-soft: hsl(18, 70%, 92%);
-	--color-forest: hsl(152, 38%, 22%);
-	--color-forest-soft: hsl(152, 38%, 91%);
-	--color-gold: hsl(42, 88%, 38%);
-	--color-gold-soft: hsl(42, 80%, 90%);
-	--color-ink-soft-bg: hsl(0, 0%, 90%);
+	--color-primary: hsl(291, 36%, 20%);
+	--color-primary-soft: hsl(291, 30%, 93%);
+	--color-coral: hsl(4, 76%, 61%);
+	--color-coral-soft: hsl(6, 80%, 94%);
+	--color-gold: hsl(33, 76%, 42%);
+	--color-gold-soft: hsl(37, 75%, 91%);
+	/* Semantic only (verified / public / casual-pace status) — not a brand
+	   color, kept muted so it doesn't read as a second accent hue. */
+	--color-calm: hsl(140, 21%, 36%);
+	--color-calm-soft: hsl(140, 24%, 92%);
 
-	--font-serif: var(--font-domine), 'Iowan Old Style', Georgia, serif;
-	--font-mono:
-		ui-monospace, 'SFMono-Regular', Menlo, Consolas, 'Liberation Mono', monospace;
+	--gradient-hero: linear-gradient(135deg, hsl(291, 36%, 20%) 0%, hsl(4, 76%, 61%) 60%, hsl(37, 90%, 58%) 100%);
+	--gradient-cta: linear-gradient(120deg, hsl(4, 76%, 61%) 0%, hsl(37, 90%, 58%) 100%);
+	--on-gradient: hsl(33, 45%, 98%);
+
+	// ===== Electric Horizon — backup direction, commented out =====
+	// Indigo-to-teal like a GPS route glowing at dusk, with a hot-coral CTA.
+	// Bolder / more "Strava-energetic" than Sunrise Climb.
+	//
+	// TO SWITCH: block-comment the "Sunrise Climb" custom properties above
+	// (the --color-*, --gradient-*, and --on-gradient lines only — leave
+	// the rest of :root alone), then uncomment this block. Nothing else in
+	// the codebase needs to change — every component reads these same
+	// custom-property names.
+	//
+	// --color-ink: hsl(230, 34%, 14%);
+	// --color-ink-soft: hsl(226, 14%, 42%);
+	// --color-ink-soft-bg: hsl(212, 20%, 91%);
+	// --color-paper: hsl(200, 20%, 96%);
+	// --color-paper-raised: hsl(204, 22%, 92%);
+	// --color-line: hsl(207, 24%, 88%);
+	//
+	// --color-primary: hsl(230, 52%, 15%);
+	// --color-primary-soft: hsl(226, 32%, 91%);
+	// --color-coral: hsl(346, 100%, 66%);
+	// --color-coral-soft: hsl(349, 100%, 93%);
+	// --color-gold: hsl(174, 76%, 38%);
+	// --color-gold-soft: hsl(172, 55%, 90%);
+	// --color-calm: hsl(201, 65%, 32%);
+	// --color-calm-soft: hsl(202, 45%, 90%);
+	//
+	// --gradient-hero: linear-gradient(135deg, hsl(230, 52%, 15%) 0%, hsl(201, 65%, 32%) 55%, hsl(174, 76%, 38%) 100%);
+	// --gradient-cta: linear-gradient(120deg, hsl(346, 100%, 66%) 0%, hsl(20, 100%, 68%) 100%);
+	// --on-gradient: hsl(0, 0%, 100%);
+	// ===== end Electric Horizon =====
+
+	--font-sans:
+		var(--font-jakarta), 'Segoe UI', system-ui, -apple-system, sans-serif;
 
 	--space-3xs: 0.25rem;
 	--space-2xs: 0.5rem;
@@ -27,8 +69,14 @@
 	--space-2xl: 5rem;
 
 	--content-width: 72rem;
-	--radius: 3px;
-	--shadow-offset: 3px;
+	--radius-sm: 0.7rem;
+	--radius: 1rem;
+	--radius-lg: 1.35rem;
+	--radius-pill: 999px;
+
+	--shadow-sm: 0 1px 2px hsl(291, 25%, 15%, 0.05);
+	--shadow-md: 0 16px 32px -18px hsl(291, 25%, 15%, 0.32);
+	--shadow-lift: 0 20px 36px -16px hsl(291, 25%, 15%, 0.38);
 }
 
 html,
@@ -47,16 +95,14 @@ body {
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
-	font-family: var(--font-serif);
+	font-family: var(--font-sans);
 	color: var(--color-ink);
 	background-color: var(--color-paper);
-	background-image: radial-gradient(circle, hsl(30, 20%, 45%, 0.14) 1px, transparent 1px);
-	background-size: 24px 24px;
 }
 
 ::selection {
-	background: var(--color-rust);
-	color: var(--color-paper);
+	background: var(--color-coral);
+	color: var(--on-gradient);
 }
 
 main {
@@ -65,10 +111,19 @@ main {
 	align-items: center;
 	flex-grow: 1;
 	width: 100%;
-	padding: var(--space-lg) var(--space-sm) var(--space-xl);
+	// No top padding here — that's each route's own call via the `page-base`
+	// mixin (styles/_mixins.scss), so a route can opt out of it (the home
+	// page's full-bleed hero) instead of overriding it back to zero.
+	padding: 0 var(--space-sm) var(--space-xl);
+	// Spacing between main's own direct children (e.g. home's hero +
+	// explainer sections). Matches main's own bottom padding so the gap
+	// above .explainer reads the same as the space below it. Only takes
+	// effect where main has more than one child — every other route wraps
+	// its content in a single page div, so this is a no-op there.
+	gap: var(--space-xl);
 
 	@media screen and (min-width: 768px) {
-		padding: var(--space-2xl) var(--space-lg) var(--space-xl);
+		padding: 0 var(--space-lg) var(--space-xl);
 	}
 }
 
@@ -76,10 +131,11 @@ h1,
 h2,
 h3,
 h4 {
-	font-family: var(--font-serif);
-	font-weight: 700;
-	line-height: 1.1;
-	letter-spacing: -0.01em;
+	font-family: var(--font-sans);
+	font-weight: 800;
+	line-height: 1.12;
+	letter-spacing: -0.02em;
+	text-wrap: balance;
 }
 
 h1 {

@@ -1,4 +1,4 @@
-// Shared breakpoints + primitives for the "field guide" design system.
+// Shared breakpoints + primitives for the "Sunrise Climb" design system.
 // Mobile-first: base styles target small screens, `from()` layers on larger ones.
 
 $bp-sm: 480px;
@@ -19,12 +19,20 @@ $bp-xl: 1280px;
 }
 
 // Base for a route's top-level element. `<main>` (in app/layout.tsx) is the
-// only real <main> landmark and owns page padding/flex-grow; route-level
-// wrappers are plain divs that just need to behave like a flex column again.
+// only real <main> landmark and owns side/bottom padding + flex-grow for
+// every route. Top padding lives here instead, on the page wrapper, so a
+// route that wants to sit flush under the sticky header (the home page's
+// full-bleed hero) can just skip page-base rather than fight main's padding
+// with a canceling negative margin.
 @mixin page-base {
 	width: 100%;
 	display: flex;
 	flex-direction: column;
+	padding-top: var(--space-lg);
+
+	@include from($bp-md) {
+		padding-top: var(--space-2xl);
+	}
 }
 
 // For short, single-card pages (quizzes, empty states) that shouldn't force
@@ -39,10 +47,10 @@ $bp-xl: 1280px;
 }
 
 @mixin eyebrow {
-	font-family: var(--font-mono);
+	font-family: var(--font-sans);
 	font-size: 0.75rem;
-	font-weight: 600;
-	letter-spacing: 0.08em;
+	font-weight: 700;
+	letter-spacing: 0.06em;
 	text-transform: uppercase;
 	color: var(--color-ink-soft);
 }
@@ -52,80 +60,107 @@ $bp-xl: 1280px;
 	align-items: center;
 	justify-content: center;
 	gap: 0.5rem;
-	font-family: var(--font-mono);
-	font-size: 0.8125rem;
-	font-weight: 600;
-	letter-spacing: 0.04em;
-	text-transform: uppercase;
+	font-family: var(--font-sans);
+	font-size: 0.875rem;
+	font-weight: 700;
+	letter-spacing: -0.005em;
 	white-space: nowrap;
-	padding: 0.85rem 1.35rem;
-	border: 1.5px solid var(--color-ink);
-	border-radius: var(--radius);
-	background: var(--color-ink);
-	color: var(--color-paper);
-	box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--color-rust);
+	padding: 0.85rem 1.5rem;
+	border: none;
+	border-radius: var(--radius-pill);
+	background: var(--gradient-cta);
+	color: var(--on-gradient);
 	cursor: pointer;
 	transition:
-		transform 0.15s ease,
-		box-shadow 0.15s ease;
+		transform 0.2s ease,
+		box-shadow 0.2s ease,
+		filter 0.2s ease;
 
 	&:hover {
-		transform: translate(-2px, -2px);
-		box-shadow: calc(var(--shadow-offset) + 2px) calc(var(--shadow-offset) + 2px) 0
-			var(--color-rust);
+		filter: brightness(1.04);
+		box-shadow: var(--shadow-md);
 	}
 
 	&:active {
-		transform: translate(0, 0);
-		box-shadow: 1px 1px 0 var(--color-rust);
+		transform: scale(0.98);
 	}
 
 	&:focus-visible {
-		outline: 2px solid var(--color-rust);
+		outline: 2px solid var(--color-primary);
 		outline-offset: 2px;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
 	}
 }
 
 @mixin button-outline {
-	@include button-solid;
-	background: transparent;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 0.5rem;
+	font-family: var(--font-sans);
+	font-size: 0.875rem;
+	font-weight: 700;
+	letter-spacing: -0.005em;
+	white-space: nowrap;
+	padding: 0.8rem 1.45rem;
+	border: 1.5px solid var(--color-line);
+	border-radius: var(--radius-pill);
+	background: var(--color-paper);
 	color: var(--color-ink);
-	box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--color-ink);
+	cursor: pointer;
+	transition:
+		border-color 0.2s ease,
+		color 0.2s ease,
+		background-color 0.2s ease;
 
 	&:hover {
-		box-shadow: calc(var(--shadow-offset) + 2px) calc(var(--shadow-offset) + 2px) 0
-			var(--color-ink);
+		border-color: var(--color-coral);
+		color: var(--color-coral);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 2px;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
 	}
 }
 
 @mixin field-input {
 	width: 100%;
-	font-family: var(--font-serif);
+	font-family: var(--font-sans);
 	font-size: 1rem;
-	padding: 0.7rem 0.85rem;
+	padding: 0.75rem 1rem;
 	border: 1.5px solid var(--color-line);
-	border-radius: var(--radius);
-	background: var(--color-paper);
+	border-radius: var(--radius-sm);
+	background: var(--color-paper-raised);
 	color: var(--color-ink);
 	transition:
 		border-color 0.15s ease,
-		box-shadow 0.15s ease;
+		box-shadow 0.15s ease,
+		background-color 0.15s ease;
 
 	&::placeholder {
 		color: var(--color-ink-soft);
-		opacity: 0.7;
+		opacity: 0.75;
 	}
 
 	&:focus-visible {
 		outline: none;
-		border-color: var(--color-rust);
-		box-shadow: 0 0 0 3px var(--color-rust-soft);
+		border-color: var(--color-coral);
+		background: var(--color-paper);
+		box-shadow: 0 0 0 3px var(--color-coral-soft);
 	}
 }
 
 @mixin card {
 	background: var(--color-paper);
-	border: 1.5px solid var(--color-ink);
-	border-radius: var(--radius);
-	box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--color-line);
+	border: 1px solid var(--color-line);
+	border-radius: var(--radius-lg);
+	box-shadow: var(--shadow-sm);
 }

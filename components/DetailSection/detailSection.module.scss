@@ -8,14 +8,38 @@
 	gap: var(--space-sm);
 }
 
+// A proper heading (not the same tiny eyebrow weight as every row label
+// beneath it) with a short accent + a rule underneath, so each section
+// reads as its own block on a long, list-heavy page instead of one
+// continuous wall of label/value pairs.
 .title {
-	@include eyebrow;
+	display: flex;
+	align-items: center;
+	gap: 0.55rem;
+	font-size: 1.0625rem;
+	font-weight: 800;
+	letter-spacing: -0.01em;
+	color: var(--color-ink);
+	padding-bottom: var(--space-sm);
+	border-bottom: 1px solid var(--color-line);
+
+	&::before {
+		content: '';
+		flex-shrink: 0;
+		width: 0.55rem;
+		height: 0.55rem;
+		border-radius: 50%;
+		background: var(--color-coral);
+	}
 }
 
 .grid {
 	display: grid;
 	grid-template-columns: 1fr;
-	gap: var(--space-xs) var(--space-md);
+	// Generous gap does the separating between rows now instead of a
+	// border under every single one — a 12-row section reads as one card
+	// with breathing room, not a dozen hairline dividers.
+	gap: var(--space-sm) var(--space-lg);
 
 	@include from($bp-sm) {
 		grid-template-columns: repeat(2, 1fr);
@@ -25,14 +49,12 @@
 .row {
 	display: flex;
 	flex-direction: column;
-	gap: 0.15rem;
-	padding-bottom: var(--space-2xs);
-	border-bottom: 1px solid var(--color-line);
+	gap: 0.2rem;
 }
 
 .rowLabel {
-	font-family: var(--font-mono);
 	font-size: 0.6875rem;
+	font-weight: 700;
 	text-transform: uppercase;
 	letter-spacing: 0.04em;
 	color: var(--color-ink-soft);
