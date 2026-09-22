@@ -38,7 +38,7 @@ export function SearchForm({
 						name='q'
 						type='text'
 						defaultValue={defaultQ}
-						placeholder='e.g. gravel, women only, no-drop&hellip;'
+						placeholder='e.g. Gravel, Women Only, No-drop&hellip;'
 						className={styles.input}
 					/>
 				</div>
@@ -51,7 +51,7 @@ export function SearchForm({
 						name='location'
 						type='text'
 						defaultValue={defaultLocation}
-						placeholder='City or state'
+						placeholder='City or State'
 						className={styles.input}
 					/>
 				</div>

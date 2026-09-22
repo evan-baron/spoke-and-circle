@@ -13,7 +13,24 @@ const QUICK_LINKS = [
 ];
 
 export default function HomePage() {
-	const teamCount = getAllTeams().length;
+	const teamCount = () => {
+		const length = getAllTeams().length;
+
+		if (length < 100) {
+			const rounded = Math.floor(length / 10) * 10;
+			return `${rounded}+`;
+		}
+
+		if (length >= 100) {
+			const rounded = Math.floor(length / 100) * 100;
+			return `over ${rounded}+`;
+		}
+
+		if (length >= 1000) {
+			const rounded = Math.floor(length / 1000) * 1000;
+			return `over ${rounded}+`;
+		}
+	};
 
 	return (
 		<>
@@ -23,8 +40,8 @@ export default function HomePage() {
 					<h1>Find the team, club, or group ride that matches your cadence.</h1>
 					<p className={styles.heroCopy}>
 						Whether you race, ride no-drop on Saturdays, or coach juniors,
-						search {teamCount} sample teams, clubs, group rides, and youth
-						programs by keyword, location, or type.
+						search {teamCount()} teams, clubs, group rides, and youth programs
+						by keyword, location, or type.
 					</p>
 					<div className={styles.searchWrap}>
 						<SearchForm onGradient />
