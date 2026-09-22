@@ -281,7 +281,7 @@ export function GetStartedWizard() {
 			<footer className={styles.footer}>
 				<p>
 					Already know what you&rsquo;re looking for?{' '}
-					<Link href='/search'>Browse all listings</Link>.
+					<Link href='/search'>Browse all groups</Link>.
 				</p>
 			</footer>
 		</div>
