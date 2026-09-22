@@ -37,6 +37,18 @@
 	margin-top: var(--space-2xs);
 }
 
+.searchWrapLinks {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--space-xs);
+
+	@include from($bp-sm) {
+		flex-direction: row;
+		align-items: center;
+	}
+}
+
 .submitLink {
 	@include button-outline;
 }

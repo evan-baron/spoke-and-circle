@@ -18,6 +18,26 @@ $bp-xl: 1280px;
 	margin-inline: auto;
 }
 
+// Base for a route's top-level element. `<main>` (in app/layout.tsx) is the
+// only real <main> landmark and owns page padding/flex-grow; route-level
+// wrappers are plain divs that just need to behave like a flex column again.
+@mixin page-base {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+}
+
+// For short, single-card pages (quizzes, empty states) that shouldn't force
+// a scrollbar on desktop: grow to fill whatever room main has left and
+// center within it instead of stacking content at the top with dead space
+// below. Mobile keeps its normal top-aligned, scrollable flow.
+@mixin fill-and-center {
+	@include from($bp-md) {
+		flex: 1;
+		justify-content: center;
+	}
+}
+
 @mixin eyebrow {
 	font-family: var(--font-mono);
 	font-size: 0.75rem;

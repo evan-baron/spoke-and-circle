@@ -1,0 +1,186 @@
+@use '@/styles/mixins' as *;
+
+.wizard {
+	@include card;
+	width: 100%;
+	max-width: 32rem;
+	padding: var(--space-md);
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-md);
+
+	@include from($bp-md) {
+		padding: var(--space-lg);
+	}
+}
+
+.progress {
+	display: flex;
+	gap: var(--space-3xs);
+}
+
+.progressSegment {
+	flex: 1;
+	height: 4px;
+	border-radius: var(--radius);
+	background: var(--color-line);
+	transition: background-color 0.2s ease;
+}
+
+.progressActive {
+	background: var(--color-rust);
+}
+
+.stepBody {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+	min-height: 12rem;
+
+	h2 {
+		margin: 0;
+	}
+}
+
+.stepHint {
+	margin: -0.5rem 0 0;
+	color: var(--color-ink-soft);
+	font-size: 0.9375rem;
+}
+
+@keyframes slideInRight {
+	from {
+		opacity: 0;
+		transform: translateX(16px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes slideInLeft {
+	from {
+		opacity: 0;
+		transform: translateX(-16px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+.slideInRight {
+	animation: slideInRight 0.25s ease both;
+}
+
+.slideInLeft {
+	animation: slideInLeft 0.25s ease both;
+}
+
+.zipForm {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+
+	@include from($bp-sm) {
+		flex-direction: row;
+	}
+}
+
+.zipInput {
+	@include field-input;
+	flex: 1;
+	letter-spacing: 0.05em;
+}
+
+.continueBtn {
+	@include button-solid;
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		transform: none;
+		box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--color-rust);
+	}
+}
+
+.optionGrid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: var(--space-2xs);
+}
+
+.optionCard {
+	@include card;
+	padding: var(--space-sm);
+	font-family: var(--font-serif);
+	font-size: 0.9375rem;
+	text-align: left;
+	cursor: pointer;
+	box-shadow: none;
+	transition:
+		border-color 0.15s ease,
+		background-color 0.15s ease;
+
+	&:hover {
+		border-color: var(--color-rust);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--color-rust);
+		outline-offset: 2px;
+	}
+}
+
+.optionSelected {
+	border-color: var(--color-rust);
+	background: var(--color-rust-soft);
+}
+
+.finishBtn {
+	@include button-solid;
+	align-self: flex-start;
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		transform: none;
+		box-shadow: var(--shadow-offset) var(--shadow-offset) 0 var(--color-rust);
+	}
+}
+
+.nav {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+.backBtn,
+.skipBtn {
+	@include eyebrow;
+	background: none;
+	border: none;
+	padding: 0;
+	cursor: pointer;
+
+	&:hover {
+		color: var(--color-rust);
+	}
+}
+
+.footer {
+	border-top: 1.5px solid var(--color-line);
+	padding-top: var(--space-sm);
+
+	p {
+		margin: 0;
+		font-size: 0.8125rem;
+		color: var(--color-ink-soft);
+	}
+
+	a {
+		color: var(--color-rust);
+		text-decoration: underline;
+	}
+}

@@ -17,7 +17,7 @@ const VIRTUAL_PLATFORMS = ['Zwift', 'Strava', 'TrainerRoad', 'Other'];
 const SCHEDULES = ['Weekly', 'Monthly', 'Annually'];
 const PACES = ['Casual', 'Steady', 'Competitive'];
 const DROP_POLICIES = ['Drop', 'No-drop'];
-const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced'];
+const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 const RANKING_SYSTEMS = ['Captains', 'Ride Leaders', 'Liaison', 'N/A'];
 const PERSONA_OPTIONS = [
 	{ value: 'allAllowed', label: 'All allowed' },
@@ -121,7 +121,7 @@ export default function NewTeamPage() {
 
 	if (submitted) {
 		return (
-			<main className={styles.page}>
+			<div className={styles.page}>
 				<div className={`${styles.wrap} ${styles.confirmation}`}>
 					<div className={styles.confirmationCard}>
 						<p className={styles.confirmationMark}>&#10003;</p>
@@ -145,12 +145,12 @@ export default function NewTeamPage() {
 						</div>
 					</div>
 				</div>
-			</main>
+			</div>
 		);
 	}
 
 	return (
-		<main className={styles.page}>
+		<div className={styles.page}>
 			<div className={styles.wrap}>
 				<Link href='/search' className={styles.backLink}>
 					&larr; Back to search
@@ -702,6 +702,6 @@ export default function NewTeamPage() {
 					</div>
 				</form>
 			</div>
-		</main>
+		</div>
 	);
 }

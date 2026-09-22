@@ -1,0 +1,24 @@
+@use '@/styles/mixins' as *;
+
+.page {
+	@include page-base;
+	align-items: center;
+	@include fill-and-center;
+}
+
+.wrap {
+	width: 100%;
+	max-width: 32rem;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--space-sm);
+
+	h1 {
+		max-width: 20ch;
+	}
+}
+
+.eyebrow {
+	@include eyebrow;
+}

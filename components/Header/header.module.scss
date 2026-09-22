@@ -37,3 +37,49 @@
 		}
 	}
 }
+
+.navLinks {
+	display: flex;
+	align-items: center;
+	gap: var(--space-md);
+}
+
+.mobileLinks {
+	display: flex;
+	align-items: center;
+	gap: var(--space-sm);
+}
+
+.navLink {
+	@include eyebrow;
+	color: var(--color-paper);
+
+	&:hover {
+		color: var(--color-rust);
+	}
+}
+
+.navUser {
+	@include eyebrow;
+	color: var(--color-ink-soft-bg);
+	max-width: 10rem;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.navCta {
+	@include eyebrow;
+	color: var(--color-paper);
+	padding: 0.5rem 0.85rem;
+	border: 1.5px solid var(--color-paper);
+	border-radius: var(--radius);
+	transition:
+		border-color 0.15s ease,
+		color 0.15s ease;
+
+	&:hover {
+		border-color: var(--color-rust);
+		color: var(--color-rust);
+	}
+}

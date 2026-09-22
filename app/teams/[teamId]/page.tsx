@@ -55,7 +55,7 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
   const primaryContact = getPrimaryContact(team);
 
   return (
-    <main className={styles.page}>
+    <div className={styles.page}>
       <div className={styles.wrap}>
         <BackButton />
 
@@ -200,6 +200,6 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

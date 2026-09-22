@@ -1,13 +1,14 @@
 "use client";
 
 import type { ChangeEvent } from "react";
+import { CheckboxDropdown } from "./CheckboxDropdown";
 import styles from "./filterBar.module.scss";
 
 interface FilterBarProps {
   defaultQ?: string;
   defaultLocation?: string;
   defaultType?: string;
-  defaultBikeType?: string;
+  defaultBikeTypes?: string[];
   defaultDiscipline?: string;
   defaultSkillLevel?: string;
   defaultCompetitiveOrCasual?: string;
@@ -19,7 +20,7 @@ interface FilterBarProps {
 const TYPE_OPTIONS = ["Team", "Club", "Group Ride", "Youth Program", "Organization"];
 const BIKE_TYPE_OPTIONS = ["Road", "Gravel", "MTB", "Track", "Tri", "E-bike", "Mixed"];
 const DISCIPLINE_OPTIONS = ["Cross-country", "Trail", "Enduro", "Downhill", "All-mountain"];
-const SKILL_LEVEL_OPTIONS = ["Beginner", "Intermediate", "Advanced"];
+const SKILL_LEVEL_OPTIONS = ["Beginner", "Intermediate", "Advanced", "Expert"];
 const RACING_OPTIONS = ["Competitive", "Casual"];
 
 function autoSubmit(event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) {
@@ -30,7 +31,7 @@ export function FilterBar({
   defaultQ = "",
   defaultLocation = "",
   defaultType = "",
-  defaultBikeType = "",
+  defaultBikeTypes = [],
   defaultDiscipline = "",
   defaultSkillLevel = "",
   defaultCompetitiveOrCasual = "",
@@ -71,20 +72,12 @@ export function FilterBar({
             </option>
           ))}
         </select>
-        <select
+        <CheckboxDropdown
           name="bikeType"
-          defaultValue={defaultBikeType}
-          aria-label="Bike type"
-          onChange={autoSubmit}
-          className={styles.input}
-        >
-          <option value="">Any bike type</option>
-          {BIKE_TYPE_OPTIONS.map((option) => (
-            <option key={option} value={option}>
-              {option}
-            </option>
-          ))}
-        </select>
+          label="Any bike type"
+          options={BIKE_TYPE_OPTIONS}
+          defaultValues={defaultBikeTypes}
+        />
         <button type="submit" className={styles.submit}>
           Apply
         </button>

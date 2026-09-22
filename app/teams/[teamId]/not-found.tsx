@@ -3,7 +3,7 @@ import styles from "./notFound.module.scss";
 
 export default function TeamNotFound() {
   return (
-    <main className={styles.page}>
+    <div className={styles.page}>
       <div className={styles.wrap}>
         <p className={styles.code}>404</p>
         <h1>We couldn&rsquo;t find that team.</h1>
@@ -12,6 +12,6 @@ export default function TeamNotFound() {
           &larr; Back to search
         </Link>
       </div>
-    </main>
+    </div>
   );
 }

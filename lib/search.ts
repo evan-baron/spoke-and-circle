@@ -41,7 +41,7 @@ export function searchTeams(params: SearchParams): Team[] {
     q = "",
     location = "",
     type,
-    bikeType,
+    bikeTypes,
     discipline,
     skillLevel,
     competitiveOrCasual,
@@ -54,7 +54,7 @@ export function searchTeams(params: SearchParams): Team[] {
     .filter((team) => matchesKeyword(team, q))
     .filter((team) => matchesLocation(team, location))
     .filter((team) => !type || team.type === type)
-    .filter((team) => !bikeType || team.bikeType === bikeType)
+    .filter((team) => !bikeTypes?.length || bikeTypes.includes(team.bikeType))
     .filter((team) => !discipline || team.discipline === discipline)
     .filter((team) => !skillLevel || team.skillLevel === skillLevel)
     .filter((team) => !competitiveOrCasual || team.competitiveOrCasual === competitiveOrCasual)

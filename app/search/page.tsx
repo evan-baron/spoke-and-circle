@@ -29,7 +29,7 @@ const DISCIPLINES: MtbDiscipline[] = [
 	'Downhill',
 	'All-mountain',
 ];
-const SKILL_LEVELS: SkillLevel[] = ['Beginner', 'Intermediate', 'Advanced'];
+const SKILL_LEVELS: SkillLevel[] = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 const RACING_OPTIONS = ['Competitive', 'Casual'] as const;
 
 type RawSearchParams = Record<string, string | string[] | undefined>;
@@ -39,11 +39,15 @@ function firstValue(value: string | string[] | undefined): string {
 	return value ?? '';
 }
 
+function allValues(value: string | string[] | undefined): string[] {
+	if (Array.isArray(value)) return value;
+	return value ? [value] : [];
+}
+
 function parseParams(raw: RawSearchParams) {
 	const q = firstValue(raw.q);
 	const location = firstValue(raw.location);
 	const typeRaw = firstValue(raw.type);
-	const bikeTypeRaw = firstValue(raw.bikeType);
 	const disciplineRaw = firstValue(raw.discipline);
 	const skillLevelRaw = firstValue(raw.skillLevel);
 	const competitiveOrCasualRaw = firstValue(raw.competitiveOrCasual);
@@ -52,10 +56,9 @@ function parseParams(raw: RawSearchParams) {
 		CLUB_TYPES.includes(typeRaw as ClubType) ?
 			(typeRaw as ClubType)
 		:	undefined;
-	const bikeType =
-		BIKE_TYPES.includes(bikeTypeRaw as BikeType) ?
-			(bikeTypeRaw as BikeType)
-		:	undefined;
+	const bikeTypes = allValues(raw.bikeType).filter((value): value is BikeType =>
+		BIKE_TYPES.includes(value as BikeType),
+	);
 	const discipline =
 		DISCIPLINES.includes(disciplineRaw as MtbDiscipline) ?
 			(disciplineRaw as MtbDiscipline)
@@ -76,7 +79,7 @@ function parseParams(raw: RawSearchParams) {
 		q,
 		location,
 		type,
-		bikeType,
+		bikeTypes,
 		discipline,
 		skillLevel,
 		competitiveOrCasual,
@@ -109,7 +112,7 @@ export default async function SearchPage({
 	const results = searchTeams(params);
 
 	return (
-		<main className={styles.page}>
+		<div className={styles.page}>
 			<SearchLocationTracker />
 			<div className={styles.wrap}>
 				<h1>Search results</h1>
@@ -118,7 +121,7 @@ export default async function SearchPage({
 					defaultQ={params.q}
 					defaultLocation={params.location}
 					defaultType={params.type ?? ''}
-					defaultBikeType={params.bikeType ?? ''}
+					defaultBikeTypes={params.bikeTypes}
 					defaultDiscipline={params.discipline ?? ''}
 					defaultSkillLevel={params.skillLevel ?? ''}
 					defaultCompetitiveOrCasual={params.competitiveOrCasual ?? ''}
@@ -131,10 +134,13 @@ export default async function SearchPage({
 					{results.length} {results.length === 1 ? 'team' : 'teams'} found
 					{params.q && <> for &ldquo;{params.q}&rdquo;</>}
 					{params.location && <> near &ldquo;{params.location}&rdquo;</>}
+					{params.bikeTypes.length > 1 && (
+						<> riding {params.bikeTypes.join(', ')}</>
+					)}
 				</p>
 
 				<ResultsTable teams={results} />
 			</div>
-		</main>
+		</div>
 	);
 }

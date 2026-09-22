@@ -18,7 +18,7 @@ export type VirtualPlatform = "Zwift" | "Strava" | "TrainerRoad" | "Other";
 
 export type Pace = "Casual" | "Steady" | "Competitive";
 
-export type SkillLevel = "Beginner" | "Intermediate" | "Advanced";
+export type SkillLevel = "Beginner" | "Intermediate" | "Advanced" | "Expert";
 
 export type MtbDiscipline = "Cross-country" | "Trail" | "Enduro" | "Downhill" | "All-mountain";
 
@@ -129,11 +129,21 @@ export interface Team {
   tags: string[];
 }
 
+// -- Rider intake ("get-started" quiz) --
+// Collected client-side to prefill a search today; will seed a rider
+// profile once accounts exist.
+export interface RiderPreferences {
+  zipCode: string;
+  disciplines: BikeType[];
+  skillLevel: SkillLevel | null;
+  lookingFor: Extract<ClubType, "Team" | "Club" | "Group Ride"> | null;
+}
+
 export interface SearchParams {
   q?: string;
   location?: string;
   type?: ClubType;
-  bikeType?: BikeType;
+  bikeTypes?: BikeType[];
   discipline?: MtbDiscipline;
   skillLevel?: SkillLevel;
   competitiveOrCasual?: "Competitive" | "Casual";

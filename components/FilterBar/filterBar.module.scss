@@ -57,3 +57,73 @@
 		accent-color: var(--color-rust);
 	}
 }
+
+.checkboxDropdown {
+	position: relative;
+}
+
+.checkboxDropdownTrigger {
+	@include field-input;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 0.5rem;
+	font-size: 0.9375rem;
+	padding: 0.55rem 0.75rem;
+	text-align: left;
+	cursor: pointer;
+
+	span:first-child {
+		overflow: hidden;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+	}
+}
+
+.checkboxDropdownCaret {
+	flex-shrink: 0;
+	color: var(--color-ink-soft);
+	font-size: 0.7rem;
+}
+
+.checkboxDropdownPanel {
+	@include card;
+	position: absolute;
+	top: calc(100% + 0.35rem);
+	left: 0;
+	z-index: 20;
+	width: max-content;
+	min-width: 100%;
+	max-height: 16rem;
+	overflow-y: auto;
+	padding: var(--space-2xs);
+	// Hidden (not unmounted) when closed, so its checkboxes stay part of
+	// the form and still contribute to the query string on submit.
+
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+}
+
+.checkboxDropdownPanelClosed {
+	display: none;
+}
+
+.checkboxDropdownOption {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.4rem 0.5rem;
+	border-radius: var(--radius);
+	font-size: 0.875rem;
+	white-space: nowrap;
+	cursor: pointer;
+
+	&:hover {
+		background: var(--color-paper-raised);
+	}
+
+	input {
+		accent-color: var(--color-rust);
+	}
+}

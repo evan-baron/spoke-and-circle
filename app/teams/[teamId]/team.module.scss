@@ -1,6 +1,7 @@
 @use '@/styles/mixins' as *;
 
 .page {
+	@include page-base;
 	align-items: stretch;
 }
 

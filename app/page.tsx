@@ -28,9 +28,11 @@ export default function HomePage() {
 					</p>
 					<div className={styles.searchWrap}>
 						<SearchForm />
-						<Link href='/teams/new' className={styles.submitLink}>
-							+ Submit your team, club, or group ride
-						</Link>
+						<div className={styles.searchWrapLinks}>
+							<Link href='/teams/new' className={styles.submitLink}>
+								+ Submit your team, club, or group ride
+							</Link>
+						</div>
 					</div>
 					<div className={styles.quickLinks}>
 						<span className={styles.quickLinksLabel}>Try:</span>

@@ -3,15 +3,38 @@
 .form {
 	@include card;
 	width: 100%;
-	display: grid;
-	grid-template-columns: 1fr;
+	display: flex;
+	flex-direction: column;
 	gap: var(--space-sm);
 	padding: var(--space-md);
 
 	@include from($bp-md) {
+		align-items: start;
+		padding: var(--space-md) var(--space-lg);
+	}
+}
+
+.search-fields {
+	width: 100%;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--space-sm);
+
+	@include from($bp-md) {
 		grid-template-columns: 2fr 1.3fr 1fr auto;
 		align-items: end;
-		padding: var(--space-md) var(--space-lg);
+	}
+}
+
+.quizLink {
+	font-family: var(--font-mono);
+	font-size: 0.8125rem;
+	color: var(--color-ink-soft);
+	text-decoration: underline;
+	text-underline-offset: 2px;
+
+	&:hover {
+		color: var(--color-rust);
 	}
 }
 
