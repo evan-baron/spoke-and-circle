@@ -57,6 +57,12 @@
 	max-width: 56ch;
 }
 
+.heroCopyHighlight {
+	font-weight: 700;
+	color: var(--color-logo);
+	font-style: italic;
+}
+
 .searchWrap {
 	width: 100%;
 	display: flex;

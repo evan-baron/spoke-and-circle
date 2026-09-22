@@ -12,6 +12,7 @@
 
 	--color-primary: hsl(291, 36%, 20%);
 	--color-primary-soft: hsl(291, 30%, 93%);
+	--color-logo: hsl(37, 90%, 66%);
 	--color-coral: hsl(4, 76%, 61%);
 	--color-coral-soft: hsl(6, 80%, 94%);
 	--color-gold: hsl(33, 76%, 42%);
@@ -21,8 +22,17 @@
 	--color-calm: hsl(140, 21%, 36%);
 	--color-calm-soft: hsl(140, 24%, 92%);
 
-	--gradient-hero: linear-gradient(135deg, hsl(291, 36%, 20%) 0%, hsl(4, 76%, 61%) 60%, hsl(37, 90%, 58%) 100%);
-	--gradient-cta: linear-gradient(120deg, hsl(4, 76%, 61%) 0%, hsl(37, 90%, 58%) 100%);
+	--gradient-hero: linear-gradient(
+		135deg,
+		hsl(291, 36%, 20%) 0%,
+		hsl(4, 76%, 61%) 60%,
+		hsl(37, 90%, 58%) 100%
+	);
+	--gradient-cta: linear-gradient(
+		120deg,
+		hsl(4, 76%, 61%) 0%,
+		hsl(37, 90%, 58%) 100%
+	);
 	--on-gradient: hsl(33, 45%, 98%);
 
 	// ===== Electric Horizon — backup direction, commented out =====

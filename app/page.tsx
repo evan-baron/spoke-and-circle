@@ -39,9 +39,10 @@ export default function HomePage() {
 					<p className={styles.eyebrow}>A field guide to group rides</p>
 					<h1>Find the team, club, or group ride that matches your cadence.</h1>
 					<p className={styles.heroCopy}>
-						Whether you race, ride no-drop on Saturdays, or coach juniors,
-						search {teamCount()} teams, clubs, group rides, and youth programs
-						by keyword, location, or type.
+						Whether you race, ride no-drop on Saturdays, or just enjoy a casual
+						end-of-day spin, you can search {teamCount()} teams, clubs, group
+						rides, and youth programs by keyword, location, or type. Find{' '}
+						<span className={styles.heroCopyHighlight}>your circle</span>.
 					</p>
 					<div className={styles.searchWrap}>
 						<SearchForm onGradient />
