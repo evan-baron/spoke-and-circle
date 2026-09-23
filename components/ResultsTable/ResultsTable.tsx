@@ -1,7 +1,6 @@
 import Link from 'next/link';
 import { Badge } from '@/components/Badge/Badge';
-import { formatMemberCount, formatVerification } from '@/lib/format';
-import { toneForPace, toneForVerified, toneForVisibility } from '@/lib/tone';
+import { formatMemberCount, formatVerification } from '@/lib/format';import { toneForPace, toneForVerified, toneForVisibility } from '@/lib/tone';
 import type { Team } from '@/lib/types';
 import styles from './resultsTable.module.scss';
 

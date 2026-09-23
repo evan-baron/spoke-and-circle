@@ -16,7 +16,7 @@ function nonEmpty<T>(items: T[]): T[] | undefined {
 
 export function toTeam(row: TeamRow): Team {
 	return {
-		id: row.slug,
+		id: row.id,
 		name: row.name,
 		type: clubTypeFromDb[row.type],
 		missionStatement: row.missionStatement ?? undefined,

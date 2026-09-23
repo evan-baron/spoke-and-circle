@@ -36,8 +36,10 @@ export default function HomePage() {
 	return (
 		<>
 			<section className={styles.hero}>
-				<div className={styles.graphic}>
-					<Crank color='white' />
+				<div className={styles.graphicContainer}>
+					<div className={styles.graphic}>
+						<Crank color='white' />
+					</div>
 				</div>
 				<div className={styles.heroInner}>
 					<p className={styles.eyebrow}>A field guide to group rides</p>

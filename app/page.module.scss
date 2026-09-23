@@ -1,10 +1,5 @@
 @use '@/styles/mixins' as *;
 
-// Horizontal full-bleed only: cancel out `main`'s side padding so the
-// gradient band runs edge-to-edge, while .explainer right below it keeps
-// the normal gutter. main itself has no top padding (that's `page-base`'s
-// job, which this page doesn't use), so .hero already sits flush under the
-// header with no vertical offset needed here.
 .hero {
 	width: calc(100% + var(--space-sm) * 2);
 	margin-inline: calc(-1 * var(--space-sm));
@@ -12,30 +7,30 @@
 	justify-content: center;
 	background: var(--gradient-hero);
 	color: var(--on-gradient);
-	animation: rise 0.5s ease both;
 	position: relative;
-	overflow: hidden;
+	isolation: isolate;
 
 	@include from($bp-md) {
 		width: calc(100% + var(--space-lg) * 2);
 		margin-inline: calc(-1 * var(--space-lg));
 	}
+}
 
-	@media (prefers-reduced-motion: reduce) {
-		animation: none;
-	}
+.graphicContainer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	overflow: hidden;
+	z-index: -1;
 }
 
 .graphic {
 	--spin-offset: translate(-10%, 10%);
-	position: absolute;
-	top: 0;
-	left: 0;
+
 	width: 300%;
-	z-index: -1;
 	animation: spin 60s linear infinite;
 	opacity: 0.1;
-	overflow: hidden;
 
 	@include from($bp-md) {
 		--spin-offset: translate(-30%, -40%);
@@ -63,17 +58,19 @@
 	align-items: flex-start;
 	gap: var(--space-sm);
 	padding: var(--space-lg) var(--space-sm);
+	animation: rise 0.5s ease both;
 
 	@include from($bp-md) {
 		padding: var(--space-xl) var(--space-lg);
 	}
 
+	@media (prefers-reduced-motion: reduce) {
+		animation: none;
+	}
+
 	h1 {
 		max-width: 24ch;
 		color: var(--on-gradient);
-		// Smaller floor than the global h1 clamp: at phone widths the full
-		// headline was wrapping into 4-5 ragged lines against the gradient
-		// band. This lets it settle into ~3 balanced lines instead.
 		font-size: clamp(1.625rem, 1.15rem + 3.6vw, 3.75rem);
 	}
 }

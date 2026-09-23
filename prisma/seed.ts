@@ -18,7 +18,6 @@ if (process.env.NODE_ENV === 'production') {
 
 function toTeamData(team: Team): Prisma.TeamCreateInput {
 	return {
-		slug: team.id,
 		status: 'Approved',
 		name: team.name,
 		type: clubTypeToDb[team.type],
@@ -88,11 +87,15 @@ async function main() {
 
 	for (const team of teams) {
 		const data = toTeamData(team);
-		await prisma.team.upsert({
-			where: { slug: data.slug },
-			create: data,
-			update: data,
+		const existing = await prisma.team.findFirst({
+			where: { name: data.name },
+			select: { id: true },
 		});
+		if (existing) {
+			await prisma.team.update({ where: { id: existing.id }, data });
+		} else {
+			await prisma.team.create({ data });
+		}
 	}
 
 	const count = await prisma.team.count();
