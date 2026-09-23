@@ -185,7 +185,11 @@ export default function NewTeamPage() {
 							/>
 						</Field>
 						<Field label='Type'>
-							<select name='type' defaultValue='Club' className={styles.input}>
+							<select
+								name='type'
+								defaultValue='Group Ride'
+								className={styles.input}
+							>
 								{CLUB_TYPES.map((option) => (
 									<option key={option} value={option}>
 										{option}
@@ -281,7 +285,7 @@ export default function NewTeamPage() {
 					</Section>
 
 					<Section title='Details'>
-						<Field label='Bike type'>
+						<Field label='Cycling Discipline'>
 							<select
 								name='bikeType'
 								defaultValue='Road'
@@ -703,7 +707,6 @@ export default function NewTeamPage() {
 					</Section>
 
 					<div className={styles.submitRow}>
-						<p>This is a wireframe; submitting won&rsquo;t save any data.</p>
 						<button type='submit' className={styles.buttonSolid}>
 							Submit for review
 						</button>

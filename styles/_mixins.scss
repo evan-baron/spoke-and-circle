@@ -31,7 +31,7 @@ $bp-xl: 1280px;
 	padding-top: var(--space-lg);
 
 	@include from($bp-md) {
-		padding-top: var(--space-2xl);
+		padding-top: var(--space-xl);
 	}
 }
 

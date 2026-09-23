@@ -13,6 +13,7 @@
 	--color-primary: hsl(291, 36%, 20%);
 	--color-primary-soft: hsl(291, 30%, 93%);
 	--color-logo: hsl(37, 90%, 66%);
+	--color-logo-soft: hsl(37, 90%, 91%);
 	--color-coral: hsl(4, 76%, 61%);
 	--color-coral-soft: hsl(6, 80%, 94%);
 	--color-gold: hsl(33, 76%, 42%);
@@ -128,15 +129,16 @@ main {
 	// No top padding here — that's each route's own call via the `page-base`
 	// mixin (styles/_mixins.scss), so a route can opt out of it (the home
 	// page's full-bleed hero) instead of overriding it back to zero.
-	padding: 0 var(--space-sm) var(--space-xl);
+	padding: 0 var(--space-sm) var(--space-lg);
 	// Spacing between main's own direct children (e.g. home's hero +
 	// explainer sections). Matches main's own bottom padding so the gap
 	// above .explainer reads the same as the space below it. Only takes
 	// effect where main has more than one child — every other route wraps
 	// its content in a single page div, so this is a no-op there.
-	gap: var(--space-xl);
+	gap: var(--space-lg);
 
 	@media screen and (min-width: 768px) {
+		gap: var(--space-xl);
 		padding: 0 var(--space-lg) var(--space-xl);
 	}
 }
