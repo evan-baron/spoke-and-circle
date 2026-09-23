@@ -1,0 +1,203 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  auth0Id   String   @unique
+  email     String   @unique
+  firstName String?
+  lastName  String?
+  timezone  String?
+  role      UserRole @default(user)
+  active    Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  teams     Team[]
+}
+
+model Team {
+  id   String @id @default(cuid())
+  slug String @unique
+
+  status        ReviewStatus @default(Pending)
+  submittedBy   User?        @relation(fields: [submittedById], references: [id])
+  submittedById Int?
+
+  name                String
+  type                ClubType
+  missionStatement    String?
+  codeOfConduct       String?
+  affiliation         String?
+  location            String
+  additionalLocations String[]
+  founded             Int?
+  visibility          Visibility @default(Public)
+  primaryLanguage     String?
+  contactPhone        String?
+  contactEmail        String?
+
+  verified       Boolean @default(false)
+  lastActiveYear Int?
+
+  bikeType            BikeType
+  discipline          MtbDiscipline?
+  eBikeAllowed        Boolean           @default(false)
+  format              Format
+  virtualPlatforms    VirtualPlatform[]
+  homeBaseAffiliation String?
+  website             String?
+  instagram           String?
+  facebook            String?
+  strava              String?
+  discord             String?
+  ageMin              Int?
+  ageMax              Int?
+  personaRestrictions String[]
+  memberCount         Int               @default(0)
+  memberLimit         Int?
+  waitlist            Boolean           @default(false)
+  howToJoin           String?
+
+  rideSchedule           ScheduleFrequency?
+  startTimes             String[]
+  pace                   Pace?
+  segmentation           Segmentation?
+  typicalDistanceMiles   Int?
+  typicalElevationGainFt Int?
+  dropPolicy             DropPolicy?
+  rideVisibility         Visibility         @default(Public)
+
+  competitiveOrCasual CompetitiveOrCasual
+  skillLevel          SkillLevel
+  instructional       Boolean             @default(false)
+  duesRequired        Boolean             @default(false)
+  duesAmount          String?
+  duesSchedule        ScheduleFrequency?
+  requiredRides       Boolean             @default(false)
+  requiredRaces       Int?
+  mileageMin          Int?
+  mileageFrequency    ScheduleFrequency?
+  requiredKit         Boolean             @default(false)
+  rankingSystem       RankingSystem       @default(NA)
+  hasRoster           Boolean             @default(false)
+  sponsors            String[]
+  eventTypes          String[]
+
+  joinTryouts    Boolean @default(false)
+  joinReferral   Boolean @default(false)
+  joinInviteOnly Boolean @default(false)
+  joinOpen       Boolean @default(true)
+
+  tags String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([bikeType])
+  @@index([location])
+}
+
+enum ClubType {
+  Team
+  Club
+  GroupRide    @map("Group Ride")
+  YouthProgram @map("Youth Program")
+  Organization
+}
+
+enum BikeType {
+  Road
+  Gravel
+  MTB
+  Track
+  Tri
+  EBike  @map("E-bike")
+  Mixed
+}
+
+enum Format {
+  InPerson @map("In-person")
+  Virtual
+  Hybrid
+}
+
+enum VirtualPlatform {
+  Zwift
+  Strava
+  TrainerRoad
+  Other
+}
+
+enum Pace {
+  Casual
+  Steady
+  Competitive
+}
+
+enum SkillLevel {
+  Beginner
+  Intermediate
+  Advanced
+  Expert
+}
+
+enum MtbDiscipline {
+  CrossCountry @map("Cross-country")
+  Trail
+  Enduro
+  Downhill
+  AllMountain  @map("All-mountain")
+}
+
+enum Segmentation {
+  AGroup @map("A Group")
+  BGroup @map("B Group")
+  CGroup @map("C Group")
+  NA     @map("N/A")
+}
+
+enum ScheduleFrequency {
+  Weekly
+  Monthly
+  Annually
+}
+
+enum DropPolicy {
+  Drop
+  NoDrop @map("No-drop")
+}
+
+enum RankingSystem {
+  Captains
+  RideLeaders @map("Ride Leaders")
+  Liaison
+  NA          @map("N/A")
+}
+
+enum Visibility {
+  Public
+  Private
+}
+
+enum CompetitiveOrCasual {
+  Competitive
+  Casual
+}
+
+enum ReviewStatus {
+  Pending
+  Approved
+  Rejected
+}
+
+enum UserRole {
+  user
+  admin
+}

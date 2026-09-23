@@ -151,3 +151,8 @@ export interface SearchParams {
   youthOnly?: boolean;
   acceptingNewRiders?: boolean;
 }
+
+export interface TeamsResponse {
+  success: boolean;
+  teams: Team[];
+}
