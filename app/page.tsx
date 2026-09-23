@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { SearchForm } from '@/components/SearchForm/SearchForm';
 import { getAllTeams } from '@/lib/teams';
+import Crank from '@/components/Graphics/Crank';
 import styles from './page.module.scss';
 
 const QUICK_LINKS = [
@@ -35,6 +36,9 @@ export default function HomePage() {
 	return (
 		<>
 			<section className={styles.hero}>
+				<div className={styles.graphic}>
+					<Crank color='white' />
+				</div>
 				<div className={styles.heroInner}>
 					<p className={styles.eyebrow}>A field guide to group rides</p>
 					<h1>Find the team, club, or group ride that matches your cadence.</h1>

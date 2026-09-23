@@ -13,6 +13,8 @@
 	background: var(--gradient-hero);
 	color: var(--on-gradient);
 	animation: rise 0.5s ease both;
+	position: relative;
+	overflow: hidden;
 
 	@include from($bp-md) {
 		width: calc(100% + var(--space-lg) * 2);
@@ -21,6 +23,36 @@
 
 	@media (prefers-reduced-motion: reduce) {
 		animation: none;
+	}
+}
+
+.graphic {
+	--spin-offset: translate(-10%, 10%);
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 300%;
+	z-index: -1;
+	animation: spin 60s linear infinite;
+	opacity: 0.1;
+	overflow: hidden;
+
+	@include from($bp-md) {
+		--spin-offset: translate(-30%, -40%);
+		width: 100%;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		animation: none;
+	}
+}
+
+@keyframes spin {
+	from {
+		transform: var(--spin-offset) rotate(0deg);
+	}
+	to {
+		transform: var(--spin-offset) rotate(360deg);
 	}
 }
 
