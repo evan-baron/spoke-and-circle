@@ -12,7 +12,7 @@ export default function GetStartedPage() {
 	return (
 		<div className={styles.page}>
 			<div className={styles.wrap}>
-				<p className={styles.eyebrow}>Find your ride</p>
+				<p className={styles.eyebrow}>Find your circle</p>
 				<h1>Let&rsquo;s find your people.</h1>
 				<GetStartedWizard />
 			</div>

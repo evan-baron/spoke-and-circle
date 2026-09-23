@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { type ChangeEvent, type FormEvent, useState } from 'react';
+import { type ChangeEvent, type FormEvent, useId, useState } from 'react';
 import styles from './newTeam.module.scss';
 
 const CLUB_TYPES = [
@@ -74,9 +74,17 @@ interface SectionProps {
 }
 
 function Section({ title, description, children }: SectionProps) {
+	// A <legend> can't reliably carry this custom a heading treatment across
+	// browsers, so the visible title is a real <h2> — same element
+	// DetailSection uses on the team page — and the <fieldset> gets its
+	// accessible name from aria-labelledby instead of relying on <legend>.
+	const titleId = useId();
+
 	return (
-		<fieldset className={styles.section}>
-			<legend className={styles.sectionTitle}>{title}</legend>
+		<fieldset className={styles.section} aria-labelledby={titleId}>
+			<h2 id={titleId} className={styles.sectionTitle}>
+				{title}
+			</h2>
 			{description && (
 				<p className={styles.sectionDescription}>{description}</p>
 			)}
@@ -157,11 +165,11 @@ export default function NewTeamPage() {
 				</Link>
 
 				<header className={styles.header}>
-					<p className={styles.eyebrow}>Submit a group</p>
-					<h1>Submit a new group</h1>
+					<p className={styles.eyebrow}>Submit a team, club, or group</p>
+					<h1>Submit a new team, club, or group ride</h1>
 					<p>
-						Send a group, club, or team for an admin to review. They may follow
-						up with you before it goes live.
+						Send a team, club, or group ride for an admin to review. They may
+						follow up with you before it goes live.
 					</p>
 				</header>
 

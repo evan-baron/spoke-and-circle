@@ -3,7 +3,12 @@
 .page {
 	@include page-base;
 	align-items: center;
-	@include fill-and-center;
+	flex: 1;
+	justify-content: center;
+
+	@include from($bp-md) {
+		justify-content: flex-start;
+	}
 }
 
 .wrap {

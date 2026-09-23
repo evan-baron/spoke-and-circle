@@ -9,28 +9,11 @@
 }
 
 // A proper heading (not the same tiny eyebrow weight as every row label
-// beneath it) with a short accent + a rule underneath, so each section
-// reads as its own block on a long, list-heavy page instead of one
-// continuous wall of label/value pairs.
+// beneath it), so each section reads as its own block on a long,
+// list-heavy page instead of one continuous wall of label/value pairs.
+// Shared recipe — see @mixin section-heading (styles/_mixins.scss).
 .title {
-	display: flex;
-	align-items: center;
-	gap: 0.55rem;
-	font-size: 1.0625rem;
-	font-weight: 800;
-	letter-spacing: -0.01em;
-	color: var(--color-ink);
-	padding-bottom: var(--space-sm);
-	border-bottom: 1px solid var(--color-line);
-
-	&::before {
-		content: '';
-		flex-shrink: 0;
-		width: 0.55rem;
-		height: 0.55rem;
-		border-radius: 50%;
-		background: var(--color-coral);
-	}
+	@include section-heading;
 }
 
 .grid {

@@ -53,8 +53,7 @@
 }
 
 .sectionTitle {
-	@include eyebrow;
-	padding: 0 var(--space-2xs);
+	@include section-heading;
 }
 
 .sectionDescription {
@@ -65,7 +64,7 @@
 .sectionGrid {
 	display: grid;
 	grid-template-columns: 1fr;
-	gap: var(--space-sm) var(--space-md);
+	gap: var(--space-md) var(--space-lg);
 
 	@include from($bp-md) {
 		grid-template-columns: repeat(2, 1fr);
