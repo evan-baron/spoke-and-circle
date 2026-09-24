@@ -1,4 +1,7 @@
-export type RateLimitBucket = 'teams-read' | 'teams-write';
+export type RateLimitBucket =
+	| 'teams-read'
+	| 'teams-write'
+	| 'locations-search';
 
 export type RateLimitActor = 'anonymous' | 'user' | 'admin';
 
@@ -15,5 +18,9 @@ export const RATE_LIMIT_CONFIG: Record<RateLimitBucket, BucketConfig> = {
 	'teams-write': {
 		windowSeconds: 600,
 		maxRequests: { anonymous: 0, user: 5, admin: 60 },
+	},
+	'locations-search': {
+		windowSeconds: 60,
+		maxRequests: { anonymous: 10, user: 10, admin: 10 },
 	},
 };

@@ -11,7 +11,7 @@ type AuthenticatedUser = NonNullable<
 type RouteParams = Record<string, string | string[]>;
 
 interface RouteContext {
-	params?: Promise<RouteParams>;
+	params: Promise<RouteParams>;
 }
 
 type AuthenticatedHandler = (
@@ -37,7 +37,7 @@ export function withAuth(
 	options: { rateLimit: RateLimitBucket },
 	handler: AuthenticatedHandler,
 ) {
-	return async (request: NextRequest, context?: RouteContext) => {
+	return async (request: NextRequest, context: RouteContext) => {
 		try {
 			const { user, error } = await getApiUser();
 			if (error) return jsonAuthError(error);
@@ -46,7 +46,7 @@ export function withAuth(
 			const rateLimited = await applyRateLimit(user, options.rateLimit);
 			if (rateLimited) return rateLimited;
 
-			const params = context?.params ? await context.params : undefined;
+			const params = await context.params;
 			return await handler(request, user, params);
 		} catch (error) {
 			return handleRouteError(request, error);
@@ -58,12 +58,12 @@ export function withPublicRateLimit(
 	bucket: RateLimitBucket,
 	handler: PublicHandler,
 ) {
-	return async (request: NextRequest, context?: RouteContext) => {
+	return async (request: NextRequest, context: RouteContext) => {
 		try {
 			const rateLimited = await applyPublicRateLimit(request, bucket);
 			if (rateLimited) return rateLimited;
 
-			const params = context?.params ? await context.params : undefined;
+			const params = await context.params;
 			return await handler(request, params);
 		} catch (error) {
 			return handleRouteError(request, error);

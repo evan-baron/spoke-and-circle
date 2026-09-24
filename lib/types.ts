@@ -156,3 +156,13 @@ export interface TeamsResponse {
   success: boolean;
   teams: Team[];
 }
+
+export interface LocationOption {
+  placeId: string;
+  label: string;
+}
+
+export interface LocationsResponse {
+  success: boolean;
+  locations: LocationOption[];
+}

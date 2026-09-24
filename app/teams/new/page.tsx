@@ -2,6 +2,8 @@
 
 import Link from 'next/link';
 import { type ChangeEvent, type FormEvent, useId, useState } from 'react';
+import { LocationInput } from '@/components/LocationInput/LocationInput';
+import { LocationListInput } from '@/components/LocationInput/LocationListInput';
 import styles from './newTeam.module.scss';
 
 const CLUB_TYPES = [
@@ -94,6 +96,8 @@ function Section({ title, description, children }: SectionProps) {
 }
 
 export default function NewTeamPage() {
+	const locationId = useId();
+	const additionalLocationsId = useId();
 	const [submitted, setSubmitted] = useState(false);
 	const [personaRestriction, setPersonaRestriction] = useState<string | null>(
 		null,
@@ -184,7 +188,7 @@ export default function NewTeamPage() {
 								className={styles.input}
 							/>
 						</Field>
-						<Field label='Type'>
+						<Field label='Group Type'>
 							<select
 								name='type'
 								defaultValue='Group Ride'
@@ -217,27 +221,37 @@ export default function NewTeamPage() {
 							<input
 								type='text'
 								name='affiliation'
-								placeholder='e.g. USA Cycling Club Member'
+								placeholder='e.g. Bike Shop, Organization, etc.'
 								className={styles.input}
 							/>
 						</Field>
-						<Field label='Location'>
-							<input
-								type='text'
+						<div className={styles.field}>
+							<label htmlFor={locationId} className={styles.fieldLabel}>
+								Location
+							</label>
+							<LocationInput
+								id={locationId}
 								name='location'
 								required
-								placeholder='City, State'
-								className={styles.input}
+								placeholder='Start typing a US city or state'
 							/>
-						</Field>
-						<Field label='Additional locations' hint='Comma-separated'>
-							<input
-								type='text'
+						</div>
+						<div className={styles.field}>
+							<label
+								htmlFor={additionalLocationsId}
+								className={styles.fieldLabel}
+							>
+								Additional locations
+							</label>
+							<LocationListInput
+								id={additionalLocationsId}
 								name='additionalLocations'
-								placeholder='e.g. Beaverton, OR'
-								className={styles.input}
+								placeholder='Search and add another US city or state'
 							/>
-						</Field>
+							<span className={styles.fieldHint}>
+								Add each place your team also rides, up to 10
+							</span>
+						</div>
 						<Field label='Founded'>
 							<input
 								type='number'

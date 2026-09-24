@@ -1,4 +1,4 @@
-import type { TeamsResponse } from '@/lib/types';
+import type { LocationsResponse, TeamsResponse } from '@/lib/types';
 import { ApiError } from '@/services/apiError';
 
 async function parseApiResponse<T>(response: Response): Promise<T> {
@@ -29,4 +29,12 @@ const apiCall = async <T = unknown>(
 
 export const teamAPI = {
 	read: () => apiCall<TeamsResponse>('/api/teams', { method: 'GET' }),
+};
+
+export const locationAPI = {
+	search: (query: string, signal?: AbortSignal) =>
+		apiCall<LocationsResponse>(
+			`/api/locations?q=${encodeURIComponent(query)}`,
+			{ method: 'GET', signal },
+		),
 };
