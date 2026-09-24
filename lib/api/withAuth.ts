@@ -34,7 +34,7 @@ function handleRouteError(request: NextRequest, error: unknown) {
 }
 
 export function withAuth(
-	options: { rateLimit: RateLimitBucket },
+	options: { rateLimit: RateLimitBucket; role?: 'admin' },
 	handler: AuthenticatedHandler,
 ) {
 	return async (request: NextRequest, context: RouteContext) => {
@@ -42,6 +42,9 @@ export function withAuth(
 			const { user, error } = await getApiUser();
 			if (error) return jsonAuthError(error);
 			if (!user.active) return json403('Account is disabled');
+			if (options.role === 'admin' && user.role !== 'admin') {
+				return json403('Admin access required');
+			}
 
 			const rateLimited = await applyRateLimit(user, options.rateLimit);
 			if (rateLimited) return rateLimited;

@@ -1,3 +1,4 @@
+import { timingSafeEqual } from 'node:crypto';
 import { isIP } from 'node:net';
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
@@ -61,8 +62,22 @@ async function checkRateLimit(
 	};
 }
 
+function isTrustedCloudflareRequest(req: NextRequest): boolean {
+	const secret = process.env.CLOUDFLARE_ORIGIN_SECRET;
+	const provided = req.headers.get('x-origin-secret');
+	if (!secret || !provided) return false;
+
+	const expectedBuffer = Buffer.from(secret);
+	const providedBuffer = Buffer.from(provided);
+	return (
+		expectedBuffer.length === providedBuffer.length &&
+		timingSafeEqual(expectedBuffer, providedBuffer)
+	);
+}
+
 function getClientIp(req: NextRequest): string {
 	const candidates = [
+		isTrustedCloudflareRequest(req) ? req.headers.get('cf-connecting-ip') : null,
 		req.headers.get('x-real-ip'),
 		req.headers.get('x-forwarded-for')?.split(',')[0],
 	];

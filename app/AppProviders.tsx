@@ -2,10 +2,14 @@
 
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState } from 'react';
+import { CurrentUserProvider } from '@/contexts/CurrentUserContext';
+import type { CurrentUser } from '@/lib/types';
 
 export default function AppProviders({
+	currentUser,
 	children,
 }: {
+	currentUser: CurrentUser | null;
 	children: React.ReactNode;
 }) {
 	const [queryClient] = useState(
@@ -23,6 +27,8 @@ export default function AppProviders({
 	);
 
 	return (
-		<QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
+		<QueryClientProvider client={queryClient}>
+			<CurrentUserProvider user={currentUser}>{children}</CurrentUserProvider>
+		</QueryClientProvider>
 	);
 }

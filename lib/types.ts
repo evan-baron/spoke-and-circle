@@ -157,6 +157,14 @@ export interface TeamsResponse {
   teams: Team[];
 }
 
+export interface CurrentUser {
+  email: string;
+  firstName: string | null;
+  lastName: string | null;
+  role: "user" | "admin";
+  isAdmin: boolean;
+}
+
 export interface LocationOption {
   placeId: string;
   label: string;

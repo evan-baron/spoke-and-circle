@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google';
 import AppProviders from '@/app/AppProviders';
 import Header from '@/components/Header/Header';
 import { Footer } from '@/components/Footer/Footer';
+import { getCurrentUser } from '@/services/currentUserService';
 import './reset.css';
 import './globals.scss';
 
@@ -17,15 +18,17 @@ export const metadata: Metadata = {
 		'Search sample bike teams, clubs, and groups by location, type, or keyword.',
 };
 
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: {
 	children: React.ReactNode;
 }) {
+	const currentUser = await getCurrentUser();
+
 	return (
 		<html lang='en' className={jakarta.variable}>
 			<body>
-				<AppProviders>
+				<AppProviders currentUser={currentUser}>
 					<Header />
 					<main>{children}</main>
 					<Footer />

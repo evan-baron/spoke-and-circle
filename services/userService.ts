@@ -49,6 +49,12 @@ export async function findOrCreateUser(user: Auth0User) {
 		const updateData =
 			user.email_verified ? userData : { firstName, lastName };
 
+		const unchanged = Object.entries(updateData).every(
+			([key, value]) =>
+				existingUser[key as keyof typeof existingUser] === value,
+		);
+		if (unchanged) return existingUser;
+
 		return prisma.user.update({
 			where: { id: existingUser.id },
 			data: updateData,

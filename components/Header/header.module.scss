@@ -60,6 +60,49 @@
 	}
 }
 
+.navLinkWithIcon {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.4rem;
+}
+
+.navIcon {
+	width: 1rem;
+	height: 1rem;
+	flex-shrink: 0;
+}
+
+.navAdmin {
+	display: inline-flex;
+	align-items: center;
+	white-space: nowrap;
+	font-size: 0.75rem;
+	font-weight: 700;
+	color: hsl(0, 0%, 100%, 0.92);
+	padding: 0.35rem 0.7rem;
+	border: 1px solid hsl(0, 0%, 100%, 0.4);
+	border-radius: var(--radius-pill);
+	transition:
+		background-color 0.15s ease,
+		border-color 0.15s ease,
+		color 0.15s ease;
+
+	&:hover {
+		background: hsl(0, 0%, 100%, 0.12);
+		border-color: var(--on-gradient);
+		color: var(--on-gradient);
+	}
+
+	@include from($bp-md) {
+		font-size: 0.8125rem;
+		padding: 0.4rem 0.9rem;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
+}
+
 .navUser {
 	font-size: 0.8125rem;
 	font-weight: 600;
