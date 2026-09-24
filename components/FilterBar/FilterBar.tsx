@@ -44,8 +44,26 @@ const DISCIPLINE_OPTIONS = [
 const SKILL_LEVEL_OPTIONS = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 const RACING_OPTIONS = ['Competitive', 'Casual'];
 
+const AUTO_SUBMIT_DEBOUNCE_MS = 300;
+const pendingAutoSubmits = new WeakMap<
+	HTMLFormElement,
+	ReturnType<typeof setTimeout>
+>();
+
 function autoSubmit(event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) {
-	event.currentTarget.form?.requestSubmit();
+	const form = event.currentTarget.form;
+	if (!form) return;
+
+	const pending = pendingAutoSubmits.get(form);
+	if (pending) clearTimeout(pending);
+
+	pendingAutoSubmits.set(
+		form,
+		setTimeout(() => {
+			pendingAutoSubmits.delete(form);
+			form.requestSubmit();
+		}, AUTO_SUBMIT_DEBOUNCE_MS),
+	);
 }
 
 export function FilterBar({

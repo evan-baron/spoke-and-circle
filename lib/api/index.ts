@@ -6,4 +6,6 @@ export {
 	json404,
 	json500,
 	jsonValidationError,
+	jsonAuthError,
 } from './responses';
+export { withAuth, withPublicRateLimit } from './withAuth';

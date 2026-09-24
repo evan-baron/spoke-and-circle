@@ -1,9 +1,9 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { json500 } from '@/lib/api';
+import { json500, withPublicRateLimit } from '@/lib/api';
 import { toTeam } from '@/lib/api/teamMapper';
 
-export async function GET() {
+export const GET = withPublicRateLimit('teams-read', async () => {
 	try {
 		const teams = await prisma.team.findMany({
 			where: { status: 'Approved' },
@@ -15,4 +15,4 @@ export async function GET() {
 		console.error('Error fetching teams:', error);
 		return json500('Failed to fetch teams');
 	}
-}
+});

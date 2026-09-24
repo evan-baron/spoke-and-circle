@@ -122,7 +122,7 @@ const teamBaseSchema = z.object({
 		.max(200, 'Home-base affiliation must be less than 200 characters')
 		.optional(),
 	website: z
-		.url('Invalid website URL')
+		.url({ protocol: /^https?$/, message: 'Invalid website URL' })
 		.max(300, 'Website must be less than 300 characters')
 		.optional(),
 	instagram: z.string().trim().max(100).optional(),

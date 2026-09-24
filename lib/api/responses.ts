@@ -25,6 +25,10 @@ export function json500(message = 'Internal Server Error') {
 	return jsonError(message, 500);
 }
 
+export function jsonAuthError(error: { error: string; status: number }) {
+	return NextResponse.json({ error: error.error }, { status: error.status });
+}
+
 export function jsonValidationError(zodError: z.ZodError) {
 	const errors = zodError.issues.map((issue) => ({
 		path: issue.path.join('.'),

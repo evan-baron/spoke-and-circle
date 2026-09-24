@@ -44,14 +44,19 @@ const RACING_OPTIONS = ['Competitive', 'Casual'] as const;
 
 type RawSearchParams = Record<string, string | string[] | undefined>;
 
+const MAX_PARAM_LENGTH = 100;
+const MAX_PARAM_VALUES = 10;
+
 function firstValue(value: string | string[] | undefined): string {
-	if (Array.isArray(value)) return value[0] ?? '';
-	return value ?? '';
+	const first = Array.isArray(value) ? (value[0] ?? '') : (value ?? '');
+	return first.slice(0, MAX_PARAM_LENGTH);
 }
 
 function allValues(value: string | string[] | undefined): string[] {
-	if (Array.isArray(value)) return value;
-	return value ? [value] : [];
+	const values = Array.isArray(value) ? value : value ? [value] : [];
+	return values
+		.slice(0, MAX_PARAM_VALUES)
+		.map((item) => item.slice(0, MAX_PARAM_LENGTH));
 }
 
 function parseParams(raw: RawSearchParams) {
