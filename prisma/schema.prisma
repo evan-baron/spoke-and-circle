@@ -99,6 +99,8 @@ model Team {
 
   tags String[]
 
+  additionalPlaces TeamLocation[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
@@ -106,6 +108,20 @@ model Team {
   @@index([deleteAfter])
   @@index([bikeType])
   @@index([location])
+  @@index([latitude, longitude])
+}
+
+model TeamLocation {
+  id        String  @id @default(cuid())
+  team      Team    @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId    String
+  label     String
+  state     String?
+  latitude  Float?
+  longitude Float?
+
+  @@index([teamId])
+  @@index([state])
   @@index([latitude, longitude])
 }
 

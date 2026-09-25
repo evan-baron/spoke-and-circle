@@ -12,6 +12,7 @@ import { isAntiBotAnswerCorrect } from '@/lib/data/mathQuestions';
 import { antiBotSchema, createTeamSchema } from '@/lib/validation';
 import { getApiUser } from '@/services/getUserService';
 import { resolveCoordinates } from '@/services/placeService';
+import { syncAdditionalPlaces } from '@/services/teamLocationService';
 
 export const GET = withPublicRateLimit('teams-read', async () => {
 	try {
@@ -61,6 +62,12 @@ export const POST = withPublicRateLimit('teams-write', async (request) => {
 			},
 			select: { id: true },
 		});
+
+		try {
+			await syncAdditionalPlaces(team.id, parsed.data.additionalLocations ?? []);
+		} catch (error) {
+			console.error('Error saving additional locations:', error);
+		}
 
 		return NextResponse.json(
 			{ success: true, team: { id: team.id } },

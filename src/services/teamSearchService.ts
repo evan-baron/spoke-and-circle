@@ -32,6 +32,7 @@ function locationClause(
 			OR: [
 				{ location: { endsWith: `, ${resolved.abbr}` } },
 				{ location: { equals: resolved.name, mode: 'insensitive' } },
+				{ additionalPlaces: { some: { state: resolved.abbr } } },
 			],
 		};
 	}
@@ -106,18 +107,30 @@ async function findTeamMilesWithin(
 			Math.max(Math.cos((point.latitude * Math.PI) / 180), 0.01));
 
 	const rows = await prisma.$queryRaw<{ id: string; miles: number }[]>`
-		SELECT id, miles FROM (
-			SELECT id, ${EARTH_RADIUS_MILES}::float8 * 2 * asin(sqrt(least(1,
-				power(sin(radians(latitude - ${point.latitude}::float8) / 2), 2) +
-				cos(radians(${point.latitude}::float8)) * cos(radians(latitude)) *
-				power(sin(radians(longitude - ${point.longitude}::float8) / 2), 2)
+		SELECT id, MIN(miles) AS miles FROM (
+			SELECT t.id AS id, ${EARTH_RADIUS_MILES}::float8 * 2 * asin(sqrt(least(1,
+				power(sin(radians(t.latitude - ${point.latitude}::float8) / 2), 2) +
+				cos(radians(${point.latitude}::float8)) * cos(radians(t.latitude)) *
+				power(sin(radians(t.longitude - ${point.longitude}::float8) / 2), 2)
 			))) AS miles
-			FROM "Team"
-			WHERE status = 'Approved'::"ReviewStatus"
-				AND latitude BETWEEN ${point.latitude - latDelta}::float8 AND ${point.latitude + latDelta}::float8
-				AND longitude BETWEEN ${point.longitude - lngDelta}::float8 AND ${point.longitude + lngDelta}::float8
+			FROM "Team" t
+			WHERE t.status = 'Approved'::"ReviewStatus"
+				AND t.latitude BETWEEN ${point.latitude - latDelta}::float8 AND ${point.latitude + latDelta}::float8
+				AND t.longitude BETWEEN ${point.longitude - lngDelta}::float8 AND ${point.longitude + lngDelta}::float8
+			UNION ALL
+			SELECT t.id AS id, ${EARTH_RADIUS_MILES}::float8 * 2 * asin(sqrt(least(1,
+				power(sin(radians(tl.latitude - ${point.latitude}::float8) / 2), 2) +
+				cos(radians(${point.latitude}::float8)) * cos(radians(tl.latitude)) *
+				power(sin(radians(tl.longitude - ${point.longitude}::float8) / 2), 2)
+			))) AS miles
+			FROM "TeamLocation" tl
+			JOIN "Team" t ON t.id = tl."teamId"
+			WHERE t.status = 'Approved'::"ReviewStatus"
+				AND tl.latitude BETWEEN ${point.latitude - latDelta}::float8 AND ${point.latitude + latDelta}::float8
+				AND tl.longitude BETWEEN ${point.longitude - lngDelta}::float8 AND ${point.longitude + lngDelta}::float8
 		) AS distances
-		WHERE miles <= ${radius}::float8
+		GROUP BY id
+		HAVING MIN(miles) <= ${radius}::float8
 	`;
 
 	return new Map(rows.map((row) => [row.id, row.miles]));

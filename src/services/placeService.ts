@@ -89,6 +89,23 @@ export async function resolveCoordinates(
 	return place ? { latitude: place.latitude, longitude: place.longitude } : null;
 }
 
+export async function resolveLocationDetails(label: string): Promise<{
+	latitude: number | null;
+	longitude: number | null;
+	state: string | null;
+} | null> {
+	const state = findStateByName(label);
+	if (state) return { latitude: null, longitude: null, state: state.abbr };
+
+	const place = await findPlaceByLabel(label);
+	if (!place) return null;
+	return {
+		latitude: place.latitude,
+		longitude: place.longitude,
+		state: place.state,
+	};
+}
+
 export async function resolveSearchLocation(
 	label: string,
 ): Promise<SearchLocation | null> {

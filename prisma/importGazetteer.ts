@@ -85,6 +85,9 @@ function toExtraZips(knownZips: Set<string>): Prisma.PlaceCreateManyInput[] {
 async function main() {
 	const { prisma } = await import('../src/lib/prisma');
 	const { resolveCoordinates } = await import('../src/services/placeService');
+	const { syncAdditionalPlaces } = await import(
+		'../src/services/teamLocationService'
+	);
 
 	const cities = toCities();
 	const zips = toZips();
@@ -111,6 +114,15 @@ async function main() {
 		located += 1;
 	}
 	console.log(`Set coordinates on ${located} of ${teams.length} teams without them`);
+
+	const withExtras = await prisma.team.findMany({
+		where: { additionalLocations: { isEmpty: false } },
+		select: { id: true, additionalLocations: true },
+	});
+	for (const team of withExtras) {
+		await syncAdditionalPlaces(team.id, team.additionalLocations);
+	}
+	console.log(`Saved additional locations for ${withExtras.length} teams`);
 
 	await prisma.$disconnect();
 }

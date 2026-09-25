@@ -3,6 +3,7 @@ import { prisma } from '@/lib/prisma';
 import type { CreateTeamInput } from '@/lib/validation';
 import { sendApprovalEmail } from '@/services/approvalEmailService';
 import type { EmailStatus } from '@/services/mailService';
+import { syncAdditionalPlaces } from '@/services/teamLocationService';
 import { resolveCoordinates } from '@/services/placeService';
 import { sendRejectionEmail } from '@/services/rejectionEmailService';
 
@@ -28,6 +29,12 @@ export async function approvePendingTeam(
 		},
 	});
 	if (result.count === 0) return null;
+
+	try {
+		await syncAdditionalPlaces(id, input.additionalLocations ?? []);
+	} catch (error) {
+		console.error('Error saving additional locations:', error);
+	}
 
 	if (!pending.submittedBy) return { emailStatus: 'no_recipient' };
 

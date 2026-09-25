@@ -29,7 +29,6 @@ Location autocomplete and radius search read the `Place` table, filled from the 
   - The import replaces the whole `Place` table and sets `latitude` / `longitude` on any team that has none. It refuses to run with `NODE_ENV=production`, so for production run it against the production `DATABASE_URL` from your machine with `NODE_ENV` unset, or turn the check into a one-off deploy step.
 - [ ] The migration runs `CREATE EXTENSION pg_trgm` (typo-tolerant name matching). Confirm the production Neon role is allowed to create it.
 - [ ] Teams get coordinates by looking their `location` text up in `Place`. `POST /api/teams` still accepts any text up to 200 characters for `location` and `additionalLocations`, so a script can send values that are not in the list. If the text is not found (for example `Brooklyn, NY`, since the Census "places" file has no boroughs or neighbourhoods), the team has no coordinates and never shows up in radius searches. Decide whether to reject unknown locations on submit, and whether to add a neighbourhood list.
-- [ ] `additionalLocations` have no coordinates, so radius search only uses the primary `location`. Decide whether teams that ride in several places should match on the others too (needs coordinates for each, for example a `TeamLocation` table).
 
 ### Environment variables to set in Vercel
 
