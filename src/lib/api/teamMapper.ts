@@ -1,4 +1,4 @@
-import type { Prisma, Team as TeamRow } from '../../generated/prisma/client';
+import type { Prisma, Team as TeamRow } from '../../../generated/prisma/client';
 import {
 	bikeTypeFromDb,
 	bikeTypeToDb,

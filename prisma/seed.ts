@@ -8,9 +8,9 @@ import {
 	formatToDb,
 	rankingSystemToDb,
 	segmentationToDb,
-} from '../lib/teamEnums';
-import { teams } from '../lib/teams';
-import type { Team } from '../lib/types';
+} from '../src/lib/teamEnums';
+import { teams } from '../src/lib/teams';
+import type { Team } from '../src/lib/types';
 
 if (process.env.NODE_ENV === 'production') {
 	throw new Error('Refusing to seed with NODE_ENV=production');
@@ -83,8 +83,8 @@ function toTeamData(team: Team): Prisma.TeamCreateInput {
 }
 
 async function main() {
-	const { prisma } = await import('../lib/prisma');
-	const { resolveCoordinates } = await import('../services/placeService');
+	const { prisma } = await import('../src/lib/prisma');
+	const { resolveCoordinates } = await import('../src/services/placeService');
 
 	for (const team of teams) {
 		const data = {

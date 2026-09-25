@@ -26,6 +26,6 @@ export const RATE_LIMIT_CONFIG: Record<RateLimitBucket, BucketConfig> = {
 	},
 	'locations-search': {
 		windowSeconds: 60,
-		maxRequests: { anonymous: 10, user: 10, admin: 10 },
+		maxRequests: { anonymous: 60, user: 60, admin: 60 },
 	},
 };

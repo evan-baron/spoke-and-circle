@@ -2,7 +2,7 @@ import 'dotenv/config';
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { Prisma } from '../generated/prisma/client';
-import { cleanPlaceName, parseGazetteer } from '../lib/gazetteer';
+import { cleanPlaceName, parseGazetteer } from '../src/lib/gazetteer';
 
 if (process.env.NODE_ENV === 'production') {
 	throw new Error('Refusing to import with NODE_ENV=production');
@@ -83,8 +83,8 @@ function toExtraZips(knownZips: Set<string>): Prisma.PlaceCreateManyInput[] {
 }
 
 async function main() {
-	const { prisma } = await import('../lib/prisma');
-	const { resolveCoordinates } = await import('../services/placeService');
+	const { prisma } = await import('../src/lib/prisma');
+	const { resolveCoordinates } = await import('../src/services/placeService');
 
 	const cities = toCities();
 	const zips = toZips();

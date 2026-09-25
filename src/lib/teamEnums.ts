@@ -6,7 +6,7 @@ import type {
 	MtbDiscipline,
 	RankingSystem,
 	Segmentation,
-} from '../generated/prisma/client';
+} from '../../generated/prisma/client';
 import type { Team } from './types';
 
 function invert<K extends string, V extends string>(
