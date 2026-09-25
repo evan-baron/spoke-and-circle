@@ -42,7 +42,10 @@ export function AntiBot({ onValidChange }: AntiBotProps) {
 	return (
 		<div className={styles.root}>
 			<label htmlFor={inputId} className={styles.label}>
-				What is {question.a} {question.op} {question.b}?
+				What is {question.a} {question.op} {question.b}?{' '}
+				<span className={styles.required} aria-hidden='true'>
+					*
+				</span>
 			</label>
 			<input
 				id={inputId}

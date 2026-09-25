@@ -67,12 +67,11 @@ The repo rules say not to use browser automation or run builds unless asked, so 
   - **Rejection emails are built but need setup.** Rejecting a team emails the logged-in submitter from `support@spokeandcircle.com` through Resend (`src/services/mailService.ts`, `rejectionEmailService.ts`). Before it works in production:
     - Add the domain in Resend and add the SPF and DKIM DNS records in Cloudflare. Also add a DMARC record.
     - Create an API key limited to sending, and set `RESEND_API_KEY` in Vercel and in your local `.env`. Without it, rejecting still works and the admin sees a notice that no email was sent.
-    - Make sure `support@spokeandcircle.com` is a real mailbox, since replies to the rejection email go there.
+    - Make sure `support@spokeandcircle.com` is a real mailbox, since replies to the rejection and approval emails go there, and so do messages from the contact form.
     - Anonymous submissions get no email, because there is no verified address. The team's public contact email is not used, since anyone could type someone else's address. Decide whether that is acceptable, or whether to collect a verified submitter email.
     - Decide whether the reason should be required. It is optional today and is not stored anywhere, since the team is deleted.
     - Check the limits fit real use: 30 emails per hour per admin, 3 per day per recipient, 200 per day overall (`src/lib/rateLimitConfig.ts`).
   - Decide whether reject should really hard delete, or set `Rejected` and keep the row (easier to audit and to answer "why was mine rejected"). `Rejected` exists in the status enum but is unused.
-  - Send an email to the submitter when their team is approved. There is no notification today.
 - [ ] **Persona radio stores display text.** Persona is saved as text like `Women Only`. The plan is to store a code (`womenOnly`) and map it to a label for display, with a separate field for the "Other" text. Not done yet.
 - [ ] **Staged team deletion.** Only the schema exists (`Team.deleteAfter`, `Team.deletionRequestedAt`, with an index on `deleteAfter`). Nothing uses it yet. Design and tasks are under "Staged team deletion design" in the Reference section. To finish it:
   - Add the request and undo endpoints, hide scheduled teams everywhere, add the purge cron, set `CRON_SECRET`, decide who may request deletion, and add the emails. Details below.

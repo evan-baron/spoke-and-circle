@@ -42,7 +42,7 @@ export const teamAPI = {
 
 export const adminAPI = {
 	approveTeam: (id: string, payload: unknown) =>
-		apiCall<{ success: boolean }>(
+		apiCall<{ success: boolean; emailStatus: string }>(
 			`/api/admin/teams/${encodeURIComponent(id)}/approve`,
 			{ method: 'POST', body: JSON.stringify(payload) },
 		),
@@ -51,6 +51,14 @@ export const adminAPI = {
 			`/api/admin/teams/${encodeURIComponent(id)}`,
 			{ method: 'DELETE', body: JSON.stringify({ reason }) },
 		),
+};
+
+export const contactAPI = {
+	send: (payload: unknown) =>
+		apiCall<{ success: boolean }>('/api/contact', {
+			method: 'POST',
+			body: JSON.stringify(payload),
+		}),
 };
 
 export const locationAPI = {

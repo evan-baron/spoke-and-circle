@@ -12,26 +12,31 @@ export const metadata: Metadata = {
 
 const MAX_ROWS = 200;
 
-const EMAIL_NOTICES: Record<string, string> = {
-	no_recipient:
-		'Group rejected. No email was sent because it was submitted without an account.',
-	not_configured:
-		'Group rejected. Email is not set up on this server, so no message was sent.',
-	throttled:
-		'Group rejected, but the email was not sent because a sending limit was reached.',
-	failed: 'Group rejected, but the email could not be sent.',
+const EMAIL_NOTICES: Record<string, (outcome: string) => string> = {
+	no_recipient: (outcome) =>
+		`Group ${outcome}. No email was sent because it was submitted without an account.`,
+	not_configured: (outcome) =>
+		`Group ${outcome}. Email is not set up on this server, so no message was sent.`,
+	throttled: (outcome) =>
+		`Group ${outcome}, but the email was not sent because a sending limit was reached.`,
+	failed: (outcome) => `Group ${outcome}, but the email could not be sent.`,
 };
 
 export default async function AdminPendingPage({
 	searchParams,
 }: {
-	searchParams: Promise<{ emailStatus?: string | string[] }>;
+	searchParams: Promise<{
+		emailStatus?: string | string[];
+		outcome?: string | string[];
+	}>;
 }) {
 	await requireAdmin();
 
-	const { emailStatus } = await searchParams;
+	const { emailStatus, outcome } = await searchParams;
 	const emailNotice =
-		typeof emailStatus === 'string' ? EMAIL_NOTICES[emailStatus] : undefined;
+		typeof emailStatus === 'string' ?
+			EMAIL_NOTICES[emailStatus]?.(outcome === 'approved' ? 'approved' : 'rejected')
+		:	undefined;
 
 	const where = { status: 'Pending' as const };
 	const [teams, total] = await Promise.all([

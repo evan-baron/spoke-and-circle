@@ -1,14 +1,22 @@
 import { toApprovedTeamUpdate } from '@/lib/api/teamMapper';
 import { prisma } from '@/lib/prisma';
 import type { CreateTeamInput } from '@/lib/validation';
+import { sendApprovalEmail } from '@/services/approvalEmailService';
 import type { EmailStatus } from '@/services/mailService';
 import { resolveCoordinates } from '@/services/placeService';
 import { sendRejectionEmail } from '@/services/rejectionEmailService';
 
 export async function approvePendingTeam(
 	id: string,
+	adminId: number,
 	input: CreateTeamInput,
-): Promise<boolean> {
+): Promise<{ emailStatus: EmailStatus } | null> {
+	const pending = await prisma.team.findFirst({
+		where: { id, status: 'Pending' },
+		select: { submittedBy: { select: { email: true, firstName: true } } },
+	});
+	if (!pending) return null;
+
 	const result = await prisma.team.updateMany({
 		where: { id, status: 'Pending' },
 		data: {
@@ -19,7 +27,23 @@ export async function approvePendingTeam(
 			}),
 		},
 	});
-	return result.count > 0;
+	if (result.count === 0) return null;
+
+	if (!pending.submittedBy) return { emailStatus: 'no_recipient' };
+
+	try {
+		const emailStatus = await sendApprovalEmail({
+			to: pending.submittedBy.email,
+			firstName: pending.submittedBy.firstName,
+			teamName: input.name,
+			teamId: id,
+			sentByAdminId: adminId,
+		});
+		return { emailStatus };
+	} catch (error) {
+		console.error('Failed to send approval email:', error);
+		return { emailStatus: 'failed' };
+	}
 }
 
 export async function rejectPendingTeam(

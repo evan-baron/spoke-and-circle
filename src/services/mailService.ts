@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto';
 import { Resend } from 'resend';
 import { z } from 'zod';
 import { checkRateLimit } from '@/lib/rateLimit';
+import type { RateLimitBucket } from '@/lib/rateLimitConfig';
 
 const FROM_ADDRESS = 'Spoke & Circle <support@spokeandcircle.com>';
 const SEND_TIMEOUT_MS = 10_000;
@@ -21,7 +22,14 @@ interface SendMailInput {
 	subject: string;
 	text: string;
 	html?: string;
-	sentByAdminId: number;
+	replyTo?: string;
+	limits: SendLimits;
+}
+
+export interface SendLimits {
+	global: RateLimitBucket;
+	adminId?: number;
+	perRecipient?: boolean;
 }
 
 const recipientSchema = z.email().max(254);
@@ -47,17 +55,25 @@ function hashAddress(address: string): string {
 
 async function isWithinSendLimits(
 	to: string,
-	sentByAdminId: number,
+	limits: SendLimits,
 ): Promise<boolean> {
-	const checks = [
-		await checkRateLimit('email:global', 'email-global', 'admin'),
-		await checkRateLimit(`user:${sentByAdminId}`, 'email-admin', 'admin'),
-		await checkRateLimit(
-			`email:${hashAddress(to)}`,
-			'email-recipient',
-			'admin',
-		),
-	];
+	const checks = [await checkRateLimit(`${limits.global}:all`, limits.global, 'admin')];
+
+	if (limits.adminId !== undefined) {
+		checks.push(
+			await checkRateLimit(`user:${limits.adminId}`, 'email-admin', 'admin'),
+		);
+	}
+	if (limits.perRecipient) {
+		checks.push(
+			await checkRateLimit(
+				`email:${hashAddress(to)}`,
+				'email-recipient',
+				'admin',
+			),
+		);
+	}
+
 	return checks.every((check) => check.success);
 }
 
@@ -82,7 +98,8 @@ export async function sendMail({
 	subject,
 	text,
 	html,
-	sentByAdminId,
+	replyTo,
+	limits,
 }: SendMailInput): Promise<EmailStatus> {
 	const recipient = recipientSchema.safeParse(to.trim());
 	if (!recipient.success) return 'no_recipient';
@@ -95,7 +112,7 @@ export async function sendMail({
 	}
 
 	try {
-		if (!(await isWithinSendLimits(recipient.data, sentByAdminId))) {
+		if (!(await isWithinSendLimits(recipient.data, limits))) {
 			return 'throttled';
 		}
 
@@ -106,6 +123,7 @@ export async function sendMail({
 				subject: toSingleLine(subject, MAX_SUBJECT_LENGTH),
 				text: toBody(text),
 				...(html ? { html: html.slice(0, MAX_HTML_LENGTH) } : {}),
+				...(replyTo ? { replyTo } : {}),
 			}),
 			SEND_TIMEOUT_MS,
 		);

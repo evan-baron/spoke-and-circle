@@ -1,4 +1,4 @@
-import type { AgeRequirement, MileageRequirement } from "./types";
+import type { AgeRequirement, MileageRequirement, Team } from "./types";
 
 export function formatMemberCount(count: number): string {
   return `${count} members`;
@@ -56,4 +56,8 @@ export function formatSubmitter(
 
 export function formatSkillLevels(levels: string[]): string {
   return levels.join(", ");
+}
+
+export function getTeamLocations(team: Pick<Team, "location" | "additionalLocations">): string[] {
+  return [team.location, ...(team.additionalLocations ?? [])];
 }

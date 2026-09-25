@@ -126,6 +126,14 @@
 	}
 }
 
+.locationLine {
+	display: block;
+}
+
+.table .locationLine {
+	white-space: nowrap;
+}
+
 .rowLink {
 	font-weight: 600;
 

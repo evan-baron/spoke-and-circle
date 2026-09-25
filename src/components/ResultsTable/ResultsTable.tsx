@@ -3,6 +3,7 @@ import { Badge } from '@/components/Badge/Badge';
 import {
 	formatMemberCount,
 	formatSkillLevels,
+	getTeamLocations,
 	formatVerification,
 } from '@/lib/format';
 import { toneForPace, toneForVerified, toneForVisibility } from '@/lib/tone';
@@ -33,7 +34,9 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 								<span className={styles.cardName}>{team.name}</span>
 								<Badge tone='ink'>{team.type}</Badge>
 							</div>
-							<p className={styles.cardLocation}>{team.location}</p>
+							<p className={styles.cardLocation}>
+								{getTeamLocations(team).join(', ')}
+							</p>
 							<div className={styles.cardBadges}>
 								<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
 								<Badge tone={toneForVisibility(team.visibility)}>
@@ -61,7 +64,7 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 					<tr>
 						<th>Name</th>
 						<th>Type</th>
-						<th>Location</th>
+						<th>Location(s)</th>
 						<th>Bike type</th>
 						<th>Skill level</th>
 						<th>Pace</th>
@@ -81,13 +84,20 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 							<td>
 								<Badge tone='ink'>{team.type}</Badge>
 							</td>
-							<td>{team.location}</td>
+							<td>
+								{getTeamLocations(team).map((location, index, all) => (
+									<span key={location} className={styles.locationLine}>
+										{location}
+										{index < all.length - 1 && ','}
+									</span>
+								))}
+							</td>
 							<td>{team.bikeType}</td>
 							<td>{formatSkillLevels(team.skillLevels)}</td>
 							<td>
 								<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
 							</td>
-							<td>{formatMemberCount(team.memberCount)}</td>
+							<td>{team.memberCount}</td>
 							<td>
 								<Badge tone={toneForVisibility(team.visibility)}>
 									{team.visibility}
