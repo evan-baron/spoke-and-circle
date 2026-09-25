@@ -11,6 +11,7 @@ import { toTeam, toTeamCreateInput } from '@/lib/api/teamMapper';
 import { isAntiBotAnswerCorrect } from '@/lib/data/mathQuestions';
 import { antiBotSchema, createTeamSchema } from '@/lib/validation';
 import { getApiUser } from '@/services/getUserService';
+import { resolveCoordinates } from '@/services/placeService';
 
 export const GET = withPublicRateLimit('teams-read', async () => {
 	try {
@@ -54,7 +55,10 @@ export const POST = withPublicRateLimit('teams-write', async (request) => {
 
 	try {
 		const team = await prisma.team.create({
-			data: toTeamCreateInput(parsed.data, await getSubmitterId()),
+			data: {
+				...toTeamCreateInput(parsed.data, await getSubmitterId()),
+				...(await resolveCoordinates(parsed.data.location)),
+			},
 			select: { id: true },
 		});
 

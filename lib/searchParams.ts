@@ -34,6 +34,8 @@ const RACING_OPTIONS = ['Competitive', 'Casual'] as const;
 export type RawSearchParams = Record<string, string | string[] | undefined>;
 
 export const TEAMS_PAGE_SIZE = 20;
+export const RADIUS_OPTIONS = [10, 25, 50, 100] as const;
+export const DEFAULT_RADIUS_MILES = 50;
 
 const MAX_PAGE = 10000;
 const MAX_PARAM_LENGTH = 100;
@@ -85,8 +87,15 @@ export function parseSearchParams(raw: RawSearchParams) {
 	const page =
 		Number.isFinite(pageRaw) && pageRaw > 0 ? Math.min(pageRaw, MAX_PAGE) : 1;
 
+	const radiusRaw = Number.parseInt(firstValue(raw.radius), 10);
+	const radius =
+		(RADIUS_OPTIONS as readonly number[]).includes(radiusRaw) ?
+			radiusRaw
+		:	DEFAULT_RADIUS_MILES;
+
 	return {
 		page,
+		radius,
 		q,
 		location,
 		type,

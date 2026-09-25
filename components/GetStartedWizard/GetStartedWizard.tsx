@@ -65,13 +65,13 @@ export function GetStartedWizard() {
 		setIsFinishing(true);
 
 		try {
-			window.sessionStorage.setItem('riderZipCode', finalAnswers.zipCode);
 			window.sessionStorage.setItem(CAME_FROM_QUIZ_KEY, 'true');
 		} catch {
 			// sessionStorage unavailable (private browsing, etc.) — non-critical
 		}
 
 		const params = new URLSearchParams();
+		if (finalAnswers.zipCode) params.set('location', finalAnswers.zipCode);
 		for (const discipline of finalAnswers.disciplines) {
 			params.append('bikeType', discipline);
 		}

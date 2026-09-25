@@ -142,6 +142,7 @@ export interface RiderPreferences {
 export interface SearchParams {
   q?: string;
   location?: string;
+  radius?: number;
   type?: ClubType;
   bikeTypes?: BikeType[];
   discipline?: MtbDiscipline;

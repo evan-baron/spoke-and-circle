@@ -47,6 +47,7 @@ export default async function AdminAllGroupsPage({
 					action='/admin/all'
 					defaultQ={params.q}
 					defaultLocation={params.location}
+					defaultRadius={params.radius}
 					defaultType={params.type ?? ''}
 					defaultBikeTypes={params.bikeTypes}
 					defaultDiscipline={params.discipline ?? ''}

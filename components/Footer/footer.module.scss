@@ -6,6 +6,19 @@
 	background: var(--color-paper-raised);
 }
 
+.credit {
+	margin-top: 0.25rem;
+
+	a {
+		text-decoration: underline;
+		text-underline-offset: 2px;
+
+		&:hover {
+			color: var(--color-coral);
+		}
+	}
+}
+
 .wrap {
 	@include container;
 	padding: var(--space-md) var(--space-sm);

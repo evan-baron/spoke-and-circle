@@ -1,6 +1,7 @@
 import { toApprovedTeamUpdate } from '@/lib/api/teamMapper';
 import { prisma } from '@/lib/prisma';
 import type { CreateTeamInput } from '@/lib/validation';
+import { resolveCoordinates } from '@/services/placeService';
 import { sendRejectionEmail } from '@/services/rejectionEmailService';
 
 export async function approvePendingTeam(
@@ -9,7 +10,13 @@ export async function approvePendingTeam(
 ): Promise<boolean> {
 	const result = await prisma.team.updateMany({
 		where: { id, status: 'Pending' },
-		data: toApprovedTeamUpdate(input),
+		data: {
+			...toApprovedTeamUpdate(input),
+			...((await resolveCoordinates(input.location)) ?? {
+				latitude: null,
+				longitude: null,
+			}),
+		},
 	});
 	return result.count > 0;
 }

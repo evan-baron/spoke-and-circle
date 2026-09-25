@@ -54,9 +54,13 @@ export const adminAPI = {
 };
 
 export const locationAPI = {
-	search: (query: string, signal?: AbortSignal) =>
+	search: (
+		query: string,
+		signal?: AbortSignal,
+		options: { includeZip?: boolean } = {},
+	) =>
 		apiCall<LocationsResponse>(
-			`/api/locations?q=${encodeURIComponent(query)}`,
+			`/api/locations?q=${encodeURIComponent(query)}${options.includeZip ? '&zip=1' : ''}`,
 			{ method: 'GET', signal },
 		),
 };

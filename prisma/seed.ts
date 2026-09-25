@@ -84,9 +84,13 @@ function toTeamData(team: Team): Prisma.TeamCreateInput {
 
 async function main() {
 	const { prisma } = await import('../lib/prisma');
+	const { resolveCoordinates } = await import('../services/placeService');
 
 	for (const team of teams) {
-		const data = toTeamData(team);
+		const data = {
+			...toTeamData(team),
+			...(await resolveCoordinates(team.location)),
+		};
 		const existing = await prisma.team.findFirst({
 			where: { name: data.name },
 			select: { id: true },

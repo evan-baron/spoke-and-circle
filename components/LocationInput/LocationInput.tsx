@@ -19,6 +19,8 @@ interface LocationInputProps {
 	required?: boolean;
 	disabled?: boolean;
 	defaultValue?: string;
+	includeZip?: boolean;
+	inputClassName?: string;
 	onSelect?: (item: LocationOption) => void;
 }
 
@@ -33,6 +35,8 @@ export function LocationInput({
 	required,
 	disabled,
 	defaultValue,
+	includeZip,
+	inputClassName,
 	onSelect,
 }: LocationInputProps) {
 	const [inputValue, setInputValue] = useState(defaultValue ?? '');
@@ -101,7 +105,9 @@ export function LocationInput({
 		const controller = new AbortController();
 		const timer = setTimeout(async () => {
 			try {
-				const data = await locationAPI.search(term, controller.signal);
+				const data = await locationAPI.search(term, controller.signal, {
+					includeZip,
+				});
 				setOptions(data.locations);
 				setStatus('done');
 			} catch {
@@ -115,7 +121,7 @@ export function LocationInput({
 			clearTimeout(timer);
 			controller.abort();
 		};
-	}, [inputValue, selectedItem]);
+	}, [inputValue, selectedItem, includeZip]);
 
 	useEffect(() => {
 		if (onSelect) return;
@@ -140,7 +146,7 @@ export function LocationInput({
 				autoComplete='off'
 				placeholder={placeholder}
 				required={required}
-				className={styles.input}
+				className={inputClassName ?? styles.input}
 			/>
 			{name && !onSelect && (
 				<input type='hidden' name={name} value={selectedItem?.label ?? ''} />
@@ -161,7 +167,6 @@ export function LocationInput({
 						))}
 				</ul>
 				{message && <p className={styles.message}>{message}</p>}
-				<p className={styles.attribution}>Google Maps</p>
 			</div>
 		</div>
 	);

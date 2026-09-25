@@ -2,6 +2,8 @@
 
 import { useEffect, useState, type ChangeEvent } from 'react';
 import { CAME_FROM_QUIZ_KEY } from '@/components/GetStartedWizard/GetStartedWizard';
+import { LocationInput } from '@/components/LocationInput/LocationInput';
+import { DEFAULT_RADIUS_MILES, RADIUS_OPTIONS } from '@/lib/searchParams';
 import { CheckboxDropdown } from './CheckboxDropdown';
 import styles from './filterBar.module.scss';
 
@@ -9,6 +11,7 @@ interface FilterBarProps {
 	action?: string;
 	defaultQ?: string;
 	defaultLocation?: string;
+	defaultRadius?: number;
 	defaultType?: string;
 	defaultBikeTypes?: string[];
 	defaultDiscipline?: string;
@@ -71,6 +74,7 @@ export function FilterBar({
 	action = '/search',
 	defaultQ = '',
 	defaultLocation = '',
+	defaultRadius = DEFAULT_RADIUS_MILES,
 	defaultType = '',
 	defaultBikeTypes = [],
 	defaultDiscipline = '',
@@ -126,14 +130,16 @@ export function FilterBar({
 				aria-label='Keyword'
 				className={`${styles.input} ${styles.keywordInput}`}
 			/>
-			<input
-				name='location'
-				type='text'
-				defaultValue={defaultLocation}
-				placeholder='Location&hellip;'
-				aria-label='Location'
-				className={`${styles.input} ${styles.locationInput}`}
-			/>
+			<div className={styles.locationInput}>
+				<LocationInput
+					id='filter-location'
+					name='location'
+					defaultValue={defaultLocation}
+					placeholder='City or ZIP code&hellip;'
+					includeZip
+					inputClassName={styles.input}
+				/>
+			</div>
 
 			<button
 				type='button'
@@ -180,6 +186,19 @@ export function FilterBar({
 
 			<div id='filter-panel' className={`${styles.moreFilters} ${openClass}`}>
 				<div className={styles.filterGrid}>
+					<select
+						name='radius'
+						defaultValue={String(defaultRadius)}
+						aria-label='Search radius'
+						onChange={autoSubmit}
+						className={styles.input}
+					>
+						{RADIUS_OPTIONS.map((option) => (
+							<option key={option} value={option}>
+								Within {option} miles
+							</option>
+						))}
+					</select>
 					<select
 						name='skillLevel'
 						defaultValue={defaultSkillLevel}

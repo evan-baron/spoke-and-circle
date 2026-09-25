@@ -1,5 +1,6 @@
-import styles from './searchForm.module.scss';
 import Link from 'next/link';
+import { LocationInput } from '@/components/LocationInput/LocationInput';
+import styles from './searchForm.module.scss';
 
 interface SearchFormProps {
 	defaultQ?: string;
@@ -46,13 +47,13 @@ export function SearchForm({
 					<label htmlFor='location' className={styles.label}>
 						Location
 					</label>
-					<input
+					<LocationInput
 						id='location'
 						name='location'
-						type='text'
 						defaultValue={defaultLocation}
-						placeholder='City or State'
-						className={styles.input}
+						placeholder='City or ZIP code'
+						includeZip
+						inputClassName={styles.input}
 					/>
 				</div>
 				<div className={styles.field}>

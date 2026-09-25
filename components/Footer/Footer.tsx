@@ -8,6 +8,20 @@ export function Footer() {
 					Spoke &amp; Circle is a wireframe. All teams, routes, and rosters
 					shown are sample data.
 				</p>
+				<p className={styles.credit}>
+					Location data from the US Census Bureau and{' '}
+					<a href='https://www.geonames.org' rel='noopener noreferrer'>
+						GeoNames
+					</a>{' '}
+					(
+					<a
+						href='https://creativecommons.org/licenses/by/4.0/'
+						rel='noopener noreferrer'
+					>
+						CC BY 4.0
+					</a>
+					).
+				</p>
 			</div>
 		</footer>
 	);

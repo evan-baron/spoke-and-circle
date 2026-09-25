@@ -42,6 +42,7 @@ export default async function SearchPage({
 				<FilterBar
 					defaultQ={params.q}
 					defaultLocation={params.location}
+					defaultRadius={params.radius}
 					defaultType={params.type ?? ''}
 					defaultBikeTypes={params.bikeTypes}
 					defaultDiscipline={params.discipline ?? ''}
