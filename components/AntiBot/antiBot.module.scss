@@ -1,0 +1,35 @@
+@use '@/styles/mixins' as *;
+
+.root {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+}
+
+.label {
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	color: var(--color-ink-soft);
+}
+
+.input {
+	@include field-input;
+	width: 6rem;
+	text-align: center;
+
+	&[aria-invalid='true'] {
+		border-color: var(--color-coral);
+	}
+}
+
+.error {
+	font-size: 0.8125rem;
+	color: var(--color-coral);
+}
+
+.loading {
+	font-size: 0.875rem;
+	color: var(--color-ink-soft);
+}

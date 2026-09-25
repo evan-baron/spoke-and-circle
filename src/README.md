@@ -55,6 +55,7 @@ The repo rules say not to use browser automation or run builds unless asked, so 
   - Map the form fields to `createTeamSchema` in `lib/validation.ts` (`additionalLocations` arrives as several values with the same name).
   - Use the `teams-write` rate limit bucket. Anonymous callers are set to 0, so decide how anonymous submissions work (see the bot protection decision below).
   - Add a double-submit guard and a disabled button while sending.
+  - Verify the math question on the server. The form already submits `antibot` (the answer) and `antibotIndex` (which question). The route must reject the request unless `isAntiBotAnswerCorrect(antibotIndex, antibot)` from `lib/data/mathQuestions.ts` is true, and check that `antibotIndex` is a valid integer first. The question list ships to the browser, so this only stops simple bots. For stronger protection use the Turnstile or signed-challenge options under "Bot protection" below.
   - New submissions save as `Pending` for admin review.
   - `withAuth` and `withPublicRateLimit` in `lib/api/withAuth.ts` are ready to use. `withAuth` is not used by any route yet.
 - [ ] **ZIP code to location** (raised for later, not answered in detail yet):

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { type ChangeEvent, type FormEvent, useId, useState } from 'react';
+import { AntiBot } from '@/components/AntiBot/AntiBot';
 import { LocationInput } from '@/components/LocationInput/LocationInput';
 import { LocationListInput } from '@/components/LocationInput/LocationListInput';
 import styles from './newTeam.module.scss';
@@ -99,6 +100,7 @@ export default function NewTeamPage() {
 	const locationId = useId();
 	const additionalLocationsId = useId();
 	const [submitted, setSubmitted] = useState(false);
+	const [isAntiBotValid, setIsAntiBotValid] = useState(false);
 	const [personaRestriction, setPersonaRestriction] = useState<string | null>(
 		null,
 	);
@@ -112,6 +114,7 @@ export default function NewTeamPage() {
 
 	function handleSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
+		if (!isAntiBotValid) return;
 		setSubmitted(true);
 	}
 
@@ -720,8 +723,19 @@ export default function NewTeamPage() {
 						</div>
 					</Section>
 
+					<Section
+						title='Are you human?'
+						description='Answer this quick question to enable submitting.'
+					>
+						<AntiBot onValidChange={setIsAntiBotValid} />
+					</Section>
+
 					<div className={styles.submitRow}>
-						<button type='submit' className={styles.buttonSolid}>
+						<button
+							type='submit'
+							className={styles.buttonSolid}
+							disabled={!isAntiBotValid}
+						>
 							Submit for review
 						</button>
 					</div>
