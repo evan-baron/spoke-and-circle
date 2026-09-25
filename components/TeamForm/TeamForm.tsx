@@ -117,9 +117,7 @@ function Section({ title, description, children }: SectionProps) {
 function describeSubmitError(error: unknown): string[] {
 	if (error instanceof ApiError) {
 		if (error.status === 429) {
-			return [
-				'Too many requests. Please try again later.',
-			];
+			return ['Too many requests. Please try again later.'];
 		}
 
 		const details = (error.responseData as { details?: unknown } | null)
@@ -224,327 +222,332 @@ export function TeamForm({
 
 	return (
 		<form onSubmit={handleSubmit} className={styles.form}>
-					<Section title='Generic info'>
-						<Field label='Name'>
-							<input
-								type='text'
-								name='name'
-								defaultValue={values.name}
-								required
-								placeholder='e.g. Portland Velo Collective'
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Group Type'>
-							<select
-								name='type'
-								defaultValue={values.type}
-								className={styles.input}
-							>
-								{CLUB_TYPES.map((option) => (
-									<option key={option} value={option}>
-										{option}
-									</option>
-								))}
-							</select>
-						</Field>
-						<Field label='Mission statement' full>
-							<textarea
-								name='missionStatement'
-								defaultValue={values.missionStatement}
-								rows={2}
-								placeholder='What is this group trying to do?'
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Code of conduct' full>
-							<textarea
-								name='codeOfConduct'
-								defaultValue={values.codeOfConduct}
-								rows={2}
-								placeholder='Any ground rules for members and rides'
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Affiliation'>
-							<input
-								type='text'
-								name='affiliation'
-								defaultValue={values.affiliation}
-								placeholder='e.g. Bike Shop, Organization, etc.'
-								className={styles.input}
-							/>
-						</Field>
-						<div className={styles.field}>
-							<label htmlFor={locationId} className={styles.fieldLabel}>
-								Location
-							</label>
-							<LocationInput
-								id={locationId}
-								name='location'
-								defaultValue={values.location}
-								required
-								placeholder='Start typing a US city or state'
-							/>
-						</div>
-						<div className={styles.field}>
-							<label
-								htmlFor={additionalLocationsId}
-								className={styles.fieldLabel}
-							>
-								Additional locations
-							</label>
-							<LocationListInput
-								id={additionalLocationsId}
-								name='additionalLocations'
-								defaultValues={values.additionalLocations}
-								placeholder='Search and add another US city or state'
-							/>
-							<span className={styles.fieldHint}>
-								Add each place your team also rides, up to 10
-							</span>
-						</div>
-						<Field label='Founded'>
-							<input
-								type='number'
-								name='founded'
-								defaultValue={values.founded}
-								min={1970}
-								max={2026}
-								placeholder='2024'
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Public or private'>
-							<select
-								name='visibility'
-								defaultValue={values.visibility}
-								className={styles.input}
-							>
-								<option value='Public'>Public</option>
-								<option value='Private'>Private</option>
-							</select>
-						</Field>
-						<Field label='Primary language'>
-							<input
-								type='text'
-								name='primaryLanguage'
-								defaultValue={values.primaryLanguage}
-								placeholder='English'
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Contact phone'>
-							<input
-								type='tel'
-								name='contactPhone'
-								defaultValue={values.contactPhone}
-								placeholder='555-555-0100'
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Contact email'>
-							<input
-								type='email'
-								name='contactEmail'
-								defaultValue={values.contactEmail}
-								placeholder='hello@yourteam.org'
-								className={styles.input}
-							/>
-						</Field>
-					</Section>
+			<Section title='Generic info'>
+				<Field label='Group Name'>
+					<input
+						type='text'
+						name='name'
+						defaultValue={values.name}
+						required
+						placeholder='e.g. Portland Velo Collective'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Group Type'>
+					<select
+						name='type'
+						defaultValue={values.type}
+						className={styles.input}
+					>
+						{CLUB_TYPES.map((option) => (
+							<option key={option} value={option}>
+								{option}
+							</option>
+						))}
+					</select>
+				</Field>
+				<Field label='Mission statement' full>
+					<textarea
+						name='missionStatement'
+						defaultValue={values.missionStatement}
+						rows={2}
+						placeholder='What is this group trying to do?'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Code of conduct' full>
+					<textarea
+						name='codeOfConduct'
+						defaultValue={values.codeOfConduct}
+						rows={2}
+						placeholder='Any ground rules for members and rides'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Affiliation'>
+					<input
+						type='text'
+						name='affiliation'
+						defaultValue={values.affiliation}
+						placeholder='e.g. Bike Shop, Organization, etc.'
+						className={styles.input}
+					/>
+				</Field>
+				<div className={styles.field}>
+					<label htmlFor={locationId} className={styles.fieldLabel}>
+						Location
+					</label>
+					<LocationInput
+						id={locationId}
+						name='location'
+						defaultValue={values.location}
+						required
+						placeholder='Start typing a US city or state'
+					/>
+				</div>
+				<div className={styles.field}>
+					<label htmlFor={additionalLocationsId} className={styles.fieldLabel}>
+						Additional locations
+					</label>
+					<LocationListInput
+						id={additionalLocationsId}
+						name='additionalLocations'
+						defaultValues={values.additionalLocations}
+						placeholder='Search and add another US city or state'
+					/>
+					<span className={styles.fieldHint}>
+						Add each place your team also rides, up to 10
+					</span>
+				</div>
+				<Field label='Founded'>
+					<input
+						type='number'
+						name='founded'
+						defaultValue={values.founded}
+						min={1970}
+						max={2026}
+						placeholder='2024'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Public or private'>
+					<select
+						name='visibility'
+						defaultValue={values.visibility}
+						className={styles.input}
+					>
+						<option value='Public'>Public</option>
+						<option value='Private'>Private</option>
+					</select>
+				</Field>
+				<Field label='Primary language'>
+					<input
+						type='text'
+						name='primaryLanguage'
+						defaultValue={values.primaryLanguage}
+						placeholder='English'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Contact phone'>
+					<input
+						type='tel'
+						name='contactPhone'
+						defaultValue={values.contactPhone}
+						placeholder='555-555-0100'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Contact email'>
+					<input
+						type='email'
+						name='contactEmail'
+						defaultValue={values.contactEmail}
+						placeholder='hello@yourteam.org'
+						className={styles.input}
+					/>
+				</Field>
+			</Section>
 
-					<Section title='Details'>
-						<Field label='Cycling Discipline'>
-							<select
-								name='bikeType'
-								defaultValue={values.bikeType}
-								className={styles.input}
-							>
-								{BIKE_TYPES.map((option) => (
-									<option key={option} value={option}>
-										{option}
-									</option>
-								))}
-							</select>
-						</Field>
-						<Field label='Virtual or in-person'>
-							<select
-								name='format'
-								defaultValue={values.format}
-								className={styles.input}
-							>
-								{FORMATS.map((option) => (
-									<option key={option} value={option}>
-										{option}
-									</option>
-								))}
-							</select>
-						</Field>
-						<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
-							<span className={styles.fieldLabel}>Virtual platform(s)</span>
-							<div className={styles.checkboxRow}>
-								{VIRTUAL_PLATFORMS.map((platform) => (
-									<Checkbox
-										key={platform}
-										label={platform}
-										name='virtualPlatform'
-										value={platform}
-										checked={virtualPlatforms.includes(platform)}
-										onChange={() => handleVirtualPlatformChange(platform)}
-									/>
-								))}
-							</div>
-							{virtualPlatforms.includes('Other') && (
-								<input
-									type='text'
-									name='virtualPlatformOtherDescription'
-									placeholder='Please describe'
-									value={virtualPlatformOtherText}
-									onChange={(event) =>
-										setVirtualPlatformOtherText(event.target.value)
-									}
-									className={styles.input}
-								/>
-							)}
-						</div>
-						<Field label='Home-base affiliation'>
-							<input
-								type='text'
-								name='homeBaseAffiliation'
-								defaultValue={values.homeBaseAffiliation}
-								placeholder='e.g. Zwift Racing League'
-								className={styles.input}
+			<Section title='Details'>
+				<Field label='Cycling Discipline'>
+					<select
+						name='bikeType'
+						defaultValue={values.bikeType}
+						className={styles.input}
+					>
+						{BIKE_TYPES.map((option) => (
+							<option key={option} value={option}>
+								{option}
+							</option>
+						))}
+					</select>
+				</Field>
+				<Field label='Virtual or in-person'>
+					<select
+						name='format'
+						defaultValue={values.format}
+						className={styles.input}
+					>
+						{FORMATS.map((option) => (
+							<option key={option} value={option}>
+								{option}
+							</option>
+						))}
+					</select>
+				</Field>
+				<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
+					<span className={styles.fieldLabel}>Virtual platform(s)</span>
+					<div className={styles.checkboxRow}>
+						{VIRTUAL_PLATFORMS.map((platform) => (
+							<Checkbox
+								key={platform}
+								label={platform}
+								name='virtualPlatform'
+								value={platform}
+								checked={virtualPlatforms.includes(platform)}
+								onChange={() => handleVirtualPlatformChange(platform)}
 							/>
-						</Field>
-						<Field label='Website'>
-							<input
-								type='url'
-								name='website'
-								defaultValue={values.website}
-								placeholder='https://'
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Instagram'>
-							<input
-								type='text'
-								name='instagram'
-								defaultValue={values.instagram}
-								placeholder='@yourteam'
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Facebook'>
-							<input
-								type='text'
-								name='facebook'
-								defaultValue={values.facebook}
-								placeholder='Page name'
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Strava'>
-							<input
-								type='text'
-								name='strava'
-								defaultValue={values.strava}
-								placeholder='Club name'
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Discord'>
-							<input
-								type='text'
-								name='discord'
-								defaultValue={values.discord}
-								placeholder='discord.gg/&hellip;'
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Minimum age'>
-							<input
-								type='number'
-								name='ageMin'
-								defaultValue={values.ageMin}
-								min={0}
-								max={120}
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Maximum age'>
-							<input
-								type='number'
-								name='ageMax'
-								defaultValue={values.ageMax}
-								min={0}
-								max={120}
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Current member count'>
-							<input
-								type='number'
-								name='memberCount'
-								defaultValue={values.memberCount}
-								min={0}
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Maximum member limit'>
-							<input
-								type='number'
-								name='memberLimit'
-								defaultValue={values.memberLimit}
-								min={0}
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='How to join' full>
-							<textarea
-								name='howToJoin'
-								defaultValue={values.howToJoin}
-								rows={2}
-								placeholder='What should a prospective member do?'
-								className={styles.input}
-							/>
-						</Field>
+						))}
+					</div>
+					{virtualPlatforms.includes('Other') && (
+						<input
+							type='text'
+							name='virtualPlatformOtherDescription'
+							placeholder='Please describe'
+							value={virtualPlatformOtherText}
+							onChange={(event) =>
+								setVirtualPlatformOtherText(event.target.value)
+							}
+							className={styles.input}
+						/>
+					)}
+				</div>
+				<Field label='Home-base affiliation'>
+					<input
+						type='text'
+						name='homeBaseAffiliation'
+						defaultValue={values.homeBaseAffiliation}
+						placeholder='e.g. Zwift Racing League'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Website'>
+					<input
+						type='url'
+						name='website'
+						defaultValue={values.website}
+						placeholder='https://'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Instagram'>
+					<input
+						type='text'
+						name='instagram'
+						defaultValue={values.instagram}
+						placeholder='@yourteam'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Facebook'>
+					<input
+						type='text'
+						name='facebook'
+						defaultValue={values.facebook}
+						placeholder='Page name'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Strava'>
+					<input
+						type='text'
+						name='strava'
+						defaultValue={values.strava}
+						placeholder='Club name'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Discord'>
+					<input
+						type='text'
+						name='discord'
+						defaultValue={values.discord}
+						placeholder='discord.gg/&hellip;'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Minimum age'>
+					<input
+						type='number'
+						name='ageMin'
+						defaultValue={values.ageMin}
+						min={0}
+						max={120}
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Maximum age'>
+					<input
+						type='number'
+						name='ageMax'
+						defaultValue={values.ageMax}
+						min={0}
+						max={120}
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Current member count'>
+					<input
+						type='number'
+						name='memberCount'
+						defaultValue={values.memberCount}
+						min={0}
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Maximum member limit'>
+					<input
+						type='number'
+						name='memberLimit'
+						defaultValue={values.memberLimit}
+						min={0}
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='How to join' full>
+					<textarea
+						name='howToJoin'
+						defaultValue={values.howToJoin}
+						rows={2}
+						placeholder='What should a prospective member do?'
+						className={styles.input}
+					/>
+				</Field>
 
-						<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
-							<span className={styles.fieldLabel}>Persona restrictions</span>
-							<div className={styles.checkboxRow}>
-								{PERSONA_OPTIONS.map((option) => (
-									<Checkbox
-										key={option.value}
-										label={option.label}
-										name='personaRestriction'
-										value={option.value}
-										checked={personaRestriction === option.value}
-										onChange={() => handlePersonaChange(option.value)}
-									/>
-								))}
-							</div>
-							{personaRestriction === 'other' && (
-								<input
-									type='text'
-									name='personaOtherDescription'
-									placeholder='Please describe'
-									value={personaOtherText}
-									onChange={(event) => setPersonaOtherText(event.target.value)}
-									className={styles.input}
-								/>
-							)}
-						</div>
-						<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
-							<span className={styles.fieldLabel}>Other restrictions</span>
+				<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
+					<span className={styles.fieldLabel}>Persona restrictions</span>
+					<div className={styles.checkboxRow}>
+						{PERSONA_OPTIONS.map((option) => (
+							<Checkbox
+								key={option.value}
+								label={option.label}
+								name='personaRestriction'
+								value={option.value}
+								checked={personaRestriction === option.value}
+								onChange={() => handlePersonaChange(option.value)}
+							/>
+						))}
+					</div>
+					{personaRestriction === 'other' && (
+						<input
+							type='text'
+							name='personaOtherDescription'
+							placeholder='Please describe'
+							value={personaOtherText}
+							onChange={(event) => setPersonaOtherText(event.target.value)}
+							className={styles.input}
+						/>
+					)}
+				</div>
+				<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
+					<span className={styles.fieldLabel}>Other restrictions</span>
 
-							<div className={styles.checkboxRow}>
-								<Checkbox label='E-bike allowed' name='eBikeAllowed' defaultChecked={values.eBikeAllowed} />
-								<Checkbox label='Waitlist active' name='waitlist' defaultChecked={values.waitlist} />
-							</div>
-						</div>
-					</Section>
-					{/* 
+					<div className={styles.checkboxRow}>
+						<Checkbox
+							label='E-bike allowed'
+							name='eBikeAllowed'
+							defaultChecked={values.eBikeAllowed}
+						/>
+						<Checkbox
+							label='Waitlist active'
+							name='waitlist'
+							defaultChecked={values.waitlist}
+						/>
+					</div>
+				</div>
+			</Section>
+			{/* 
 					<Section title='Ride details'>
 						<Field label='Schedule'>
 							<select
@@ -654,246 +657,295 @@ export function TeamForm({
 						</Field>
 					</Section> */}
 
-					<Section title='Team / club details'>
-						<Field label='Competitive or casual'>
-							<select
-								name='competitiveOrCasual'
-								defaultValue={values.competitiveOrCasual}
-								className={styles.input}
-							>
-								<option value='Casual'>Casual</option>
-								<option value='Competitive'>Competitive</option>
-							</select>
-						</Field>
-						<Field label='Skill level'>
-							<select
-								name='skillLevel'
-								defaultValue={values.skillLevel}
-								className={styles.input}
-							>
-								{SKILL_LEVELS.map((option) => (
-									<option key={option} value={option}>
-										{option}
-									</option>
-								))}
-							</select>
-						</Field>
-						<Field label='Dues amount' hint='Leave blank if none'>
-							<input
-								type='text'
-								name='duesAmount'
-								defaultValue={values.duesAmount}
-								placeholder='e.g. $150/year'
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Dues schedule'>
-							<select
-								name='duesSchedule'
-								defaultValue={values.duesSchedule}
-								className={styles.input}
-							>
-								{SCHEDULES.map((option) => (
-									<option key={option} value={option}>
-										{option}
-									</option>
-								))}
-							</select>
-						</Field>
-						<Field label='Required races' hint='Minimum per season'>
-							<input
-								type='number'
-								name='requiredRaces'
-								defaultValue={values.requiredRaces}
-								min={0}
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Mileage requirement' hint='Minimum miles'>
-							<input
-								type='number'
-								name='mileageMin'
-								defaultValue={values.mileageMin}
-								min={0}
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Mileage frequency'>
-							<select
-								name='mileageFrequency'
-								defaultValue={values.mileageFrequency}
-								className={styles.input}
-							>
-								{SCHEDULES.map((option) => (
-									<option key={option} value={option}>
-										{option}
-									</option>
-								))}
-							</select>
-						</Field>
-						<Field label='Rankings'>
-							<select
-								name='rankingSystem'
-								defaultValue={values.rankingSystem}
-								className={styles.input}
-							>
-								{RANKING_SYSTEMS.map((option) => (
-									<option key={option} value={option}>
-										{option}
-									</option>
-								))}
-							</select>
-						</Field>
-						<Field label='Sponsors' hint='Comma-separated' full>
-							<input
-								type='text'
-								name='sponsors'
-								defaultValue={values.sponsors}
-								placeholder='e.g. Lone Star Bikes, Velocity Nutrition'
-								className={styles.input}
-							/>
-						</Field>
-
-						<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
-							<span className={styles.fieldLabel}>Team attributes</span>
-							<div className={styles.checkboxRow}>
-								<Checkbox label='Instructional' name='instructional' defaultChecked={values.instructional} />
-								<Checkbox label='Dues required' name='duesRequired' defaultChecked={values.duesRequired} />
-								<Checkbox label='Required rides' name='requiredRides' defaultChecked={values.requiredRides} />
-								<Checkbox label='Required kit / uniform' name='requiredKit' defaultChecked={values.requiredKit} />
-								<Checkbox label='Public roster' name='hasRoster' defaultChecked={values.hasRoster} />
-							</div>
-						</div>
-
-						<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
-							<span className={styles.fieldLabel}>Event types</span>
-							<div className={styles.checkboxRow}>
-								<Checkbox label='Sponsor events' name='eventSponsor' defaultChecked={values.eventSponsor} />
-								<Checkbox
-									label='Team-specific events'
-									name='eventTeamSpecific' defaultChecked={values.eventTeamSpecific}
-								/>
-								<Checkbox label='Public events' name='eventPublic' defaultChecked={values.eventPublic} />
-								<Checkbox label='Recruiting events' name='eventRecruiting' defaultChecked={values.eventRecruiting} />
-							</div>
-						</div>
-
-						<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
-							<span className={styles.fieldLabel}>
-								Join / applicant requirements
-							</span>
-							<div className={styles.checkboxRow}>
-								<Checkbox label='Try-outs required' name='joinTryouts' defaultChecked={values.joinTryouts} />
-								<Checkbox label='Referral required' name='joinReferral' defaultChecked={values.joinReferral} />
-								<Checkbox label='Invite only' name='joinInviteOnly' defaultChecked={values.joinInviteOnly} />
-								<Checkbox label='Open to all' name='joinOpen' defaultChecked={values.joinOpen} />
-							</div>
-						</div>
-					</Section>
-
-					{!isReview && (
-						<Section
-							title='Are you human?'
-							description='Answer this quick question to enable submitting.'
-						>
-							<AntiBot onValidChange={setIsAntiBotValid} />
-						</Section>
-					)}
-
-					{submitErrors.length > 0 && (
-						<div className={styles.submitError} role='alert'>
-							<p>
-								We couldn&rsquo;t {isReview ? 'save this team' : 'submit your team'}
-								:
-							</p>
-							<ul>
-								{submitErrors.map((message) => (
-									<li key={message}>{message}</li>
-								))}
-							</ul>
-						</div>
-					)}
-
-					{isReview && (
-						<div className={styles.rejectReason}>
-							{submitter ?
-								<>
-									<label htmlFor={rejectionReasonId} className={styles.fieldLabel}>
-										Rejection reason
-									</label>
-									<textarea
-										id={rejectionReasonId}
-										rows={3}
-										maxLength={1000}
-										value={rejectionReason}
-										onChange={(event) => setRejectionReason(event.target.value)}
-										placeholder='Tell the submitter why this was rejected'
-										className={styles.input}
-									/>
-									<span className={styles.fieldHint}>
-										If you reject this team, {submitter.name} ({submitter.email})
-										will be emailed this reason. This is a wireframe, so no email is
-										sent yet.
-									</span>
-								</>
-							:	<span className={styles.fieldHint}>
-									This team was submitted anonymously, so there is no one to email
-									if you reject it.
-								</span>
-							}
-						</div>
-					)}
-
-					<div
-						className={`${styles.submitRow} ${isReview ? styles.submitRowReview : ''}`}
+			<Section title='Team / club details'>
+				<Field label='Competitive or casual'>
+					<select
+						name='competitiveOrCasual'
+						defaultValue={values.competitiveOrCasual}
+						className={styles.input}
 					>
-						{isReview ?
+						<option value='Casual'>Casual</option>
+						<option value='Competitive'>Competitive</option>
+					</select>
+				</Field>
+				<Field label='Skill level'>
+					<select
+						name='skillLevel'
+						defaultValue={values.skillLevel}
+						className={styles.input}
+					>
+						{SKILL_LEVELS.map((option) => (
+							<option key={option} value={option}>
+								{option}
+							</option>
+						))}
+					</select>
+				</Field>
+				<Field label='Dues amount' hint='Leave blank if none'>
+					<input
+						type='text'
+						name='duesAmount'
+						defaultValue={values.duesAmount}
+						placeholder='e.g. $150/year'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Dues schedule'>
+					<select
+						name='duesSchedule'
+						defaultValue={values.duesSchedule}
+						className={styles.input}
+					>
+						{SCHEDULES.map((option) => (
+							<option key={option} value={option}>
+								{option}
+							</option>
+						))}
+					</select>
+				</Field>
+				<Field label='Required races' hint='Minimum per season'>
+					<input
+						type='number'
+						name='requiredRaces'
+						defaultValue={values.requiredRaces}
+						min={0}
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Mileage requirement' hint='Minimum miles'>
+					<input
+						type='number'
+						name='mileageMin'
+						defaultValue={values.mileageMin}
+						min={0}
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Mileage frequency'>
+					<select
+						name='mileageFrequency'
+						defaultValue={values.mileageFrequency}
+						className={styles.input}
+					>
+						{SCHEDULES.map((option) => (
+							<option key={option} value={option}>
+								{option}
+							</option>
+						))}
+					</select>
+				</Field>
+				<Field label='Rankings'>
+					<select
+						name='rankingSystem'
+						defaultValue={values.rankingSystem}
+						className={styles.input}
+					>
+						{RANKING_SYSTEMS.map((option) => (
+							<option key={option} value={option}>
+								{option}
+							</option>
+						))}
+					</select>
+				</Field>
+				<Field label='Sponsors' hint='Comma-separated' full>
+					<input
+						type='text'
+						name='sponsors'
+						defaultValue={values.sponsors}
+						placeholder='e.g. Lone Star Bikes, Velocity Nutrition'
+						className={styles.input}
+					/>
+				</Field>
+
+				<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
+					<span className={styles.fieldLabel}>Team attributes</span>
+					<div className={styles.checkboxRow}>
+						<Checkbox
+							label='Instructional'
+							name='instructional'
+							defaultChecked={values.instructional}
+						/>
+						<Checkbox
+							label='Dues required'
+							name='duesRequired'
+							defaultChecked={values.duesRequired}
+						/>
+						<Checkbox
+							label='Required rides'
+							name='requiredRides'
+							defaultChecked={values.requiredRides}
+						/>
+						<Checkbox
+							label='Required kit / uniform'
+							name='requiredKit'
+							defaultChecked={values.requiredKit}
+						/>
+						<Checkbox
+							label='Public roster'
+							name='hasRoster'
+							defaultChecked={values.hasRoster}
+						/>
+					</div>
+				</div>
+
+				<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
+					<span className={styles.fieldLabel}>Event types</span>
+					<div className={styles.checkboxRow}>
+						<Checkbox
+							label='Sponsor events'
+							name='eventSponsor'
+							defaultChecked={values.eventSponsor}
+						/>
+						<Checkbox
+							label='Team-specific events'
+							name='eventTeamSpecific'
+							defaultChecked={values.eventTeamSpecific}
+						/>
+						<Checkbox
+							label='Public events'
+							name='eventPublic'
+							defaultChecked={values.eventPublic}
+						/>
+						<Checkbox
+							label='Recruiting events'
+							name='eventRecruiting'
+							defaultChecked={values.eventRecruiting}
+						/>
+					</div>
+				</div>
+
+				<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
+					<span className={styles.fieldLabel}>
+						Join / applicant requirements
+					</span>
+					<div className={styles.checkboxRow}>
+						<Checkbox
+							label='Try-outs required'
+							name='joinTryouts'
+							defaultChecked={values.joinTryouts}
+						/>
+						<Checkbox
+							label='Referral required'
+							name='joinReferral'
+							defaultChecked={values.joinReferral}
+						/>
+						<Checkbox
+							label='Invite only'
+							name='joinInviteOnly'
+							defaultChecked={values.joinInviteOnly}
+						/>
+						<Checkbox
+							label='Open to all'
+							name='joinOpen'
+							defaultChecked={values.joinOpen}
+						/>
+					</div>
+				</div>
+			</Section>
+
+			{!isReview && (
+				<Section
+					title='Are you human?'
+					description='Answer this quick question to enable submitting.'
+				>
+					<AntiBot onValidChange={setIsAntiBotValid} />
+				</Section>
+			)}
+
+			{submitErrors.length > 0 && (
+				<div className={styles.submitError} role='alert'>
+					<p>
+						We couldn&rsquo;t {isReview ? 'save this team' : 'submit your team'}
+						:
+					</p>
+					<ul>
+						{submitErrors.map((message) => (
+							<li key={message}>{message}</li>
+						))}
+					</ul>
+				</div>
+			)}
+
+			{isReview && (
+				<div className={styles.rejectReason}>
+					{submitter ?
+						<Section title='Submission Rejection'>
+							<label htmlFor={rejectionReasonId} className={styles.fieldLabel}>
+								Rejection reason
+							</label>
+							<textarea
+								id={rejectionReasonId}
+								rows={3}
+								maxLength={1000}
+								value={rejectionReason}
+								onChange={(event) => setRejectionReason(event.target.value)}
+								placeholder='Tell the submitter why this was rejected'
+								className={styles.input}
+							/>
+							<span className={styles.fieldHint}>
+								If you reject this team, {submitter.name} ({submitter.email})
+								will be emailed this reason. This is a wireframe, so no email is
+								sent yet.
+							</span>
+						</Section>
+					:	<span className={styles.fieldHint}>
+							This team was submitted anonymously, so there is no one to email
+							if you reject it.
+						</span>
+					}
+				</div>
+			)}
+
+			<div
+				className={`${styles.submitRow} ${isReview ? styles.submitRowReview : ''}`}
+			>
+				{isReview ?
+					<>
+						<button
+							type='submit'
+							className={styles.buttonSolid}
+							disabled={isSubmitting}
+						>
+							{isSubmitting ? 'Working…' : 'Approve'}
+						</button>
+						{confirmingReject ?
 							<>
 								<button
-									type='submit'
-									className={styles.buttonSolid}
+									type='button'
+									className={styles.buttonDanger}
 									disabled={isSubmitting}
+									onClick={handleReject}
 								>
-									{isSubmitting ? 'Working…' : 'Approve'}
+									Yes, reject and delete
 								</button>
-								{confirmingReject ?
-									<>
-										<button
-											type='button'
-											className={styles.buttonDanger}
-											disabled={isSubmitting}
-											onClick={handleReject}
-										>
-											Yes, reject and delete
-										</button>
-										<button
-											type='button'
-											className={styles.buttonOutline}
-											disabled={isSubmitting}
-											onClick={() => setConfirmingReject(false)}
-										>
-											Cancel
-										</button>
-									</>
-								:	<button
-										type='button'
-										className={styles.buttonDanger}
-										disabled={isSubmitting}
-										onClick={() => setConfirmingReject(true)}
-									>
-										Reject
-									</button>
-								}
+								<button
+									type='button'
+									className={styles.buttonOutline}
+									disabled={isSubmitting}
+									onClick={() => setConfirmingReject(false)}
+								>
+									Cancel
+								</button>
 							</>
 						:	<button
-								type='submit'
-								className={styles.buttonSolid}
-								disabled={!isAntiBotValid || isSubmitting}
+								type='button'
+								className={styles.buttonDanger}
+								disabled={isSubmitting}
+								onClick={() => setConfirmingReject(true)}
 							>
-								{isSubmitting ? 'Submitting…' : 'Submit for review'}
+								Reject
 							</button>
 						}
-					</div>
-				</form>
+					</>
+				:	<button
+						type='submit'
+						className={styles.buttonSolid}
+						disabled={!isAntiBotValid || isSubmitting}
+					>
+						{isSubmitting ? 'Submitting…' : 'Submit for review'}
+					</button>
+				}
+			</div>
+		</form>
 	);
 }

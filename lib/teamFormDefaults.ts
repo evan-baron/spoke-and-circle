@@ -2,7 +2,7 @@ import type { TeamFormValues } from '@/lib/types';
 
 export const DEFAULT_TEAM_FORM_VALUES: TeamFormValues = {
 	name: '',
-	type: 'Group Ride',
+	type: 'Team',
 	missionStatement: '',
 	codeOfConduct: '',
 	affiliation: '',
