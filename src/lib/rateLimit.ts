@@ -9,14 +9,17 @@ import {
 } from './rateLimitConfig';
 
 const CLEANUP_PROBABILITY = 0.01;
-const CLEANUP_AGE_MS = 2 * 60 * 60 * 1000;
+const CLEANUP_AGE_MS =
+	Math.max(
+		...Object.values(RATE_LIMIT_CONFIG).map((config) => config.windowSeconds),
+	) * 1000;
 
 interface RateLimitResult {
 	success: boolean;
 	retryAfterSeconds: number;
 }
 
-async function checkRateLimit(
+export async function checkRateLimit(
 	identifier: string,
 	bucket: RateLimitBucket,
 	actor: RateLimitActor,

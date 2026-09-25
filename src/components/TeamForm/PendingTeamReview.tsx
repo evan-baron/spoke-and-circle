@@ -18,8 +18,12 @@ export function PendingTeamReview({
 }: PendingTeamReviewProps) {
 	const router = useRouter();
 
-	function backToList() {
-		router.push('/admin/pending');
+	function backToList(emailStatus?: string) {
+		const query =
+			emailStatus && emailStatus !== 'sent' ?
+				`?emailStatus=${encodeURIComponent(emailStatus)}`
+			:	'';
+		router.push(`/admin/pending${query}`);
 		router.refresh();
 	}
 
@@ -33,8 +37,8 @@ export function PendingTeamReview({
 				backToList();
 			}}
 			onReject={async (reason) => {
-				await adminAPI.rejectTeam(teamId, reason);
-				backToList();
+				const { emailStatus } = await adminAPI.rejectTeam(teamId, reason);
+				backToList(emailStatus);
 			}}
 		/>
 	);

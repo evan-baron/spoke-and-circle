@@ -47,7 +47,7 @@ export const adminAPI = {
 			{ method: 'POST', body: JSON.stringify(payload) },
 		),
 	rejectTeam: (id: string, reason?: string) =>
-		apiCall<{ success: boolean }>(
+		apiCall<{ success: boolean; emailStatus: string }>(
 			`/api/admin/teams/${encodeURIComponent(id)}`,
 			{ method: 'DELETE', body: JSON.stringify({ reason }) },
 		),

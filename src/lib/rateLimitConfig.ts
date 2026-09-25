@@ -2,7 +2,10 @@ export type RateLimitBucket =
 	| 'teams-read'
 	| 'teams-write'
 	| 'locations-search'
-	| 'admin-write';
+	| 'admin-write'
+	| 'email-admin'
+	| 'email-recipient'
+	| 'email-global';
 
 export type RateLimitActor = 'anonymous' | 'user' | 'admin';
 
@@ -23,6 +26,18 @@ export const RATE_LIMIT_CONFIG: Record<RateLimitBucket, BucketConfig> = {
 	'admin-write': {
 		windowSeconds: 60,
 		maxRequests: { anonymous: 0, user: 0, admin: 60 },
+	},
+	'email-admin': {
+		windowSeconds: 3600,
+		maxRequests: { anonymous: 0, user: 0, admin: 30 },
+	},
+	'email-recipient': {
+		windowSeconds: 86400,
+		maxRequests: { anonymous: 0, user: 0, admin: 3 },
+	},
+	'email-global': {
+		windowSeconds: 86400,
+		maxRequests: { anonymous: 0, user: 0, admin: 200 },
 	},
 	'locations-search': {
 		windowSeconds: 60,

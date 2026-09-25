@@ -12,8 +12,26 @@ export const metadata: Metadata = {
 
 const MAX_ROWS = 200;
 
-export default async function AdminPendingPage() {
+const EMAIL_NOTICES: Record<string, string> = {
+	no_recipient:
+		'Group rejected. No email was sent because it was submitted without an account.',
+	not_configured:
+		'Group rejected. Email is not set up on this server, so no message was sent.',
+	throttled:
+		'Group rejected, but the email was not sent because a sending limit was reached.',
+	failed: 'Group rejected, but the email could not be sent.',
+};
+
+export default async function AdminPendingPage({
+	searchParams,
+}: {
+	searchParams: Promise<{ emailStatus?: string | string[] }>;
+}) {
 	await requireAdmin();
+
+	const { emailStatus } = await searchParams;
+	const emailNotice =
+		typeof emailStatus === 'string' ? EMAIL_NOTICES[emailStatus] : undefined;
 
 	const where = { status: 'Pending' as const };
 	const [teams, total] = await Promise.all([
@@ -40,6 +58,11 @@ export default async function AdminPendingPage() {
 					&larr; Admin console
 				</Link>
 				<h1>Pending Groups</h1>
+				{emailNotice && (
+					<p className={styles.notice} role='status'>
+						{emailNotice}
+					</p>
+				)}
 				<p className={styles.count}>
 					{total} {total === 1 ? 'group' : 'groups'} waiting for review
 					{total > MAX_ROWS && <> (showing the oldest {MAX_ROWS})</>}

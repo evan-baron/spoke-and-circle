@@ -77,6 +77,14 @@
 	color: var(--color-ink-soft);
 }
 
+.notice {
+	@include card;
+	width: 100%;
+	padding: var(--space-sm) var(--space-md);
+	font-size: 0.875rem;
+	color: var(--color-ink-soft);
+}
+
 .empty {
 	@include card;
 	width: 100%;

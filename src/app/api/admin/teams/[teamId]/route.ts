@@ -6,7 +6,7 @@ import { rejectPendingTeam } from '@/services/teamAdminService';
 
 export const DELETE = withAuth(
 	{ rateLimit: 'admin-write', role: 'admin' },
-	async (request, _user, params) => {
+	async (request, user, params) => {
 		const teamId = typeof params?.teamId === 'string' ? params.teamId : '';
 		if (!teamId) return json400('Invalid team id');
 
@@ -18,10 +18,14 @@ export const DELETE = withAuth(
 
 		const rejected = await rejectPendingTeam(
 			teamId,
+			user.id,
 			parsed.data.reason || undefined,
 		);
 		if (!rejected) return json404('Pending team not found');
 
-		return NextResponse.json({ success: true });
+		return NextResponse.json({
+			success: true,
+			emailStatus: rejected.emailStatus,
+		});
 	},
 );

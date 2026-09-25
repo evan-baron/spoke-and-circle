@@ -162,7 +162,6 @@ export function TeamForm({
 	const isReview = mode === 'review';
 	const locationId = useId();
 	const additionalLocationsId = useId();
-	const rejectionReasonId = useId();
 	const [rejectionReason, setRejectionReason] = useState('');
 	const [isAntiBotValid, setIsAntiBotValid] = useState(false);
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -874,23 +873,20 @@ export function TeamForm({
 				<div className={styles.rejectReason}>
 					{submitter ?
 						<Section title='Submission Rejection'>
-							<label htmlFor={rejectionReasonId} className={styles.fieldLabel}>
-								Rejection reason
-							</label>
-							<textarea
-								id={rejectionReasonId}
-								rows={3}
-								maxLength={1000}
-								value={rejectionReason}
-								onChange={(event) => setRejectionReason(event.target.value)}
-								placeholder='Tell the submitter why this was rejected'
-								className={styles.input}
-							/>
-							<span className={styles.fieldHint}>
-								If you reject this team, {submitter.name} ({submitter.email})
-								will be emailed this reason. This is a wireframe, so no email is
-								sent yet.
-							</span>
+							<Field
+								label='Rejection reason'
+								hint={`If you reject this team, ${submitter.name} (${submitter.email}) will be emailed this reason. The reason is optional.`}
+								full
+							>
+								<textarea
+									rows={3}
+									maxLength={1000}
+									value={rejectionReason}
+									onChange={(event) => setRejectionReason(event.target.value)}
+									placeholder='Tell the submitter why this was rejected'
+									className={styles.input}
+								/>
+							</Field>
 						</Section>
 					:	<span className={styles.fieldHint}>
 							This team was submitted anonymously, so there is no one to email

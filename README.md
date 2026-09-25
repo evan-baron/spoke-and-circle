@@ -36,7 +36,7 @@ Location autocomplete and radius search read the `Place` table, filled from the 
 - [ ] `DATABASE_URL` and `DATABASE_URL_UNPOOLED` (production, used when `NODE_ENV=production`)
 - [ ] `APP_BASE_URL` set to the production origin. `src/middleware.ts` rejects cross-origin `POST`/`PUT`/`PATCH`/`DELETE` requests to `/api` that do not match it.
 - [ ] `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, `AUTH0_SECRET`
-- [ ] `CLOUDFLARE_ORIGIN_SECRET`
+- [ ] `CLOUDFLARE_ORIGIN_SECRET`, `RESEND_API_KEY`
 - [ ] Add the production callback and logout URLs in the Auth0 dashboard.
 
 ### Database
@@ -64,7 +64,13 @@ The repo rules say not to use browser automation or run builds unless asked, so 
   - Some form inputs have nowhere to be stored yet: the "Other" text for virtual platforms (`virtualPlatformOtherDescription`), and the segmentation yes/no and description. Persona "Other" text is stored as its own persona entry.
   - There is no duplicate check. The same name can be submitted repeatedly, and only the rate limit slows it down.
 - [ ] **Admin review follow-ups** (approve and reject work at `/admin/pending`):
-  - **Rejection emails are a wireframe.** When a logged-in user submitted the team, the admin can type a rejection reason, and `src/services/rejectionEmailService.ts` is called, but it only logs a line. Build the real email (subject, body with the reason, the team name) and decide whether the reason is required. The reason is not stored anywhere, since the team is deleted.
+  - **Rejection emails are built but need setup.** Rejecting a team emails the logged-in submitter from `support@spokeandcircle.com` through Resend (`src/services/mailService.ts`, `rejectionEmailService.ts`). Before it works in production:
+    - Add the domain in Resend and add the SPF and DKIM DNS records in Cloudflare. Also add a DMARC record.
+    - Create an API key limited to sending, and set `RESEND_API_KEY` in Vercel and in your local `.env`. Without it, rejecting still works and the admin sees a notice that no email was sent.
+    - Make sure `support@spokeandcircle.com` is a real mailbox, since replies to the rejection email go there.
+    - Anonymous submissions get no email, because there is no verified address. The team's public contact email is not used, since anyone could type someone else's address. Decide whether that is acceptable, or whether to collect a verified submitter email.
+    - Decide whether the reason should be required. It is optional today and is not stored anywhere, since the team is deleted.
+    - Check the limits fit real use: 30 emails per hour per admin, 3 per day per recipient, 200 per day overall (`src/lib/rateLimitConfig.ts`).
   - Decide whether reject should really hard delete, or set `Rejected` and keep the row (easier to audit and to answer "why was mine rejected"). `Rejected` exists in the status enum but is unused.
   - Send an email to the submitter when their team is approved. There is no notification today.
 - [ ] **Persona radio stores display text.** Persona is saved as text like `Women Only`. The plan is to store a code (`womenOnly`) and map it to a label for display, with a separate field for the "Other" text. Not done yet.
@@ -142,4 +148,4 @@ The database (`User.role`) is the only source of truth. Never trust a role from 
 
 ### Environment variable names (values live in `.env` and Vercel only)
 
-`DEVELOPMENT_DATABASE_URL`, `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `NEON_BRANCH`, `APP_BASE_URL`, `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, `AUTH0_SECRET`, `CLOUDFLARE_ORIGIN_SECRET`
+`DEVELOPMENT_DATABASE_URL`, `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `NEON_BRANCH`, `APP_BASE_URL`, `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, `AUTH0_SECRET`, `CLOUDFLARE_ORIGIN_SECRET`, `RESEND_API_KEY`

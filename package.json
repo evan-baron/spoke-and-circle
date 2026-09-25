@@ -8,6 +8,7 @@
     "start": "next start",
     "db:seed": "tsx prisma/seed.ts",
     "db:import-places": "tsx prisma/importGazetteer.ts",
+    "email:header": "tsx scripts/generateEmailHeader.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
@@ -22,6 +23,7 @@
     "next": "^15.0.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "resend": "^6.30.0",
     "zod": "^4.6.5"
   },
   "devDependencies": {
@@ -30,6 +32,7 @@
     "@types/react-dom": "^19.0.0",
     "prisma": "7.10.0",
     "sass": "^1.79.0",
+    "sharp": "^0.35.4",
     "tsx": "^4.23.15",
     "typescript": "^5.6.0"
   }
