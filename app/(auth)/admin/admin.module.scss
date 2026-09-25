@@ -1,0 +1,73 @@
+@use '@/styles/mixins' as *;
+
+.page {
+	@include page-base;
+	align-items: center;
+	flex: 1;
+	justify-content: center;
+	padding-inline: var(--space-sm);
+	padding-bottom: var(--space-lg);
+}
+
+.consoleWrap {
+	width: 100%;
+	max-width: 40rem;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: var(--space-md);
+	text-align: center;
+}
+
+.eyebrow {
+	@include eyebrow;
+	color: var(--color-coral);
+}
+
+.actions {
+	width: 100%;
+	max-width: 20rem;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+
+	@include from($bp-md) {
+		max-width: none;
+		flex-direction: row;
+		justify-content: center;
+	}
+}
+
+.buttonSolid {
+	@include button-solid;
+}
+
+.buttonOutline {
+	@include button-outline;
+}
+
+.subPage {
+	@include page-base;
+	align-items: stretch;
+	flex: 1;
+}
+
+.subWrap {
+	@include container;
+	display: flex;
+	flex-direction: column;
+	align-items: stretch;
+	gap: var(--space-sm);
+	padding-inline: var(--space-sm);
+}
+
+.backLink {
+	font-size: 0.8125rem;
+	font-weight: 700;
+	color: var(--color-ink-soft);
+	width: fit-content;
+
+	&:hover {
+		color: var(--color-coral);
+	}
+}

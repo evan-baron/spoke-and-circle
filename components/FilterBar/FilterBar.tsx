@@ -6,6 +6,7 @@ import { CheckboxDropdown } from './CheckboxDropdown';
 import styles from './filterBar.module.scss';
 
 interface FilterBarProps {
+	action?: string;
 	defaultQ?: string;
 	defaultLocation?: string;
 	defaultType?: string;
@@ -67,6 +68,7 @@ function autoSubmit(event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) {
 }
 
 export function FilterBar({
+	action = '/search',
 	defaultQ = '',
 	defaultLocation = '',
 	defaultType = '',
@@ -115,7 +117,7 @@ export function FilterBar({
 	}, []);
 
 	return (
-		<form action='/search' method='GET' className={styles.form}>
+		<form action={action} method='GET' className={styles.form}>
 			<input
 				name='q'
 				type='text'

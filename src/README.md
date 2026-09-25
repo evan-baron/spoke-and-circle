@@ -62,6 +62,11 @@ The repo rules say not to use browser automation or run builds unless asked, so 
   - Options: Google Geocoding API through a server route (same key, needs the API enabled on the key), Places Autocomplete with the postal code type, or an offline ZIP dataset.
   - The get-started quiz already collects `zipCode` (`RiderPreferences` in `lib/types.ts`).
 
+- [ ] **Admin delete is a wireframe.** `/admin/all` (`components/AdminTeamsTable`) shows the same static teams as `/search`, with per-group Delete and multi-select delete, but deleting only hides rows in the browser until reload. To make it real:
+  - Read teams from the database, not `lib/teams.ts`.
+  - Add a `DELETE /api/admin/teams` route using `withAuth({ rateLimit: ..., role: 'admin' }, handler)`, a zod-validated list of ids, and a new rate limit bucket for admin writes.
+  - Decide between hard delete and a soft delete (for example set status to `Rejected`). There is no audit log or undo today, so hard delete is permanent.
+  - Refresh the list after deleting (`router.refresh()`).
 - [ ] **Admin features.** The role plumbing exists (see Reference) but nothing uses it yet:
   - There is no way to promote a user. Until an admin screen exists, set the role in the database, for example `UPDATE "User" SET role = 'admin' WHERE email = '...';` or use Prisma Studio.
   - The admin review queue (approve or reject `Pending` teams) is not built, and no admin-only UI bits exist yet.
