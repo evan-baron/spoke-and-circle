@@ -23,7 +23,16 @@ const CLUB_TYPES = [
 	'Youth Program',
 	'Organization',
 ];
-const BIKE_TYPES = ['Road', 'Gravel', 'MTB', 'Track', 'BMX', 'Tri', 'E-bike', 'Mixed'];
+const BIKE_TYPES = [
+	'Road',
+	'Gravel',
+	'MTB',
+	'Track',
+	'BMX',
+	'Tri',
+	'E-bike',
+	'Mixed',
+];
 const FORMATS = ['In-person', 'Virtual', 'Hybrid'];
 const VIRTUAL_PLATFORMS = ['Zwift', 'Strava', 'TrainerRoad', 'Other'];
 const SCHEDULES = ['Weekly', 'Monthly', 'Annually'];
@@ -405,7 +414,10 @@ export function TeamForm({
 						/>
 					)}
 				</div>
-				<Field label='Home-base affiliation'>
+				<Field
+					label='Home-base affiliation'
+					hint='The shop, venue, league, or organization your group is based out of or belongs to. Ex: The Broken Spoke Bike Shop'
+				>
 					<input
 						type='text'
 						name='homeBaseAffiliation'
@@ -587,9 +599,7 @@ export function TeamForm({
 						</select>
 					</Field>
 					<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
-						<span className={styles.fieldLabel}>
-							Skill/Speed Segmentation
-						</span>
+						<span className={styles.fieldLabel}>Skill/Speed Segmentation</span>
 						<div className={styles.checkboxRow}>
 							<Checkbox
 								label='Yes'
