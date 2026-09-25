@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { BackButton } from "@/components/BackButton/BackButton";
 import { Badge } from "@/components/Badge/Badge";
 import { ContactModal } from "@/components/ContactModal/ContactModal";
+import { MailIcon, PhoneIcon } from "@/components/ContactIcons/ContactIcons";
 import { DetailRow, DetailSection } from "@/components/DetailSection/DetailSection";
 import {
   formatAgeRequirement,
@@ -120,22 +121,28 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
                   </>
                 )}
                 <dt>Contact</dt>
-                <dd>
-                  {team.contact.email && <div>{team.contact.email}</div>}
-                  {team.contact.phone && <div>{team.contact.phone}</div>}
-                  {!team.contact.email && !team.contact.phone && "Not listed"}
-                </dd>
+                {team.contact.email && (
+                  <dd className={styles.factWithIcon}>
+                    <MailIcon size={16} />
+                    <span>{team.contact.email}</span>
+                  </dd>
+                )}
+                {team.contact.phone && (
+                  <dd className={styles.factWithIcon}>
+                    <PhoneIcon size={16} />
+                    <span>{team.contact.phone}</span>
+                  </dd>
+                )}
+                {!team.contact.email && !team.contact.phone && <dd>Not listed</dd>}
                 <dt>Website</dt>
                 <dd>{team.website ? <a href={team.website}>{team.website}</a> : "N/A"}</dd>
                 {hasSocial && (
                   <>
                     <dt>Social</dt>
-                    <dd>
-                      {team.social.instagram && <div>Instagram &middot; {team.social.instagram}</div>}
-                      {team.social.facebook && <div>Facebook &middot; {team.social.facebook}</div>}
-                      {team.social.strava && <div>Strava &middot; {team.social.strava}</div>}
-                      {team.social.discord && <div>Discord &middot; {team.social.discord}</div>}
-                    </dd>
+                    {team.social.instagram && <dd>Instagram &middot; {team.social.instagram}</dd>}
+                    {team.social.facebook && <dd>Facebook &middot; {team.social.facebook}</dd>}
+                    {team.social.strava && <dd>Strava &middot; {team.social.strava}</dd>}
+                    {team.social.discord && <dd>Discord &middot; {team.social.discord}</dd>}
                   </>
                 )}
                 {team.codeOfConduct && (
