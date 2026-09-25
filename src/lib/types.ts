@@ -28,7 +28,6 @@ export type ScheduleFrequency = "Weekly" | "Monthly" | "Annually";
 
 export type DropPolicy = "Drop" | "No-drop";
 
-export type RankingSystem = "Captains" | "Ride Leaders" | "Liaison" | "N/A";
 
 export type Visibility = "Public" | "Private";
 
@@ -110,7 +109,7 @@ export interface Team {
 
   // -- Team/Club Details --
   competitiveOrCasual: "Competitive" | "Casual";
-  skillLevel: SkillLevel;
+  skillLevels: SkillLevel[];
   instructional: boolean;
   duesRequired: boolean;
   duesAmount?: string;
@@ -119,7 +118,6 @@ export interface Team {
   requiredRaces?: number;
   mileageRequirement?: MileageRequirement;
   requiredKit: boolean;
-  rankingSystem: RankingSystem;
   hasRoster: boolean;
   sponsors?: string[];
   eventTypes?: string[];
@@ -190,13 +188,12 @@ export interface TeamFormValues {
   eBikeAllowed: boolean;
   waitlist: boolean;
   competitiveOrCasual: string;
-  skillLevel: string;
+  skillLevels: string[];
   duesAmount: string;
   duesSchedule: string;
   requiredRaces: string;
   mileageMin: string;
   mileageFrequency: string;
-  rankingSystem: string;
   sponsors: string;
   instructional: boolean;
   duesRequired: boolean;

@@ -51,7 +51,6 @@ export function GetStartedWizard() {
 	const [direction, setDirection] = useState<'forward' | 'back'>('forward');
 	const [zipDraft, setZipDraft] = useState('');
 	const [isFinishing, setIsFinishing] = useState(false);
-	const [lookingForTouched, setLookingForTouched] = useState(false);
 
 	const step: StepKey = STEPS[stepIndex] ?? STEPS[0];
 	const isLastStep = stepIndex === STEPS.length - 1;
@@ -108,7 +107,6 @@ export function GetStartedWizard() {
 
 	function selectLookingFor(value: RiderPreferences['lookingFor']) {
 		setAnswers((prev) => ({ ...prev, lookingFor: value }));
-		setLookingForTouched(true);
 	}
 
 	function handleSkip() {
@@ -241,7 +239,7 @@ export function GetStartedWizard() {
 							))}
 							<button
 								type='button'
-								className={`${styles.optionCard} ${lookingForTouched && answers.lookingFor === null ? styles.optionSelected : ''}`}
+								className={`${styles.optionCard} ${answers.lookingFor === null ? styles.optionSelected : ''}`}
 								onClick={() => selectLookingFor(null)}
 							>
 								Any
@@ -250,7 +248,7 @@ export function GetStartedWizard() {
 						<button
 							type='button'
 							className={styles.finishBtn}
-							disabled={!lookingForTouched || isFinishing}
+							disabled={isFinishing}
 							onClick={() => finish(answers)}
 						>
 							{isFinishing ? 'Finding matches…' : 'Find my matches'}

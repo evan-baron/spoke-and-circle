@@ -53,3 +53,7 @@ export function formatSubmitter(
   const name = [user.firstName, user.lastName].filter(Boolean).join(" ");
   return name || user.email;
 }
+
+export function formatSkillLevels(levels: string[]): string {
+  return levels.join(", ");
+}

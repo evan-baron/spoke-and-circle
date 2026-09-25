@@ -4,7 +4,6 @@ import type {
 	DropPolicy,
 	Format,
 	MtbDiscipline,
-	RankingSystem,
 	Segmentation,
 } from '../../generated/prisma/client';
 import type { Team } from './types';
@@ -64,17 +63,9 @@ export const dropPolicyToDb: Record<Team['dropPolicy'], DropPolicy> = {
 	'No-drop': 'NoDrop',
 };
 
-export const rankingSystemToDb: Record<Team['rankingSystem'], RankingSystem> = {
-	Captains: 'Captains',
-	'Ride Leaders': 'RideLeaders',
-	Liaison: 'Liaison',
-	'N/A': 'NA',
-};
-
 export const clubTypeFromDb = invert(clubTypeToDb);
 export const bikeTypeFromDb = invert(bikeTypeToDb);
 export const formatFromDb = invert(formatToDb);
 export const disciplineFromDb = invert(disciplineToDb);
 export const segmentationFromDb = invert(segmentationToDb);
 export const dropPolicyFromDb = invert(dropPolicyToDb);
-export const rankingSystemFromDb = invert(rankingSystemToDb);

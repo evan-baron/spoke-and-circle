@@ -98,7 +98,7 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		eBikeAllowed: flag('eBikeAllowed'),
 		waitlist: flag('waitlist'),
 		competitiveOrCasual: text('competitiveOrCasual'),
-		skillLevel: text('skillLevel'),
+		skillLevels: values('skillLevel'),
 		duesRequired,
 		duesAmount: duesRequired ? text('duesAmount') : undefined,
 		duesSchedule: duesRequired ? text('duesSchedule') : undefined,
@@ -106,7 +106,6 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		mileageMin,
 		mileageFrequency:
 			mileageMin === undefined ? undefined : text('mileageFrequency'),
-		rankingSystem: text('rankingSystem'),
 		sponsors: commaList('sponsors'),
 		instructional: flag('instructional'),
 		requiredRides: flag('requiredRides'),

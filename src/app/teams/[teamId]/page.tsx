@@ -12,19 +12,16 @@ import {
   formatList,
   formatMemberCount,
   formatMileageRequirement,
+  formatSkillLevels,
   formatVerification,
   formatYesNo,
 } from "@/lib/format";
-import { getAllTeams, getTeamById } from "@/lib/teams";
 import { toneForPace, toneForVerified, toneForVisibility } from "@/lib/tone";
+import { getApprovedTeamById } from "@/services/teamService";
 import styles from "./team.module.scss";
 
 interface TeamPageParams {
   teamId: string;
-}
-
-export async function generateStaticParams(): Promise<TeamPageParams[]> {
-  return getAllTeams().map((team) => ({ teamId: team.id }));
 }
 
 export async function generateMetadata({
@@ -33,13 +30,13 @@ export async function generateMetadata({
   params: Promise<TeamPageParams>;
 }): Promise<Metadata> {
   const { teamId } = await params;
-  const team = getTeamById(teamId);
+  const team = await getApprovedTeamById(teamId);
   return { title: team ? `${team.name} | Spoke & Circle` : "Team not found | Spoke & Circle" };
 }
 
 export default async function TeamPage({ params }: { params: Promise<TeamPageParams> }) {
   const { teamId } = await params;
-  const team = getTeamById(teamId);
+  const team = await getApprovedTeamById(teamId);
 
   if (!team) {
     notFound();
@@ -182,7 +179,7 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
 
             <DetailSection title="Team structure">
               <DetailRow label="Competitive or casual" value={team.competitiveOrCasual} />
-              <DetailRow label="Skill level" value={team.skillLevel} />
+              <DetailRow label="Skill levels" value={formatSkillLevels(team.skillLevels)} />
               <DetailRow label="Instructional" value={formatYesNo(team.instructional)} />
               <DetailRow
                 label="Dues"
@@ -196,7 +193,6 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
               <DetailRow label="Required races (min)" value={team.requiredRaces ?? "None"} />
               <DetailRow label="Mileage requirement" value={formatMileageRequirement(team.mileageRequirement)} />
               <DetailRow label="Required kit / uniform" value={formatYesNo(team.requiredKit)} />
-              <DetailRow label="Rankings" value={team.rankingSystem} />
               <DetailRow label="Roster" value={formatYesNo(team.hasRoster)} />
               <DetailRow label="Sponsors" value={formatList(team.sponsors)} />
               <DetailRow label="Event types" value={formatList(team.eventTypes)} />

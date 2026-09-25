@@ -6,7 +6,6 @@ import {
 	disciplineToDb,
 	dropPolicyToDb,
 	formatToDb,
-	rankingSystemToDb,
 	segmentationToDb,
 } from '../src/lib/teamEnums';
 import { teams } from '../src/lib/teams';
@@ -60,7 +59,7 @@ function toTeamData(team: Team): Prisma.TeamCreateInput {
 		dropPolicy: dropPolicyToDb[team.dropPolicy],
 		rideVisibility: team.rideVisibility,
 		competitiveOrCasual: team.competitiveOrCasual,
-		skillLevel: team.skillLevel,
+		skillLevels: team.skillLevels,
 		instructional: team.instructional,
 		duesRequired: team.duesRequired,
 		duesAmount: team.duesAmount,
@@ -70,7 +69,6 @@ function toTeamData(team: Team): Prisma.TeamCreateInput {
 		mileageMin: team.mileageRequirement?.min,
 		mileageFrequency: team.mileageRequirement?.frequency,
 		requiredKit: team.requiredKit,
-		rankingSystem: rankingSystemToDb[team.rankingSystem],
 		hasRoster: team.hasRoster,
 		sponsors: team.sponsors ?? [],
 		eventTypes: team.eventTypes ?? [],

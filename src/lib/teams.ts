@@ -35,9 +35,10 @@ interface TeamInput {
 }
 
 function makeTeam(input: TeamInput): Team {
-  const { overrides, ...rest } = input;
+  const { overrides, skillLevel, ...rest } = input;
   return {
     ...rest,
+    skillLevels: [skillLevel],
     visibility: "Public",
     rideVisibility: "Public",
     verified: true,
@@ -52,7 +53,6 @@ function makeTeam(input: TeamInput): Team {
     primaryLanguage: "English",
     contact: { email: `hello@${input.id.replace(/-/g, "")}.club` },
     social: {},
-    rankingSystem: "N/A",
     joinRequirements: {
       tryouts: false,
       referralRequired: false,
@@ -89,7 +89,6 @@ export const teams: Team[] = [
       startTimes: ["Tue 6:00 PM", "Sat 8:00 AM"],
       website: "https://portlandvelo.example.org",
       social: { instagram: "@portlandvelo", strava: "Portland Velo Collective" },
-      rankingSystem: "Ride Leaders",
       eventTypes: ["Public Events"],
     },
   }),
@@ -154,7 +153,6 @@ export const teams: Team[] = [
       requiredRaces: 6,
       mileageRequirement: { min: 150, frequency: "Monthly" },
       requiredKit: true,
-      rankingSystem: "Captains",
       sponsors: ["Lone Star Bikes", "Velocity Nutrition"],
       eventTypes: ["Team-specific Events", "Sponsor Events", "Recruiting Events"],
       joinRequirements: { tryouts: true, referralRequired: false, inviteOnly: false, open: false },
@@ -185,7 +183,6 @@ export const teams: Team[] = [
     overrides: {
       discipline: "Trail",
       startTimes: ["Sat 9:00 AM"],
-      rankingSystem: "Ride Leaders",
       social: { instagram: "@frontrangemtb" },
     },
   }),
@@ -213,7 +210,6 @@ export const teams: Team[] = [
     overrides: {
       discipline: "Enduro",
       requiredKit: true,
-      rankingSystem: "Captains",
       social: { instagram: "@cascadiaenduro" },
       eventTypes: ["Team-specific Events", "Public Events"],
     },
@@ -240,7 +236,6 @@ export const teams: Team[] = [
     tags: ["track", "velodrome", "racing", "competitive"],
     overrides: {
       requiredKit: true,
-      rankingSystem: "Liaison",
       hasRoster: true,
       joinRequirements: { tryouts: false, referralRequired: true, inviteOnly: false, open: false },
       homeBaseAffiliation: "Austin Super Velodrome",
@@ -327,7 +322,6 @@ export const teams: Team[] = [
       homeBaseAffiliation: "Zwift Racing League",
       memberLimit: 400,
       requiredKit: true,
-      rankingSystem: "Captains",
       social: { discord: "discord.gg/zwiftsummit" },
       startTimes: ["Mon 7:00 PM", "Thu 7:00 PM"],
     },
@@ -355,7 +349,6 @@ export const teams: Team[] = [
     missionStatement: "Build confidence and community for women on bikes, from first ride to first race.",
     overrides: {
       personaRestrictions: ["Women Only"],
-      rankingSystem: "Ride Leaders",
       eventTypes: ["Public Events", "Recruiting Events"],
       social: { instagram: "@rosecitywomenscycling" },
     },
@@ -439,7 +432,6 @@ export const teams: Team[] = [
       duesAmount: "$300/year",
       duesSchedule: "Annually",
       sponsors: ["Piedmont Bike Co.", "SC Sports Medicine"],
-      rankingSystem: "Captains",
       joinRequirements: { tryouts: true, referralRequired: false, inviteOnly: false, open: false },
       eventTypes: ["Team-specific Events", "Sponsor Events"],
     },
@@ -520,7 +512,6 @@ export const teams: Team[] = [
       affiliation: "Randonneurs USA, Vermont Chapter",
       requiredRides: true,
       mileageRequirement: { min: 200, frequency: "Monthly" },
-      rankingSystem: "Liaison",
       verified: false,
       lastActiveYear: 2024,
     },
@@ -705,7 +696,6 @@ export const teams: Team[] = [
       duesAmount: "$120/year",
       duesSchedule: "Annually",
       requiredKit: true,
-      rankingSystem: "Captains",
       website: "https://peachtreeracing.example.org",
     },
   }),
@@ -732,7 +722,6 @@ export const teams: Team[] = [
     overrides: {
       virtualPlatform: "TrainerRoad",
       homeBaseAffiliation: "TrainerRoad Team League",
-      rankingSystem: "Captains",
     },
   }),
 
@@ -813,7 +802,6 @@ export const teams: Team[] = [
       duesAmount: "$180/year",
       duesSchedule: "Annually",
       joinRequirements: { tryouts: false, referralRequired: false, inviteOnly: true, open: false },
-      rankingSystem: "Captains",
     },
   }),
 

@@ -78,7 +78,7 @@ model Team {
   rideVisibility         Visibility         @default(Public)
 
   competitiveOrCasual CompetitiveOrCasual
-  skillLevel          SkillLevel
+  skillLevels         SkillLevel[]
   instructional       Boolean             @default(false)
   duesRequired        Boolean             @default(false)
   duesAmount          String?
@@ -88,7 +88,6 @@ model Team {
   mileageMin          Int?
   mileageFrequency    ScheduleFrequency?
   requiredKit         Boolean             @default(false)
-  rankingSystem       RankingSystem       @default(NA)
   hasRoster           Boolean             @default(false)
   sponsors            String[]
   eventTypes          String[]
@@ -210,13 +209,6 @@ enum ScheduleFrequency {
 enum DropPolicy {
   Drop
   NoDrop @map("No-drop")
-}
-
-enum RankingSystem {
-  Captains
-  RideLeaders @map("Ride Leaders")
-  Liaison
-  NA          @map("N/A")
 }
 
 enum Visibility {

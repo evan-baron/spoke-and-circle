@@ -1,6 +1,10 @@
 import Link from 'next/link';
 import { Badge } from '@/components/Badge/Badge';
-import { formatMemberCount, formatVerification } from '@/lib/format';
+import {
+	formatMemberCount,
+	formatSkillLevels,
+	formatVerification,
+} from '@/lib/format';
 import { toneForPace, toneForVerified, toneForVisibility } from '@/lib/tone';
 import type { Team } from '@/lib/types';
 import styles from './resultsTable.module.scss';
@@ -36,7 +40,7 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 									{team.visibility}
 								</Badge>
 								<span className={styles.cardMeta}>{team.bikeType}</span>
-								<span className={styles.cardMeta}>{team.skillLevel}</span>
+								<span className={styles.cardMeta}>{formatSkillLevels(team.skillLevels)}</span>
 								<span className={styles.cardMeta}>
 									{formatMemberCount(team.memberCount)}
 								</span>
@@ -79,7 +83,7 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 							</td>
 							<td>{team.location}</td>
 							<td>{team.bikeType}</td>
-							<td>{team.skillLevel}</td>
+							<td>{formatSkillLevels(team.skillLevels)}</td>
 							<td>
 								<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
 							</td>

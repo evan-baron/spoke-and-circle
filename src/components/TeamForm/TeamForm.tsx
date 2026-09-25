@@ -30,7 +30,6 @@ const SCHEDULES = ['Weekly', 'Monthly', 'Annually'];
 const PACES = ['Casual', 'Steady', 'Competitive'];
 const DROP_POLICIES = ['Drop', 'No-drop'];
 const SKILL_LEVELS = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
-const RANKING_SYSTEMS = ['Captains', 'Ride Leaders', 'Liaison', 'N/A'];
 const PERSONA_OPTIONS = [
 	{ value: 'allAllowed', label: 'All allowed' },
 	{ value: 'womenOnly', label: 'Women only' },
@@ -658,6 +657,20 @@ export function TeamForm({
 					</Section> */}
 
 			<Section title='Team / club details'>
+				<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
+					<span className={styles.fieldLabel}>Skill levels welcome</span>
+					<div className={styles.checkboxRow}>
+						{SKILL_LEVELS.map((option) => (
+							<Checkbox
+								key={option}
+								label={option}
+								name='skillLevel'
+								value={option}
+								defaultChecked={values.skillLevels.includes(option)}
+							/>
+						))}
+					</div>
+				</div>
 				<Field label='Competitive or casual'>
 					<select
 						name='competitiveOrCasual'
@@ -666,19 +679,6 @@ export function TeamForm({
 					>
 						<option value='Casual'>Casual</option>
 						<option value='Competitive'>Competitive</option>
-					</select>
-				</Field>
-				<Field label='Skill level'>
-					<select
-						name='skillLevel'
-						defaultValue={values.skillLevel}
-						className={styles.input}
-					>
-						{SKILL_LEVELS.map((option) => (
-							<option key={option} value={option}>
-								{option}
-							</option>
-						))}
 					</select>
 				</Field>
 				<Field label='Dues amount' hint='Leave blank if none'>
@@ -728,19 +728,6 @@ export function TeamForm({
 						className={styles.input}
 					>
 						{SCHEDULES.map((option) => (
-							<option key={option} value={option}>
-								{option}
-							</option>
-						))}
-					</select>
-				</Field>
-				<Field label='Rankings'>
-					<select
-						name='rankingSystem'
-						defaultValue={values.rankingSystem}
-						className={styles.input}
-					>
-						{RANKING_SYSTEMS.map((option) => (
 							<option key={option} value={option}>
 								{option}
 							</option>

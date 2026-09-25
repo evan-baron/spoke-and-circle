@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { SearchForm } from '@/components/SearchForm/SearchForm';
-import { getAllTeams } from '@/lib/teams';
+import { countApprovedTeams } from '@/services/teamService';
 import Crank from '@/components/Graphics/Crank';
 import styles from './page.module.scss';
 
@@ -13,9 +13,10 @@ const QUICK_LINKS = [
 	{ label: 'No-drop', href: '/search?q=no-drop' },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+	const approvedCount = await countApprovedTeams();
 	const teamCount = () => {
-		const length = getAllTeams().length;
+		const length = approvedCount;
 
 		if (length < 100) {
 			const rounded = Math.floor(length / 10) * 10;

@@ -41,12 +41,6 @@ const mtbDisciplineSchema = z.enum([
 const segmentationSchema = z.enum(['A Group', 'B Group', 'C Group', 'N/A']);
 const scheduleFrequencySchema = z.enum(['Weekly', 'Monthly', 'Annually']);
 const dropPolicySchema = z.enum(['Drop', 'No-drop']);
-const rankingSystemSchema = z.enum([
-	'Captains',
-	'Ride Leaders',
-	'Liaison',
-	'N/A',
-]);
 const visibilitySchema = z.enum(['Public', 'Private']);
 const competitiveOrCasualSchema = z.enum(['Competitive', 'Casual']);
 
@@ -189,7 +183,10 @@ const teamBaseSchema = z.object({
 	rideVisibility: visibilitySchema.optional(),
 
 	competitiveOrCasual: competitiveOrCasualSchema,
-	skillLevel: skillLevelSchema,
+	skillLevels: z
+		.array(skillLevelSchema)
+		.min(1, 'Choose at least one skill level')
+		.max(4),
 	instructional: z.boolean().optional(),
 	duesRequired: z.boolean().optional(),
 	duesAmount: z
@@ -213,7 +210,6 @@ const teamBaseSchema = z.object({
 		.optional(),
 	mileageFrequency: scheduleFrequencySchema.optional(),
 	requiredKit: z.boolean().optional(),
-	rankingSystem: rankingSystemSchema.optional(),
 	hasRoster: z.boolean().optional(),
 	sponsors: z.array(teamListItemSchema).max(20).optional(),
 	eventTypes: z.array(eventTypeSchema).max(4).optional(),

@@ -70,7 +70,7 @@ function buildWhere(
 		and.push({ bikeType: { in: params.bikeTypes.map((b) => bikeTypeToDb[b]) } });
 	}
 	if (params.discipline) and.push({ discipline: disciplineToDb[params.discipline] });
-	if (params.skillLevel) and.push({ skillLevel: params.skillLevel });
+	if (params.skillLevel) and.push({ skillLevels: { has: params.skillLevel } });
 	if (params.competitiveOrCasual) {
 		and.push({ competitiveOrCasual: params.competitiveOrCasual });
 	}

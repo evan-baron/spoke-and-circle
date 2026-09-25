@@ -58,7 +58,6 @@ The repo rules say not to use browser automation or run builds unless asked, so 
 
 ## 2. Features not built yet
 
-- [ ] **Team detail page and homepage count still read the static list.** `/search` and `/admin/all` now read approved teams from the database (`src/services/teamSearchService.ts`, 20 per page), but the team detail page and the homepage count still read `src/lib/teams.ts`. Search results link to `/teams/<id>` with database ids, which the detail page cannot find, so those links 404 until `getAllTeams` and `getTeamById` move to Prisma (then `generateStaticParams` too).
 - [ ] **Keyword search matches tags only as whole tags.** Name and mission statement are substring matches, but Prisma cannot do substring matches inside array columns, so a tag has to match exactly. If that matters, use a raw SQL query or a search column.
 - [ ] **Team submission follow-ups** (`POST /api/teams` works and saves as `Pending`):
   - Submissions are rate limited to 3 per hour per IP for anonymous callers (`teams-write` in `src/lib/rateLimitConfig.ts`). Check this is right for real use, for example a club submitting several groups at once.

@@ -4,7 +4,11 @@ import Link from 'next/link';
 import { useEffect, useId, useRef, useState } from 'react';
 import { Badge } from '@/components/Badge/Badge';
 import tableStyles from '@/components/ResultsTable/resultsTable.module.scss';
-import { formatMemberCount, formatVerification } from '@/lib/format';
+import {
+	formatMemberCount,
+	formatSkillLevels,
+	formatVerification,
+} from '@/lib/format';
 import { toneForPace, toneForVerified, toneForVisibility } from '@/lib/tone';
 import type { Team } from '@/lib/types';
 import styles from './adminTeamsTable.module.scss';
@@ -151,7 +155,7 @@ export function AdminTeamsTable({
 												{team.bikeType}
 											</span>
 											<span className={tableStyles.cardMeta}>
-												{team.skillLevel}
+												{formatSkillLevels(team.skillLevels)}
 											</span>
 											<span className={tableStyles.cardMeta}>
 												{formatMemberCount(team.memberCount)}
@@ -215,7 +219,7 @@ export function AdminTeamsTable({
 									</td>
 									<td>{team.location}</td>
 									<td>{team.bikeType}</td>
-									<td>{team.skillLevel}</td>
+									<td>{formatSkillLevels(team.skillLevels)}</td>
 									<td>
 										<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
 									</td>
