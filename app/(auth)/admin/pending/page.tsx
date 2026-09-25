@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { formatSubmittedDate, formatSubmitter } from '@/lib/format';
+import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/services/currentUserService';
 import styles from '../admin.module.scss';
 
@@ -8,8 +10,28 @@ export const metadata: Metadata = {
 	robots: { index: false, follow: false },
 };
 
+const MAX_ROWS = 200;
+
 export default async function AdminPendingPage() {
 	await requireAdmin();
+
+	const where = { status: 'Pending' as const };
+	const [teams, total] = await Promise.all([
+		prisma.team.findMany({
+			where,
+			orderBy: { createdAt: 'asc' },
+			take: MAX_ROWS,
+			select: {
+				id: true,
+				name: true,
+				createdAt: true,
+				submittedBy: {
+					select: { firstName: true, lastName: true, email: true },
+				},
+			},
+		}),
+		prisma.team.count({ where }),
+	]);
 
 	return (
 		<div className={styles.subPage}>
@@ -18,6 +40,44 @@ export default async function AdminPendingPage() {
 					&larr; Admin console
 				</Link>
 				<h1>Pending Groups</h1>
+				<p className={styles.count}>
+					{total} {total === 1 ? 'group' : 'groups'} waiting for review
+					{total > MAX_ROWS && <> (showing the oldest {MAX_ROWS})</>}
+				</p>
+
+				{teams.length === 0 ?
+					<div className={styles.empty}>
+						<p>No pending groups.</p>
+					</div>
+				:	<div className={styles.tableWrap}>
+						<table className={styles.table}>
+							<thead>
+								<tr>
+									<th>Name</th>
+									<th>Submitted</th>
+									<th>Submitted by</th>
+								</tr>
+							</thead>
+							<tbody>
+								{teams.map((team) => (
+									<tr key={team.id}>
+										<td className={styles.nameCell}>
+											<Link href={`/admin/pending/${team.id}`} className={styles.nameLink}>
+												{team.name}
+											</Link>
+										</td>
+										<td>
+											<time dateTime={team.createdAt.toISOString()}>
+												{formatSubmittedDate(team.createdAt)}
+											</time>
+										</td>
+										<td>{formatSubmitter(team.submittedBy)}</td>
+									</tr>
+								))}
+							</tbody>
+						</table>
+					</div>
+				}
 			</div>
 		</div>
 	);

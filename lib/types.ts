@@ -157,6 +157,66 @@ export interface TeamsResponse {
   teams: Team[];
 }
 
+export interface TeamFormValues {
+  name: string;
+  type: string;
+  missionStatement: string;
+  codeOfConduct: string;
+  affiliation: string;
+  location: string;
+  additionalLocations: string[];
+  founded: string;
+  visibility: string;
+  primaryLanguage: string;
+  contactPhone: string;
+  contactEmail: string;
+  bikeType: string;
+  format: string;
+  virtualPlatform: string[];
+  homeBaseAffiliation: string;
+  website: string;
+  instagram: string;
+  facebook: string;
+  strava: string;
+  discord: string;
+  ageMin: string;
+  ageMax: string;
+  memberCount: string;
+  memberLimit: string;
+  howToJoin: string;
+  personaRestriction: string | null;
+  personaOtherDescription: string;
+  eBikeAllowed: boolean;
+  waitlist: boolean;
+  competitiveOrCasual: string;
+  skillLevel: string;
+  duesAmount: string;
+  duesSchedule: string;
+  requiredRaces: string;
+  mileageMin: string;
+  mileageFrequency: string;
+  rankingSystem: string;
+  sponsors: string;
+  instructional: boolean;
+  duesRequired: boolean;
+  requiredRides: boolean;
+  requiredKit: boolean;
+  hasRoster: boolean;
+  eventSponsor: boolean;
+  eventTeamSpecific: boolean;
+  eventPublic: boolean;
+  eventRecruiting: boolean;
+  joinTryouts: boolean;
+  joinReferral: boolean;
+  joinInviteOnly: boolean;
+  joinOpen: boolean;
+}
+
+export interface CreateTeamResponse {
+  success: boolean;
+  team: { id: string };
+}
+
 export interface CurrentUser {
   email: string;
   firstName: string | null;

@@ -176,6 +176,37 @@ textarea.input {
 	}
 }
 
+.submitRowReview {
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: center;
+	gap: var(--space-sm);
+
+	@include from($bp-md) {
+		justify-content: center;
+	}
+}
+
+.submitError {
+	padding: var(--space-sm);
+	font-size: 0.9375rem;
+	color: var(--color-coral);
+	background: var(--color-coral-soft);
+	border: 1px solid var(--color-coral);
+	border-radius: var(--radius-sm);
+
+	p {
+		font-weight: 700;
+	}
+
+	ul {
+		margin: 0.35rem 0 0;
+		padding-left: 1.25rem;
+		list-style: disc;
+	}
+}
+
 .buttonSolid {
 	@include button-solid;
 
@@ -228,4 +259,15 @@ textarea.input {
 	gap: var(--space-sm);
 	justify-content: center;
 	margin-top: var(--space-2xs);
+}
+
+.buttonDanger {
+	@include button-solid;
+	background: var(--color-coral);
+}
+
+.rejectReason {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
 }

@@ -57,8 +57,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: stretch;
-	gap: var(--space-sm);
-	padding-inline: var(--space-sm);
+	gap: var(--space-md);
 }
 
 .backLink {
@@ -67,6 +66,67 @@
 	color: var(--color-ink-soft);
 	width: fit-content;
 
+	&:hover {
+		color: var(--color-coral);
+	}
+}
+
+.count {
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var(--color-ink-soft);
+}
+
+.empty {
+	@include card;
+	width: 100%;
+	padding: var(--space-lg);
+	text-align: center;
+	color: var(--color-ink-soft);
+}
+
+.tableWrap {
+	width: 100%;
+	overflow-x: auto;
+}
+
+.table {
+	width: 100%;
+	border-collapse: collapse;
+
+	th {
+		text-align: left;
+		font-size: 0.6875rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--color-ink-soft);
+		padding: 0.6rem var(--space-xs);
+		border-bottom: 1.5px solid var(--color-line);
+		white-space: nowrap;
+	}
+
+	td {
+		padding: 0.75rem var(--space-xs);
+		border-bottom: 1px solid var(--color-line);
+		font-size: 0.9375rem;
+		vertical-align: middle;
+	}
+
+	tbody tr {
+		transition: background 0.12s ease;
+
+		&:hover {
+			background: var(--color-paper-raised);
+		}
+	}
+}
+
+.nameCell {
+	font-weight: 600;
+}
+
+.nameLink {
 	&:hover {
 		color: var(--color-coral);
 	}

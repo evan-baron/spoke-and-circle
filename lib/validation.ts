@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import mathQuestions from '@/lib/data/mathQuestions';
 
 const clubTypeSchema = z.enum([
 	'Team',
@@ -48,6 +49,13 @@ const rankingSystemSchema = z.enum([
 ]);
 const visibilitySchema = z.enum(['Public', 'Private']);
 const competitiveOrCasualSchema = z.enum(['Competitive', 'Casual']);
+
+const eventTypeSchema = z.enum([
+	'Sponsor Events',
+	'Team-specific Events',
+	'Public Events',
+	'Recruiting Events',
+]);
 
 const teamListItemSchema = z
 	.string()
@@ -115,7 +123,7 @@ const teamBaseSchema = z.object({
 	discipline: mtbDisciplineSchema.optional(),
 	eBikeAllowed: z.boolean().optional(),
 	format: formatSchema,
-	virtualPlatforms: z.array(virtualPlatformSchema).optional(),
+	virtualPlatforms: z.array(virtualPlatformSchema).max(4).optional(),
 	homeBaseAffiliation: z
 		.string()
 		.trim()
@@ -146,11 +154,13 @@ const teamBaseSchema = z.object({
 		.number()
 		.int('Member count must be a whole number')
 		.min(0, 'Member count cannot be negative')
+		.max(1000000, 'Member count is too large')
 		.optional(),
 	memberLimit: z
 		.number()
 		.int('Member limit must be a whole number')
 		.min(0, 'Member limit cannot be negative')
+		.max(1000000, 'Member limit is too large')
 		.optional(),
 	waitlist: z.boolean().optional(),
 	howToJoin: z
@@ -167,11 +177,13 @@ const teamBaseSchema = z.object({
 		.number()
 		.int('Distance must be a whole number')
 		.min(0, 'Distance cannot be negative')
+		.max(1000, 'Distance is too large')
 		.optional(),
 	typicalElevationGainFt: z
 		.number()
 		.int('Elevation gain must be a whole number')
 		.min(0, 'Elevation gain cannot be negative')
+		.max(100000, 'Elevation gain is too large')
 		.optional(),
 	dropPolicy: dropPolicySchema.optional(),
 	rideVisibility: visibilitySchema.optional(),
@@ -191,18 +203,20 @@ const teamBaseSchema = z.object({
 		.number()
 		.int('Required races must be a whole number')
 		.min(0, 'Required races cannot be negative')
+		.max(1000, 'Required races is too large')
 		.optional(),
 	mileageMin: z
 		.number()
 		.int('Mileage must be a whole number')
 		.min(0, 'Mileage cannot be negative')
+		.max(100000, 'Mileage is too large')
 		.optional(),
 	mileageFrequency: scheduleFrequencySchema.optional(),
 	requiredKit: z.boolean().optional(),
 	rankingSystem: rankingSystemSchema.optional(),
 	hasRoster: z.boolean().optional(),
 	sponsors: z.array(teamListItemSchema).max(20).optional(),
-	eventTypes: z.array(teamListItemSchema).max(10).optional(),
+	eventTypes: z.array(eventTypeSchema).max(4).optional(),
 	joinTryouts: z.boolean().optional(),
 	joinReferral: z.boolean().optional(),
 	joinInviteOnly: z.boolean().optional(),
@@ -236,6 +250,23 @@ export const createTeamSchema = teamBaseSchema
 export const updateTeamSchema = teamBaseSchema
 	.partial()
 	.refine(ageRangeCheck, ageRangeIssue);
+
+export const rejectTeamSchema = z.object({
+	reason: z
+		.string()
+		.trim()
+		.max(1000, 'Rejection reason must be less than 1000 characters')
+		.optional(),
+});
+
+export const antiBotSchema = z.object({
+	antibotIndex: z
+		.number()
+		.int('Invalid anti-bot question')
+		.min(0, 'Invalid anti-bot question')
+		.max(mathQuestions.length - 1, 'Invalid anti-bot question'),
+	antibot: z.string().regex(/^\d$/, 'Invalid anti-bot answer'),
+});
 
 export type CreateTeamInput = z.infer<typeof createTeamSchema>;
 export type UpdateTeamInput = z.infer<typeof updateTeamSchema>;

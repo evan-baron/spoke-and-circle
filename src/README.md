@@ -51,18 +51,25 @@ The repo rules say not to use browser automation or run builds unless asked, so 
 ## 2. Features not built yet
 
 - [ ] **Pages still read the static list.** Search, the team detail page and the homepage count all read `lib/teams.ts`, not the database. Team URLs (`/teams/<id>`) therefore use the static ids like `portland-velo-collective`, not database ids. Move `getAllTeams`, `getTeamById` and `searchTeams` to Prisma, then `generateStaticParams` too.
-- [ ] **No `POST /api/teams`.** The new team form is a wireframe and says nothing is saved. When building it:
-  - Map the form fields to `createTeamSchema` in `lib/validation.ts` (`additionalLocations` arrives as several values with the same name).
-  - Use the `teams-write` rate limit bucket. Anonymous callers are set to 0, so decide how anonymous submissions work (see the bot protection decision below).
-  - Add a double-submit guard and a disabled button while sending.
-  - Verify the math question on the server. The form already submits `antibot` (the answer) and `antibotIndex` (which question). The route must reject the request unless `isAntiBotAnswerCorrect(antibotIndex, antibot)` from `lib/data/mathQuestions.ts` is true, and check that `antibotIndex` is a valid integer first. The question list ships to the browser, so this only stops simple bots. For stronger protection use the Turnstile or signed-challenge options under "Bot protection" below.
-  - New submissions save as `Pending` for admin review.
-  - `withAuth` and `withPublicRateLimit` in `lib/api/withAuth.ts` are ready to use. `withAuth` is not used by any route yet.
+- [x] **`POST /api/teams` (done).** The new team form now submits to the database as `Pending`. What exists: `app/api/teams/route.ts` (rate limited, 100 KB body cap, JSON checks), `createTeamSchema` and `antiBotSchema` in `lib/validation.ts` used on the server, `toTeamCreateInput` in `lib/api/teamMapper.ts`, and `buildTeamPayload` in `lib/teamForm.ts` on the client. The server always sets `status = Pending` and `verified = false` and ignores `id`, `status`, `submittedById` and any unknown field in the request. The submitter is recorded in `submittedById` only when the person is logged in. Still to do around it:
+  - Submissions are rate limited to 3 per hour per IP for anonymous callers (`teams-write` in `lib/rateLimitConfig.ts`). Check this is right for real use, for example a club submitting several groups at once.
+  - The math question is verified on the server, but its questions ship to the browser, so it only stops simple bots. See "Bot protection" below.
+  - Location text is not verified server side. `location` and `additionalLocations` accept any text up to 200 characters, so a script can send values that did not come from the Google dropdown. An admin sees them in review.
+  - Some form inputs have nowhere to be stored yet: the "Other" text for virtual platforms (`virtualPlatformOtherDescription`), and the segmentation yes/no and description. The "Ride details" section of the form is commented out, so ride schedule, start times, pace, distance, elevation, drop policy and ride visibility are not collected. Persona "Other" text is stored as its own persona entry.
+  - There is no duplicate check. The same name can be submitted repeatedly, and only the rate limit slows it down.
+  - Send a confirmation email to the contact email, and consider requiring the link to be clicked before a submission enters the queue.
 - [ ] **ZIP code to location** (raised for later, not answered in detail yet):
   - The location dropdown is limited to cities and states, so typing a ZIP such as `97201` returns nothing.
   - Options: Google Geocoding API through a server route (same key, needs the API enabled on the key), Places Autocomplete with the postal code type, or an offline ZIP dataset.
   - The get-started quiz already collects `zipCode` (`RiderPreferences` in `lib/types.ts`).
 
+- [x] **Admin review of pending teams (done, except email).** `/admin/pending` lists pending teams, each name links to `/admin/pending/[teamId]`, which shows the full form prefilled and editable (`components/TeamForm`, shared with the public form). **Approve** saves the edits and sets `Approved`. **Reject** permanently deletes the team. Both only work on teams that are still `Pending`, are admin only (`withAuth` with `role: 'admin'`), and are rate limited (`admin-write`). Endpoints: `POST /api/admin/teams/[teamId]/approve` and `DELETE /api/admin/teams/[teamId]`. Still to do:
+  - **Rejection emails are a wireframe.** When a logged-in user submitted the team, the admin can type a rejection reason, and `services/rejectionEmailService.ts` is called, but it only logs a line. Build the real email (subject, body with the reason, the team name) and decide whether the reason is required. The reason is not stored anywhere, since the team is deleted.
+  - Decide whether reject should really hard delete, or set `Rejected` and keep the row (easier to audit and to answer "why was mine rejected"). `Rejected` exists in the status enum but is unused.
+  - Approve saves only the fields the form collects. Fields set elsewhere (ride details, tags, verified, last active year) are left as they were.
+  - There is no notification to the submitter when a team is approved.
+  - Send an email to the submitter on approval too.
+- [ ] **Persona radio stores display text.** Persona is saved as text like `Women Only`. The plan is to store a code (`womenOnly`) and map it to a label for display, with a separate field for the "Other" text. Not done yet.
 - [ ] **Staged team deletion.** Only the schema exists (`Team.deleteAfter`, `Team.deletionRequestedAt`, with an index on `deleteAfter`). Nothing uses it yet. Design and tasks are under "Staged team deletion design" in the Reference section. To finish it:
   - Add the request and undo endpoints, hide scheduled teams everywhere, add the purge cron, set `CRON_SECRET`, decide who may request deletion, and add the emails. Details below.
 - [ ] **Admin delete is a wireframe.** `/admin/all` (`components/AdminTeamsTable`) shows the same static teams as `/search`, with per-group Delete and multi-select delete, but deleting only hides rows in the browser until reload. To make it real:
@@ -101,7 +108,7 @@ The repo rules say not to use browser automation or run builds unless asked, so 
 
 - Security headers (CSP, frame, sniffing, HSTS, referrer, permissions) in `next.config.ts`.
 - CORS limited to `APP_BASE_URL`, and cross-origin mutating requests to `/api` get a 403, in `middleware.ts`.
-- Database-backed rate limiting with atomic counting: `lib/rateLimit.ts`, limits in `lib/rateLimitConfig.ts` (`teams-read` 60/min anonymous, `teams-write` 5 per 10 min per user, `locations-search` 10/min).
+- Database-backed rate limiting with atomic counting: `lib/rateLimit.ts`, limits in `lib/rateLimitConfig.ts` (`teams-read` 60/min anonymous, `teams-write` 3 per hour per IP for anonymous callers, `locations-search` 10/min).
 - Route wrappers with auth, disabled-account check, rate limiting and error handling: `lib/api/withAuth.ts`.
 - Team input validation, including `http`/`https` only for website URLs: `lib/validation.ts`.
 - Search query parameters capped at 100 characters and 10 values: `app/search/page.tsx`.

@@ -1,4 +1,8 @@
-import type { LocationsResponse, TeamsResponse } from '@/lib/types';
+import type {
+	CreateTeamResponse,
+	LocationsResponse,
+	TeamsResponse,
+} from '@/lib/types';
 import { ApiError } from '@/services/apiError';
 
 async function parseApiResponse<T>(response: Response): Promise<T> {
@@ -29,6 +33,24 @@ const apiCall = async <T = unknown>(
 
 export const teamAPI = {
 	read: () => apiCall<TeamsResponse>('/api/teams', { method: 'GET' }),
+	create: (payload: unknown) =>
+		apiCall<CreateTeamResponse>('/api/teams', {
+			method: 'POST',
+			body: JSON.stringify(payload),
+		}),
+};
+
+export const adminAPI = {
+	approveTeam: (id: string, payload: unknown) =>
+		apiCall<{ success: boolean }>(
+			`/api/admin/teams/${encodeURIComponent(id)}/approve`,
+			{ method: 'POST', body: JSON.stringify(payload) },
+		),
+	rejectTeam: (id: string, reason?: string) =>
+		apiCall<{ success: boolean }>(
+			`/api/admin/teams/${encodeURIComponent(id)}`,
+			{ method: 'DELETE', body: JSON.stringify({ reason }) },
+		),
 };
 
 export const locationAPI = {

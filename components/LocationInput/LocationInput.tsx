@@ -18,6 +18,7 @@ interface LocationInputProps {
 	placeholder?: string;
 	required?: boolean;
 	disabled?: boolean;
+	defaultValue?: string;
 	onSelect?: (item: LocationOption) => void;
 }
 
@@ -31,10 +32,13 @@ export function LocationInput({
 	placeholder,
 	required,
 	disabled,
+	defaultValue,
 	onSelect,
 }: LocationInputProps) {
-	const [inputValue, setInputValue] = useState('');
-	const [selectedItem, setSelectedItem] = useState<LocationOption | null>(null);
+	const [inputValue, setInputValue] = useState(defaultValue ?? '');
+	const [selectedItem, setSelectedItem] = useState<LocationOption | null>(
+		defaultValue ? { placeId: defaultValue, label: defaultValue } : null,
+	);
 	const [options, setOptions] = useState<LocationOption[]>([]);
 	const [status, setStatus] = useState<SearchStatus>('idle');
 	const inputRef = useRef<HTMLInputElement | null>(null);

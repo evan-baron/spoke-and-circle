@@ -36,3 +36,20 @@ export function formatYesNo(value: boolean): string {
 export function formatVerification(verified: boolean, lastActiveYear: number): string {
   return verified ? `Verified · Active ${lastActiveYear}` : `Unverified · Last updated ${lastActiveYear}`;
 }
+
+export function formatSubmittedDate(date: Date): string {
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+    timeZone: "UTC",
+  });
+}
+
+export function formatSubmitter(
+  user: { firstName: string | null; lastName: string | null; email: string } | null,
+): string {
+  if (!user) return "Anonymous";
+  const name = [user.firstName, user.lastName].filter(Boolean).join(" ");
+  return name || user.email;
+}

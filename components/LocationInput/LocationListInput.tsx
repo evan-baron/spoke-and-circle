@@ -11,14 +11,18 @@ interface LocationListInputProps {
 	id: string;
 	name: string;
 	placeholder?: string;
+	defaultValues?: string[];
 }
 
 export function LocationListInput({
 	id,
 	name,
 	placeholder,
+	defaultValues = [],
 }: LocationListInputProps) {
-	const [locations, setLocations] = useState<LocationOption[]>([]);
+	const [locations, setLocations] = useState<LocationOption[]>(() =>
+		defaultValues.map((label) => ({ placeId: label, label })),
+	);
 	const atLimit = locations.length >= MAX_LOCATIONS;
 
 	function addLocation(item: LocationOption) {
