@@ -238,7 +238,7 @@ export const teams: Team[] = [
       requiredKit: true,
       hasRoster: true,
       joinRequirements: { tryouts: false, referralRequired: true, inviteOnly: false, open: false },
-      homeBaseAffiliation: "Austin Super Velodrome",
+      homeBase: "Austin Super Velodrome",
     },
   }),
 
@@ -319,7 +319,7 @@ export const teams: Team[] = [
     tags: ["virtual", "zwift", "racing", "esports"],
     overrides: {
       virtualPlatform: "Zwift",
-      homeBaseAffiliation: "Zwift Racing League",
+      homeBase: "Zwift Racing League",
       memberLimit: 400,
       requiredKit: true,
       social: { discord: "discord.gg/zwiftsummit" },
@@ -721,7 +721,7 @@ export const teams: Team[] = [
     tags: ["virtual", "structured-training", "winter-training", "road"],
     overrides: {
       virtualPlatform: "TrainerRoad",
-      homeBaseAffiliation: "TrainerRoad Team League",
+      homeBase: "TrainerRoad Team League",
     },
   }),
 

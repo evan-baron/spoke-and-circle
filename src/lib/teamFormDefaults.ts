@@ -16,7 +16,7 @@ export const DEFAULT_TEAM_FORM_VALUES: TeamFormValues = {
 	bikeType: 'Road',
 	format: 'In-person',
 	virtualPlatform: [],
-	homeBaseAffiliation: '',
+	homeBase: '',
 	website: '',
 	instagram: '',
 	facebook: '',

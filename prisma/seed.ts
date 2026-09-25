@@ -37,7 +37,7 @@ function toTeamData(team: Team): Prisma.TeamCreateInput {
 		eBikeAllowed: team.eBikeAllowed,
 		format: formatToDb[team.format],
 		virtualPlatforms: team.virtualPlatform ? [team.virtualPlatform] : [],
-		homeBaseAffiliation: team.homeBaseAffiliation,
+		homeBase: team.homeBase,
 		website: team.website,
 		instagram: team.social.instagram,
 		facebook: team.social.facebook,

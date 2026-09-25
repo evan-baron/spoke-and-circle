@@ -415,13 +415,13 @@ export function TeamForm({
 					)}
 				</div>
 				<Field
-					label='Home-base affiliation'
+					label='Home Base'
 					hint='The shop, venue, league, or organization your group is based out of or belongs to. Ex: The Broken Spoke Bike Shop'
 				>
 					<input
 						type='text'
-						name='homeBaseAffiliation'
-						defaultValue={values.homeBaseAffiliation}
+						name='homeBase'
+						defaultValue={values.homeBase}
 						placeholder='e.g. Zwift Racing League'
 						className={styles.input}
 					/>

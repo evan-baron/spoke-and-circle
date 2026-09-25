@@ -88,7 +88,7 @@ export interface Team {
   eBikeAllowed: boolean;
   format: Format;
   virtualPlatform?: VirtualPlatform;
-  homeBaseAffiliation?: string;
+  homeBase?: string;
   website?: string;
   social: SocialLinks;
   ageRequirement?: AgeRequirement;
@@ -173,7 +173,7 @@ export interface TeamFormValues {
   bikeType: string;
   format: string;
   virtualPlatform: string[];
-  homeBaseAffiliation: string;
+  homeBase: string;
   website: string;
   instagram: string;
   facebook: string;

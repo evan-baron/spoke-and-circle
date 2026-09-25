@@ -157,8 +157,8 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
               <DetailRow label="Virtual or in-person" value={team.format} />
               {team.discipline && <DetailRow label="Riding style" value={team.discipline} />}
               {team.virtualPlatform && <DetailRow label="Virtual platform" value={team.virtualPlatform} />}
-              {team.homeBaseAffiliation && (
-                <DetailRow label="Home-base affiliation" value={team.homeBaseAffiliation} />
+              {team.homeBase && (
+                <DetailRow label="Home Base" value={team.homeBase} />
               )}
               <DetailRow label="E-bike allowed" value={formatYesNo(team.eBikeAllowed)} />
               <DetailRow label="Age requirement" value={formatAgeRequirement(team.ageRequirement)} />

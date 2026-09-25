@@ -54,7 +54,7 @@ model Team {
   eBikeAllowed        Boolean           @default(false)
   format              Format
   virtualPlatforms    VirtualPlatform[]
-  homeBaseAffiliation String?
+  homeBase String?
   website             String?
   instagram           String?
   facebook            String?

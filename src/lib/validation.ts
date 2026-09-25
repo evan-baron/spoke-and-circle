@@ -119,10 +119,10 @@ const teamBaseSchema = z.object({
 	eBikeAllowed: z.boolean().optional(),
 	format: formatSchema,
 	virtualPlatforms: z.array(virtualPlatformSchema).max(4).optional(),
-	homeBaseAffiliation: z
+	homeBase: z
 		.string()
 		.trim()
-		.max(200, 'Home-base affiliation must be less than 200 characters')
+		.max(200, 'Home base must be less than 200 characters')
 		.optional(),
 	website: z
 		.url({ protocol: /^https?$/, message: 'Invalid website URL' })
