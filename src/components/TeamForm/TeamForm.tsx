@@ -23,7 +23,7 @@ const CLUB_TYPES = [
 	'Youth Program',
 	'Organization',
 ];
-const BIKE_TYPES = ['Road', 'Gravel', 'MTB', 'Track', 'Tri', 'E-bike', 'Mixed'];
+const BIKE_TYPES = ['Road', 'Gravel', 'MTB', 'Track', 'BMX', 'Tri', 'E-bike', 'Mixed'];
 const FORMATS = ['In-person', 'Virtual', 'Hybrid'];
 const VIRTUAL_PLATFORMS = ['Zwift', 'Strava', 'TrainerRoad', 'Other'];
 const SCHEDULES = ['Weekly', 'Monthly', 'Annually'];
@@ -160,6 +160,7 @@ export function TeamForm({
 	const [submitErrors, setSubmitErrors] = useState<string[]>([]);
 	const [confirmingReject, setConfirmingReject] = useState(false);
 	const busyRef = useRef(false);
+	const [groupType, setGroupType] = useState(values.type);
 	const [personaRestriction, setPersonaRestriction] = useState<string | null>(
 		values.personaRestriction,
 	);
@@ -235,7 +236,8 @@ export function TeamForm({
 				<Field label='Group Type'>
 					<select
 						name='type'
-						defaultValue={values.type}
+						value={groupType}
+						onChange={(event) => setGroupType(event.target.value)}
 						className={styles.input}
 					>
 						{CLUB_TYPES.map((option) => (
@@ -295,7 +297,8 @@ export function TeamForm({
 						placeholder='Search and add another US city or state'
 					/>
 					<span className={styles.fieldHint}>
-						Add each place your team also rides, up to 10
+						If your team has additional chapters, add each location they can be
+						found, up to 10
 					</span>
 				</div>
 				<Field label='Founded'>
@@ -546,115 +549,119 @@ export function TeamForm({
 					</div>
 				</div>
 			</Section>
-			{/* 
-					<Section title='Ride details'>
-						<Field label='Schedule'>
-							<select
-								name='rideSchedule'
-								defaultValue='Weekly'
-								className={styles.input}
-							>
-								{SCHEDULES.map((option) => (
-									<option key={option} value={option}>
-										{option}
-									</option>
-								))}
-							</select>
-						</Field>
-						<Field label='Start times' hint='Comma-separated'>
+			{groupType === 'Group Ride' && (
+				<Section title='Ride details'>
+					<Field label='Schedule'>
+						<select
+							name='rideSchedule'
+							defaultValue={values.rideSchedule}
+							className={styles.input}
+						>
+							{SCHEDULES.map((option) => (
+								<option key={option} value={option}>
+									{option}
+								</option>
+							))}
+						</select>
+					</Field>
+					<Field label='Start times' hint='Comma-separated'>
+						<input
+							type='text'
+							name='startTimes'
+							defaultValue={values.startTimes}
+							placeholder='e.g. Tue 6:00 PM, Sat 8:00 AM'
+							className={styles.input}
+						/>
+					</Field>
+					<Field label='Pace'>
+						<select
+							name='pace'
+							defaultValue={values.pace}
+							className={styles.input}
+						>
+							{PACES.map((option) => (
+								<option key={option} value={option}>
+									{option}
+								</option>
+							))}
+						</select>
+					</Field>
+					<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
+						<span className={styles.fieldLabel}>
+							Skill/Speed Segmentation
+						</span>
+						<div className={styles.checkboxRow}>
+							<Checkbox
+								label='Yes'
+								name='hasSegmentation'
+								value='yes'
+								checked={hasSegmentation === 'yes'}
+								onChange={() => handleSegmentationChange('yes')}
+							/>
+							<Checkbox
+								label='No'
+								name='hasSegmentation'
+								value='no'
+								checked={hasSegmentation === 'no'}
+								onChange={() => handleSegmentationChange('no')}
+							/>
+						</div>
+						{hasSegmentation === 'yes' && (
 							<input
 								type='text'
-								name='startTimes'
-								placeholder='e.g. Tue 6:00 PM, Sat 8:00 AM'
+								name='segmentationDescription'
+								placeholder='A Group, B Group, etc.'
+								value={segmentationDescription}
+								onChange={(event) =>
+									setSegmentationDescription(event.target.value)
+								}
 								className={styles.input}
 							/>
-						</Field>
-						<Field label='Pace'>
-							<select
-								name='pace'
-								defaultValue='Steady'
-								className={styles.input}
-							>
-								{PACES.map((option) => (
-									<option key={option} value={option}>
-										{option}
-									</option>
-								))}
-							</select>
-						</Field>
-						<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
-							<span className={styles.fieldLabel}>
-								Skill/Speed Segmentation
-							</span>
-							<div className={styles.checkboxRow}>
-								<Checkbox
-									label='Yes'
-									name='hasSegmentation'
-									value='yes'
-									checked={hasSegmentation === 'yes'}
-									onChange={() => handleSegmentationChange('yes')}
-								/>
-								<Checkbox
-									label='No'
-									name='hasSegmentation'
-									value='no'
-									checked={hasSegmentation === 'no'}
-									onChange={() => handleSegmentationChange('no')}
-								/>
-							</div>
-							{hasSegmentation === 'yes' && (
-								<input
-									type='text'
-									name='segmentationDescription'
-									placeholder='A Group, B Group, etc.'
-									value={segmentationDescription}
-									onChange={(event) =>
-										setSegmentationDescription(event.target.value)
-									}
-									className={styles.input}
-								/>
-							)}
-						</div>
-						<Field label='Typical distance' hint='Miles'>
-							<input
-								type='number'
-								name='typicalDistanceMiles'
-								min={0}
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Typical elevation gain' hint='Feet'>
-							<input
-								type='number'
-								name='typicalElevationGainFt'
-								min={0}
-								className={styles.input}
-							/>
-						</Field>
-						<Field label='Drop or no-drop'>
-							<select
-								name='dropPolicy'
-								defaultValue='No-drop'
-								className={styles.input}
-							>
-								{DROP_POLICIES.map((option) => (
-									<option key={option} value={option}>
-										{option}
-									</option>
-								))}
-							</select>
-						</Field>
-						<Field label='Ride visibility'>
-							<select
-								name='rideVisibility'
-								defaultValue='Public'
-								className={styles.input}
-							>
-								<option value='Public'>Public</option>
-								<option value='Private'>Private</option>
-							</select>
-						</Field>
-					</Section> */}
+						)}
+					</div>
+					<Field label='Typical distance' hint='Miles'>
+						<input
+							type='number'
+							name='typicalDistanceMiles'
+							defaultValue={values.typicalDistanceMiles}
+							min={0}
+							className={styles.input}
+						/>
+					</Field>
+					<Field label='Typical elevation gain' hint='Feet'>
+						<input
+							type='number'
+							name='typicalElevationGainFt'
+							defaultValue={values.typicalElevationGainFt}
+							min={0}
+							className={styles.input}
+						/>
+					</Field>
+					<Field label='Drop or no-drop'>
+						<select
+							name='dropPolicy'
+							defaultValue={values.dropPolicy}
+							className={styles.input}
+						>
+							{DROP_POLICIES.map((option) => (
+								<option key={option} value={option}>
+									{option}
+								</option>
+							))}
+						</select>
+					</Field>
+					<Field label='Ride visibility'>
+						<select
+							name='rideVisibility'
+							defaultValue={values.rideVisibility}
+							className={styles.input}
+						>
+							<option value='Public'>Public</option>
+							<option value='Private'>Private</option>
+						</select>
+					</Field>
+				</Section>
+			)}
 
 			<Section title='Team / club details'>
 				<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>

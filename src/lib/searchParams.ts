@@ -12,6 +12,7 @@ const BIKE_TYPES: BikeType[] = [
 	'Gravel',
 	'MTB',
 	'Track',
+	'BMX',
 	'Tri',
 	'E-bike',
 	'Mixed',

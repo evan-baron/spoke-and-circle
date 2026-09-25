@@ -167,15 +167,17 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
               <DetailRow label="Waitlist" value={formatYesNo(team.waitlist)} />
             </DetailSection>
 
-            <DetailSection title="Ride profile">
-              <DetailRow label="Schedule" value={team.rideSchedule} />
-              {team.startTimes && <DetailRow label="Start times" value={formatList(team.startTimes)} />}
-              <DetailRow label="Segmentation" value={team.segmentation} />
-              <DetailRow label="Typical distance" value={formatDistance(team.typicalDistanceMiles)} />
-              <DetailRow label="Typical elevation gain" value={formatElevation(team.typicalElevationGainFt)} />
-              <DetailRow label="Drop / no-drop" value={team.dropPolicy} />
-              <DetailRow label="Ride visibility" value={team.rideVisibility} />
-            </DetailSection>
+            {team.type === "Group Ride" && (
+              <DetailSection title="Ride profile">
+                <DetailRow label="Schedule" value={team.rideSchedule} />
+                {team.startTimes && <DetailRow label="Start times" value={formatList(team.startTimes)} />}
+                <DetailRow label="Segmentation" value={team.segmentation} />
+                <DetailRow label="Typical distance" value={formatDistance(team.typicalDistanceMiles)} />
+                <DetailRow label="Typical elevation gain" value={formatElevation(team.typicalElevationGainFt)} />
+                <DetailRow label="Drop / no-drop" value={team.dropPolicy} />
+                <DetailRow label="Ride visibility" value={team.rideVisibility} />
+              </DetailSection>
+            )}
 
             <DetailSection title="Team structure">
               <DetailRow label="Competitive or casual" value={team.competitiveOrCasual} />

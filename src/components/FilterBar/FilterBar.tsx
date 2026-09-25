@@ -34,6 +34,7 @@ const BIKE_TYPE_OPTIONS = [
 	'Gravel',
 	'MTB',
 	'Track',
+	'BMX',
 	'Tri',
 	'E-bike',
 	'Mixed',

@@ -11,6 +11,7 @@ const DISCIPLINE_OPTIONS: RiderPreferences['disciplines'][number][] = [
 	'Gravel',
 	'MTB',
 	'Track',
+	'BMX',
 	'Tri',
 	'E-bike',
 	'Mixed',

@@ -13,6 +13,7 @@ const bikeTypeSchema = z.enum([
 	'Gravel',
 	'MTB',
 	'Track',
+	'BMX',
 	'Tri',
 	'E-bike',
 	'Mixed',

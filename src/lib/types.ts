@@ -8,6 +8,7 @@ export type BikeType =
   | "Gravel"
   | "MTB"
   | "Track"
+  | "BMX"
   | "Tri"
   | "E-bike"
   | "Mixed";
@@ -187,6 +188,13 @@ export interface TeamFormValues {
   personaOtherDescription: string;
   eBikeAllowed: boolean;
   waitlist: boolean;
+  rideSchedule: string;
+  startTimes: string;
+  pace: string;
+  typicalDistanceMiles: string;
+  typicalElevationGainFt: string;
+  dropPolicy: string;
+  rideVisibility: string;
   competitiveOrCasual: string;
   skillLevels: string[];
   duesAmount: string;

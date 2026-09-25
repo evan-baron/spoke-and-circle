@@ -29,6 +29,7 @@ export const bikeTypeToDb: Record<Team['bikeType'], BikeType> = {
 	Gravel: 'Gravel',
 	MTB: 'MTB',
 	Track: 'Track',
+	BMX: 'BMX',
 	Tri: 'Tri',
 	'E-bike': 'EBike',
 	Mixed: 'Mixed',
