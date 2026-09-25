@@ -41,6 +41,9 @@ model Team {
   contactPhone        String?
   contactEmail        String?
 
+  deletionRequestedAt DateTime?
+  deleteAfter         DateTime?
+
   verified       Boolean @default(false)
   lastActiveYear Int?
 
@@ -99,6 +102,7 @@ model Team {
   updatedAt DateTime @updatedAt
 
   @@index([status])
+  @@index([deleteAfter])
   @@index([bikeType])
   @@index([location])
 }

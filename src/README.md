@@ -62,6 +62,8 @@ The repo rules say not to use browser automation or run builds unless asked, so 
   - Options: Google Geocoding API through a server route (same key, needs the API enabled on the key), Places Autocomplete with the postal code type, or an offline ZIP dataset.
   - The get-started quiz already collects `zipCode` (`RiderPreferences` in `lib/types.ts`).
 
+- [ ] **Staged team deletion.** Only the schema exists (`Team.deleteAfter`, `Team.deletionRequestedAt`, with an index on `deleteAfter`). Nothing uses it yet. Design and tasks are under "Staged team deletion design" in the Reference section. To finish it:
+  - Add the request and undo endpoints, hide scheduled teams everywhere, add the purge cron, set `CRON_SECRET`, decide who may request deletion, and add the emails. Details below.
 - [ ] **Admin delete is a wireframe.** `/admin/all` (`components/AdminTeamsTable`) shows the same static teams as `/search`, with per-group Delete and multi-select delete, but deleting only hides rows in the browser until reload. To make it real:
   - Read teams from the database, not `lib/teams.ts`.
   - Add a `DELETE /api/admin/teams` route using `withAuth({ rateLimit: ..., role: 'admin' }, handler)`, a zod-validated list of ids, and a new rate limit bucket for admin writes.
@@ -104,6 +106,32 @@ The repo rules say not to use browser automation or run builds unless asked, so 
 - Search query parameters capped at 100 characters and 10 values: `app/search/page.tsx`.
 - 300ms debounce and request cancelling on the location input and the search filters.
 - Google key stays server-side (`lib/locations.ts`, `app/api/locations/route.ts`).
+
+### Staged team deletion design
+
+When someone deletes their team, it is not removed right away. It is scheduled for removal in 7 days, so an accidental or hasty delete can be undone.
+
+**Data model (already in the schema):**
+- `deleteAfter DateTime?`: `null` means the team is not scheduled for deletion. A value means it is scheduled, and the value is the moment it becomes eligible for permanent removal (request time plus 7 days). There is deliberately no separate "pending" state column, so state and date can never disagree.
+- `deletionRequestedAt DateTime?`: when the request was made, for support and audit.
+- `status` (`Pending` / `Approved` / `Rejected`) is a review status. Do not reuse it for deletion.
+
+**Tasks:**
+- [ ] **Request endpoint** (owner or admin only): sets `deletionRequestedAt = now()` and `deleteAfter = now() + 7 days`. Validate input with zod, rate limit it, and use `withAuth`.
+- [ ] **Undo endpoint:** sets both columns back to `null`. Allowed until the purge runs.
+- [ ] **Hide scheduled teams immediately.** Every public read must add `deleteAfter: null` to its filter: `GET /api/teams`, search, the team page (return 404) and any counts. Show the owner and admins a banner with a countdown and an Undo button.
+- [ ] **Purge cron:** a route such as `/api/cron/purge-deleted-teams`, scheduled with Vercel Cron in `vercel.json`:
+  - Protect it with a `CRON_SECRET` bearer token, compared with `timingSafeEqual` (same approach as repliably's `src/app/api/cron/route.ts`). Add `CRON_SECRET` in Vercel.
+  - Delete with `deleteMany({ where: { deleteAfter: { lte: new Date() } } })`, in batches, and log how many were removed.
+  - It must be safe to run twice (idempotent). Compare against the current timestamp, not a calendar date, to avoid timezone edge cases.
+  - Vercel's Hobby plan limits crons to once a day, which is fine for this. Check the current limits for your plan.
+  - The same cron can also call `cleanupExpiredRateLimits()` from `lib/rateLimit.ts`.
+  - Verify Cloudflare rules do not block the cron request.
+- [ ] **Who may request deletion:** a team currently only has `submittedBy`. Decide whether the submitter or a separate owner can request deletion, plus admins.
+- [ ] **Admin delete:** decide whether admin deletes (`/admin/all`) go through this same 7 day flow or delete immediately.
+- [ ] **Emails:** confirmation with an undo link at request time, and optionally a reminder one day before the purge.
+- [ ] **Related data:** if rosters, members or uploads are added later, decide whether they are removed by the purge (cascade) or kept.
+- [ ] **Audit:** record who requested and who purged once an audit log exists.
 
 ### How roles work
 
