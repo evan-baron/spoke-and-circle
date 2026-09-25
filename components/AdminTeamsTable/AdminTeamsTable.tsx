@@ -11,11 +11,13 @@ import styles from './adminTeamsTable.module.scss';
 
 interface AdminTeamsTableProps {
 	teams: Team[];
+	totalCount: number;
 	summarySuffix?: string;
 }
 
 export function AdminTeamsTable({
 	teams,
+	totalCount,
 	summarySuffix = '',
 }: AdminTeamsTableProps) {
 	const [removedIds, setRemovedIds] = useState<string[]>([]);
@@ -84,7 +86,8 @@ export function AdminTeamsTable({
 		<>
 			<div className={styles.toolbar}>
 				<p className={styles.count}>
-					{visible.length} {visible.length === 1 ? 'result' : 'results'}
+					{totalCount - removedIds.length}{' '}
+					{totalCount - removedIds.length === 1 ? 'result' : 'results'}
 					{summarySuffix}
 				</p>
 				<div className={styles.toolbarActions}>

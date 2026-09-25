@@ -1,0 +1,28 @@
+@use '@/styles/mixins' as *;
+
+.nav {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-xs);
+	margin-top: var(--space-sm);
+}
+
+.button {
+	@include button-outline;
+	padding: 0.6rem 1.1rem;
+	text-decoration: none;
+}
+
+.disabled {
+	opacity: 0.45;
+	cursor: not-allowed;
+	pointer-events: none;
+}
+
+.status {
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var(--color-ink-soft);
+	text-align: center;
+}

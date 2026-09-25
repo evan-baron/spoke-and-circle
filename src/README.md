@@ -50,7 +50,8 @@ The repo rules say not to use browser automation or run builds unless asked, so 
 
 ## 2. Features not built yet
 
-- [ ] **Pages still read the static list.** Search, the team detail page and the homepage count all read `lib/teams.ts`, not the database. Team URLs (`/teams/<id>`) therefore use the static ids like `portland-velo-collective`, not database ids. Move `getAllTeams`, `getTeamById` and `searchTeams` to Prisma, then `generateStaticParams` too.
+- [ ] **Team detail page and homepage count still read the static list.** `/search` and `/admin/all` now read approved teams from the database (`services/teamSearchService.ts`, 20 per page), but the team detail page and the homepage count still read `lib/teams.ts`. Search results link to `/teams/<id>` with database ids, which the detail page cannot find, so those links 404 until `getAllTeams` and `getTeamById` move to Prisma (then `generateStaticParams` too).
+- [ ] **Search matching is looser than it was in the static version.** Keyword search matches name and mission statement as a substring, but tags only as an exact whole tag. Location matches `location` as a substring, but `additionalLocations` only as an exact, case-sensitive string. Prisma cannot do substring matches inside array columns. If that matters, use a raw SQL query or a search column.
 - [x] **`POST /api/teams` (done).** The new team form now submits to the database as `Pending`. What exists: `app/api/teams/route.ts` (rate limited, 100 KB body cap, JSON checks), `createTeamSchema` and `antiBotSchema` in `lib/validation.ts` used on the server, `toTeamCreateInput` in `lib/api/teamMapper.ts`, and `buildTeamPayload` in `lib/teamForm.ts` on the client. The server always sets `status = Pending` and `verified = false` and ignores `id`, `status`, `submittedById` and any unknown field in the request. The submitter is recorded in `submittedById` only when the person is logged in. Still to do around it:
   - Submissions are rate limited to 3 per hour per IP for anonymous callers (`teams-write` in `lib/rateLimitConfig.ts`). Check this is right for real use, for example a club submitting several groups at once.
   - The math question is verified on the server, but its questions ship to the browser, so it only stops simple bots. See "Bot protection" below.
@@ -72,8 +73,7 @@ The repo rules say not to use browser automation or run builds unless asked, so 
 - [ ] **Persona radio stores display text.** Persona is saved as text like `Women Only`. The plan is to store a code (`womenOnly`) and map it to a label for display, with a separate field for the "Other" text. Not done yet.
 - [ ] **Staged team deletion.** Only the schema exists (`Team.deleteAfter`, `Team.deletionRequestedAt`, with an index on `deleteAfter`). Nothing uses it yet. Design and tasks are under "Staged team deletion design" in the Reference section. To finish it:
   - Add the request and undo endpoints, hide scheduled teams everywhere, add the purge cron, set `CRON_SECRET`, decide who may request deletion, and add the emails. Details below.
-- [ ] **Admin delete is a wireframe.** `/admin/all` (`components/AdminTeamsTable`) shows the same static teams as `/search`, with per-group Delete and multi-select delete, but deleting only hides rows in the browser until reload. To make it real:
-  - Read teams from the database, not `lib/teams.ts`.
+- [ ] **Admin delete is a wireframe.** `/admin/all` (`components/AdminTeamsTable`) lists approved teams from the database (paginated, same as `/search`), with per-group Delete and multi-select delete, but deleting only hides rows in the browser until reload. To make it real:
   - Add a `DELETE /api/admin/teams` route using `withAuth({ rateLimit: ..., role: 'admin' }, handler)`, a zod-validated list of ids, and a new rate limit bucket for admin writes.
   - Decide between hard delete and a soft delete (for example set status to `Rejected`). There is no audit log or undo today, so hard delete is permanent.
   - Refresh the list after deleting (`router.refresh()`).
@@ -111,7 +111,7 @@ The repo rules say not to use browser automation or run builds unless asked, so 
 - Database-backed rate limiting with atomic counting: `lib/rateLimit.ts`, limits in `lib/rateLimitConfig.ts` (`teams-read` 60/min anonymous, `teams-write` 3 per hour per IP for anonymous callers, `locations-search` 10/min).
 - Route wrappers with auth, disabled-account check, rate limiting and error handling: `lib/api/withAuth.ts`.
 - Team input validation, including `http`/`https` only for website URLs: `lib/validation.ts`.
-- Search query parameters capped at 100 characters and 10 values: `app/search/page.tsx`.
+- Search query parameters capped at 100 characters and 10 values, page number capped at 10000: `lib/searchParams.ts`.
 - 300ms debounce and request cancelling on the location input and the search filters.
 - Google key stays server-side (`lib/locations.ts`, `app/api/locations/route.ts`).
 

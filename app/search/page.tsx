@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import { FilterBar } from '@/components/FilterBar/FilterBar';
+import { Pagination } from '@/components/Pagination/Pagination';
 import { ResultsTable } from '@/components/ResultsTable/ResultsTable';
 import { SearchLocationTracker } from '@/components/SearchLocationTracker/SearchLocationTracker';
-import { searchTeams } from '@/lib/search';
 import { parseSearchParams, type RawSearchParams } from '@/lib/searchParams';
+import { searchApprovedTeams } from '@/services/teamSearchService';
 import styles from './search.module.scss';
 
 export async function generateMetadata({
@@ -25,8 +26,12 @@ export default async function SearchPage({
 }: {
 	searchParams: Promise<RawSearchParams>;
 }) {
-	const params = parseSearchParams(await searchParams);
-	const results = searchTeams(params);
+	const rawParams = await searchParams;
+	const { page: requestedPage, ...params } = parseSearchParams(rawParams);
+	const { teams, total, page, pageCount } = await searchApprovedTeams(
+		params,
+		requestedPage,
+	);
 
 	return (
 		<div className={styles.page}>
@@ -48,7 +53,7 @@ export default async function SearchPage({
 				/>
 
 				<p className={styles.count}>
-					{results.length} {results.length === 1 ? 'result' : 'results'}
+					{total} {total === 1 ? 'result' : 'results'}
 					{params.q && <> for &ldquo;{params.q}&rdquo;</>}
 					{params.location && <> near &ldquo;{params.location}&rdquo;</>}
 					{params.bikeTypes.length > 1 && (
@@ -56,7 +61,14 @@ export default async function SearchPage({
 					)}
 				</p>
 
-				<ResultsTable teams={results} />
+				<ResultsTable teams={teams} />
+
+				<Pagination
+					basePath='/search'
+					searchParams={rawParams}
+					page={page}
+					pageCount={pageCount}
+				/>
 			</div>
 		</div>
 	);

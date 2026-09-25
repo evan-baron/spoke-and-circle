@@ -33,6 +33,9 @@ const RACING_OPTIONS = ['Competitive', 'Casual'] as const;
 
 export type RawSearchParams = Record<string, string | string[] | undefined>;
 
+export const TEAMS_PAGE_SIZE = 20;
+
+const MAX_PAGE = 10000;
 const MAX_PARAM_LENGTH = 100;
 const MAX_PARAM_VALUES = 10;
 
@@ -78,8 +81,12 @@ export function parseSearchParams(raw: RawSearchParams) {
 	const womensOnly = firstValue(raw.womensOnly) === 'true';
 	const youthOnly = firstValue(raw.youthOnly) === 'true';
 	const acceptingNewRiders = firstValue(raw.acceptingNewRiders) === 'true';
+	const pageRaw = Number.parseInt(firstValue(raw.page), 10);
+	const page =
+		Number.isFinite(pageRaw) && pageRaw > 0 ? Math.min(pageRaw, MAX_PAGE) : 1;
 
 	return {
+		page,
 		q,
 		location,
 		type,

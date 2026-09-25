@@ -2,9 +2,10 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { AdminTeamsTable } from '@/components/AdminTeamsTable/AdminTeamsTable';
 import { FilterBar } from '@/components/FilterBar/FilterBar';
-import { searchTeams } from '@/lib/search';
+import { Pagination } from '@/components/Pagination/Pagination';
 import { parseSearchParams, type RawSearchParams } from '@/lib/searchParams';
 import { requireAdmin } from '@/services/currentUserService';
+import { searchApprovedTeams } from '@/services/teamSearchService';
 import styles from '../admin.module.scss';
 
 export const metadata: Metadata = {
@@ -19,8 +20,12 @@ export default async function AdminAllGroupsPage({
 }) {
 	await requireAdmin();
 
-	const params = parseSearchParams(await searchParams);
-	const results = searchTeams(params);
+	const rawParams = await searchParams;
+	const { page: requestedPage, ...params } = parseSearchParams(rawParams);
+	const { teams, total, page, pageCount } = await searchApprovedTeams(
+		params,
+		requestedPage,
+	);
 
 	const summarySuffix = [
 		params.q && ` for “${params.q}”`,
@@ -52,7 +57,18 @@ export default async function AdminAllGroupsPage({
 					defaultAcceptingNewRiders={params.acceptingNewRiders}
 				/>
 
-				<AdminTeamsTable teams={results} summarySuffix={summarySuffix} />
+				<AdminTeamsTable
+					teams={teams}
+					totalCount={total}
+					summarySuffix={summarySuffix}
+				/>
+
+				<Pagination
+					basePath='/admin/all'
+					searchParams={rawParams}
+					page={page}
+					pageCount={pageCount}
+				/>
 			</div>
 		</div>
 	);
