@@ -84,7 +84,7 @@ The repo rules say not to use browser automation or run builds unless asked, so 
   - Add a `DELETE /api/admin/teams` route using `withAuth({ rateLimit: ..., role: 'admin' }, handler)`, a zod-validated list of ids, and a new rate limit bucket for admin writes.
   - Decide between hard delete, a soft delete (for example set status to `Rejected`), or the staged deletion flow below. There is no audit log or undo today, so hard delete is permanent.
   - Refresh the list after deleting (`router.refresh()`).
-- [ ] **Admin users.** `/admin/users` is a blank placeholder, so there is no way to list or promote users. Until it exists, set the role in the database, for example `UPDATE "User" SET role = 'admin' WHERE email = '...';` or use Prisma Studio.
+- [ ] **Promoting users.** `/admin/users` lists users, but there is no way to promote one to admin from the UI. Until there is, set the role in the database, for example `UPDATE "User" SET role = 'admin' WHERE email = '...';` or use Prisma Studio.
   - After changing a role, the person has to reload the page. The layout that supplies the role to client components does not re-run on in-app navigation. Server checks are always current.
 
 ## 3. Open decisions

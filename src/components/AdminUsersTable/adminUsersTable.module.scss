@@ -1,0 +1,132 @@
+@use '@/styles/mixins' as *;
+
+.count {
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var(--color-ink-soft);
+}
+
+.muted {
+	font-size: 0.875rem;
+	color: var(--color-ink-soft);
+	overflow-wrap: anywhere;
+}
+
+.email {
+	overflow-wrap: anywhere;
+}
+
+.mobileTable {
+	width: 100%;
+	border-collapse: collapse;
+
+	@include from($bp-lg) {
+		display: none;
+	}
+
+	th {
+		text-align: left;
+		font-size: 0.6875rem;
+		font-weight: 700;
+		text-transform: uppercase;
+		letter-spacing: 0.05em;
+		color: var(--color-ink-soft);
+		padding: 0.6rem var(--space-xs);
+		border-bottom: 1.5px solid var(--color-line);
+	}
+
+	td {
+		padding: 0.75rem var(--space-xs);
+		border-bottom: 1px solid var(--color-line);
+		font-size: 0.9375rem;
+	}
+
+	th:first-child,
+	td:first-child {
+		width: 4.5rem;
+		color: var(--color-ink-soft);
+	}
+}
+
+.nameButton {
+	padding: 0;
+	border: none;
+	background: none;
+	font: inherit;
+	font-weight: 600;
+	color: var(--color-ink);
+	text-align: left;
+	cursor: pointer;
+
+	&:hover {
+		color: var(--color-coral);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--color-coral);
+		outline-offset: 2px;
+		border-radius: 2px;
+	}
+}
+
+.detailList {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2xs);
+	margin: var(--space-xs) 0 0;
+}
+
+.detailRow {
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+	padding: 0.75rem var(--space-sm);
+	background: var(--color-paper-raised);
+	border-radius: var(--radius-sm);
+	font-size: 0.9375rem;
+
+	dt {
+		@include eyebrow;
+	}
+
+	dd {
+		margin: 0;
+		overflow-wrap: anywhere;
+	}
+
+	a {
+		font-weight: 600;
+
+		&:hover {
+			color: var(--color-coral);
+		}
+	}
+}
+
+.groupList {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.groupLine {
+	display: block;
+	line-height: 1.5;
+}
+
+.groupLink {
+	font-weight: 600;
+
+	&:hover {
+		color: var(--color-coral);
+	}
+}
+
+.pendingTag {
+	margin-left: 0.4rem;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	color: var(--color-ink-soft);
+}
