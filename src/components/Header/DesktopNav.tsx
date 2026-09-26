@@ -11,6 +11,7 @@ import styles from './header.module.scss';
 interface DesktopNavProps {
 	user: {
 		name?: string | null;
+		firstName?: string | null;
 		email?: string | null;
 		isAdmin?: boolean;
 	} | null;
@@ -21,6 +22,10 @@ const DesktopNav = ({ user }: DesktopNavProps) => {
 		<nav className={styles.desktop}>
 			<Logo />
 			<div className={styles.navLinks}>
+				{user && (
+					<p className={styles.welcome}>Welcome, {user.firstName || user.name?.split(' ')[0] || user.email}
+					</p>
+				)}
 				{user && user.isAdmin && (
 					<Link href='/admin' className={styles.navAdmin}>
 						Admin Console
@@ -30,13 +35,9 @@ const DesktopNav = ({ user }: DesktopNavProps) => {
 					Browse
 				</Link>
 				{user ?
-					<>
-						<p className={styles.navLink}>{user.name || user.email}</p>
-
-						<a href='/auth/logout' className={styles.navLink}>
-							Log out
-						</a>
-					</>
+					<a href='/auth/logout' className={styles.navLink}>
+						Log out
+					</a>
 				:	<a href='/auth/login' className={styles.navLink}>
 						Log in
 					</a>

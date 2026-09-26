@@ -13,6 +13,7 @@ const Header = async () => {
 		session?.user ?
 			{
 				name: session.user.name,
+				firstName: currentUser?.firstName ?? session.user.given_name ?? null,
 				email: session.user.email,
 				isAdmin: currentUser?.isAdmin ?? false,
 			}
