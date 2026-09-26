@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import { requireAdmin } from '@/services/currentUserService';
 
 export const metadata: Metadata = {
-	title: 'Admin | Spoke & Circle',
+	title: 'Admin',
 	robots: { index: false, follow: false },
 };
 

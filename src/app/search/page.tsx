@@ -12,12 +12,32 @@ export async function generateMetadata({
 }: {
 	searchParams: Promise<RawSearchParams>;
 }): Promise<Metadata> {
-	const { q } = parseSearchParams(await searchParams);
+	const params = parseSearchParams(await searchParams);
+	const hasFilters =
+		Boolean(params.q || params.location) ||
+		params.bikeTypes.length > 0 ||
+		Boolean(
+			params.type ||
+				params.discipline ||
+				params.skillLevel ||
+				params.competitiveOrCasual ||
+				params.womensOnly ||
+				params.youthOnly ||
+				params.acceptingNewRiders,
+		) ||
+		params.page > 1;
+
+	const title =
+		params.q ? `“${params.q}” cycling teams and group rides`
+		: params.location ? `Cycling teams and group rides near ${params.location}`
+		: 'Search Cycling Teams & Group Rides';
+
 	return {
-		title:
-			q ?
-				`"${q}" | Search results | Spoke & Circle`
-			:	'Search teams | Spoke & Circle',
+		title,
+		description:
+			'Search cycling teams, clubs, and group rides by location, riding style, skill level, and more. Find no-drop road and gravel rides, racing teams, and beginner-friendly groups.',
+		alternates: { canonical: '/search' },
+		...(hasFilters ? { robots: { index: false, follow: true } } : {}),
 	};
 }
 

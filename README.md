@@ -30,6 +30,12 @@ Location autocomplete and radius search read the `Place` table, filled from the 
 - [ ] The migration runs `CREATE EXTENSION pg_trgm` (typo-tolerant name matching). Confirm the production Neon role is allowed to create it.
 - [ ] Teams get coordinates by looking their `location` text up in `Place`. `POST /api/teams` still accepts any text up to 200 characters for `location` and `additionalLocations`, so a script can send values that are not in the list. If the text is not found (for example `Brooklyn, NY`, since the Census "places" file has no boroughs or neighbourhoods), the team has no coordinates and never shows up in radius searches. Decide whether to reject unknown locations on submit, and whether to add a neighbourhood list.
 
+### SEO and social sharing
+
+- [ ] Create `public/og-image.png` (1200 x 630). The site metadata already points at it, so link previews show no image until the file exists.
+- [ ] Add favicons (`src/app/favicon.ico` plus a 180px `apple-icon.png`). None exist yet.
+- [ ] After launch, add the site to Google Search Console and submit `/sitemap.xml`. Set `APP_BASE_URL` to the exact production origin first (with or without `www`, whichever you serve), because canonical links, the sitemap, and social URLs are built from it.
+
 ### Environment variables to set in Vercel
 
 - [ ] `DATABASE_URL` and `DATABASE_URL_UNPOOLED` (production, used when `NODE_ENV=production`)

@@ -12,8 +12,8 @@
 
 	--color-primary: hsl(291, 36%, 20%);
 	--color-primary-soft: hsl(291, 30%, 93%);
-	--color-logo: hsl(37, 90%, 66%);
-	--color-logo-soft: hsl(37, 90%, 91%);
+	--color-logo: #f6bb5a;
+	--color-logo-soft: #fdedd3;
 	--color-coral: hsl(4, 76%, 61%);
 	--color-coral-soft: hsl(6, 80%, 94%);
 	--color-gold: hsl(33, 76%, 42%);
@@ -25,9 +25,9 @@
 
 	--gradient-hero: linear-gradient(
 		135deg,
-		hsl(291, 36%, 20%) 0%,
-		hsl(4, 76%, 61%) 60%,
-		hsl(37, 90%, 58%) 100%
+		rgb(64, 33, 69) 0%,
+		#e75a50 60%,
+		rgb(244, 170, 52) 100%
 	);
 	--gradient-cta: linear-gradient(
 		120deg,

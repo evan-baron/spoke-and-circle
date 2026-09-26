@@ -9,7 +9,7 @@ import { requireAdmin } from '@/services/currentUserService';
 import styles from '../../admin.module.scss';
 
 export const metadata: Metadata = {
-	title: 'Review Group | Admin | Spoke & Circle',
+	title: 'Review Group | Admin',
 	robots: { index: false, follow: false },
 };
 

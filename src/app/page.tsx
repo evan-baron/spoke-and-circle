@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { SearchForm } from '@/components/SearchForm/SearchForm';
 import { countApprovedTeams } from '@/services/teamService';
@@ -12,6 +13,11 @@ const QUICK_LINKS = [
 	{ label: 'Competitive racing teams', href: '/search?type=Team&q=racing' },
 	{ label: 'No-drop', href: '/search?q=no-drop' },
 ];
+
+export const metadata: Metadata = {
+	title: { absolute: 'Spoke & Circle | Cycling Team & Group Ride Finder' },
+	alternates: { canonical: '/' },
+};
 
 export default async function HomePage() {
 	const approvedCount = await countApprovedTeams();

@@ -4,7 +4,10 @@ import Crank from '@/components/Graphics/Crank';
 import styles from './contact.module.scss';
 
 export const metadata: Metadata = {
-	title: 'Contact us | Spoke & Circle',
+	title: 'Contact Us',
+	description:
+		'Questions, feedback, or a cycling team or group ride we should know about? Send the Spoke & Circle team a message.',
+	alternates: { canonical: '/contact' },
 };
 
 export default function ContactPage() {

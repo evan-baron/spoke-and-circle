@@ -6,7 +6,7 @@ import { requireAdmin } from '@/services/currentUserService';
 import styles from '../admin.module.scss';
 
 export const metadata: Metadata = {
-	title: 'Pending Groups | Admin | Spoke & Circle',
+	title: 'Pending Groups | Admin',
 	robots: { index: false, follow: false },
 };
 

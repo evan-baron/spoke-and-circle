@@ -16,6 +16,7 @@ import {
   formatVerification,
   formatYesNo,
 } from "@/lib/format";
+import { getSiteUrl, OG_IMAGE_PATH, SITE_NAME } from "@/lib/siteConfig";
 import { toneForPace, toneForVerified, toneForVisibility } from "@/lib/tone";
 import { getApprovedTeamById } from "@/services/teamService";
 import styles from "./team.module.scss";
@@ -31,7 +32,36 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { teamId } = await params;
   const team = await getApprovedTeamById(teamId);
-  return { title: team ? `${team.name} | Spoke & Circle` : "Team not found | Spoke & Circle" };
+  if (!team) {
+    return { title: "Team not found", robots: { index: false, follow: false } };
+  }
+
+  const title = `${team.name}: ${team.type} in ${team.location}`;
+  const summary =
+    team.missionStatement ??
+    `${team.name} is a ${team.bikeType.toLowerCase()} ${team.type.toLowerCase()} based in ${team.location}. See how to join, when they ride, and how to get in touch.`;
+  const description = summary.length > 160 ? `${summary.slice(0, 157)}...` : summary;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: `/teams/${team.id}` },
+    openGraph: {
+      title,
+      description,
+      url: `/teams/${team.id}`,
+      siteName: SITE_NAME,
+      images: [{ url: OG_IMAGE_PATH, width: 1200, height: 630, alt: SITE_NAME }],
+      locale: "en_US",
+      type: "website",
+    },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: [OG_IMAGE_PATH],
+    },
+  };
 }
 
 export default async function TeamPage({ params }: { params: Promise<TeamPageParams> }) {
@@ -51,8 +81,24 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
 
   const hasSocial = Object.values(team.social).some(Boolean);
 
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "SportsOrganization",
+    name: team.name,
+    sport: "Cycling",
+    url: `${getSiteUrl()}/teams/${team.id}`,
+    description: team.missionStatement,
+    location: { "@type": "Place", name: team.location },
+    ...(team.founded > 0 ? { foundingDate: String(team.founded) } : {}),
+    ...(team.website ? { sameAs: [team.website] } : {}),
+  };
+
   return (
     <div className={styles.page}>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+      />
       <div className={styles.wrap}>
         <BackButton />
 

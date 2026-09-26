@@ -1,10 +1,10 @@
 import {
 	escapeHtml,
-	getSiteUrl,
 	renderButton,
 	renderEmailLayout,
 	renderParagraph,
 } from '@/lib/emailLayout';
+import { getSiteUrl } from '@/lib/siteConfig';
 import {
 	type EmailStatus,
 	sendMail,

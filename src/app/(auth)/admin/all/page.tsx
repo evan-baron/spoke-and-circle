@@ -9,7 +9,7 @@ import { searchApprovedTeams } from '@/services/teamSearchService';
 import styles from '../admin.module.scss';
 
 export const metadata: Metadata = {
-	title: 'All Groups | Admin | Spoke & Circle',
+	title: 'All Groups | Admin',
 	robots: { index: false, follow: false },
 };
 

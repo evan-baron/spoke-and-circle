@@ -1,3 +1,5 @@
+import { getSiteUrl } from '@/lib/siteConfig';
+
 export const EMAIL_COLORS = {
 	ink: '#2d1d30',
 	inkSoft: '#6e6374',
@@ -19,13 +21,6 @@ export function escapeHtml(value: string): string {
 		.replace(/>/g, '&gt;')
 		.replace(/"/g, '&quot;')
 		.replace(/'/g, '&#39;');
-}
-
-export function getSiteUrl(): string {
-	return (process.env.APP_BASE_URL ?? 'https://spokeandcircle.com').replace(
-		/\/+$/,
-		'',
-	);
 }
 
 export const paragraphStyle = `margin:0 0 16px;font-family:${FONT_STACK};font-size:16px;line-height:1.6;color:${EMAIL_COLORS.ink};`;

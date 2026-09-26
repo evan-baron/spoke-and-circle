@@ -3,9 +3,10 @@ import { GetStartedWizard } from '@/components/GetStartedWizard/GetStartedWizard
 import styles from './getStarted.module.scss';
 
 export const metadata: Metadata = {
-	title: 'Get Started | Spoke & Circle',
+	title: 'Find Your Cycling Team or Group Ride',
 	description:
-		'Tell us your ZIP code, riding discipline, skill level, and what you’re looking for so we can point you at the right team, club, or group ride.',
+		'Answer four quick questions about your ZIP code, riding discipline, and skill level, and we’ll point you to cycling teams, clubs, and group rides that fit.',
+	alternates: { canonical: '/get-started' },
 };
 
 export default function GetStartedPage() {
