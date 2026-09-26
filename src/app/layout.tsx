@@ -55,6 +55,11 @@ export const metadata: Metadata = {
 		description: SITE_DESCRIPTION,
 		images: [OG_IMAGE_PATH],
 	},
+	icons: [
+		{ url: '/favicon.ico', type: 'image/x-icon' },
+		{ url: '/favicon-16x16.png', type: 'image/png', sizes: '16x16' },
+		{ url: '/favicon-32x32.png', type: 'image/png', sizes: '32x32' },
+	],
 	robots: {
 		index: true,
 		follow: true,

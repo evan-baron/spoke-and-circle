@@ -32,8 +32,8 @@ Location autocomplete and radius search read the `Place` table, filled from the 
 
 ### SEO and social sharing
 
-- [ ] Create `public/og-image.png` (1200 x 630). The site metadata already points at it, so link previews show no image until the file exists.
-- [ ] Add favicons (`src/app/favicon.ico` plus a 180px `apple-icon.png`). None exist yet.
+- [ ] Still needed: create `public/og-image.png` (1200 x 630). The site metadata already points at it in `src/app/layout.tsx`, so link previews on social sites and messaging apps show no image until the file exists.
+- [ ] Optional: add a 180 x 180 `public/apple-touch-icon.png` for iPhone home-screen icons, and add it to the `icons` list in `src/app/layout.tsx`.
 - [ ] After launch, add the site to Google Search Console and submit `/sitemap.xml`. Set `APP_BASE_URL` to the exact production origin first (with or without `www`, whichever you serve), because canonical links, the sitemap, and social URLs are built from it.
 
 ### Environment variables to set in Vercel
