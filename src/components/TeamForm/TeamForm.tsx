@@ -3,7 +3,7 @@
 import { type FormEvent, useRef, useState } from 'react';
 import { DEFAULT_TEAM_FORM_VALUES } from '@/lib/teamFormDefaults';
 import { buildTeamPayload } from '@/lib/teamForm';
-import type { TeamFormValues } from '@/lib/types';
+import type { RideDay, TeamFormValues } from '@/lib/types';
 import { describeSubmitError } from './describeSubmitError';
 import { DetailsSection } from './DetailsSection';
 import { GenericInfoSection } from './GenericInfoSection';
@@ -57,6 +57,8 @@ export function TeamForm({
 		null,
 	);
 	const [segmentationDescription, setSegmentationDescription] = useState('');
+	const [rideSchedule, setRideSchedule] = useState(values.rideSchedule);
+	const [rideDays, setRideDays] = useState<RideDay[]>(values.rideDays);
 
 	async function run(action: () => Promise<void>) {
 		busyRef.current = true;
@@ -102,6 +104,25 @@ export function TeamForm({
 		setHasSegmentation((prev) => (prev === value ? null : value));
 	}
 
+	function handleRideScheduleChange(next: string) {
+		setRideSchedule(next);
+		if (next !== 'Weekly') setRideDays([]);
+	}
+
+	function handleToggleRideDay(day: string) {
+		setRideDays((prev) =>
+			prev.some((entry) => entry.day === day) ?
+				prev.filter((entry) => entry.day !== day)
+			:	[...prev, { day, details: '' }],
+		);
+	}
+
+	function handleRideDayDetailsChange(day: string, details: string) {
+		setRideDays((prev) =>
+			prev.map((entry) => (entry.day === day ? { ...entry, details } : entry)),
+		);
+	}
+
 	return (
 		<form onSubmit={handleSubmit} className={styles.form}>
 			<GenericInfoSection
@@ -132,6 +153,11 @@ export function TeamForm({
 			{groupType === 'Group Ride' && (
 				<RideDetailsSection
 					values={values}
+					rideSchedule={rideSchedule}
+					onRideScheduleChange={handleRideScheduleChange}
+					rideDays={rideDays}
+					onToggleRideDay={handleToggleRideDay}
+					onRideDayDetailsChange={handleRideDayDetailsChange}
 					hasSegmentation={hasSegmentation}
 					onSegmentationChange={handleSegmentationChange}
 					segmentationDescription={segmentationDescription}

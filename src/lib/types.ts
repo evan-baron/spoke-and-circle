@@ -42,6 +42,11 @@ export interface MileageRequirement {
   frequency: ScheduleFrequency;
 }
 
+export interface RideDay {
+  day: string;
+  details?: string;
+}
+
 export interface JoinRequirements {
   tryouts: boolean;
   referralRequired: boolean;
@@ -102,6 +107,7 @@ export interface Team {
   // -- Ride Details --
   rideSchedule: ScheduleFrequency;
   startTimes?: string[];
+  rideDays?: RideDay[];
   pace: Pace;
   segmentation: Segmentation;
   typicalDistanceMiles: number;
@@ -192,6 +198,7 @@ export interface TeamFormValues {
   waitlist: boolean;
   rideSchedule: string;
   startTimes: string;
+  rideDays: RideDay[];
   pace: string;
   typicalDistanceMiles: string;
   typicalElevationGainFt: string;

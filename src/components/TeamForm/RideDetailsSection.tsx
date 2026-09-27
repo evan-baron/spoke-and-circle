@@ -1,6 +1,6 @@
-import type { TeamFormValues } from '@/lib/types';
+import type { RideDay, TeamFormValues } from '@/lib/types';
 import { Checkbox } from './Checkbox';
-import { DROP_POLICIES, PACES, SCHEDULES } from './constants';
+import { DAYS, DROP_POLICIES, PACES, SCHEDULES } from './constants';
 import { Field } from './Field';
 import { Section } from './Section';
 import { SkillLevelsField } from './SkillLevelsField';
@@ -8,6 +8,11 @@ import styles from './teamForm.module.scss';
 
 interface RideDetailsSectionProps {
 	values: TeamFormValues;
+	rideSchedule: string;
+	onRideScheduleChange: (value: string) => void;
+	rideDays: RideDay[];
+	onToggleRideDay: (day: string) => void;
+	onRideDayDetailsChange: (day: string, details: string) => void;
 	hasSegmentation: 'yes' | 'no' | null;
 	onSegmentationChange: (value: 'yes' | 'no') => void;
 	segmentationDescription: string;
@@ -16,6 +21,11 @@ interface RideDetailsSectionProps {
 
 export function RideDetailsSection({
 	values,
+	rideSchedule,
+	onRideScheduleChange,
+	rideDays,
+	onToggleRideDay,
+	onRideDayDetailsChange,
 	hasSegmentation,
 	onSegmentationChange,
 	segmentationDescription,
@@ -26,7 +36,8 @@ export function RideDetailsSection({
 			<Field label='Schedule'>
 				<select
 					name='rideSchedule'
-					defaultValue={values.rideSchedule}
+					value={rideSchedule}
+					onChange={(event) => onRideScheduleChange(event.target.value)}
 					className={styles.input}
 				>
 					{SCHEDULES.map((option) => (
@@ -36,15 +47,63 @@ export function RideDetailsSection({
 					))}
 				</select>
 			</Field>
-			<Field label='Start times' hint='Comma-separated'>
-				<input
-					type='text'
-					name='startTimes'
-					defaultValue={values.startTimes}
-					placeholder='e.g. Tue 6:00 PM, Sat 8:00 AM'
-					className={styles.input}
-				/>
-			</Field>
+			{rideSchedule !== 'Weekly' && (
+				<Field label='Start times' hint='Comma-separated'>
+					<input
+						type='text'
+						name='startTimes'
+						defaultValue={values.startTimes}
+						placeholder='e.g. Tue 6:00 PM, Sat 8:00 AM'
+						className={styles.input}
+					/>
+				</Field>
+			)}
+			{rideSchedule === 'Weekly' && (
+				<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
+					<span className={styles.fieldLabel}>Days</span>
+					<div className={styles.rideDayList}>
+						{DAYS.map((day) => {
+							const entry = rideDays.find((d) => d.day === day);
+							return (
+								<div key={day} className={styles.rideDayRow}>
+									<Checkbox
+										label={
+											<>
+												<span className={styles.dayFull}>{day}</span>
+												<span className={styles.dayShort}>
+													{day.slice(0, 3)}
+												</span>
+											</>
+										}
+										name='rideDay'
+										value={day}
+										checked={entry !== undefined}
+										onChange={() => onToggleRideDay(day)}
+									/>
+									<label className={styles.rideDayDetails}>
+										<span className={styles.fieldLabel}>Details</span>
+										<input
+											type='text'
+											placeholder='e.g. 5:30pm meet outside The Broken Spoke'
+											value={entry?.details ?? ''}
+											disabled={!entry}
+											onChange={(event) =>
+												onRideDayDetailsChange(day, event.target.value)
+											}
+											className={styles.input}
+										/>
+									</label>
+								</div>
+							);
+						})}
+					</div>
+					<input
+						type='hidden'
+						name='rideDays'
+						value={JSON.stringify(rideDays)}
+					/>
+				</div>
+			)}
 			<Field label='Pace'>
 				<select name='pace' defaultValue={values.pace} className={styles.input}>
 					{PACES.map((option) => (

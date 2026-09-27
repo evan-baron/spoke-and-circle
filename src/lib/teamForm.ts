@@ -61,6 +61,17 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		([, label]) => label,
 	);
 
+	function rideDays() {
+		const raw = text('rideDays');
+		if (!raw) return undefined;
+		try {
+			const parsed = JSON.parse(raw);
+			return Array.isArray(parsed) ? parsed : undefined;
+		} catch {
+			return undefined;
+		}
+	}
+
 	const duesRequired = flag('duesRequired');
 	const mileageMin = number('mileageMin');
 	const virtualPlatforms = values('virtualPlatform');
@@ -100,6 +111,7 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		waitlist: flag('waitlist'),
 		rideSchedule: text('rideSchedule'),
 		startTimes: commaList('startTimes'),
+		rideDays: rideDays(),
 		pace: text('pace'),
 		typicalDistanceMiles: number('typicalDistanceMiles'),
 		typicalElevationGainFt: number('typicalElevationGainFt'),

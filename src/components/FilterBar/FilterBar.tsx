@@ -97,6 +97,17 @@ export function FilterBar({
 		(defaultYouthOnly ? 1 : 0) +
 		(defaultAcceptingNewRiders ? 1 : 0);
 
+	// Clearing drops every filter facet but keeps the keyword/location/radius
+	// search itself intact — "clear filters" isn't "clear my search".
+	const clearParams = new URLSearchParams();
+	if (defaultQ) clearParams.set('q', defaultQ);
+	if (defaultLocation) clearParams.set('location', defaultLocation);
+	if (defaultRadius !== DEFAULT_RADIUS_MILES) {
+		clearParams.set('radius', String(defaultRadius));
+	}
+	const clearHref =
+		clearParams.size > 0 ? `${action}?${clearParams.toString()}` : action;
+
 	// Below $bp-md this also gates .typeBikeGroup and .moreFilters (both
 	// collapsed unless open); at $bp-md and up neither ever collapses, so
 	// this state only matters on mobile. Starts open if filters already came
@@ -141,22 +152,6 @@ export function FilterBar({
 					inputClassName={styles.input}
 				/>
 			</div>
-
-			<button
-				type='button'
-				className={styles.filtersToggle}
-				aria-expanded={filtersOpen}
-				aria-controls='filter-panel'
-				onClick={() => setFiltersOpen((open) => !open)}
-			>
-				<span>More Filters</span>
-				{activeFilterCount > 0 && (
-					<span className={styles.filtersCount}>{activeFilterCount}</span>
-				)}
-				<span className={styles.filtersCaret} aria-hidden='true'>
-					&#9662;
-				</span>
-			</button>
 
 			{/* Collapsed on mobile until "Filters" is tapped (or already open,
           because filters came in via the URL). On desktop this wrapper
@@ -276,6 +271,34 @@ export function FilterBar({
 						<span>Accepting new riders</span>
 					</label>
 				</div>
+			</div>
+
+			{/* Mobile: sits directly above the search button, below every
+          collapsible filter group. Desktop: display:contents lets the
+          toggle (hidden there) and the clear link (ordered last) each
+          take their own place in the primary row independently. */}
+			<div className={styles.toggleClearRow}>
+				<button
+					type='button'
+					className={styles.filtersToggle}
+					aria-expanded={filtersOpen}
+					aria-controls='filter-panel'
+					onClick={() => setFiltersOpen((open) => !open)}
+				>
+					<span>{filtersOpen ? 'Less' : 'More'} Filters</span>
+					{activeFilterCount > 0 && (
+						<span className={styles.filtersCount}>{activeFilterCount}</span>
+					)}
+					<span className={styles.filtersCaret} aria-hidden='true'>
+						&#9662;
+					</span>
+				</button>
+
+				{activeFilterCount > 0 && (
+					<a href={clearHref} className={styles.clearFilters}>
+						Clear filters
+					</a>
+				)}
 			</div>
 
 			{/* Mobile: the final action, below every filter. Desktop: rejoins

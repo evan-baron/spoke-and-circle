@@ -28,3 +28,12 @@ export const PERSONA_OPTIONS = [
 	{ value: 'lgbtOnly', label: 'LGBT only' },
 	{ value: 'other', label: 'Other' },
 ];
+export const DAYS = [
+	'Monday',
+	'Tuesday',
+	'Wednesday',
+	'Thursday',
+	'Friday',
+	'Saturday',
+	'Sunday',
+];

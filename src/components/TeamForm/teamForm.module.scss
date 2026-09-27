@@ -119,6 +119,47 @@ textarea.input {
 	gap: var(--space-2xs);
 }
 
+.rideDayList {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	gap: var(--space-2xs) var(--space-sm);
+}
+
+.rideDayRow {
+	display: contents;
+}
+
+.dayFull {
+	display: none;
+}
+
+.dayShort {
+	display: inline;
+}
+
+@include from($bp-sm) {
+	.dayFull {
+		display: inline;
+	}
+
+	.dayShort {
+		display: none;
+	}
+}
+
+.rideDayDetails {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	flex: 1;
+	min-width: 12rem;
+
+	&:has(input:disabled) {
+		opacity: 0.5;
+	}
+}
+
 .checkbox {
 	display: flex;
 	align-items: center;

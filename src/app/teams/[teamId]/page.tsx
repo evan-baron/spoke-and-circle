@@ -12,6 +12,7 @@ import {
   formatList,
   formatMemberCount,
   formatMileageRequirement,
+  formatRideDays,
   formatSkillLevels,
   formatVerification,
   formatYesNo,
@@ -225,6 +226,9 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
               <DetailSection title="Ride profile">
                 <DetailRow label="Schedule" value={team.rideSchedule} />
                 {team.startTimes && <DetailRow label="Start times" value={formatList(team.startTimes)} />}
+                {team.rideDays && team.rideDays.length > 0 && (
+                  <DetailRow label="Ride days" value={formatRideDays(team.rideDays)} />
+                )}
                 <DetailRow label="Segmentation" value={team.segmentation} />
                 <DetailRow label="Typical distance" value={formatDistance(team.typicalDistanceMiles)} />
                 <DetailRow label="Typical elevation gain" value={formatElevation(team.typicalElevationGainFt)} />

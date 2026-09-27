@@ -73,6 +73,7 @@ model Team {
 
   rideSchedule           ScheduleFrequency?
   startTimes             String[]
+  rideDays               Json?
   pace                   Pace?
   segmentation           Segmentation?
   typicalDistanceMiles   Int?

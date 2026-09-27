@@ -1,8 +1,8 @@
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, ReactNode } from 'react';
 import styles from './teamForm.module.scss';
 
 interface CheckboxProps {
-	label: string;
+	label: ReactNode;
 	name: string;
 	value?: string;
 	checked?: boolean;

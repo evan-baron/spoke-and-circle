@@ -1,4 +1,14 @@
-import type { AgeRequirement, MileageRequirement, Team } from "./types";
+import type { AgeRequirement, MileageRequirement, RideDay, Team } from "./types";
+
+const WEEKDAY_ORDER = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
 
 export function formatMemberCount(count: number): string {
   return `${count} members`;
@@ -56,6 +66,14 @@ export function formatSubmitter(
 
 export function formatSkillLevels(levels: string[]): string {
   return levels.join(", ");
+}
+
+export function formatRideDays(days?: RideDay[]): string {
+  if (!days || days.length === 0) return "None";
+  return [...days]
+    .sort((a, b) => WEEKDAY_ORDER.indexOf(a.day) - WEEKDAY_ORDER.indexOf(b.day))
+    .map((entry) => (entry.details ? `${entry.day} (${entry.details})` : entry.day))
+    .join(", ");
 }
 
 export function getTeamLocations(team: Pick<Team, "location" | "additionalLocations">): string[] {

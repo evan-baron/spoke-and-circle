@@ -1,4 +1,5 @@
-import type { Prisma, Team as TeamRow } from '../../../generated/prisma/client';
+import { Prisma } from '../../../generated/prisma/client';
+import type { Team as TeamRow } from '../../../generated/prisma/client';
 import {
 	bikeTypeFromDb,
 	bikeTypeToDb,
@@ -13,7 +14,7 @@ import {
 	segmentationFromDb,
 	segmentationToDb,
 } from '../teamEnums';
-import type { Team, TeamFormValues } from '../types';
+import type { RideDay, Team, TeamFormValues } from '../types';
 import type { CreateTeamInput } from '../validation';
 
 function nonEmpty<T>(items: T[]): T[] | undefined {
@@ -64,6 +65,7 @@ export function toTeam(row: TeamRow): Team {
 		howToJoin: row.howToJoin ?? '',
 		rideSchedule: row.rideSchedule ?? 'Weekly',
 		startTimes: nonEmpty(row.startTimes),
+		rideDays: (row.rideDays as RideDay[] | null) ?? undefined,
 		pace: row.pace ?? 'Casual',
 		segmentation: row.segmentation ? segmentationFromDb[row.segmentation] : 'N/A',
 		typicalDistanceMiles: row.typicalDistanceMiles ?? 0,
@@ -138,6 +140,7 @@ export function toTeamCreateInput(
 		howToJoin: input.howToJoin,
 		rideSchedule: input.rideSchedule,
 		startTimes: input.startTimes ?? [],
+		rideDays: (input.rideDays as Prisma.InputJsonValue) ?? undefined,
 		pace: input.pace,
 		segmentation: input.segmentation ? segmentationToDb[input.segmentation] : undefined,
 		typicalDistanceMiles: input.typicalDistanceMiles,
@@ -210,6 +213,7 @@ export function toTeamFormValues(row: TeamRow): TeamFormValues {
 		waitlist: row.waitlist,
 		rideSchedule: row.rideSchedule ?? 'Weekly',
 		startTimes: row.startTimes.join(', '),
+		rideDays: (row.rideDays as RideDay[] | null) ?? [],
 		pace: row.pace ?? 'Steady',
 		typicalDistanceMiles: row.typicalDistanceMiles?.toString() ?? '',
 		typicalElevationGainFt: row.typicalElevationGainFt?.toString() ?? '',
@@ -276,6 +280,7 @@ export function toApprovedTeamUpdate(
 		howToJoin: input.howToJoin ?? null,
 		rideSchedule: input.rideSchedule ?? null,
 		startTimes: input.startTimes ?? [],
+		rideDays: (input.rideDays as Prisma.InputJsonValue) ?? Prisma.JsonNull,
 		pace: input.pace ?? null,
 		typicalDistanceMiles: input.typicalDistanceMiles ?? null,
 		typicalElevationGainFt: input.typicalElevationGainFt ?? null,

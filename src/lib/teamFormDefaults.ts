@@ -34,6 +34,7 @@ export const DEFAULT_TEAM_FORM_VALUES: TeamFormValues = {
 	waitlist: false,
 	rideSchedule: 'Weekly',
 	startTimes: '',
+	rideDays: [],
 	pace: 'Steady',
 	typicalDistanceMiles: '',
 	typicalElevationGainFt: '',

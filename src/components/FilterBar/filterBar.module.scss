@@ -141,6 +141,41 @@
 	transform: rotate(180deg);
 }
 
+// Wraps the "More Filters" toggle + "Clear filters" link as one unit that
+// sits directly above the search button on mobile. On desktop the wrapper
+// disappears (display:contents) so each child takes its own place in the
+// primary row via its own `order` — the toggle hides, the link goes last.
+.toggleClearRow {
+	display: flex;
+	align-items: center;
+	gap: var(--space-sm);
+
+	@include from($bp-md) {
+		display: contents;
+	}
+}
+
+.clearFilters {
+	display: inline-flex;
+	align-items: center;
+	align-self: flex-center;
+	font-size: 0.8125rem;
+	font-weight: 700;
+	color: var(--color-ink-soft);
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+	padding: 0.5rem 0.25rem;
+
+	&:hover {
+		color: var(--color-coral);
+	}
+
+	@include from($bp-md) {
+		order: 6;
+		margin-left: auto;
+	}
+}
+
 // ----------------------------------------------------------------------
 // Skill level / race-or-casual / riding style + the three toggles. Same
 // collapse mechanism as .typeBikeGroup, but this group never rejoins row 1
@@ -154,7 +189,7 @@
 
 	@include from($bp-md) {
 		flex: 1 1 100%;
-		order: 6;
+		order: 7;
 	}
 }
 

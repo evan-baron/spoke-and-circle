@@ -44,6 +44,23 @@ const scheduleFrequencySchema = z.enum(['Weekly', 'Monthly', 'Annually']);
 const dropPolicySchema = z.enum(['Drop', 'No-drop']);
 const visibilitySchema = z.enum(['Public', 'Private']);
 const competitiveOrCasualSchema = z.enum(['Competitive', 'Casual']);
+const dayOfWeekSchema = z.enum([
+	'Monday',
+	'Tuesday',
+	'Wednesday',
+	'Thursday',
+	'Friday',
+	'Saturday',
+	'Sunday',
+]);
+const rideDaySchema = z.object({
+	day: dayOfWeekSchema,
+	details: z
+		.string()
+		.trim()
+		.max(200, 'Details must be less than 200 characters')
+		.optional(),
+});
 
 const eventTypeSchema = z.enum([
 	'Sponsor Events',
@@ -167,6 +184,7 @@ const teamBaseSchema = z.object({
 
 	rideSchedule: scheduleFrequencySchema.optional(),
 	startTimes: z.array(teamListItemSchema).max(14).optional(),
+	rideDays: z.array(rideDaySchema).max(7).optional(),
 	pace: paceSchema.optional(),
 	segmentation: segmentationSchema.optional(),
 	typicalDistanceMiles: z
