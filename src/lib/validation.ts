@@ -184,7 +184,7 @@ const teamBaseSchema = z.object({
 	dropPolicy: dropPolicySchema.optional(),
 	rideVisibility: visibilitySchema.optional(),
 
-	competitiveOrCasual: competitiveOrCasualSchema,
+	competitiveOrCasual: competitiveOrCasualSchema.optional(),
 	skillLevels: z
 		.array(skillLevelSchema)
 		.min(1, 'Choose at least one skill level')
@@ -231,6 +231,9 @@ const ageRangeCheck = (team: Partial<TeamFields>) =>
 const mileageCheck = (team: Partial<TeamFields>) =>
 	(team.mileageMin === undefined) === (team.mileageFrequency === undefined);
 
+const competitiveOrCasualCheck = (team: Partial<TeamFields>) =>
+	team.type === 'Group Ride' || team.competitiveOrCasual !== undefined;
+
 const ageRangeIssue = {
 	message: 'Minimum age cannot be greater than maximum age',
 	path: ['ageMin'],
@@ -241,9 +244,15 @@ const mileageIssue = {
 	path: ['mileageMin'],
 };
 
+const competitiveOrCasualIssue = {
+	message: 'Competitive or casual is required',
+	path: ['competitiveOrCasual'],
+};
+
 export const createTeamSchema = teamBaseSchema
 	.refine(ageRangeCheck, ageRangeIssue)
-	.refine(mileageCheck, mileageIssue);
+	.refine(mileageCheck, mileageIssue)
+	.refine(competitiveOrCasualCheck, competitiveOrCasualIssue);
 
 export const updateTeamSchema = teamBaseSchema
 	.partial()

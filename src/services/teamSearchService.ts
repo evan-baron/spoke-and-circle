@@ -24,12 +24,16 @@ export async function searchAffiliatableTeams(
 			name: { contains: query, mode: 'insensitive' },
 			...(excludeId ? { id: { not: excludeId } } : {}),
 		},
-		select: { id: true, name: true },
+		select: { id: true, name: true, location: true },
 		orderBy: { name: 'asc' },
 		take: 10,
 	});
 
-	return rows.map((row) => ({ id: row.id, label: row.name }));
+	return rows.map((row) => ({
+		id: row.id,
+		label: row.name,
+		location: row.location,
+	}));
 }
 
 export interface TeamSearchPage {

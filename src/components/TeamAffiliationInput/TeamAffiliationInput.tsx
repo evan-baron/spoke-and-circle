@@ -38,7 +38,7 @@ export function TeamAffiliationInput({
 	const [status, setStatus] = useState<SearchStatus>('idle');
 
 	const selectedItem = useMemo<TeamOption | null>(
-		() => (affiliatedId ? { id: affiliatedId, label: value } : null),
+		() => (affiliatedId ? { id: affiliatedId, label: value, location: '' } : null),
 		[affiliatedId, value],
 	);
 
@@ -120,7 +120,8 @@ export function TeamAffiliationInput({
 								{...getItemProps({ item, index })}
 								className={`${styles.option} ${highlightedIndex === index ? styles.optionActive : ''}`}
 							>
-								{item.label}
+								<span>{item.label}</span>
+								<span className={styles.optionLocation}>{item.location}</span>
 							</li>
 						))}
 				</ul>

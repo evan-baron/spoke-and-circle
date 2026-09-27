@@ -246,6 +246,7 @@ export interface LocationsResponse {
 export interface TeamOption {
   id: string;
   label: string;
+  location: string;
 }
 
 export interface TeamSearchResponse {

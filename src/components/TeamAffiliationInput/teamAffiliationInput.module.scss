@@ -34,6 +34,9 @@
 }
 
 .option {
+	display: flex;
+	flex-direction: column;
+	gap: 0.1rem;
 	padding: 0.55rem 0.75rem;
 	border-radius: var(--radius-sm);
 	font-size: 0.9375rem;
@@ -42,6 +45,11 @@
 
 .optionActive {
 	background: var(--color-coral-soft);
+}
+
+.optionLocation {
+	font-size: 0.8125rem;
+	color: var(--color-ink-soft);
 }
 
 .message {
