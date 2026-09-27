@@ -39,6 +39,7 @@ export default async function AdminUsersPage({
 			firstName: true,
 			lastName: true,
 			email: true,
+			role: true,
 			createdAt: true,
 			teams: {
 				orderBy: { name: 'asc' },

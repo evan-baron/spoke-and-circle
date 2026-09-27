@@ -1,6 +1,7 @@
 import type {
 	CreateTeamResponse,
 	LocationsResponse,
+	TeamSearchResponse,
 	TeamsResponse,
 } from '@/lib/types';
 import { ApiError } from '@/services/apiError';
@@ -38,6 +39,15 @@ export const teamAPI = {
 			method: 'POST',
 			body: JSON.stringify(payload),
 		}),
+	search: (
+		query: string,
+		signal?: AbortSignal,
+		options: { excludeId?: string } = {},
+	) =>
+		apiCall<TeamSearchResponse>(
+			`/api/teams/search?q=${encodeURIComponent(query)}${options.excludeId ? `&excludeId=${encodeURIComponent(options.excludeId)}` : ''}`,
+			{ method: 'GET', signal },
+		),
 };
 
 export const adminAPI = {

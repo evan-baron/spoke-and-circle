@@ -3,11 +3,34 @@ import { toTeam } from '@/lib/api/teamMapper';
 import { prisma } from '@/lib/prisma';
 import { DEFAULT_RADIUS_MILES, TEAMS_PAGE_SIZE } from '@/lib/searchParams';
 import { bikeTypeToDb, clubTypeToDb, disciplineToDb } from '@/lib/teamEnums';
-import type { SearchParams, Team } from '@/lib/types';
+import type { SearchParams, Team, TeamOption } from '@/lib/types';
 import {
 	resolveSearchLocation,
 	type SearchLocation,
 } from '@/services/placeService';
+
+const AFFILIATABLE_TYPES = Object.entries(clubTypeToDb)
+	.filter(([label]) => label !== 'Group Ride')
+	.map(([, dbValue]) => dbValue);
+
+export async function searchAffiliatableTeams(
+	query: string,
+	excludeId?: string,
+): Promise<TeamOption[]> {
+	const rows = await prisma.team.findMany({
+		where: {
+			status: 'Approved',
+			type: { in: AFFILIATABLE_TYPES },
+			name: { contains: query, mode: 'insensitive' },
+			...(excludeId ? { id: { not: excludeId } } : {}),
+		},
+		select: { id: true, name: true },
+		orderBy: { name: 'asc' },
+		take: 10,
+	});
+
+	return rows.map((row) => ({ id: row.id, label: row.name }));
+}
 
 export interface TeamSearchPage {
 	teams: Team[];

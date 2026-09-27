@@ -39,7 +39,12 @@ export function AdminUsersTable({ users, totalCount }: AdminUsersTableProps) {
 							{users.map((user) => (
 								<tr key={user.id}>
 									<td>{user.id}</td>
-									<td>{user.firstName ?? '—'}</td>
+									<td>
+										{user.firstName ?? '—'}
+										{user.role === 'admin' && (
+											<span className={styles.adminTag}>Admin</span>
+										)}
+									</td>
 									<td>{user.lastName ?? '—'}</td>
 									<td className={styles.email}>{user.email}</td>
 									<td>

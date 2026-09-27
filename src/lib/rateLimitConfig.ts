@@ -1,6 +1,7 @@
 export type RateLimitBucket =
 	| 'teams-read'
 	| 'teams-write'
+	| 'teams-search'
 	| 'locations-search'
 	| 'admin-write'
 	| 'email-admin'
@@ -55,6 +56,10 @@ export const RATE_LIMIT_CONFIG: Record<RateLimitBucket, BucketConfig> = {
 		maxRequests: { anonymous: 5, user: 5, admin: 5 },
 	},
 	'locations-search': {
+		windowSeconds: 60,
+		maxRequests: { anonymous: 60, user: 60, admin: 60 },
+	},
+	'teams-search': {
 		windowSeconds: 60,
 		maxRequests: { anonymous: 60, user: 60, admin: 60 },
 	},

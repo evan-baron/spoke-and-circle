@@ -32,6 +32,7 @@ export function PendingTeamReview({
 			mode='review'
 			initialValues={initialValues}
 			submitter={submitter}
+			excludeTeamId={teamId}
 			onSubmit={async (payload) => {
 				const { emailStatus } = await adminAPI.approveTeam(teamId, payload);
 				backToList('approved', emailStatus);

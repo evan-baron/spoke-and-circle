@@ -28,6 +28,7 @@ export function toTeam(row: TeamRow): Team {
 		missionStatement: row.missionStatement ?? undefined,
 		codeOfConduct: row.codeOfConduct ?? undefined,
 		affiliation: row.affiliation ?? undefined,
+		affiliatedId: row.affiliatedId ?? undefined,
 		location: row.location,
 		additionalLocations: nonEmpty(row.additionalLocations),
 		founded: row.founded ?? 0,
@@ -107,6 +108,9 @@ export function toTeamCreateInput(
 		missionStatement: input.missionStatement,
 		codeOfConduct: input.codeOfConduct,
 		affiliation: input.affiliation,
+		affiliatedTeam: input.affiliatedId ?
+			{ connect: { id: input.affiliatedId } }
+		:	undefined,
 		location: input.location,
 		additionalLocations: input.additionalLocations ?? [],
 		founded: input.founded,
@@ -178,6 +182,7 @@ export function toTeamFormValues(row: TeamRow): TeamFormValues {
 		missionStatement: row.missionStatement ?? '',
 		codeOfConduct: row.codeOfConduct ?? '',
 		affiliation: row.affiliation ?? '',
+		affiliatedId: row.affiliatedId ?? '',
 		location: row.location,
 		additionalLocations: row.additionalLocations,
 		founded: row.founded?.toString() ?? '',
@@ -236,7 +241,7 @@ export function toTeamFormValues(row: TeamRow): TeamFormValues {
 
 export function toApprovedTeamUpdate(
 	input: CreateTeamInput,
-): Prisma.TeamUpdateManyMutationInput {
+): Prisma.TeamUncheckedUpdateManyInput {
 	return {
 		status: 'Approved',
 		name: input.name,
@@ -244,6 +249,7 @@ export function toApprovedTeamUpdate(
 		missionStatement: input.missionStatement ?? null,
 		codeOfConduct: input.codeOfConduct ?? null,
 		affiliation: input.affiliation ?? null,
+		affiliatedId: input.affiliatedId ?? null,
 		location: input.location,
 		additionalLocations: input.additionalLocations ?? [],
 		founded: input.founded ?? null,

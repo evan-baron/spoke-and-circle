@@ -70,6 +70,7 @@ export interface Team {
   missionStatement?: string;
   codeOfConduct?: string;
   affiliation?: string;
+  affiliatedId?: string;
   location: string;
   additionalLocations?: string[];
   founded: number;
@@ -163,6 +164,7 @@ export interface TeamFormValues {
   missionStatement: string;
   codeOfConduct: string;
   affiliation: string;
+  affiliatedId: string;
   location: string;
   additionalLocations: string[];
   founded: string;
@@ -239,4 +241,14 @@ export interface LocationOption {
 export interface LocationsResponse {
   success: boolean;
   locations: LocationOption[];
+}
+
+export interface TeamOption {
+  id: string;
+  label: string;
+}
+
+export interface TeamSearchResponse {
+  success: boolean;
+  teams: TeamOption[];
 }

@@ -43,6 +43,7 @@ Location autocomplete and radius search read the `Place` table, filled from the 
 - [ ] `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, `AUTH0_SECRET`
 - [ ] `CLOUDFLARE_ORIGIN_SECRET`, `RESEND_API_KEY`
 - [ ] Add the production callback and logout URLs in the Auth0 dashboard.
+- [ ] Turn on multi-factor authentication in Auth0 (Security > Multi-factor Auth), at least for admin accounts. Enable a factor such as one-time passwords from an authenticator app, then set the policy to require it, either for everyone or, using an Auth0 Action, for users with the admin role. Test by logging in as an admin before launch.
 
 ### Database
 

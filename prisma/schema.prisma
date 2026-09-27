@@ -33,6 +33,9 @@ model Team {
   missionStatement    String?
   codeOfConduct       String?
   affiliation         String?
+  affiliatedId        String?
+  affiliatedTeam      Team?      @relation("TeamAffiliation", fields: [affiliatedId], references: [id], onDelete: SetNull)
+  affiliatedRides     Team[]     @relation("TeamAffiliation")
   location            String
   latitude            Float?
   longitude           Float?
@@ -109,6 +112,7 @@ model Team {
   @@index([bikeType])
   @@index([location])
   @@index([latitude, longitude])
+  @@index([affiliatedId])
 }
 
 model TeamLocation {

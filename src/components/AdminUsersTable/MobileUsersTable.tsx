@@ -65,6 +65,9 @@ export function MobileUsersTable({ users }: { users: AdminUserRow[] }) {
 								>
 									{getUserDisplayName(user)}
 								</button>
+								{user.role === 'admin' && (
+									<span className={styles.adminTag}>Admin</span>
+								)}
 							</td>
 						</tr>
 					))}
@@ -91,7 +94,9 @@ export function MobileUsersTable({ users }: { users: AdminUserRow[] }) {
 								<CloseIcon />
 							</button>
 
-							<p className={modalStyles.eyebrow}>User</p>
+							<p className={modalStyles.eyebrow}>
+								{selected.role === 'admin' ? 'Admin user' : 'User'}
+							</p>
 							<h2 id={titleId}>{getUserDisplayName(selected)}</h2>
 
 							<dl className={styles.detailList}>

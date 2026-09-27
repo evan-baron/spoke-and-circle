@@ -80,6 +80,7 @@ const teamBaseSchema = z.object({
 		.trim()
 		.max(200, 'Affiliation must be less than 200 characters')
 		.optional(),
+	affiliatedId: z.string().trim().min(1).optional(),
 	location: z
 		.string()
 		.trim()

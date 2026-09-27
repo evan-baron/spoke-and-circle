@@ -72,6 +72,7 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		missionStatement: text('missionStatement'),
 		codeOfConduct: text('codeOfConduct'),
 		affiliation: text('affiliation'),
+		affiliatedId: text('affiliatedId'),
 		location: text('location'),
 		additionalLocations:
 			additionalLocations.length > 0 ? additionalLocations : undefined,

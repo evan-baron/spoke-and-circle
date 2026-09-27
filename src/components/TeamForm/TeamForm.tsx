@@ -10,6 +10,7 @@ import {
 import { AntiBot } from '@/components/AntiBot/AntiBot';
 import { LocationInput } from '@/components/LocationInput/LocationInput';
 import { LocationListInput } from '@/components/LocationInput/LocationListInput';
+import { TeamAffiliationInput } from '@/components/TeamAffiliationInput/TeamAffiliationInput';
 import { DEFAULT_TEAM_FORM_VALUES } from '@/lib/teamFormDefaults';
 import { buildTeamPayload } from '@/lib/teamForm';
 import type { TeamFormValues } from '@/lib/types';
@@ -149,6 +150,7 @@ export interface TeamFormProps {
 	onSubmit: (payload: ReturnType<typeof buildTeamPayload>) => Promise<void>;
 	submitter?: { name: string; email: string } | null;
 	onReject?: (reason: string | undefined) => Promise<void>;
+	excludeTeamId?: string;
 }
 
 export function TeamForm({
@@ -157,6 +159,7 @@ export function TeamForm({
 	submitter,
 	onSubmit,
 	onReject,
+	excludeTeamId,
 }: TeamFormProps) {
 	const values = initialValues ?? DEFAULT_TEAM_FORM_VALUES;
 	const isReview = mode === 'review';
@@ -169,6 +172,8 @@ export function TeamForm({
 	const [confirmingReject, setConfirmingReject] = useState(false);
 	const busyRef = useRef(false);
 	const [groupType, setGroupType] = useState(values.type);
+	const [affiliationLabel, setAffiliationLabel] = useState(values.affiliation);
+	const [affiliatedId, setAffiliatedId] = useState(values.affiliatedId);
 	const [personaRestriction, setPersonaRestriction] = useState<string | null>(
 		values.personaRestriction,
 	);
@@ -273,13 +278,25 @@ export function TeamForm({
 						className={styles.input}
 					/>
 				</Field>
-				<Field label='Affiliation'>
-					<input
-						type='text'
+				<Field
+					label='Affiliation'
+					hint={
+						affiliatedId ?
+							'Linked to an existing team.'
+						:	'Begin typing to search Spoke & Circle for an existing team, club, or organization to link to'
+					}
+				>
+					<TeamAffiliationInput
 						name='affiliation'
-						defaultValue={values.affiliation}
-						placeholder='e.g. Bike Shop, Organization, etc.'
-						className={styles.input}
+						affiliatedIdName='affiliatedId'
+						value={affiliationLabel}
+						affiliatedId={affiliatedId}
+						onChange={(label, id) => {
+							setAffiliationLabel(label);
+							setAffiliatedId(id);
+						}}
+						excludeId={excludeTeamId}
+						placeholder='e.g. Team, Bike Shop, Organization, etc.'
 					/>
 				</Field>
 				<div className={styles.field}>

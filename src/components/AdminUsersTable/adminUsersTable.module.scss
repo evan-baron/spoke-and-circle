@@ -48,6 +48,19 @@
 	}
 }
 
+.adminTag {
+	margin-left: 0.5rem;
+	padding: 0.15rem 0.5rem;
+	border-radius: var(--radius-pill);
+	background: var(--color-coral-soft);
+	color: var(--color-coral);
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	vertical-align: middle;
+}
+
 .nameButton {
 	padding: 0;
 	border: none;

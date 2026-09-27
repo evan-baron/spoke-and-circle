@@ -160,7 +160,13 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
                 {team.affiliation && (
                   <>
                     <dt>Affiliation</dt>
-                    <dd>{team.affiliation}</dd>
+                    <dd>
+                      {team.affiliatedId ? (
+                        <a href={`/teams/${team.affiliatedId}`}>{team.affiliation}</a>
+                      ) : (
+                        team.affiliation
+                      )}
+                    </dd>
                   </>
                 )}
                 <dt>Contact</dt>

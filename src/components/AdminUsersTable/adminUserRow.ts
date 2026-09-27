@@ -3,6 +3,7 @@ export interface AdminUserRow {
 	firstName: string | null;
 	lastName: string | null;
 	email: string;
+	role: 'user' | 'admin';
 	createdAt: Date;
 	teams: {
 		id: string;
