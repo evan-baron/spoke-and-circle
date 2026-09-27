@@ -40,7 +40,7 @@ export const DEFAULT_TEAM_FORM_VALUES: TeamFormValues = {
 	dropPolicy: 'No-drop',
 	rideVisibility: 'Public',
 	competitiveOrCasual: 'Casual',
-	skillLevels: ['Intermediate'],
+	skillLevels: [],
 	duesAmount: '',
 	duesSchedule: 'Annually',
 	requiredRaces: '',

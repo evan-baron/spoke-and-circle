@@ -162,7 +162,9 @@ export default async function TeamPage({ params }: { params: Promise<TeamPagePar
                     <dt>Affiliation</dt>
                     <dd>
                       {team.affiliatedId ? (
-                        <a href={`/teams/${team.affiliatedId}`}>{team.affiliation}</a>
+                        <a href={`/teams/${team.affiliatedId}`} className={styles.affiliationLink}>
+                          {team.affiliation}
+                        </a>
                       ) : (
                         team.affiliation
                       )}

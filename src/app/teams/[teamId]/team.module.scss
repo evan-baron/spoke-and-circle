@@ -150,6 +150,16 @@
 	}
 }
 
+.affiliationLink {
+	color: #f4aa34;
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+
+	&:hover {
+		color: var(--color-logo);
+	}
+}
+
 .factWithIcon {
 	display: flex;
 	align-items: flex-start;
