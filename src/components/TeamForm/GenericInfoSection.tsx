@@ -56,24 +56,28 @@ export function GenericInfoSection({
 					))}
 				</select>
 			</Field>
-			<Field label='Mission statement' full>
-				<textarea
-					name='missionStatement'
-					defaultValue={values.missionStatement}
-					rows={2}
-					placeholder='What is this group trying to do?'
-					className={styles.input}
-				/>
-			</Field>
-			<Field label='Code of conduct' full>
-				<textarea
-					name='codeOfConduct'
-					defaultValue={values.codeOfConduct}
-					rows={2}
-					placeholder='Any ground rules for members and rides'
-					className={styles.input}
-				/>
-			</Field>
+			{groupType !== 'Group Ride' && (
+				<Field label='Mission statement' full>
+					<textarea
+						name='missionStatement'
+						defaultValue={values.missionStatement}
+						rows={2}
+						placeholder='What is this group trying to do?'
+						className={styles.input}
+					/>
+				</Field>
+			)}
+			{groupType !== 'Group Ride' && (
+				<Field label='Code of conduct' full>
+					<textarea
+						name='codeOfConduct'
+						defaultValue={values.codeOfConduct}
+						rows={2}
+						placeholder='Any ground rules for members and rides'
+						className={styles.input}
+					/>
+				</Field>
+			)}
 			<Field
 				label='Affiliation'
 				hint={
@@ -104,32 +108,36 @@ export function GenericInfoSection({
 					placeholder='Start typing a US city or state'
 				/>
 			</div>
-			<div className={styles.field}>
-				<label htmlFor={additionalLocationsId} className={styles.fieldLabel}>
-					Additional locations
-				</label>
-				<LocationListInput
-					id={additionalLocationsId}
-					name='additionalLocations'
-					defaultValues={values.additionalLocations}
-					placeholder='Search and add another US city or state'
-				/>
-				<span className={styles.fieldHint}>
-					If your team has additional chapters, add each location they can be
-					found, up to 10
-				</span>
-			</div>
-			<Field label='Founded'>
-				<input
-					type='number'
-					name='founded'
-					defaultValue={values.founded}
-					min={1970}
-					max={2026}
-					placeholder='2024'
-					className={styles.input}
-				/>
-			</Field>
+			{groupType !== 'Group Ride' && (
+				<div className={styles.field}>
+					<label htmlFor={additionalLocationsId} className={styles.fieldLabel}>
+						Additional locations
+					</label>
+					<LocationListInput
+						id={additionalLocationsId}
+						name='additionalLocations'
+						defaultValues={values.additionalLocations}
+						placeholder='Search and add another US city or state'
+					/>
+					<span className={styles.fieldHint}>
+						If your team has additional chapters, add each location they can be
+						found, up to 10
+					</span>
+				</div>
+			)}
+			{groupType !== 'Group Ride' && (
+				<Field label='Founded'>
+					<input
+						type='number'
+						name='founded'
+						defaultValue={values.founded}
+						min={1970}
+						max={2026}
+						placeholder='2024'
+						className={styles.input}
+					/>
+				</Field>
+			)}
 			<Field label='Public or private'>
 				<select
 					name='visibility'

@@ -21,6 +21,19 @@ function nonEmpty<T>(items: T[]): T[] | undefined {
 	return items.length > 0 ? items : undefined;
 }
 
+const PERSONA_SEARCH_TAGS: Record<string, string[]> = {
+	'Women Only': ['women'],
+	'Men Only': ['men'],
+	'LGBT Only': ['lgbt', 'lgbtq'],
+};
+
+function deriveTeamTags(personaRestrictions: string[]): string[] {
+	const tags = personaRestrictions.flatMap(
+		(restriction) => PERSONA_SEARCH_TAGS[restriction] ?? [restriction.toLowerCase()],
+	);
+	return [...new Set(tags)];
+}
+
 export function toTeam(row: TeamRow): Team {
 	return {
 		id: row.id,
@@ -165,6 +178,7 @@ export function toTeamCreateInput(
 		joinReferral: input.joinReferral,
 		joinInviteOnly: input.joinInviteOnly,
 		joinOpen: input.joinOpen,
+		tags: deriveTeamTags(input.personaRestrictions ?? []),
 	};
 }
 
@@ -304,5 +318,6 @@ export function toApprovedTeamUpdate(
 		joinReferral: input.joinReferral ?? false,
 		joinInviteOnly: input.joinInviteOnly ?? false,
 		joinOpen: input.joinOpen ?? false,
+		tags: deriveTeamTags(input.personaRestrictions ?? []),
 	};
 }

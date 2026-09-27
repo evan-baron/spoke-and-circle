@@ -140,6 +140,7 @@ export function TeamForm({
 
 			<DetailsSection
 				values={values}
+				groupType={groupType}
 				virtualPlatforms={virtualPlatforms}
 				onVirtualPlatformChange={handleVirtualPlatformChange}
 				virtualPlatformOtherText={virtualPlatformOtherText}

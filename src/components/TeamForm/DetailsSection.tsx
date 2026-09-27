@@ -1,12 +1,18 @@
 import type { TeamFormValues } from '@/lib/types';
 import { Checkbox } from './Checkbox';
-import { BIKE_TYPES, FORMATS, PERSONA_OPTIONS, VIRTUAL_PLATFORMS } from './constants';
+import {
+	BIKE_TYPES,
+	FORMATS,
+	PERSONA_OPTIONS,
+	VIRTUAL_PLATFORMS,
+} from './constants';
 import { Field } from './Field';
 import { Section } from './Section';
 import styles from './teamForm.module.scss';
 
 interface DetailsSectionProps {
 	values: TeamFormValues;
+	groupType: string;
 	virtualPlatforms: string[];
 	onVirtualPlatformChange: (value: string) => void;
 	virtualPlatformOtherText: string;
@@ -19,6 +25,7 @@ interface DetailsSectionProps {
 
 export function DetailsSection({
 	values,
+	groupType,
 	virtualPlatforms,
 	onVirtualPlatformChange,
 	virtualPlatformOtherText,
@@ -83,45 +90,53 @@ export function DetailsSection({
 					/>
 				)}
 			</div>
-			<Field
-				label='Home Base'
-				hint='The shop, venue, league, or organization your group is based out of or belongs to. Ex: The Broken Spoke Bike Shop'
-			>
-				<input
-					type='text'
-					name='homeBase'
-					defaultValue={values.homeBase}
-					placeholder='e.g. Zwift Racing League'
-					className={styles.input}
-				/>
-			</Field>
-			<Field label='Website'>
-				<input
-					type='url'
-					name='website'
-					defaultValue={values.website}
-					placeholder='https://'
-					className={styles.input}
-				/>
-			</Field>
-			<Field label='Instagram'>
-				<input
-					type='text'
-					name='instagram'
-					defaultValue={values.instagram}
-					placeholder='@yourteam'
-					className={styles.input}
-				/>
-			</Field>
-			<Field label='Facebook'>
-				<input
-					type='text'
-					name='facebook'
-					defaultValue={values.facebook}
-					placeholder='Page name'
-					className={styles.input}
-				/>
-			</Field>
+			{groupType !== 'Group Ride' && (
+				<Field
+					label='Home Base'
+					hint='The shop, venue, league, or organization your group is based out of or belongs to. Ex: The Broken Spoke Bike Shop'
+				>
+					<input
+						type='text'
+						name='homeBase'
+						defaultValue={values.homeBase}
+						placeholder='e.g. Zwift Racing League'
+						className={styles.input}
+					/>
+				</Field>
+			)}
+			{groupType !== 'Group Ride' && (
+				<Field label='Website'>
+					<input
+						type='url'
+						name='website'
+						defaultValue={values.website}
+						placeholder='https://'
+						className={styles.input}
+					/>
+				</Field>
+			)}
+			{groupType !== 'Group Ride' && (
+				<Field label='Instagram'>
+					<input
+						type='text'
+						name='instagram'
+						defaultValue={values.instagram}
+						placeholder='@yourteam'
+						className={styles.input}
+					/>
+				</Field>
+			)}
+			{groupType !== 'Group Ride' && (
+				<Field label='Facebook'>
+					<input
+						type='text'
+						name='facebook'
+						defaultValue={values.facebook}
+						placeholder='Page name'
+						className={styles.input}
+					/>
+				</Field>
+			)}
 			<Field label='Strava'>
 				<input
 					type='text'
@@ -150,25 +165,29 @@ export function DetailsSection({
 					className={styles.input}
 				/>
 			</Field>
-			<Field label='Maximum age'>
-				<input
-					type='number'
-					name='ageMax'
-					defaultValue={values.ageMax}
-					min={0}
-					max={120}
-					className={styles.input}
-				/>
-			</Field>
-			<Field label='Current member count'>
-				<input
-					type='number'
-					name='memberCount'
-					defaultValue={values.memberCount}
-					min={0}
-					className={styles.input}
-				/>
-			</Field>
+			{groupType !== 'Group Ride' && (
+				<Field label='Maximum age'>
+					<input
+						type='number'
+						name='ageMax'
+						defaultValue={values.ageMax}
+						min={0}
+						max={120}
+						className={styles.input}
+					/>
+				</Field>
+			)}
+			{groupType !== 'Group Ride' && (
+				<Field label='Current member count'>
+					<input
+						type='number'
+						name='memberCount'
+						defaultValue={values.memberCount}
+						min={0}
+						className={styles.input}
+					/>
+				</Field>
+			)}
 			<Field label='Maximum member limit'>
 				<input
 					type='number'
@@ -183,7 +202,11 @@ export function DetailsSection({
 					name='howToJoin'
 					defaultValue={values.howToJoin}
 					rows={2}
-					placeholder='What should a prospective member do?'
+					placeholder={
+						groupType !== 'Group Ride' ?
+							'What should a prospective member do?'
+						:	'What should a prospective rider do?'
+					}
 					className={styles.input}
 				/>
 			</Field>
@@ -222,11 +245,13 @@ export function DetailsSection({
 						name='eBikeAllowed'
 						defaultChecked={values.eBikeAllowed}
 					/>
-					<Checkbox
-						label='Waitlist active'
-						name='waitlist'
-						defaultChecked={values.waitlist}
-					/>
+					{groupType !== 'Group Ride' && (
+						<Checkbox
+							label='Waitlist active'
+							name='waitlist'
+							defaultChecked={values.waitlist}
+						/>
+					)}
 				</div>
 			</div>
 		</Section>
