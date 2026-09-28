@@ -58,8 +58,9 @@ export default async function HomePage() {
 					<p className={styles.heroCopy}>
 						Whether you race, ride no-drop on Saturdays, or just enjoy a casual
 						end-of-day spin, you can search {teamCount()} teams, clubs, group
-						rides, and more by keyword, location, or type. Find{' '}
-						<span className={styles.heroCopyHighlight}>your circle</span>.
+						rides, and more by keyword, location, or type.
+						<br />
+						Find <span className={styles.heroCopyHighlight}>your circle</span>.
 					</p>
 					<div className={styles.searchWrap}>
 						<SearchForm onGradient />
