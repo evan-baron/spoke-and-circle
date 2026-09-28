@@ -7,6 +7,7 @@ const clubTypeSchema = z.enum([
 	'Group Ride',
 	'Youth Program',
 	'Organization',
+	'Association',
 ]);
 const bikeTypeSchema = z.enum([
 	'Road',

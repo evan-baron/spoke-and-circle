@@ -4,6 +4,7 @@ export const CLUB_TYPES = [
 	'Group Ride',
 	'Youth Program',
 	'Organization',
+	'Association',
 ];
 export const BIKE_TYPES = [
 	'Road',

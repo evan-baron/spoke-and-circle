@@ -15,6 +15,7 @@ const TYPE_OPTIONS = [
 	'Group Ride',
 	'Youth Program',
 	'Organization',
+	'Association',
 ];
 
 export function SearchForm({

@@ -28,6 +28,7 @@ const TYPE_OPTIONS = [
 	'Group Ride',
 	'Youth Program',
 	'Organization',
+	'Association',
 ];
 const BIKE_TYPE_OPTIONS = [
 	'Road',

@@ -6,6 +6,7 @@ const CLUB_TYPES: ClubType[] = [
 	'Group Ride',
 	'Youth Program',
 	'Organization',
+	'Association',
 ];
 const BIKE_TYPES: BikeType[] = [
 	'Road',

@@ -168,6 +168,7 @@ enum ClubType {
   GroupRide    @map("Group Ride")
   YouthProgram @map("Youth Program")
   Organization
+  Association
 }
 
 enum BikeType {

@@ -1,7 +1,7 @@
 // Data shape mirrors the club/team intake form, grouped into the same
 // four sections so the detail page can render section-for-section.
 
-export type ClubType = "Team" | "Club" | "Group Ride" | "Youth Program" | "Organization";
+export type ClubType = "Team" | "Club" | "Group Ride" | "Youth Program" | "Organization" | "Association";
 
 export type BikeType =
   | "Road"
