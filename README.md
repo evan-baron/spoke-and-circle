@@ -65,7 +65,6 @@ The repo rules say not to use browser automation or run builds unless asked, so 
   3. Honeypot field plus a minimum time-to-submit on the form.
   4. Edge rules in Cloudflare or Vercel.
 - [ ] **`rideVisibility`.** Leave alone. The user is still debating what Private means for ride details. `visibility: Private` means membership-gated and Private teams stay listed publicly.
-- [ ] **If Google Analytics is added**, update `src/app/privacy/page.tsx` (it currently states no third-party analytics run), `src/components/CookieNotice/CookieNotice.tsx` (currently states only essential cookies), and the CCPA "right to opt out of sale or sharing" section, since GA (especially with Google Signals/ads features) is commonly treated as "sharing" under CPRA and would need an actual opt-out, not just a disclosure banner.
 
 ## 4. Known rough edges
 
@@ -141,4 +140,6 @@ There is no `DATABASE_URL_UNPOOLED` in this project — everything, including mi
 
 ### Environment variable names (values live in `.env` and Vercel only)
 
-`DEVELOPMENT_DATABASE_URL`, `DATABASE_URL`, `NEON_BRANCH`, `APP_BASE_URL`, `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, `AUTH0_SECRET`, `CLOUDFLARE_ORIGIN_SECRET`, `RESEND_API_KEY`
+`DEVELOPMENT_DATABASE_URL`, `DATABASE_URL`, `NEON_BRANCH`, `APP_BASE_URL`, `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, `AUTH0_SECRET`, `CLOUDFLARE_ORIGIN_SECRET`, `RESEND_API_KEY`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`
+
+`NEXT_PUBLIC_GA_MEASUREMENT_ID` is the Google Analytics 4 Measurement ID (`src/components/GoogleAnalytics/GoogleAnalytics.tsx`, wired in `src/app/layout.tsx`). It only renders when the var is set, so scope it to the Production environment in Vercel to keep local dev and preview deployments out of analytics.

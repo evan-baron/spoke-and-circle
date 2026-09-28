@@ -31,8 +31,9 @@ export function CookieNotice() {
 	return (
 		<div className={styles.notice} role='status'>
 			<p>
-				We use only essential cookies to keep you signed in. No tracking or
-				ad cookies. See our{' '}
+				We use cookies to keep you signed in and to measure site usage with
+				Google Analytics. No advertising or cross-site tracking cookies. See
+				our{' '}
 				<Link href='/privacy'>Privacy Policy</Link> for details.
 			</p>
 			<button type='button' onClick={handleDismiss} className={styles.dismiss}>

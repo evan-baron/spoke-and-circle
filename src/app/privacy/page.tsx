@@ -54,6 +54,14 @@ export default function PrivacyPage() {
 					up; they are not used to track you across the site or build a
 					profile of you.
 				</p>
+				<p>
+					We also use Google Analytics to understand how the site is used
+					(pages visited, general location derived from IP address, device
+					and browser type, and how you arrived at the site). We don&rsquo;t
+					enable Google Signals or link this data to Google Ads, so it
+					isn&rsquo;t used for cross-site advertising or to build ad profiles
+					about you.
+				</p>
 				<h3>Location search</h3>
 				<p>
 					When you search by city, ZIP code, or state, we match your search
@@ -79,11 +87,14 @@ export default function PrivacyPage() {
 					</li>
 					<li>To detect and prevent spam, abuse, and automated submissions.</li>
 					<li>To maintain, secure, and improve the site.</li>
+					<li>
+						To understand aggregate site usage and improve the experience,
+						via Google Analytics.
+					</li>
 				</ul>
 				<p>
 					We do not sell your information, and we do not use it for
-					advertising. We do not run third-party analytics or ad-tracking
-					scripts on this site.
+					advertising. We do not run ad-tracking scripts on this site.
 				</p>
 			</section>
 
@@ -121,6 +132,10 @@ export default function PrivacyPage() {
 						<strong>Vercel</strong> and <strong>Cloudflare</strong>:
 						application hosting, content delivery, and network security.
 					</li>
+					<li>
+						<strong>Google Analytics</strong>: aggregate site usage
+						statistics.
+					</li>
 				</ul>
 				<p>
 					These providers process information on our behalf and are not
@@ -145,9 +160,10 @@ export default function PrivacyPage() {
 			<section>
 				<h2>Cookies</h2>
 				<p>
-					We use only the cookies necessary to keep you signed in (managed by
-					Auth0) and to protect the site during login. We don&rsquo;t use
-					third-party advertising or cross-site tracking cookies.
+					We use cookies necessary to keep you signed in (managed by Auth0)
+					and to protect the site during login. We also use Google Analytics
+					cookies to measure site usage in aggregate. We don&rsquo;t use
+					advertising or cross-site tracking cookies.
 				</p>
 			</section>
 
@@ -188,7 +204,9 @@ export default function PrivacyPage() {
 					</li>
 					<li>
 						<strong>Internet or network activity</strong>: IP address and
-						request metadata used only to enforce rate limits.
+						request metadata used to enforce rate limits, and site usage
+						data (pages visited, device/browser type, referring site)
+						collected via Google Analytics.
 					</li>
 					<li>
 						<strong>Information you submit</strong>: team/group listing
@@ -216,8 +234,10 @@ export default function PrivacyPage() {
 					</li>
 					<li>
 						<strong>Right to opt out of sale or sharing.</strong> We don&rsquo;t
-						sell or share personal information for cross-context behavioral
-						advertising, so there&rsquo;s nothing to opt out of today.
+						sell personal information, and Google Analytics is configured
+						without Google Signals or Google Ads linking, so we don&rsquo;t
+						share personal information for cross-context behavioral
+						advertising. There&rsquo;s nothing to opt out of today.
 					</li>
 					<li>
 						<strong>Right to non-discrimination</strong> for exercising any of
