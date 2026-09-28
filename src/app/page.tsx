@@ -53,7 +53,7 @@ export default async function HomePage() {
 					</div>
 				</div>
 				<div className={styles.heroInner}>
-					<p className={styles.eyebrow}>A field guide to group rides</p>
+					<p className={styles.eyebrow}>A field guide to cycling groups</p>
 					<h1>Find the team, club, or group ride that matches your cadence.</h1>
 					<p className={styles.heroCopy}>
 						Whether you race, ride no-drop on Saturdays, or just enjoy a casual
