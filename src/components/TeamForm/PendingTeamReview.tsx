@@ -8,12 +8,14 @@ import { TeamForm } from './TeamForm';
 interface PendingTeamReviewProps {
 	teamId: string;
 	initialValues: TeamFormValues;
+	initialVerified: boolean;
 	submitter: { name: string; email: string } | null;
 }
 
 export function PendingTeamReview({
 	teamId,
 	initialValues,
+	initialVerified,
 	submitter,
 }: PendingTeamReviewProps) {
 	const router = useRouter();
@@ -31,6 +33,7 @@ export function PendingTeamReview({
 		<TeamForm
 			mode='review'
 			initialValues={initialValues}
+			initialVerified={initialVerified}
 			submitter={submitter}
 			excludeTeamId={teamId}
 			onSubmit={async (payload) => {

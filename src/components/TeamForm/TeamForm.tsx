@@ -173,7 +173,7 @@ export function TeamForm({
 
 			{groupType !== 'Group Ride' && <TeamClubDetailsSection values={values} />}
 
-			{isEdit && (
+			{(isEdit || isReview) && (
 				<Section title='Admin'>
 					<Checkbox
 						label='Verified'

@@ -11,6 +11,7 @@ export async function approvePendingTeam(
 	id: string,
 	adminId: number,
 	input: CreateTeamInput,
+	verified?: boolean,
 ): Promise<{ emailStatus: EmailStatus } | null> {
 	const pending = await prisma.team.findFirst({
 		where: { id, status: 'Pending' },
@@ -26,6 +27,10 @@ export async function approvePendingTeam(
 				latitude: null,
 				longitude: null,
 			}),
+			...(verified !== undefined ? { verified } : {}),
+			...(verified === true ?
+				{ lastActiveYear: new Date().getFullYear() }
+			:	{}),
 		},
 	});
 	if (result.count === 0) return null;

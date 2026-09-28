@@ -14,7 +14,8 @@ export const POST = withAuth(
 		const result = await readJsonObject(request);
 		if ('error' in result) return result.error;
 
-		const parsed = createTeamSchema.safeParse(result.body);
+		const { verified, ...teamFields } = result.body;
+		const parsed = createTeamSchema.safeParse(teamFields);
 		if (!parsed.success) return jsonValidationError(parsed.error);
 
 		const unknownLocations = await findUnknownLocations(
@@ -24,7 +25,12 @@ export const POST = withAuth(
 		const unknownLocationsMessage = describeUnknownLocations(unknownLocations);
 		if (unknownLocationsMessage) return json400(unknownLocationsMessage);
 
-		const approved = await approvePendingTeam(teamId, user.id, parsed.data);
+		const approved = await approvePendingTeam(
+			teamId,
+			user.id,
+			parsed.data,
+			typeof verified === 'boolean' ? verified : undefined,
+		);
 		if (!approved) return json404('Pending team not found');
 
 		return NextResponse.json({

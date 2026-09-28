@@ -52,6 +52,7 @@ export default async function AdminReviewPendingPage({
 				<PendingTeamReview
 					teamId={team.id}
 					initialValues={toTeamFormValues(team)}
+					initialVerified={team.verified}
 					submitter={submitter}
 				/>
 			</div>
