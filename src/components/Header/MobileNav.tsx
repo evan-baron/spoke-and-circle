@@ -13,6 +13,7 @@ interface MobileNavProps {
 		name?: string | null;
 		email?: string | null;
 		isAdmin?: boolean;
+		pendingCount?: number;
 	} | null;
 }
 
@@ -26,6 +27,11 @@ const MobileNav = ({ user }: MobileNavProps) => {
 						{user.isAdmin && (
 							<Link href='/admin' className={styles.navAdmin}>
 								Admin Console
+								{!!user.pendingCount && (
+									<span className={styles.pendingBadge}>
+										{user.pendingCount}
+									</span>
+								)}
 							</Link>
 						)}
 						<a

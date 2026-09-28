@@ -1,5 +1,6 @@
 import { auth0 } from '@/lib/auth0';
 import { getCurrentUser } from '@/services/currentUserService';
+import { countPendingTeams } from '@/services/teamService';
 import DesktopNav from './DesktopNav';
 import MobileNav from './MobileNav';
 
@@ -8,6 +9,8 @@ import styles from './header.module.scss';
 const Header = async () => {
 	const session = await auth0.getSession();
 	const currentUser = await getCurrentUser();
+	const pendingCount =
+		currentUser?.isAdmin ? await countPendingTeams() : undefined;
 
 	const user =
 		session?.user ?
@@ -16,6 +19,7 @@ const Header = async () => {
 				firstName: currentUser?.firstName ?? session.user.given_name ?? null,
 				email: session.user.email,
 				isAdmin: currentUser?.isAdmin ?? false,
+				pendingCount,
 			}
 		:	null;
 

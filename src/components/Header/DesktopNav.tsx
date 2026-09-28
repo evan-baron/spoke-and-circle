@@ -14,6 +14,7 @@ interface DesktopNavProps {
 		firstName?: string | null;
 		email?: string | null;
 		isAdmin?: boolean;
+		pendingCount?: number;
 	} | null;
 }
 
@@ -29,6 +30,9 @@ const DesktopNav = ({ user }: DesktopNavProps) => {
 				{user && user.isAdmin && (
 					<Link href='/admin' className={styles.navAdmin}>
 						Admin Console
+						{!!user.pendingCount && (
+							<span className={styles.pendingBadge}>{user.pendingCount}</span>
+						)}
 					</Link>
 				)}
 				<Link href='/search' className={styles.navLink}>

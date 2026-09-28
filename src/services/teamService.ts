@@ -15,3 +15,7 @@ export const getApprovedTeamById = cache(
 export function countApprovedTeams(): Promise<number> {
 	return prisma.team.count({ where: { status: 'Approved' } });
 }
+
+export function countPendingTeams(): Promise<number> {
+	return prisma.team.count({ where: { status: 'Pending' } });
+}
