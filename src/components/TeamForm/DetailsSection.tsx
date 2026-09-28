@@ -3,11 +3,13 @@ import { Checkbox } from './Checkbox';
 import {
 	BIKE_TYPES,
 	FORMATS,
+	PACES,
 	PERSONA_OPTIONS,
 	VIRTUAL_PLATFORMS,
 } from './constants';
 import { Field } from './Field';
 import { Section } from './Section';
+import { SkillLevelsField } from './SkillLevelsField';
 import styles from './teamForm.module.scss';
 
 interface DetailsSectionProps {
@@ -36,7 +38,9 @@ export function DetailsSection({
 	onPersonaOtherTextChange,
 }: DetailsSectionProps) {
 	return (
-		<Section title='Details'>
+		<Section
+			title={groupType === 'Group Ride' ? 'Group Ride Profile' : 'Group Profile'}
+		>
 			<Field label='Cycling Discipline'>
 				<select
 					name='bikeType'
@@ -63,33 +67,17 @@ export function DetailsSection({
 					))}
 				</select>
 			</Field>
-			<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
-				<span className={styles.fieldLabel}>Virtual platform(s)</span>
-				<div className={styles.checkboxRow}>
-					{VIRTUAL_PLATFORMS.map((platform) => (
-						<Checkbox
-							key={platform}
-							label={platform}
-							name='virtualPlatform'
-							value={platform}
-							checked={virtualPlatforms.includes(platform)}
-							onChange={() => onVirtualPlatformChange(platform)}
-						/>
+			<Field label='Average Riding Pace'>
+				<select name='pace' defaultValue={values.pace} className={styles.input}>
+					{PACES.map((option) => (
+						<option key={option} value={option}>
+							{option}
+						</option>
 					))}
-				</div>
-				{virtualPlatforms.includes('Other') && (
-					<input
-						type='text'
-						name='virtualPlatformOtherDescription'
-						placeholder='Please describe'
-						value={virtualPlatformOtherText}
-						onChange={(event) =>
-							onVirtualPlatformOtherTextChange(event.target.value)
-						}
-						className={styles.input}
-					/>
-				)}
-			</div>
+				</select>
+			</Field>
+			<SkillLevelsField defaultValues={values.skillLevels} />
+
 			{groupType !== 'Group Ride' && (
 				<Field
 					label='Home Base'
@@ -155,6 +143,33 @@ export function DetailsSection({
 					className={styles.input}
 				/>
 			</Field>
+			<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
+				<span className={styles.fieldLabel}>Platform(s)</span>
+				<div className={styles.checkboxRow}>
+					{VIRTUAL_PLATFORMS.map((platform) => (
+						<Checkbox
+							key={platform}
+							label={platform}
+							name='virtualPlatform'
+							value={platform}
+							checked={virtualPlatforms.includes(platform)}
+							onChange={() => onVirtualPlatformChange(platform)}
+						/>
+					))}
+				</div>
+				{virtualPlatforms.includes('Other') && (
+					<input
+						type='text'
+						name='virtualPlatformOtherDescription'
+						placeholder='Please describe'
+						value={virtualPlatformOtherText}
+						onChange={(event) =>
+							onVirtualPlatformOtherTextChange(event.target.value)
+						}
+						className={styles.input}
+					/>
+				)}
+			</div>
 			<Field label='Minimum age'>
 				<input
 					type='number'

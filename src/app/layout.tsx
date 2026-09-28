@@ -3,6 +3,7 @@ import { Plus_Jakarta_Sans } from 'next/font/google';
 import AppProviders from '@/app/AppProviders';
 import Header from '@/components/Header/Header';
 import { Footer } from '@/components/Footer/Footer';
+import { jsonLdScript } from '@/lib/jsonLd';
 import {
 	getSiteUrl,
 	OG_IMAGE_PATH,
@@ -116,7 +117,7 @@ export default async function RootLayout({
 			<head>
 				<script
 					type='application/ld+json'
-					dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+					dangerouslySetInnerHTML={{ __html: jsonLdScript(structuredData) }}
 				/>
 			</head>
 			<body>

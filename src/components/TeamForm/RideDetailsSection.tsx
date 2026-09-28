@@ -1,9 +1,8 @@
 import type { RideDay, TeamFormValues } from '@/lib/types';
 import { Checkbox } from './Checkbox';
-import { DAYS, DROP_POLICIES, PACES, SCHEDULES } from './constants';
+import { DAYS, DROP_POLICIES, SCHEDULES } from './constants';
 import { Field } from './Field';
 import { Section } from './Section';
-import { SkillLevelsField } from './SkillLevelsField';
 import styles from './teamForm.module.scss';
 
 interface RideDetailsSectionProps {
@@ -32,7 +31,7 @@ export function RideDetailsSection({
 	onSegmentationDescriptionChange,
 }: RideDetailsSectionProps) {
 	return (
-		<Section title='Ride details'>
+		<Section title='Ride Details'>
 			<Field label='Schedule'>
 				<select
 					name='rideSchedule'
@@ -104,16 +103,6 @@ export function RideDetailsSection({
 					/>
 				</div>
 			)}
-			<Field label='Pace'>
-				<select name='pace' defaultValue={values.pace} className={styles.input}>
-					{PACES.map((option) => (
-						<option key={option} value={option}>
-							{option}
-						</option>
-					))}
-				</select>
-			</Field>
-			<SkillLevelsField defaultValues={values.skillLevels} />
 			<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
 				<span className={styles.fieldLabel}>Skill/Speed Segmentation</span>
 				<div className={styles.checkboxRow}>

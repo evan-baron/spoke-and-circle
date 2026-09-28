@@ -21,6 +21,7 @@ import {
 	formatVerification,
 	formatYesNo,
 } from '@/lib/format';
+import { jsonLdScript } from '@/lib/jsonLd';
 import { getSiteUrl, OG_IMAGE_PATH, SITE_NAME } from '@/lib/siteConfig';
 import { toneForPace, toneForVerified, toneForVisibility } from '@/lib/tone';
 import { getApprovedTeamById } from '@/services/teamService';
@@ -109,7 +110,7 @@ export default async function TeamPage({
 		<div className={styles.page}>
 			<script
 				type='application/ld+json'
-				dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+				dangerouslySetInnerHTML={{ __html: jsonLdScript(structuredData) }}
 			/>
 			<div className={styles.wrap}>
 				<BackButton />

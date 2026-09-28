@@ -3,17 +3,17 @@ import { Checkbox } from './Checkbox';
 import { SCHEDULES } from './constants';
 import { Field } from './Field';
 import { Section } from './Section';
-import { SkillLevelsField } from './SkillLevelsField';
 import styles from './teamForm.module.scss';
 
 interface TeamClubDetailsSectionProps {
 	values: TeamFormValues;
 }
 
-export function TeamClubDetailsSection({ values }: TeamClubDetailsSectionProps) {
+export function TeamClubDetailsSection({
+	values,
+}: TeamClubDetailsSectionProps) {
 	return (
-		<Section title='Team / club details'>
-			<SkillLevelsField defaultValues={values.skillLevels} />
+		<Section title='Group Structure'>
 			<Field label='Competitive or casual'>
 				<select
 					name='competitiveOrCasual'
@@ -145,9 +145,7 @@ export function TeamClubDetailsSection({ values }: TeamClubDetailsSectionProps) 
 			</div>
 
 			<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
-				<span className={styles.fieldLabel}>
-					Join / applicant requirements
-				</span>
+				<span className={styles.fieldLabel}>Join / applicant requirements</span>
 				<div className={styles.checkboxRow}>
 					<Checkbox
 						label='Try-outs required'

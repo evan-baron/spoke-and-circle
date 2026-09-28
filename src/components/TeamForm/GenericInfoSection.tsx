@@ -31,7 +31,7 @@ export function GenericInfoSection({
 	const additionalLocationsId = useId();
 
 	return (
-		<Section title='Generic info'>
+		<Section title='Generic Info'>
 			<Field label='Group Name'>
 				<input
 					type='text'
