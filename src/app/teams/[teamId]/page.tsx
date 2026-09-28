@@ -342,50 +342,52 @@ export default async function TeamPage({
 							</DetailSection>
 						)}
 
-						<DetailSection title='Team structure'>
-							<DetailRow
-								label='Competitive or casual'
-								value={team.competitiveOrCasual}
-							/>
-							<DetailRow
-								label='Skill levels'
-								value={formatSkillLevels(team.skillLevels)}
-							/>
-							<DetailRow
-								label='Instructional'
-								value={formatYesNo(team.instructional)}
-							/>
-							<DetailRow
-								label='Dues'
-								value={
-									team.duesRequired ?
-										`${team.duesAmount ?? 'Required'}${team.duesSchedule ? ` (${team.duesSchedule})` : ''}`
-									:	'Not required'
-								}
-							/>
-							<DetailRow
-								label='Required rides'
-								value={formatYesNo(team.requiredRides)}
-							/>
-							<DetailRow
-								label='Required races (min)'
-								value={team.requiredRaces ?? 'None'}
-							/>
-							<DetailRow
-								label='Mileage requirement'
-								value={formatMileageRequirement(team.mileageRequirement)}
-							/>
-							<DetailRow
-								label='Required kit / uniform'
-								value={formatYesNo(team.requiredKit)}
-							/>
-							<DetailRow label='Roster' value={formatYesNo(team.hasRoster)} />
-							<DetailRow label='Sponsors' value={formatList(team.sponsors)} />
-							<DetailRow
-								label='Event types'
-								value={formatList(team.eventTypes)}
-							/>
-						</DetailSection>
+						{team.type !== 'Group Ride' && (
+							<DetailSection title='Team structure'>
+								<DetailRow
+									label='Competitive or casual'
+									value={team.competitiveOrCasual}
+								/>
+								<DetailRow
+									label='Skill levels'
+									value={formatSkillLevels(team.skillLevels)}
+								/>
+								<DetailRow
+									label='Instructional'
+									value={formatYesNo(team.instructional)}
+								/>
+								<DetailRow
+									label='Dues'
+									value={
+										team.duesRequired ?
+											`${team.duesAmount ?? 'Required'}${team.duesSchedule ? ` (${team.duesSchedule})` : ''}`
+										:	'Not required'
+									}
+								/>
+								<DetailRow
+									label='Required rides'
+									value={formatYesNo(team.requiredRides)}
+								/>
+								<DetailRow
+									label='Required races (min)'
+									value={team.requiredRaces ?? 'None'}
+								/>
+								<DetailRow
+									label='Mileage requirement'
+									value={formatMileageRequirement(team.mileageRequirement)}
+								/>
+								<DetailRow
+									label='Required kit / uniform'
+									value={formatYesNo(team.requiredKit)}
+								/>
+								<DetailRow label='Roster' value={formatYesNo(team.hasRoster)} />
+								<DetailRow label='Sponsors' value={formatList(team.sponsors)} />
+								<DetailRow
+									label='Event types'
+									value={formatList(team.eventTypes)}
+								/>
+							</DetailSection>
+						)}
 					</div>
 				</div>
 			</div>
