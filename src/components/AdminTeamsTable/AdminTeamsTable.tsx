@@ -219,7 +219,14 @@ export function AdminTeamsTable({
 									</td>
 									<td>{team.location}</td>
 									<td>{team.bikeType}</td>
-									<td>{formatSkillLevels(team.skillLevels)}</td>
+									<td>
+										{team.skillLevels.map((level, index, all) => (
+											<span key={level} className={tableStyles.stackedLine}>
+												{level}
+												{index < all.length - 1 && ','}
+											</span>
+										))}
+									</td>
 									<td>
 										<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
 									</td>

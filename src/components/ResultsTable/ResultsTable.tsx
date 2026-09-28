@@ -86,14 +86,21 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 							</td>
 							<td>
 								{getTeamLocations(team).map((location, index, all) => (
-									<span key={location} className={styles.locationLine}>
+									<span key={location} className={styles.stackedLine}>
 										{location}
 										{index < all.length - 1 && ','}
 									</span>
 								))}
 							</td>
 							<td>{team.bikeType}</td>
-							<td>{formatSkillLevels(team.skillLevels)}</td>
+							<td>
+								{team.skillLevels.map((level, index, all) => (
+									<span key={level} className={styles.stackedLine}>
+										{level}
+										{index < all.length - 1 && ','}
+									</span>
+								))}
+							</td>
 							<td>
 								<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
 							</td>
