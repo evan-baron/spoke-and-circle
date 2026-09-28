@@ -13,20 +13,15 @@ Hosting: domain on Cloudflare, app on Vercel, database on Neon, auth via Auth0.
 - [ ] After deploying to a preview, confirm the rate limiter sees separate visitor IPs. Hit the API a few times from different networks and check the `identifier` values in the `RateLimit` table. If they are all Cloudflare addresses, the secret or rule is wrong.
   - Why: the limiter (`src/lib/rateLimit.ts`) only trusts `CF-Connecting-IP` when the `X-Origin-Secret` header matches. Without it, every visitor behind Cloudflare shares a few IPs and would lock each other out of the 60 per minute location search limit.
 
-### Google cleanup
-
-- [ ] Google Places is no longer used. Delete `GOOGLE_PLACES_API_KEY` from `.env` and revoke the key in the Google Cloud console.
-- [ ] Verify the old repliably key no longer works. It could not be tested here because its value had already been removed from `.env`. Confirm in the Google Cloud console (Credentials in the repliably project) that it is gone, or test the old key text yourself and check it returns an error.
-
 ### US Census gazetteer (location search data)
 
 Location autocomplete and radius search read the `Place` table, filled from the free US Census gazetteer files.
 
-- [ ] Download and unzip the three files into `data/gazetteer/` (gitignored), then run `npm run db:import-places`:
+- [ ] The three files are already downloaded into `data/gazetteer/` (gitignored) for local dev. For production, run `npm run db:import-places` against the production `DATABASE_URL`:
   - `https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2024_Gazetteer/2024_Gaz_place_national.zip`
   - `https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2024_Gazetteer/2024_Gaz_zcta_national.zip`
   - `https://download.geonames.org/export/zip/US.zip` (only `US.txt` is used, to add the ZIPs the Census file lacks, such as university and PO-box ZIPs). It is CC BY 4.0, so keep the credit in the footer.
-  - The import replaces the whole `Place` table and sets `latitude` / `longitude` on any team that has none. It refuses to run with `NODE_ENV=production`, so for production run it against the production `DATABASE_URL` from your machine with `NODE_ENV` unset, or turn the check into a one-off deploy step.
+  - The import replaces the whole `Place` table and sets `latitude` / `longitude` on any team that has none. It refuses to run with `NODE_ENV=production`, so for production run it from your machine with `NODE_ENV` unset, or turn the check into a one-off deploy step.
 - [ ] The migration runs `CREATE EXTENSION pg_trgm` (typo-tolerant name matching). Confirm the production Neon role is allowed to create it.
 - [ ] Teams get coordinates by looking their `location` text up in `Place`. `POST /api/teams` still accepts any text up to 200 characters for `location` and `additionalLocations`, so a script can send values that are not in the list. If the text is not found (for example `Brooklyn, NY`, since the Census "places" file has no boroughs or neighbourhoods), the team has no coordinates and never shows up in radius searches. Decide whether to reject unknown locations on submit, and whether to add a neighbourhood list.
 
@@ -120,11 +115,13 @@ The repo rules say not to use browser automation or run builds unless asked, so 
 When someone deletes their team, it is not removed right away. It is scheduled for removal in 7 days, so an accidental or hasty delete can be undone.
 
 **Data model (already in the schema):**
+
 - `deleteAfter DateTime?`: `null` means the team is not scheduled for deletion. A value means it is scheduled, and the value is the moment it becomes eligible for permanent removal (request time plus 7 days). There is deliberately no separate "pending" state column, so state and date can never disagree.
 - `deletionRequestedAt DateTime?`: when the request was made, for support and audit.
 - `status` (`Pending` / `Approved` / `Rejected`) is a review status. Do not reuse it for deletion.
 
 **Tasks:**
+
 - [ ] **Request endpoint** (owner or admin only): sets `deletionRequestedAt = now()` and `deleteAfter = now() + 7 days`. Validate input with zod, rate limit it, and use `withAuth`.
 - [ ] **Undo endpoint:** sets both columns back to `null`. Allowed until the purge runs.
 - [ ] **Hide scheduled teams immediately.** Every public read must add `deleteAfter: null` to its filter: `GET /api/teams`, search, the team page (return 404) and any counts. Show the owner and admins a banner with a countdown and an Undo button.
