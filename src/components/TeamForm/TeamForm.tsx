@@ -1,6 +1,7 @@
 'use client';
 
 import { type FormEvent, useRef, useState } from 'react';
+import { Checkbox } from './Checkbox';
 import { DEFAULT_TEAM_FORM_VALUES } from '@/lib/teamFormDefaults';
 import { buildTeamPayload } from '@/lib/teamForm';
 import type { RideDay, TeamFormValues } from '@/lib/types';
@@ -10,14 +11,16 @@ import { GenericInfoSection } from './GenericInfoSection';
 import { HumanCheckSection } from './HumanCheckSection';
 import { RejectionSection } from './RejectionSection';
 import { RideDetailsSection } from './RideDetailsSection';
+import { Section } from './Section';
 import { SubmitActions } from './SubmitActions';
 import { SubmitErrors } from './SubmitErrors';
 import { TeamClubDetailsSection } from './TeamClubDetailsSection';
 import styles from './teamForm.module.scss';
 
 export interface TeamFormProps {
-	mode: 'create' | 'review';
+	mode: 'create' | 'review' | 'edit';
 	initialValues?: TeamFormValues;
+	initialVerified?: boolean;
 	onSubmit: (payload: ReturnType<typeof buildTeamPayload>) => Promise<void>;
 	submitter?: { name: string; email: string } | null;
 	onReject?: (reason: string | undefined) => Promise<void>;
@@ -27,6 +30,7 @@ export interface TeamFormProps {
 export function TeamForm({
 	mode,
 	initialValues,
+	initialVerified,
 	submitter,
 	onSubmit,
 	onReject,
@@ -34,6 +38,7 @@ export function TeamForm({
 }: TeamFormProps) {
 	const values = initialValues ?? DEFAULT_TEAM_FORM_VALUES;
 	const isReview = mode === 'review';
+	const isEdit = mode === 'edit';
 	const [rejectionReason, setRejectionReason] = useState('');
 	const [isAntiBotValid, setIsAntiBotValid] = useState(false);
 	const [isSubmitting, setIsSubmitting] = useState(false);
@@ -76,7 +81,7 @@ export function TeamForm({
 
 	async function handleSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
-		if ((!isReview && !isAntiBotValid) || busyRef.current) return;
+		if ((mode === 'create' && !isAntiBotValid) || busyRef.current) return;
 
 		const payload = buildTeamPayload(event.currentTarget);
 		await run(() => onSubmit(payload));
@@ -168,9 +173,21 @@ export function TeamForm({
 
 			{groupType !== 'Group Ride' && <TeamClubDetailsSection values={values} />}
 
-			{!isReview && <HumanCheckSection onValidChange={setIsAntiBotValid} />}
+			{isEdit && (
+				<Section title='Admin'>
+					<Checkbox
+						label='Verified'
+						name='verified'
+						defaultChecked={initialVerified}
+					/>
+				</Section>
+			)}
 
-			<SubmitErrors errors={submitErrors} isReview={isReview} />
+			{mode === 'create' && (
+				<HumanCheckSection onValidChange={setIsAntiBotValid} />
+			)}
+
+			<SubmitErrors errors={submitErrors} isReview={mode !== 'create'} />
 
 			{isReview && (
 				<RejectionSection
@@ -181,7 +198,7 @@ export function TeamForm({
 			)}
 
 			<SubmitActions
-				isReview={isReview}
+				mode={mode}
 				isSubmitting={isSubmitting}
 				isAntiBotValid={isAntiBotValid}
 				confirmingReject={confirmingReject}

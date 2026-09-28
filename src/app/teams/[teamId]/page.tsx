@@ -24,6 +24,7 @@ import {
 import { jsonLdScript } from '@/lib/jsonLd';
 import { getSiteUrl, OG_IMAGE_PATH, SITE_NAME } from '@/lib/siteConfig';
 import { toneForPace, toneForVerified, toneForVisibility } from '@/lib/tone';
+import { getCurrentUser } from '@/services/currentUserService';
 import { getApprovedTeamById } from '@/services/teamService';
 import styles from './team.module.scss';
 
@@ -79,7 +80,10 @@ export default async function TeamPage({
 	params: Promise<TeamPageParams>;
 }) {
 	const { teamId } = await params;
-	const team = await getApprovedTeamById(teamId);
+	const [team, currentUser] = await Promise.all([
+		getApprovedTeamById(teamId),
+		getCurrentUser(),
+	]);
 
 	if (!team) {
 		notFound();
@@ -113,7 +117,17 @@ export default async function TeamPage({
 				dangerouslySetInnerHTML={{ __html: jsonLdScript(structuredData) }}
 			/>
 			<div className={styles.wrap}>
-				<BackButton />
+				<div className={styles.topRow}>
+					<BackButton />
+					{currentUser?.isAdmin && (
+						<Link
+							href={`/admin/teams/${team.id}/edit`}
+							className={styles.editLink}
+						>
+							Edit
+						</Link>
+					)}
+				</div>
 
 				<header className={styles.header}>
 					<div className={styles.badgeRow}>

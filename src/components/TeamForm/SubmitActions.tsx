@@ -1,7 +1,7 @@
 import styles from './teamForm.module.scss';
 
 interface SubmitActionsProps {
-	isReview: boolean;
+	mode: 'create' | 'review' | 'edit';
 	isSubmitting: boolean;
 	isAntiBotValid: boolean;
 	confirmingReject: boolean;
@@ -11,7 +11,7 @@ interface SubmitActionsProps {
 }
 
 export function SubmitActions({
-	isReview,
+	mode,
 	isSubmitting,
 	isAntiBotValid,
 	confirmingReject,
@@ -19,9 +19,11 @@ export function SubmitActions({
 	onCancelReject,
 	onReject,
 }: SubmitActionsProps) {
+	const isReview = mode === 'review';
+
 	return (
 		<div
-			className={`${styles.submitRow} ${isReview ? styles.submitRowReview : ''}`}
+			className={`${styles.submitRow} ${mode !== 'create' ? styles.submitRowReview : ''}`}
 		>
 			{isReview ?
 				<>
@@ -61,6 +63,14 @@ export function SubmitActions({
 						</button>
 					}
 				</>
+			: mode === 'edit' ?
+				<button
+					type='submit'
+					className={styles.buttonSolid}
+					disabled={isSubmitting}
+				>
+					{isSubmitting ? 'Saving…' : 'Save changes'}
+				</button>
 			:	<button
 					type='submit'
 					className={styles.buttonSolid}

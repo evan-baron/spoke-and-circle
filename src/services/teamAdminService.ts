@@ -53,6 +53,49 @@ export async function approvePendingTeam(
 	}
 }
 
+export async function updateApprovedTeam(
+	id: string,
+	input: CreateTeamInput,
+	verified?: boolean,
+): Promise<boolean> {
+	const result = await prisma.team.updateMany({
+		where: { id, status: 'Approved' },
+		data: {
+			...toApprovedTeamUpdate(input),
+			...((await resolveCoordinates(input.location)) ?? {
+				latitude: null,
+				longitude: null,
+			}),
+			...(verified !== undefined ? { verified } : {}),
+		},
+	});
+	if (result.count === 0) return false;
+
+	try {
+		await syncAdditionalPlaces(id, input.additionalLocations ?? []);
+	} catch (error) {
+		console.error('Error saving additional locations:', error);
+	}
+
+	return true;
+}
+
+export async function toggleTeamVerified(id: string): Promise<boolean | null> {
+	const team = await prisma.team.findFirst({
+		where: { id, status: 'Approved' },
+		select: { verified: true },
+	});
+	if (!team) return null;
+
+	const result = await prisma.team.updateMany({
+		where: { id, status: 'Approved' },
+		data: { verified: !team.verified },
+	});
+	if (result.count === 0) return null;
+
+	return !team.verified;
+}
+
 export async function rejectPendingTeam(
 	id: string,
 	adminId: number,

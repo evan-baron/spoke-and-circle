@@ -12,6 +12,19 @@
 	gap: var(--space-md);
 }
 
+.topRow {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--space-sm);
+}
+
+.editLink {
+	@include button-outline;
+	padding: 0.4rem 0.95rem;
+	font-size: 0.8125rem;
+}
+
 .header {
 	display: flex;
 	flex-direction: column;

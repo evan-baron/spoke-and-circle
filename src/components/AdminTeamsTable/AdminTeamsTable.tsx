@@ -27,6 +27,10 @@ export function AdminTeamsTable({
 	const [removedIds, setRemovedIds] = useState<string[]>([]);
 	const [selectedIds, setSelectedIds] = useState<string[]>([]);
 	const [pendingDelete, setPendingDelete] = useState<Team[] | null>(null);
+	const [verifiedOverrides, setVerifiedOverrides] = useState<
+		Record<string, boolean>
+	>({});
+	const [verifiedPendingIds, setVerifiedPendingIds] = useState<string[]>([]);
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const selectAllRef = useRef<HTMLInputElement>(null);
 	const dialogTitleId = useId();
@@ -75,6 +79,32 @@ export function AdminTeamsTable({
 
 	function cancelDelete() {
 		setPendingDelete(null);
+	}
+
+	function isVerified(team: Team): boolean {
+		return verifiedOverrides[team.id] ?? team.verified;
+	}
+
+	async function toggleVerified(team: Team) {
+		if (verifiedPendingIds.includes(team.id)) return;
+
+		const previous = isVerified(team);
+		setVerifiedPendingIds((prev) => [...prev, team.id]);
+		setVerifiedOverrides((prev) => ({ ...prev, [team.id]: !previous }));
+
+		try {
+			const response = await fetch(`/api/admin/teams/${team.id}`, {
+				method: 'PATCH',
+			});
+			if (!response.ok) throw new Error('Failed to toggle verification');
+			const data: { verified: boolean } = await response.json();
+			setVerifiedOverrides((prev) => ({ ...prev, [team.id]: data.verified }));
+		} catch (error) {
+			console.error('Error toggling verification:', error);
+			setVerifiedOverrides((prev) => ({ ...prev, [team.id]: previous }));
+		} finally {
+			setVerifiedPendingIds((prev) => prev.filter((id) => id !== team.id));
+		}
 	}
 
 	const selectedTeamIds = visible
@@ -161,12 +191,32 @@ export function AdminTeamsTable({
 												{formatMemberCount(team.memberCount)}
 											</span>
 										</div>
-										<p
+									</Link>
+								</div>
+								<div className={styles.cardActions}>
+									<button
+										type='button'
+										className={styles.verifiedToggle}
+										disabled={verifiedPendingIds.includes(team.id)}
+										onClick={() => toggleVerified(team)}
+										aria-label={
+											isVerified(team) ?
+												`Mark ${team.name} as unverified`
+											:	`Mark ${team.name} as verified`
+										}
+									>
+										<span
 											className={tableStyles.cardVerification}
-											data-verified={team.verified}
+											data-verified={isVerified(team)}
 										>
-											{formatVerification(team.verified, team.lastActiveYear)}
-										</p>
+											{formatVerification(isVerified(team), team.lastActiveYear)}
+										</span>
+									</button>
+									<Link
+										href={`/admin/teams/${team.id}/edit`}
+										className={styles.editLink}
+									>
+										Edit
 									</Link>
 								</div>
 							</li>
@@ -188,6 +238,9 @@ export function AdminTeamsTable({
 								<th>Members</th>
 								<th>Visibility</th>
 								<th>Status</th>
+								<th>
+									<span className={styles.srOnly}>Actions</span>
+								</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -237,11 +290,31 @@ export function AdminTeamsTable({
 										</Badge>
 									</td>
 									<td>
-										<Badge tone={toneForVerified(team.verified)}>
-											{team.verified ?
-												`Verified · ${team.lastActiveYear}`
-											:	`Unverified`}
-										</Badge>
+										<button
+											type='button'
+											className={styles.verifiedToggle}
+											disabled={verifiedPendingIds.includes(team.id)}
+											onClick={() => toggleVerified(team)}
+											aria-label={
+												isVerified(team) ?
+													`Mark ${team.name} as unverified`
+												:	`Mark ${team.name} as verified`
+											}
+										>
+											<Badge tone={toneForVerified(isVerified(team))}>
+												{isVerified(team) ?
+													`Verified · ${team.lastActiveYear}`
+												:	`Unverified`}
+											</Badge>
+										</button>
+									</td>
+									<td>
+										<Link
+											href={`/admin/teams/${team.id}/edit`}
+											className={styles.editLink}
+										>
+											Edit
+										</Link>
 									</td>
 								</tr>
 							))}

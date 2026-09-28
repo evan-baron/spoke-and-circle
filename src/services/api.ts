@@ -61,6 +61,11 @@ export const adminAPI = {
 			`/api/admin/teams/${encodeURIComponent(id)}`,
 			{ method: 'DELETE', body: JSON.stringify({ reason }) },
 		),
+	updateTeam: (id: string, payload: unknown) =>
+		apiCall<{ success: boolean }>(`/api/admin/teams/${encodeURIComponent(id)}`, {
+			method: 'PUT',
+			body: JSON.stringify(payload),
+		}),
 };
 
 export const contactAPI = {

@@ -138,5 +138,6 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		joinOpen: flag('joinOpen'),
 		antibot: text('antibot'),
 		antibotIndex: number('antibotIndex'),
+		verified: flag('verified'),
 	};
 }
