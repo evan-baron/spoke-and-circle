@@ -144,7 +144,7 @@ export default async function TeamPage({
 					<aside className={styles.aside}>
 						<div className={`${styles.asideCard} ${styles.contactCard}`}>
 							<p className={styles.asideTitle}>How to join</p>
-							<p>{team.howToJoin}</p>
+							<p className={styles.howToJoin}>{team.howToJoin}</p>
 							{team.waitlist && (
 								<p className={styles.waitlistNote}>
 									Currently accepting waitlist signups only.

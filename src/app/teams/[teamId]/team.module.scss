@@ -78,6 +78,10 @@
 	box-shadow: var(--shadow-md);
 }
 
+.howToJoin {
+	white-space: pre-line;
+}
+
 // Matches DetailSection's title treatment (styles/DetailSection) so "How
 // to join" and "Quick facts" carry the same real heading weight, instead
 // of the small uppercase eyebrow label they shared with every field label
