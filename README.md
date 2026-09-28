@@ -8,42 +8,16 @@ Hosting: domain on Cloudflare, app on Vercel, database on Neon, auth via Auth0.
 
 ### Cloudflare and Vercel setup
 
-- [ ] Generate a long random string (for example `openssl rand -hex 32`) and set it in Vercel as `CLOUDFLARE_ORIGIN_SECRET`.
-- [ ] In Cloudflare, add a Modify Request Header rule (Rules > Transform Rules) that sets `X-Origin-Secret` to that same string on all requests to the domain.
-- [ ] After deploying to a preview, confirm the rate limiter sees separate visitor IPs. Hit the API a few times from different networks and check the `identifier` values in the `RateLimit` table. If they are all Cloudflare addresses, the secret or rule is wrong.
+`CLOUDFLARE_ORIGIN_SECRET` is generated and set in both Vercel and a Cloudflare Transform Rule (Modify Request Header, sets `X-Origin-Secret` on all requests to the domain).
+
+- [ ] Confirm the rate limiter actually sees separate visitor IPs now that traffic is live. Hit the API a few times from different networks and check the `identifier` values in the `RateLimit` table. If they are all Cloudflare addresses, the secret or rule is wrong.
   - Why: the limiter (`src/lib/rateLimit.ts`) only trusts `CF-Connecting-IP` when the `X-Origin-Secret` header matches. Without it, every visitor behind Cloudflare shares a few IPs and would lock each other out of the 60 per minute location search limit.
-
-### US Census gazetteer (location search data)
-
-Location autocomplete and radius search read the `Place` table, filled from the free US Census gazetteer files.
-
-- [ ] The three files are already downloaded into `data/gazetteer/` (gitignored) for local dev. For production, run `npm run db:import-places` against the production `DATABASE_URL`:
-  - `https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2024_Gazetteer/2024_Gaz_place_national.zip`
-  - `https://www2.census.gov/geo/docs/maps-data/data/gazetteer/2024_Gazetteer/2024_Gaz_zcta_national.zip`
-  - `https://download.geonames.org/export/zip/US.zip` (only `US.txt` is used, to add the ZIPs the Census file lacks, such as university and PO-box ZIPs). It is CC BY 4.0, so keep the credit in the footer.
-  - The import replaces the whole `Place` table and sets `latitude` / `longitude` on any team that has none. It refuses to run with `NODE_ENV=production`, so for production run it from your machine with `NODE_ENV` unset, or turn the check into a one-off deploy step.
-- [ ] The migration runs `CREATE EXTENSION pg_trgm` (typo-tolerant name matching). Confirm the production Neon role is allowed to create it.
-- [ ] Teams get coordinates by looking their `location` text up in `Place`. `POST /api/teams` still accepts any text up to 200 characters for `location` and `additionalLocations`, so a script can send values that are not in the list. If the text is not found (for example `Brooklyn, NY`, since the Census "places" file has no boroughs or neighbourhoods), the team has no coordinates and never shows up in radius searches. Decide whether to reject unknown locations on submit, and whether to add a neighbourhood list.
 
 ### SEO and social sharing
 
 - [ ] Still needed: create `public/og-image.png` (1200 x 630). The site metadata already points at it in `src/app/layout.tsx`, so link previews on social sites and messaging apps show no image until the file exists.
 - [ ] Optional: add a 180 x 180 `public/apple-touch-icon.png` for iPhone home-screen icons, and add it to the `icons` list in `src/app/layout.tsx`.
 - [ ] After launch, add the site to Google Search Console and submit `/sitemap.xml`. Set `APP_BASE_URL` to the exact production origin first (with or without `www`, whichever you serve), because canonical links, the sitemap, and social URLs are built from it.
-
-### Environment variables to set in Vercel
-
-- [ ] `DATABASE_URL` and `DATABASE_URL_UNPOOLED` (production, used when `NODE_ENV=production`)
-- [ ] `APP_BASE_URL` set to the production origin. `src/middleware.ts` rejects cross-origin `POST`/`PUT`/`PATCH`/`DELETE` requests to `/api` that do not match it.
-- [ ] `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, `AUTH0_SECRET`
-- [ ] `CLOUDFLARE_ORIGIN_SECRET`, `RESEND_API_KEY`
-- [ ] Add the production callback and logout URLs in the Auth0 dashboard.
-- [ ] Turn on multi-factor authentication in Auth0 (Security > Multi-factor Auth), at least for admin accounts. Enable a factor such as one-time passwords from an authenticator app, then set the policy to require it, either for everyone or, using an Auth0 Action, for users with the admin role. Test by logging in as an admin before launch.
-
-### Database
-
-- [ ] Run `npx prisma migrate deploy` against the production database, then import the places (see the US Census gazetteer section). The build script only runs `prisma generate`, it does not migrate.
-- [ ] Decide whether to load any starting data. `prisma/seed.ts` refuses to run when `NODE_ENV=production`, on purpose.
 
 ### Verify in a real browser
 
@@ -94,6 +68,7 @@ The repo rules say not to use browser automation or run builds unless asked, so 
 
 ## 4. Known rough edges
 
+- [ ] No neighbourhood-level location data. The Census "places" file has no boroughs or neighbourhoods (for example `Brooklyn, NY`), so `POST /api/teams` rejects any location that doesn't match a real city, ZIP, or state in `Place` (`src/services/placeService.ts`, `findUnknownLocations`). Add a neighbourhood list if that turns out to matter for real submissions.
 - [ ] No audit log yet. Repliably has one. Add it when the app has writes worth recording.
 - [ ] Rate limit table cleanup is opportunistic (about 1 in 100 rate-limited requests deletes old rows), there is no scheduled job.
 - [ ] Auth-related pages are not gated by a session cookie check. Decide whether anything needs it once submissions exist.
@@ -148,6 +123,21 @@ The database (`User.role`) is the only source of truth. Never trust a role from 
 - A disabled user (`active = false`) is never treated as an admin.
 - **Admin pages:** everything under `src/app/(auth)/admin/` is guarded by `src/app/(auth)/admin/layout.tsx`, which calls `requireAdmin()`. Also call `await requireAdmin()` at the top of every admin `page.tsx`, because Next does not re-run a layout when moving between pages inside it, so the layout alone is not enough.
 
+### How database URLs are chosen
+
+`prisma.config.ts` and `src/lib/prisma.ts` both pick the connection string the same way:
+
+```ts
+const dbUrl =
+	process.env.NODE_ENV === 'development' ?
+		process.env.DEVELOPMENT_DATABASE_URL
+	:	process.env.DATABASE_URL;
+```
+
+**Production is the default.** `DATABASE_URL` is used unless `NODE_ENV` is exactly `development`. `next dev` sets that automatically, so `npm run dev` targets your local database without any extra setup. But a bare CLI command run outside of `next dev` — `npx prisma migrate deploy`, `npx prisma studio`, `npx tsx prisma/seed.ts`, `npm run db:import-places`, etc. — has no `NODE_ENV` set at all by default, so **it targets production** unless you explicitly prefix it with `NODE_ENV=development` (or `$env:NODE_ENV="development"` in PowerShell). `prisma/seed.ts` and `prisma/importGazetteer.ts` have no environment guard, so always check which database a bare command is about to hit before running something destructive.
+
+There is no `DATABASE_URL_UNPOOLED` in this project — everything, including migrations, goes through the single pooled `DATABASE_URL`.
+
 ### Environment variable names (values live in `.env` and Vercel only)
 
-`DEVELOPMENT_DATABASE_URL`, `DATABASE_URL`, `DATABASE_URL_UNPOOLED`, `NEON_BRANCH`, `APP_BASE_URL`, `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, `AUTH0_SECRET`, `CLOUDFLARE_ORIGIN_SECRET`, `RESEND_API_KEY`
+`DEVELOPMENT_DATABASE_URL`, `DATABASE_URL`, `NEON_BRANCH`, `APP_BASE_URL`, `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, `AUTH0_SECRET`, `CLOUDFLARE_ORIGIN_SECRET`, `RESEND_API_KEY`

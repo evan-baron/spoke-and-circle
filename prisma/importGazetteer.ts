@@ -4,10 +4,6 @@ import { join } from 'node:path';
 import type { Prisma } from '../generated/prisma/client';
 import { cleanPlaceName, parseGazetteer } from '../src/lib/gazetteer';
 
-if (process.env.NODE_ENV === 'production') {
-	throw new Error('Refusing to import with NODE_ENV=production');
-}
-
 const DATA_DIR = join(process.cwd(), 'data', 'gazetteer');
 const BATCH_SIZE = 2000;
 

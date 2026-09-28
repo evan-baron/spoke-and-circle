@@ -11,7 +11,11 @@ import { toTeam, toTeamCreateInput } from '@/lib/api/teamMapper';
 import { isAntiBotAnswerCorrect } from '@/lib/data/mathQuestions';
 import { antiBotSchema, createTeamSchema } from '@/lib/validation';
 import { getApiUser } from '@/services/getUserService';
-import { resolveCoordinates } from '@/services/placeService';
+import {
+	describeUnknownLocations,
+	findUnknownLocations,
+	resolveCoordinates,
+} from '@/services/placeService';
 import { syncAdditionalPlaces } from '@/services/teamLocationService';
 
 export const GET = withPublicRateLimit('teams-read', async () => {
@@ -53,6 +57,13 @@ export const POST = withPublicRateLimit('teams-write', async (request) => {
 
 	const parsed = createTeamSchema.safeParse(teamFields);
 	if (!parsed.success) return jsonValidationError(parsed.error);
+
+	const unknownLocations = await findUnknownLocations(
+		parsed.data.location,
+		parsed.data.additionalLocations ?? [],
+	);
+	const unknownLocationsMessage = describeUnknownLocations(unknownLocations);
+	if (unknownLocationsMessage) return json400(unknownLocationsMessage);
 
 	try {
 		const team = await prisma.team.create({

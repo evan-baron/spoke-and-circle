@@ -106,6 +106,33 @@ export async function resolveLocationDetails(label: string): Promise<{
 	};
 }
 
+export async function isKnownLocation(label: string): Promise<boolean> {
+	return (await resolveLocationDetails(label)) !== null;
+}
+
+export async function findUnknownLocations(
+	location: string,
+	additionalLocations: string[],
+): Promise<{ location: string[]; additionalLocations: string[] }> {
+	const unknownLocation = (await isKnownLocation(location)) ? [] : [location];
+
+	const unknownAdditional: string[] = [];
+	for (const label of additionalLocations) {
+		if (!(await isKnownLocation(label))) unknownAdditional.push(label);
+	}
+
+	return { location: unknownLocation, additionalLocations: unknownAdditional };
+}
+
+export function describeUnknownLocations(unknown: {
+	location: string[];
+	additionalLocations: string[];
+}): string | null {
+	const all = [...unknown.location, ...unknown.additionalLocations];
+	if (all.length === 0) return null;
+	return `These locations aren't recognized: ${all.join(', ')}. Please choose from the suggestions.`;
+}
+
 export async function resolveSearchLocation(
 	label: string,
 ): Promise<SearchLocation | null> {

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { json400, json404, jsonValidationError, withAuth } from '@/lib/api';
 import { readJsonObject } from '@/lib/api/readJsonObject';
 import { createTeamSchema } from '@/lib/validation';
+import { describeUnknownLocations, findUnknownLocations } from '@/services/placeService';
 import { approvePendingTeam } from '@/services/teamAdminService';
 
 export const POST = withAuth(
@@ -15,6 +16,13 @@ export const POST = withAuth(
 
 		const parsed = createTeamSchema.safeParse(result.body);
 		if (!parsed.success) return jsonValidationError(parsed.error);
+
+		const unknownLocations = await findUnknownLocations(
+			parsed.data.location,
+			parsed.data.additionalLocations ?? [],
+		);
+		const unknownLocationsMessage = describeUnknownLocations(unknownLocations);
+		if (unknownLocationsMessage) return json400(unknownLocationsMessage);
 
 		const approved = await approvePendingTeam(teamId, user.id, parsed.data);
 		if (!approved) return json404('Pending team not found');

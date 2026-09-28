@@ -24,6 +24,10 @@ export default async function HomePage() {
 	const teamCount = () => {
 		const length = approvedCount;
 
+		if (length < 50) {
+			return;
+		}
+
 		if (length < 100) {
 			const rounded = Math.floor(length / 10) * 10;
 			return `${rounded}+`;
