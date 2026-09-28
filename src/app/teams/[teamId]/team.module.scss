@@ -155,8 +155,55 @@
 	text-decoration: underline;
 	text-underline-offset: 0.15em;
 
-	&:hover {
-		color: var(--color-logo);
+	@media (hover: hover) {
+		&:hover {
+			color: var(--color-logo);
+		}
+	}
+}
+
+.website {
+	color: #f4aa34;
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+
+	@media (hover: hover) {
+		&:hover {
+			color: var(--color-logo);
+		}
+	}
+}
+
+.contactLink {
+	color: #f4aa34;
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+
+	@media (hover: hover) {
+		&:hover {
+			color: var(--color-logo);
+		}
+	}
+}
+
+// Tel links only make sense on a device with a phone dialer. `pointer: fine`
+// means a mouse/trackpad (i.e. desktop), where there's no dialer to hand off
+// to, so there it falls back to reading like the plain text it replaced.
+.phoneLink {
+	color: #f4aa34;
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+
+	@media (hover: hover) {
+		&:hover {
+			color: var(--color-logo);
+		}
+	}
+
+	@media (pointer: fine) {
+		pointer-events: none;
+		color: inherit;
+		text-decoration: none;
 	}
 }
 
