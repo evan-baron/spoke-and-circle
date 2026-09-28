@@ -87,10 +87,17 @@
 	max-width: 56ch;
 }
 
+.heroH1Highlight {
+	@include from($bp-md) {
+		color: var(--color-logo);
+		font-style: italic;
+	}
+}
+
 .heroCopyHighlight {
-	font-weight: 900;
-	color: var(--color-logo);
-	font-style: italic;
+	font-weight: 800;
+	// color: var(--color-logo);
+	// font-style: italic;
 }
 
 .searchWrap {

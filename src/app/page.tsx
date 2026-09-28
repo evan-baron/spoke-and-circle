@@ -54,7 +54,13 @@ export default async function HomePage() {
 				</div>
 				<div className={styles.heroInner}>
 					<p className={styles.eyebrow}>A field guide to cycling groups</p>
-					<h1>Find the team, club, or group ride that matches your cadence.</h1>
+					<h1>
+						Find the{' '}
+						<span className={styles.heroH1Highlight}>cycling team</span>,{' '}
+						<span className={styles.heroH1Highlight}>club</span>, or{' '}
+						<span className={styles.heroH1Highlight}>group ride</span> that
+						matches your cadence.
+					</h1>
 					<p className={styles.heroCopy}>
 						Whether you race, ride no-drop on Saturdays, or just enjoy a casual
 						end-of-day spin, you can search {teamCount()} teams, clubs, group
