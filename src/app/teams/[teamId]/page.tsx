@@ -200,7 +200,10 @@ export default async function TeamPage({
 								{team.contact.email && (
 									<dd className={styles.factWithIcon}>
 										<MailIcon size={16} />
-										<a href={`mailto:${team.contact.email}`} className={styles.contactLink}>
+										<a
+											href={`mailto:${team.contact.email}`}
+											className={styles.contactLink}
+										>
 											{team.contact.email}
 										</a>
 									</dd>
@@ -208,7 +211,10 @@ export default async function TeamPage({
 								{team.contact.phone && (
 									<dd className={styles.factWithIcon}>
 										<PhoneIcon size={16} />
-										<a href={`tel:${team.contact.phone}`} className={styles.phoneLink}>
+										<a
+											href={`tel:${team.contact.phone}`}
+											className={styles.phoneLink}
+										>
 											{team.contact.phone}
 										</a>
 									</dd>

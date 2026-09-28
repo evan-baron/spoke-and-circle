@@ -223,7 +223,7 @@ export function AdminTeamsTable({
 									<td>
 										<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
 									</td>
-									<td>{formatMemberCount(team.memberCount)}</td>
+									<td>{team.memberCount}</td>
 									<td>
 										<Badge tone={toneForVisibility(team.visibility)}>
 											{team.visibility}
