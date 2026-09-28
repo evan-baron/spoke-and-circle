@@ -87,7 +87,7 @@ export function formatRideDays(days?: RideDay[]): string {
 	return [...days]
 		.sort((a, b) => WEEKDAY_ORDER.indexOf(a.day) - WEEKDAY_ORDER.indexOf(b.day))
 		.map((entry) =>
-			entry.details ? `${entry.day} (${entry.details})` : entry.day,
+			entry.details ? `${entry.day} - (${entry.details})` : entry.day,
 		)
 		.join(', ');
 }
