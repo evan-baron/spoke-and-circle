@@ -4,14 +4,15 @@ import Link from 'next/link';
 import { useEffect, useId, useRef, useState } from 'react';
 import { Badge } from '@/components/Badge/Badge';
 import tableStyles from '@/components/ResultsTable/resultsTable.module.scss';
-import {
-	formatMemberCount,
-	formatSkillLevels,
-	formatVerification,
-} from '@/lib/format';
+import { formatMemberCount, formatSkillLevels } from '@/lib/format';
 import { toneForPace, toneForVerified, toneForVisibility } from '@/lib/tone';
 import type { Team } from '@/lib/types';
 import styles from './adminTeamsTable.module.scss';
+
+function verifiedLabel(verified: boolean, lastActiveYear: number): string {
+	if (!verified) return 'Unverified';
+	return lastActiveYear ? `Verified · ${lastActiveYear}` : 'Verified';
+}
 
 interface AdminTeamsTableProps {
 	teams: Team[];
@@ -209,7 +210,7 @@ export function AdminTeamsTable({
 											className={tableStyles.cardVerification}
 											data-verified={isVerified(team)}
 										>
-											{formatVerification(isVerified(team), team.lastActiveYear)}
+											{verifiedLabel(isVerified(team), team.lastActiveYear)}
 										</span>
 									</button>
 									<Link
@@ -302,9 +303,7 @@ export function AdminTeamsTable({
 											}
 										>
 											<Badge tone={toneForVerified(isVerified(team))}>
-												{isVerified(team) ?
-													`Verified · ${team.lastActiveYear}`
-												:	`Unverified`}
+												{verifiedLabel(isVerified(team), team.lastActiveYear)}
 											</Badge>
 										</button>
 									</td>

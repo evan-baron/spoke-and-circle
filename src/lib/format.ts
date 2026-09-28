@@ -53,9 +53,8 @@ export function formatVerification(
 	verified: boolean,
 	lastActiveYear: number,
 ): string {
-	return verified ?
-			`Verified · Active ${lastActiveYear}`
-		:	`Unverified · Last updated ${lastActiveYear}`;
+	if (!verified) return 'Unverified';
+	return lastActiveYear ? `Verified · Active ${lastActiveYear}` : 'Verified';
 }
 
 export function formatSubmittedDate(date: Date): string {

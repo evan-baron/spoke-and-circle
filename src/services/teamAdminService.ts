@@ -67,6 +67,9 @@ export async function updateApprovedTeam(
 				longitude: null,
 			}),
 			...(verified !== undefined ? { verified } : {}),
+			...(verified === true ?
+				{ lastActiveYear: new Date().getFullYear() }
+			:	{}),
 		},
 	});
 	if (result.count === 0) return false;
@@ -87,13 +90,17 @@ export async function toggleTeamVerified(id: string): Promise<boolean | null> {
 	});
 	if (!team) return null;
 
+	const nextVerified = !team.verified;
 	const result = await prisma.team.updateMany({
 		where: { id, status: 'Approved' },
-		data: { verified: !team.verified },
+		data: {
+			verified: nextVerified,
+			...(nextVerified ? { lastActiveYear: new Date().getFullYear() } : {}),
+		},
 	});
 	if (result.count === 0) return null;
 
-	return !team.verified;
+	return nextVerified;
 }
 
 export async function rejectPendingTeam(
