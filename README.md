@@ -65,6 +65,7 @@ The repo rules say not to use browser automation or run builds unless asked, so 
   3. Honeypot field plus a minimum time-to-submit on the form.
   4. Edge rules in Cloudflare or Vercel.
 - [ ] **`rideVisibility`.** Leave alone. The user is still debating what Private means for ride details. `visibility: Private` means membership-gated and Private teams stay listed publicly.
+- [ ] **If Google Analytics is added**, update `src/app/privacy/page.tsx` (it currently states no third-party analytics run), `src/components/CookieNotice/CookieNotice.tsx` (currently states only essential cookies), and the CCPA "right to opt out of sale or sharing" section, since GA (especially with Google Signals/ads features) is commonly treated as "sharing" under CPRA and would need an actual opt-out, not just a disclosure banner.
 
 ## 4. Known rough edges
 

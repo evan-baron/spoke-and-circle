@@ -44,6 +44,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			changeFrequency: 'yearly',
 			priority: 0.4,
 		},
+		{
+			url: `${baseUrl}/privacy`,
+			changeFrequency: 'yearly',
+			priority: 0.2,
+		},
+		{
+			url: `${baseUrl}/terms`,
+			changeFrequency: 'yearly',
+			priority: 0.2,
+		},
 		...teams.map((team) => ({
 			url: `${baseUrl}/teams/${team.id}`,
 			lastModified: team.updatedAt,

@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import AppProviders from '@/app/AppProviders';
+import { CookieNotice } from '@/components/CookieNotice/CookieNotice';
 import Header from '@/components/Header/Header';
 import { Footer } from '@/components/Footer/Footer';
 import { jsonLdScript } from '@/lib/jsonLd';
@@ -125,6 +126,7 @@ export default async function RootLayout({
 					<Header />
 					<main>{children}</main>
 					<Footer />
+					<CookieNotice />
 				</AppProviders>
 			</body>
 		</html>

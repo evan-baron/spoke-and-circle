@@ -1,0 +1,55 @@
+@use '@/styles/mixins' as *;
+
+.page {
+	@include page-base;
+}
+
+.wrap {
+	@include container;
+	max-width: 52rem;
+}
+
+.eyebrow {
+	@include eyebrow;
+}
+
+.updated {
+	color: var(--color-ink-soft);
+	font-size: 0.875rem;
+	margin-top: var(--space-3xs);
+	margin-bottom: var(--space-lg);
+}
+
+.prose {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-md);
+
+	h2 {
+		margin-top: var(--space-sm);
+	}
+
+	h3 {
+		margin-top: var(--space-2xs);
+	}
+
+	ul {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-3xs);
+		padding-left: 1.25rem;
+	}
+
+	li {
+		list-style: disc;
+	}
+
+	a {
+		text-decoration: underline;
+		text-underline-offset: 2px;
+
+		&:hover {
+			color: var(--color-coral);
+		}
+	}
+}

@@ -7,7 +7,9 @@ export function Footer() {
 			<div className={styles.wrap}>
 				<p className={styles.contactLink}>
 					&copy; {new Date().getFullYear()} Spoke &amp; Circle &middot;{' '}
-					<Link href='/contact'>Contact us</Link>
+					<Link href='/contact'>Contact us</Link> &middot;{' '}
+					<Link href='/privacy'>Privacy Policy</Link> &middot;{' '}
+					<Link href='/terms'>Terms of Service</Link>
 				</p>
 				<p className={styles.credit}>
 					Location data from the US Census Bureau and{' '}
