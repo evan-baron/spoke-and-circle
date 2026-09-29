@@ -148,7 +148,8 @@ export default async function TeamPage({
 					</div>
 					<h1>{team.name}</h1>
 					<p className={styles.subline}>
-						{team.location} &middot; Founded {team.founded}
+						{team.location}
+						{team.founded > 0 && <> &middot; Founded {team.founded}</>}
 						{/* &middot;{' '}
 						{formatMemberCount(team.memberCount)} */}
 					</p>
