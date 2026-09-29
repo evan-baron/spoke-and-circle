@@ -51,6 +51,8 @@ export const teamAPI = {
 };
 
 export const adminAPI = {
+	pendingCount: () =>
+		apiCall<{ count: number }>('/api/admin/pending-count', { method: 'GET' }),
 	approveTeam: (id: string, payload: unknown) =>
 		apiCall<{ success: boolean; emailStatus: string }>(
 			`/api/admin/teams/${encodeURIComponent(id)}/approve`,

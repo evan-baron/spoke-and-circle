@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 // Component imports
 import Logo from '@/components/Logo/Logo';
+import AdminNavLink from './AdminNavLink';
 
 // Styles imports
 import styles from './header.module.scss';
@@ -25,14 +26,7 @@ const MobileNav = ({ user }: MobileNavProps) => {
 				{user ?
 					<>
 						{user.isAdmin && (
-							<Link href='/admin' className={styles.navAdmin}>
-								Admin Console
-								{!!user.pendingCount && (
-									<span className={styles.pendingBadge}>
-										{user.pendingCount}
-									</span>
-								)}
-							</Link>
+							<AdminNavLink initialCount={user.pendingCount} />
 						)}
 						<a
 							href='/auth/logout'

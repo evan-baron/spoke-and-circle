@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 // Component imports
 import Logo from '@/components/Logo/Logo';
+import AdminNavLink from './AdminNavLink';
 
 // Styles imports
 import styles from './header.module.scss';
@@ -28,12 +29,7 @@ const DesktopNav = ({ user }: DesktopNavProps) => {
 					</p>
 				)}
 				{user && user.isAdmin && (
-					<Link href='/admin' className={styles.navAdmin}>
-						Admin Console
-						{!!user.pendingCount && (
-							<span className={styles.pendingBadge}>{user.pendingCount}</span>
-						)}
-					</Link>
+					<AdminNavLink initialCount={user.pendingCount} />
 				)}
 				<Link href='/search' className={styles.navLink}>
 					Browse

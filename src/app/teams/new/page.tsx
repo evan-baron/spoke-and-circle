@@ -2,12 +2,14 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useInvalidatePendingTeamCount } from '@/hooks/usePendingTeamCount';
 import { TeamForm } from '@/components/TeamForm/TeamForm';
 import styles from '@/components/TeamForm/teamForm.module.scss';
 import { teamAPI } from '@/services/api';
 
 export default function NewTeamPage() {
 	const [submitted, setSubmitted] = useState(false);
+	const invalidatePendingCount = useInvalidatePendingTeamCount();
 
 	if (submitted) {
 		return (
@@ -58,6 +60,7 @@ export default function NewTeamPage() {
 					mode='create'
 					onSubmit={async (payload) => {
 						await teamAPI.create(payload);
+						await invalidatePendingCount();
 						setSubmitted(true);
 					}}
 				/>
