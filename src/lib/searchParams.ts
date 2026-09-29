@@ -11,6 +11,7 @@ const CLUB_TYPES: ClubType[] = [
 const BIKE_TYPES: BikeType[] = [
 	'Road',
 	'Gravel',
+	'Cyclocross',
 	'MTB',
 	'Track',
 	'BMX',

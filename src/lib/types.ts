@@ -6,6 +6,7 @@ export type ClubType = "Team" | "Club" | "Group Ride" | "Youth Program" | "Organ
 export type BikeType =
   | "Road"
   | "Gravel"
+  | "Cyclocross"
   | "MTB"
   | "Track"
   | "BMX"

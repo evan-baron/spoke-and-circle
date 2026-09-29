@@ -176,6 +176,7 @@ enum ClubType {
 enum BikeType {
   Road
   Gravel
+  Cyclocross
   MTB
   Track
   BMX

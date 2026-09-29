@@ -12,6 +12,7 @@ const clubTypeSchema = z.enum([
 const bikeTypeSchema = z.enum([
 	'Road',
 	'Gravel',
+	'Cyclocross',
 	'MTB',
 	'Track',
 	'BMX',

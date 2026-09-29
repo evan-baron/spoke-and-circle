@@ -9,6 +9,7 @@ export const CLUB_TYPES = [
 export const BIKE_TYPES = [
 	'Road',
 	'Gravel',
+	'Cyclocross',
 	'MTB',
 	'Track',
 	'BMX',

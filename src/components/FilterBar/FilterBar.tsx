@@ -33,6 +33,7 @@ const TYPE_OPTIONS = [
 const BIKE_TYPE_OPTIONS = [
 	'Road',
 	'Gravel',
+	'Cyclocross',
 	'MTB',
 	'Track',
 	'BMX',

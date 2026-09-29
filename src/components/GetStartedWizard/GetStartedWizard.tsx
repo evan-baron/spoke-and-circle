@@ -9,6 +9,7 @@ import styles from './getStartedWizard.module.scss';
 const DISCIPLINE_OPTIONS: RiderPreferences['disciplines'][number][] = [
 	'Road',
 	'Gravel',
+	'Cyclocross',
 	'MTB',
 	'Track',
 	'BMX',
