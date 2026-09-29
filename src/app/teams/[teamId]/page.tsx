@@ -411,11 +411,11 @@ export default async function TeamPage({
 									label='Required kit / uniform'
 									value={formatYesNo(team.requiredKit)}
 								/>
-								<DetailRow label='Sponsors' value={formatList(team.sponsors)} />
 								<DetailRow
 									label='Event types'
 									value={formatList(team.eventTypes)}
 								/>
+								<DetailRow label='Sponsors' value={formatList(team.sponsors)} />
 							</DetailSection>
 						)}
 					</div>
