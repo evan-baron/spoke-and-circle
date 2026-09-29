@@ -17,8 +17,8 @@ import {
 import type { RideDay, Team, TeamFormValues } from '../types';
 import type { CreateTeamInput } from '../validation';
 
-function nonEmpty<T>(items: T[]): T[] | undefined {
-	return items.length > 0 ? items : undefined;
+function nonEmpty<T>(items: T[] | null | undefined): T[] | undefined {
+	return items && items.length > 0 ? items : undefined;
 }
 
 const PERSONA_SEARCH_TAGS: Record<string, string[]> = {
@@ -230,7 +230,7 @@ export function toTeamFormValues(row: TeamRow): TeamFormValues {
 		rideSchedule: row.rideSchedule ?? 'Weekly',
 		startTimes: row.startTimes.join(', '),
 		rideDays: (row.rideDays as RideDay[] | null) ?? [],
-		seasons: row.seasons,
+		seasons: row.seasons ?? [],
 		pace: row.pace ?? 'Steady',
 		typicalDistanceMiles: row.typicalDistanceMiles?.toString() ?? '',
 		typicalElevationGainFt: row.typicalElevationGainFt?.toString() ?? '',
