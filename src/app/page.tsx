@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { SearchForm } from '@/components/SearchForm/SearchForm';
 import { countApprovedTeams } from '@/services/teamService';
 import Crank from '@/components/Graphics/Crank';
+import { SITE_NAME } from '@/lib/siteConfig';
 import styles from './page.module.scss';
 
 const QUICK_LINKS = [
@@ -17,6 +18,16 @@ const QUICK_LINKS = [
 	{ label: 'No-drop', href: '/search?q=no-drop' },
 ];
 
+const LISTING_DETAILS = [
+	{
+		title: `Who it's for`,
+		copy: 'Pace, skill level, and the kind of riding.',
+	},
+	{ title: 'When and where', copy: 'Schedule and meeting details.' },
+	{ title: 'What it takes', copy: 'Membership requirements, spelled out.' },
+	{ title: 'How to join', copy: 'Who to contact and what to do next.' },
+];
+
 export const metadata: Metadata = {
 	title: { absolute: 'Spoke & Circle | Cycling Team & Group Ride Finder' },
 	alternates: { canonical: '/' },
@@ -28,7 +39,7 @@ export default async function HomePage() {
 		const length = approvedCount;
 
 		if (length < 50) {
-			return;
+			return '';
 		}
 
 		if (length < 100) {
@@ -36,7 +47,7 @@ export default async function HomePage() {
 			return `${rounded}+`;
 		}
 
-		if (length >= 100) {
+		if (length < 1000) {
 			const rounded = Math.floor(length / 100) * 100;
 			return `over ${rounded}+`;
 		}
@@ -120,6 +131,53 @@ export default async function HomePage() {
 							exactly how to join.
 						</p>
 					</div>
+				</div>
+			</section>
+
+			<section className={styles.why}>
+				<div className={styles.whyInner}>
+					<div className={styles.whyText}>
+						<p className={styles.whyLabel}>Why {SITE_NAME}</p>
+						<h2>Great rides shouldn&rsquo;t be a secret.</h2>
+						<p>
+							Nearly every town has a team, club, or group ride. Finding it
+							usually means knowing someone who already rides, or digging
+							through old websites and social pages.
+						</p>
+						<p>
+							{SITE_NAME} puts them in one searchable place, with the details
+							that matter and a clear way to get in touch.
+						</p>
+						<Link href='/about' className={styles.whyLink}>
+							Read our story &rarr;
+						</Link>
+					</div>
+					<div className={styles.whyCard}>
+						<h3>Every listing tells you</h3>
+						<ul className={styles.whyList}>
+							{LISTING_DETAILS.map((item) => (
+								<li key={item.title}>
+									<strong>{item.title}</strong>
+									<span>{item.copy}</span>
+								</li>
+							))}
+						</ul>
+					</div>
+				</div>
+			</section>
+
+			<section className={styles.organizers}>
+				<div className={styles.organizersInner}>
+					<div>
+						<h2>Run a team, club, or group ride?</h2>
+						<p>
+							List it for free so riders in your area can find you, see your
+							pace and schedule, and know exactly how to join.
+						</p>
+					</div>
+					<Link href='/teams/new' className={styles.organizersCta}>
+						Submit your group
+					</Link>
 				</div>
 			</section>
 		</>

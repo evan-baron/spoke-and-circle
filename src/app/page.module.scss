@@ -229,6 +229,152 @@
 	letter-spacing: 0.04em;
 }
 
+.why {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.whyInner {
+	@include container;
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--space-md);
+	align-items: start;
+
+	@include from($bp-md) {
+		grid-template-columns: 1.1fr 1fr;
+		gap: var(--space-xl);
+	}
+}
+
+.whyText {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--space-xs);
+
+	p {
+		color: var(--color-ink-soft);
+		max-width: 52ch;
+	}
+}
+
+.whyLabel {
+	@include eyebrow;
+	color: var(--color-coral);
+}
+
+.whyLink {
+	font-weight: 700;
+	color: var(--color-coral);
+
+	&:hover {
+		text-decoration: underline;
+	}
+}
+
+.whyCard {
+	@include card;
+	padding: var(--space-md);
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+}
+
+.whyList {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+
+	li {
+		display: flex;
+		flex-direction: column;
+		gap: 0.15rem;
+		padding-block: var(--space-xs);
+		border-top: 1px solid var(--color-line);
+
+		&:first-child {
+			border-top: none;
+			padding-top: 0;
+		}
+	}
+
+	strong {
+		color: var(--color-ink);
+	}
+
+	span {
+		color: var(--color-ink-soft);
+		font-size: 0.9375rem;
+	}
+}
+
+.organizers {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.organizersInner {
+	@include container;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--space-sm);
+	padding: var(--space-md);
+	border-radius: var(--radius-lg);
+	background: var(--gradient-hero);
+	color: var(--on-gradient);
+
+	@include from($bp-md) {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--space-lg);
+		padding: var(--space-lg);
+	}
+
+	h2 {
+		color: var(--on-gradient);
+	}
+
+	p {
+		margin-top: var(--space-2xs);
+		max-width: 52ch;
+		color: hsl(0, 0%, 100%, 0.88);
+	}
+}
+
+.organizersCta {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 0.875rem;
+	font-weight: 700;
+	white-space: nowrap;
+	padding: 0.85rem 1.5rem;
+	border-radius: var(--radius-pill);
+	background: var(--color-paper);
+	color: var(--color-ink);
+	transition: transform 0.2s ease;
+
+	&:hover {
+		transform: translateY(-1px);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--on-gradient);
+		outline-offset: 2px;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+	}
+}
+
 @keyframes rise {
 	from {
 		opacity: 0;
