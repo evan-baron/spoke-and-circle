@@ -12,6 +12,8 @@ interface RideDetailsSectionProps {
 	rideDays: RideDay[];
 	onToggleRideDay: (day: string) => void;
 	onRideDayDetailsChange: (day: string, details: string) => void;
+	seasons: string[];
+	onSeasonChange: (season: string) => void;
 	hasSegmentation: 'yes' | 'no' | null;
 	onSegmentationChange: (value: 'yes' | 'no') => void;
 	segmentationDescription: string;
@@ -25,6 +27,8 @@ export function RideDetailsSection({
 	rideDays,
 	onToggleRideDay,
 	onRideDayDetailsChange,
+	seasons,
+	onSeasonChange,
 	hasSegmentation,
 	onSegmentationChange,
 	segmentationDescription,
@@ -66,7 +70,8 @@ export function RideDetailsSection({
 							label={season}
 							name='season'
 							value={season}
-							defaultChecked={values.seasons.includes(season)}
+							checked={seasons.includes(season)}
+							onChange={() => onSeasonChange(season)}
 						/>
 					))}
 				</div>

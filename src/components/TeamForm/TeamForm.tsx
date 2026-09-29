@@ -64,6 +64,7 @@ export function TeamForm({
 	const [segmentationDescription, setSegmentationDescription] = useState('');
 	const [rideSchedule, setRideSchedule] = useState(values.rideSchedule);
 	const [rideDays, setRideDays] = useState<RideDay[]>(values.rideDays);
+	const [seasons, setSeasons] = useState<string[]>(values.seasons);
 
 	async function run(action: () => Promise<void>) {
 		busyRef.current = true;
@@ -128,6 +129,18 @@ export function TeamForm({
 		);
 	}
 
+	function handleSeasonChange(season: string) {
+		setSeasons((prev) => {
+			if (season === 'Year Round') {
+				return prev.includes('Year Round') ? [] : ['Year Round'];
+			}
+			const withoutYearRound = prev.filter((entry) => entry !== 'Year Round');
+			return withoutYearRound.includes(season) ?
+					withoutYearRound.filter((entry) => entry !== season)
+				:	[...withoutYearRound, season];
+		});
+	}
+
 	return (
 		<form onSubmit={handleSubmit} className={styles.form}>
 			<GenericInfoSection
@@ -164,6 +177,8 @@ export function TeamForm({
 					rideDays={rideDays}
 					onToggleRideDay={handleToggleRideDay}
 					onRideDayDetailsChange={handleRideDayDetailsChange}
+					seasons={seasons}
+					onSeasonChange={handleSeasonChange}
 					hasSegmentation={hasSegmentation}
 					onSegmentationChange={handleSegmentationChange}
 					segmentationDescription={segmentationDescription}
