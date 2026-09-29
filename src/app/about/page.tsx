@@ -38,8 +38,8 @@ export default function AboutPage() {
 					<p className={styles.eyebrow}>About {SITE_NAME}</p>
 					<h1>Every cyclist deserves a circle to ride with.</h1>
 					<p className={styles.heroCopy}>
-						{SITE_NAME} makes it simple to find cycling teams, clubs, and
-						group rides near you, whatever your discipline or skill level.
+						{SITE_NAME} makes it easy to find cycling teams, clubs, and group
+						rides near you, whatever your discipline or skill level.
 					</p>
 				</div>
 			</section>
@@ -53,19 +53,19 @@ export default function AboutPage() {
 							Cycling groups, teams, and group rides are out there in almost
 							every town. The hard part is finding them. If you don&rsquo;t
 							already know someone who rides, it&rsquo;s tough to know who to
-							reach out to, where to look, or whether a group is even a good
-							fit for you.
+							reach out to, where to look, or whether a group is even a good fit
+							for you.
 						</p>
 						<p>
 							Information ends up scattered across old websites, social media
-							pages, and word of mouth. Newer riders give up before they find
-							a group, and welcoming clubs go unnoticed by the people who
-							would love them.
+							pages, and word of mouth. Newer riders give up before they find a
+							group, and welcoming clubs go unnoticed by the people who would
+							love them.
 						</p>
 						<p>
 							{SITE_NAME} fixes that. It puts teams, clubs, and group rides in
-							one searchable place, with the details that matter and a clear
-							way to get in touch.
+							one searchable place, with the details that matter and a clear way
+							to get in touch.
 						</p>
 					</div>
 				</section>
@@ -89,10 +89,10 @@ export default function AboutPage() {
 					<h2>Built by a rider who knows the feeling.</h2>
 					<div className={styles.prose}>
 						<p>
-							{SITE_NAME} was created by Evan Baron, a former endurance
-							mountain bike racer. Racing on a team showed him how much a
-							group of people can change the way you ride: the motivation, the
-							shared miles, the friends who show up at dawn.
+							{SITE_NAME} was created by Evan Baron, a former endurance mountain
+							bike racer. Racing on a team showed him how much a group of people
+							can change the way you ride: the motivation, the shared miles, the
+							friends who show up at dawn.
 						</p>
 						<p>
 							Now he&rsquo;s building the tool he wishes every rider had, to
