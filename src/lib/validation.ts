@@ -247,7 +247,6 @@ const teamBaseSchema = z.object({
 		.optional(),
 	mileageFrequency: scheduleFrequencySchema.optional(),
 	requiredKit: z.boolean().optional(),
-	hasRoster: z.boolean().optional(),
 	sponsors: z.array(teamListItemSchema).max(20).optional(),
 	eventTypes: z.array(eventTypeSchema).max(4).optional(),
 	joinTryouts: z.boolean().optional(),

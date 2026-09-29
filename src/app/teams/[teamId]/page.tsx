@@ -411,7 +411,6 @@ export default async function TeamPage({
 									label='Required kit / uniform'
 									value={formatYesNo(team.requiredKit)}
 								/>
-								<DetailRow label='Roster' value={formatYesNo(team.hasRoster)} />
 								<DetailRow label='Sponsors' value={formatList(team.sponsors)} />
 								<DetailRow
 									label='Event types'

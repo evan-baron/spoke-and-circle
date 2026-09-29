@@ -95,7 +95,6 @@ model Team {
   mileageMin          Int?
   mileageFrequency    ScheduleFrequency?
   requiredKit         Boolean             @default(false)
-  hasRoster           Boolean             @default(false)
   sponsors            String[]
   eventTypes          String[]
 

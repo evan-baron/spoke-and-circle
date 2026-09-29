@@ -55,7 +55,6 @@ export const DEFAULT_TEAM_FORM_VALUES: TeamFormValues = {
 	duesRequired: false,
 	requiredRides: false,
 	requiredKit: false,
-	hasRoster: false,
 	eventSponsor: false,
 	eventTeamSpecific: false,
 	eventPublic: false,

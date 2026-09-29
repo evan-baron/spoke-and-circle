@@ -49,7 +49,6 @@ function makeTeam(input: TeamInput): Team {
     duesRequired: false,
     requiredRides: false,
     requiredKit: false,
-    hasRoster: true,
     primaryLanguage: "English",
     contact: { email: `hello@${input.id.replace(/-/g, "")}.club` },
     social: {},
@@ -236,7 +235,6 @@ export const teams: Team[] = [
     tags: ["track", "velodrome", "racing", "competitive"],
     overrides: {
       requiredKit: true,
-      hasRoster: true,
       joinRequirements: { tryouts: false, referralRequired: true, inviteOnly: false, open: false },
       homeBase: "Austin Super Velodrome",
     },

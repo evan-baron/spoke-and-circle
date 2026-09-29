@@ -129,7 +129,6 @@ export interface Team {
   requiredRaces?: number;
   mileageRequirement?: MileageRequirement;
   requiredKit: boolean;
-  hasRoster: boolean;
   sponsors?: string[];
   eventTypes?: string[];
   joinRequirements: JoinRequirements;
@@ -222,7 +221,6 @@ export interface TeamFormValues {
   duesRequired: boolean;
   requiredRides: boolean;
   requiredKit: boolean;
-  hasRoster: boolean;
   eventSponsor: boolean;
   eventTeamSpecific: boolean;
   eventPublic: boolean;

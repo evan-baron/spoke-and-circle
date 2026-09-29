@@ -110,11 +110,6 @@ export function TeamClubDetailsSection({
 						name='requiredKit'
 						defaultChecked={values.requiredKit}
 					/>
-					<Checkbox
-						label='Public roster'
-						name='hasRoster'
-						defaultChecked={values.hasRoster}
-					/>
 				</div>
 			</div>
 

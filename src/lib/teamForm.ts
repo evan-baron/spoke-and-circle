@@ -133,7 +133,6 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		instructional: flag('instructional'),
 		requiredRides: flag('requiredRides'),
 		requiredKit: flag('requiredKit'),
-		hasRoster: flag('hasRoster'),
 		eventTypes: eventTypes.length > 0 ? eventTypes : undefined,
 		joinTryouts: flag('joinTryouts'),
 		joinReferral: flag('joinReferral'),

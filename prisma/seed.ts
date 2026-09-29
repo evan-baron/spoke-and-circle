@@ -65,7 +65,6 @@ function toTeamData(team: Team): Prisma.TeamCreateInput {
 		mileageMin: team.mileageRequirement?.min,
 		mileageFrequency: team.mileageRequirement?.frequency,
 		requiredKit: team.requiredKit,
-		hasRoster: team.hasRoster,
 		sponsors: team.sponsors ?? [],
 		eventTypes: team.eventTypes ?? [],
 		joinTryouts: team.joinRequirements.tryouts,

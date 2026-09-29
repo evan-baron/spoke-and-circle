@@ -101,7 +101,6 @@ export function toTeam(row: TeamRow): Team {
 				{ min: row.mileageMin, frequency: row.mileageFrequency }
 			:	undefined,
 		requiredKit: row.requiredKit,
-		hasRoster: row.hasRoster,
 		sponsors: nonEmpty(row.sponsors),
 		eventTypes: nonEmpty(row.eventTypes),
 		joinRequirements: {
@@ -177,7 +176,6 @@ export function toTeamCreateInput(
 		mileageMin: input.mileageMin,
 		mileageFrequency: input.mileageFrequency,
 		requiredKit: input.requiredKit,
-		hasRoster: input.hasRoster,
 		sponsors: input.sponsors ?? [],
 		eventTypes: input.eventTypes ?? [],
 		joinTryouts: input.joinTryouts,
@@ -254,7 +252,6 @@ export function toTeamFormValues(row: TeamRow): TeamFormValues {
 		duesRequired: row.duesRequired,
 		requiredRides: row.requiredRides,
 		requiredKit: row.requiredKit,
-		hasRoster: row.hasRoster,
 		eventSponsor: row.eventTypes.includes('Sponsor Events'),
 		eventTeamSpecific: row.eventTypes.includes('Team-specific Events'),
 		eventPublic: row.eventTypes.includes('Public Events'),
@@ -323,7 +320,6 @@ export function toApprovedTeamUpdate(
 		mileageMin: input.mileageMin ?? null,
 		mileageFrequency: input.mileageFrequency ?? null,
 		requiredKit: input.requiredKit ?? false,
-		hasRoster: input.hasRoster ?? false,
 		sponsors: input.sponsors ?? [],
 		eventTypes: input.eventTypes ?? [],
 		joinTryouts: input.joinTryouts ?? false,
