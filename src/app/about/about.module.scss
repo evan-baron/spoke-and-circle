@@ -91,7 +91,7 @@
 	padding: 0 var(--space-sm);
 
 	@include from($bp-md) {
-		padding-top: var(--space-xl);
+		padding-top: 0;
 	}
 }
 
