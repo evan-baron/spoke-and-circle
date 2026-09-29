@@ -112,6 +112,7 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		rideSchedule: text('rideSchedule'),
 		startTimes: commaList('startTimes'),
 		rideDays: rideDays(),
+		seasons: values('season'),
 		pace: text('pace'),
 		typicalDistanceMiles: number('typicalDistanceMiles'),
 		typicalElevationGainFt: number('typicalElevationGainFt'),

@@ -38,3 +38,5 @@ export const DAYS = [
 	'Saturday',
 	'Sunday',
 ];
+
+export const SEASONS = ['Spring', 'Summer', 'Fall', 'Winter', 'Year Round'];

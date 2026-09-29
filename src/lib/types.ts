@@ -108,6 +108,7 @@ export interface Team {
   rideSchedule: ScheduleFrequency;
   startTimes?: string[];
   rideDays?: RideDay[];
+  seasons?: string[];
   pace: Pace;
   segmentation: Segmentation;
   typicalDistanceMiles: number;
@@ -199,6 +200,7 @@ export interface TeamFormValues {
   rideSchedule: string;
   startTimes: string;
   rideDays: RideDay[];
+  seasons: string[];
   pace: string;
   typicalDistanceMiles: string;
   typicalElevationGainFt: string;

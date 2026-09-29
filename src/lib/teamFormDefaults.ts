@@ -35,6 +35,7 @@ export const DEFAULT_TEAM_FORM_VALUES: TeamFormValues = {
 	rideSchedule: 'Weekly',
 	startTimes: '',
 	rideDays: [],
+	seasons: [],
 	pace: 'Casual',
 	typicalDistanceMiles: '',
 	typicalElevationGainFt: '',

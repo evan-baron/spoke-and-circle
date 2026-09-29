@@ -74,6 +74,7 @@ model Team {
   rideSchedule           ScheduleFrequency?
   startTimes             String[]
   rideDays               Json?
+  seasons                String[]
   pace                   Pace?
   segmentation           Segmentation?
   typicalDistanceMiles   Int?
