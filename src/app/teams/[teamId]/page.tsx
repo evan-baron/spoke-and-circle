@@ -144,8 +144,9 @@ export default async function TeamPage({
 					</div>
 					<h1>{team.name}</h1>
 					<p className={styles.subline}>
-						{team.location} &middot; Founded {team.founded} &middot;{' '}
-						{formatMemberCount(team.memberCount)}
+						{team.location} &middot; Founded {team.founded}
+						{/* &middot;{' '}
+						{formatMemberCount(team.memberCount)} */}
 					</p>
 					{team.missionStatement && (
 						<p className={styles.mission}>
@@ -253,10 +254,34 @@ export default async function TeamPage({
 									<>
 										<dt>Social</dt>
 										{team.social.instagram && (
-											<dd>Instagram &middot; {team.social.instagram}</dd>
+											<dd>
+												Instagram &middot;{' '}
+												{team.social.instagramLink ?
+													<a
+														target='_blank'
+														rel='noopener noreferrer'
+														href={team.social.instagramLink}
+														className={styles.website}
+													>
+														{team.social.instagram}
+													</a>
+												:	team.social.instagram}
+											</dd>
 										)}
 										{team.social.facebook && (
-											<dd>Facebook &middot; {team.social.facebook}</dd>
+											<dd>
+												Facebook &middot;{' '}
+												{team.social.facebookLink ?
+													<a
+														target='_blank'
+														rel='noopener noreferrer'
+														href={team.social.facebookLink}
+														className={styles.website}
+													>
+														{team.social.facebook}
+													</a>
+												:	team.social.facebook}
+											</dd>
 										)}
 										{team.social.strava && (
 											<dd>Strava &middot; {team.social.strava}</dd>

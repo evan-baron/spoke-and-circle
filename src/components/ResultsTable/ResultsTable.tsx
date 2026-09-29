@@ -44,9 +44,9 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 								</Badge>
 								<span className={styles.cardMeta}>{team.bikeType}</span>
 								<span className={styles.cardMeta}>{formatSkillLevels(team.skillLevels)}</span>
-								<span className={styles.cardMeta}>
+								{/* <span className={styles.cardMeta}>
 									{formatMemberCount(team.memberCount)}
-								</span>
+								</span> */}
 							</div>
 							<p
 								className={styles.cardVerification}
@@ -68,7 +68,7 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 						<th>Bike type</th>
 						<th>Skill level</th>
 						<th>Pace</th>
-						<th>Members</th>
+						{/* <th>Members</th> */}
 						<th>Visibility</th>
 						<th>Status</th>
 					</tr>
@@ -104,7 +104,7 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 							<td>
 								<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
 							</td>
-							<td>{team.memberCount}</td>
+							{/* <td>{team.memberCount}</td> */}
 							<td>
 								<Badge tone={toneForVisibility(team.visibility)}>
 									{team.visibility}

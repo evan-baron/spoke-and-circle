@@ -61,7 +61,9 @@ export interface ContactInfo {
 
 export interface SocialLinks {
   instagram?: string;
+  instagramLink?: string;
   facebook?: string;
+  facebookLink?: string;
   strava?: string;
   discord?: string;
 }
@@ -185,7 +187,9 @@ export interface TeamFormValues {
   homeBase: string;
   website: string;
   instagram: string;
+  instagramLink: string;
   facebook: string;
+  facebookLink: string;
   strava: string;
   discord: string;
   ageMin: string;

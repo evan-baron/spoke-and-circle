@@ -188,9 +188,9 @@ export function AdminTeamsTable({
 											<span className={tableStyles.cardMeta}>
 												{formatSkillLevels(team.skillLevels)}
 											</span>
-											<span className={tableStyles.cardMeta}>
+											{/* <span className={tableStyles.cardMeta}>
 												{formatMemberCount(team.memberCount)}
-											</span>
+											</span> */}
 										</div>
 									</Link>
 								</div>
@@ -236,7 +236,7 @@ export function AdminTeamsTable({
 								<th>Bike type</th>
 								<th>Skill level</th>
 								<th>Pace</th>
-								<th>Members</th>
+								{/* <th>Members</th> */}
 								<th>Visibility</th>
 								<th>Status</th>
 								<th>
@@ -284,7 +284,7 @@ export function AdminTeamsTable({
 									<td>
 										<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
 									</td>
-									<td>{team.memberCount}</td>
+									{/* <td>{team.memberCount}</td> */}
 									<td>
 										<Badge tone={toneForVisibility(team.visibility)}>
 											{team.visibility}

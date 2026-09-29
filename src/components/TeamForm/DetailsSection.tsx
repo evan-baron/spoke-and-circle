@@ -115,12 +115,34 @@ export function DetailsSection({
 				</Field>
 			)}
 			{groupType !== 'Group Ride' && (
+				<Field label='Instagram link'>
+					<input
+						type='url'
+						name='instagramLink'
+						defaultValue={values.instagramLink}
+						placeholder='https://instagram.com/yourteam'
+						className={styles.input}
+					/>
+				</Field>
+			)}
+			{groupType !== 'Group Ride' && (
 				<Field label='Facebook'>
 					<input
 						type='text'
 						name='facebook'
 						defaultValue={values.facebook}
 						placeholder='Page name'
+						className={styles.input}
+					/>
+				</Field>
+			)}
+			{groupType !== 'Group Ride' && (
+				<Field label='Facebook link'>
+					<input
+						type='url'
+						name='facebookLink'
+						defaultValue={values.facebookLink}
+						placeholder='https://facebook.com/yourteam'
 						className={styles.input}
 					/>
 				</Field>
@@ -192,7 +214,7 @@ export function DetailsSection({
 					/>
 				</Field>
 			)}
-			{groupType !== 'Group Ride' && (
+			{/* {groupType !== 'Group Ride' && (
 				<Field label='Current member count'>
 					<input
 						type='number'
@@ -202,7 +224,7 @@ export function DetailsSection({
 						className={styles.input}
 					/>
 				</Field>
-			)}
+			)} */}
 			<Field label='Maximum member limit'>
 				<input
 					type='number'

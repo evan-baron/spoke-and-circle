@@ -60,7 +60,9 @@ model Team {
   homeBase String?
   website             String?
   instagram           String?
+  instagramLink       String?
   facebook            String?
+  facebookLink        String?
   strava              String?
   discord             String?
   ageMin              Int?

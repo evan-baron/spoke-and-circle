@@ -155,7 +155,15 @@ const teamBaseSchema = z.object({
 		.max(300, 'Website must be less than 300 characters')
 		.optional(),
 	instagram: z.string().trim().max(100).optional(),
+	instagramLink: z
+		.url({ protocol: /^https?$/, message: 'Invalid Instagram URL' })
+		.max(300, 'Instagram link must be less than 300 characters')
+		.optional(),
 	facebook: z.string().trim().max(100).optional(),
+	facebookLink: z
+		.url({ protocol: /^https?$/, message: 'Invalid Facebook URL' })
+		.max(300, 'Facebook link must be less than 300 characters')
+		.optional(),
 	strava: z.string().trim().max(100).optional(),
 	discord: z.string().trim().max(100).optional(),
 	ageMin: z
