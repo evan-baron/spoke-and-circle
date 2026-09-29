@@ -2,7 +2,13 @@ import type { Prisma } from '../../generated/prisma/client';
 import { toTeam } from '@/lib/api/teamMapper';
 import { prisma } from '@/lib/prisma';
 import { DEFAULT_RADIUS_MILES, TEAMS_PAGE_SIZE } from '@/lib/searchParams';
-import { bikeTypeToDb, clubTypeToDb, disciplineToDb } from '@/lib/teamEnums';
+import {
+	bikeTypeToDb,
+	clubTypeToDb,
+	disciplineToDb,
+	dropPolicyToDb,
+	formatToDb,
+} from '@/lib/teamEnums';
 import type { SearchParams, Team, TeamOption } from '@/lib/types';
 import {
 	resolveSearchLocation,
@@ -72,23 +78,111 @@ function locationClause(
 	};
 }
 
-function buildWhere(
+const normalizeTerm = (value: string) =>
+	value.toLowerCase().replace(/[^a-z0-9]/g, '');
+
+const ENUM_TERM_CLAUSES: [string, Prisma.TeamWhereInput][] = [
+	...Object.entries(clubTypeToDb).map(
+		([label, value]): [string, Prisma.TeamWhereInput] => [
+			label,
+			{ type: value },
+		],
+	),
+	...Object.entries(bikeTypeToDb).map(
+		([label, value]): [string, Prisma.TeamWhereInput] => [
+			label,
+			{ bikeTypes: { has: value } },
+		],
+	),
+	...Object.entries(formatToDb).map(
+		([label, value]): [string, Prisma.TeamWhereInput] => [
+			label,
+			{ format: value },
+		],
+	),
+	...Object.entries(disciplineToDb).map(
+		([label, value]): [string, Prisma.TeamWhereInput] => [
+			label,
+			{ discipline: value },
+		],
+	),
+	...Object.entries(dropPolicyToDb).map(
+		([label, value]): [string, Prisma.TeamWhereInput] => [
+			label,
+			{ dropPolicy: value },
+		],
+	),
+	...(['Beginner', 'Intermediate', 'Advanced', 'Expert'] as const).map(
+		(level): [string, Prisma.TeamWhereInput] => [
+			level,
+			{ skillLevels: { has: level } },
+		],
+	),
+	...(['Casual', 'Steady', 'Competitive'] as const).map(
+		(pace): [string, Prisma.TeamWhereInput] => [pace, { pace }],
+	),
+	...(['Zwift', 'Strava', 'TrainerRoad'] as const).map(
+		(platform): [string, Prisma.TeamWhereInput] => [
+			platform,
+			{ virtualPlatforms: { has: platform } },
+		],
+	),
+	['Competitive', { competitiveOrCasual: 'Competitive' }],
+	['Casual', { competitiveOrCasual: 'Casual' }],
+	['Instructional', { instructional: true }],
+];
+
+async function idsWithListMatch(term: string): Promise<string[]> {
+	const pattern = `%${term.replace(/[\\%_]/g, '\\$&')}%`;
+	const rows = await prisma.$queryRaw<{ id: string }[]>`
+		SELECT id FROM "Team"
+		WHERE EXISTS (
+			SELECT 1 FROM unnest(
+				"tags" || "personaRestrictions" || "sponsors" || "eventTypes" || "additionalLocations"
+			) AS item
+			WHERE item ILIKE ${pattern}
+		)
+	`;
+	return rows.map((row) => row.id);
+}
+
+async function termClause(term: string): Promise<Prisma.TeamWhereInput> {
+	const normalized = normalizeTerm(term);
+	const enumClauses = ENUM_TERM_CLAUSES.filter(
+		([label]) => normalizeTerm(label) === normalized,
+	).map(([, clause]) => clause);
+
+	return {
+		OR: [
+			{ name: { contains: term, mode: 'insensitive' } },
+			{ missionStatement: { contains: term, mode: 'insensitive' } },
+			{ location: { contains: term, mode: 'insensitive' } },
+			{ affiliation: { contains: term, mode: 'insensitive' } },
+			{ homeBase: { contains: term, mode: 'insensitive' } },
+			{ id: { in: await idsWithListMatch(term) } },
+			...enumClauses,
+		],
+	};
+}
+
+async function queryClause(q: string): Promise<Prisma.TeamWhereInput> {
+	const words = q.split(/[\s\-,/]+/).filter((word) => word.length > 1);
+	const wholePhrase = await termClause(q);
+	if (words.length < 2) return wholePhrase;
+
+	const perWord = await Promise.all(words.map(termClause));
+	return { OR: [wholePhrase, { AND: perWord }] };
+}
+
+async function buildWhere(
 	params: SearchParams,
 	resolved: SearchLocation | null,
-): Prisma.TeamWhereInput {
+): Promise<Prisma.TeamWhereInput> {
 	const q = params.q?.trim() ?? '';
 	const location = params.location?.trim() ?? '';
 	const and: Prisma.TeamWhereInput[] = [{ status: 'Approved' }];
 
-	if (q) {
-		and.push({
-			OR: [
-				{ name: { contains: q, mode: 'insensitive' } },
-				{ missionStatement: { contains: q, mode: 'insensitive' } },
-				{ tags: { has: q.toLowerCase() } },
-			],
-		});
-	}
+	if (q) and.push(await queryClause(q));
 
 	const locationFilter = location ? locationClause(location, resolved) : null;
 	if (locationFilter) and.push(locationFilter);
@@ -203,7 +297,7 @@ export async function searchApprovedTeams(
 ): Promise<TeamSearchPage> {
 	const location = params.location?.trim() ?? '';
 	const resolved = location ? await resolveSearchLocation(location) : null;
-	const where = buildWhere(params, resolved);
+	const where = await buildWhere(params, resolved);
 
 	if (resolved?.kind === 'point') {
 		return searchNear(
