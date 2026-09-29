@@ -10,7 +10,10 @@ const QUICK_LINKS = [
 	{ label: 'Women only', href: '/search?q=women' },
 	{ label: 'Virtual / Zwift', href: '/search?q=virtual' },
 	{ label: 'Beginner-friendly', href: '/search?q=beginner-friendly' },
-	{ label: 'Competitive racing teams', href: '/search?type=Team&q=racing' },
+	{
+		label: 'Competitive racing teams',
+		href: '/search?type=Team&q=competitive',
+	},
 	{ label: 'No-drop', href: '/search?q=no-drop' },
 ];
 
