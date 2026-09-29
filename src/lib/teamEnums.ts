@@ -25,7 +25,7 @@ export const clubTypeToDb: Record<Team['type'], ClubType> = {
 	Association: 'Association',
 };
 
-export const bikeTypeToDb: Record<Team['bikeType'], BikeType> = {
+export const bikeTypeToDb: Record<Team['bikeTypes'][number], BikeType> = {
 	Road: 'Road',
 	Gravel: 'Gravel',
 	MTB: 'MTB',

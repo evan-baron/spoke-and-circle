@@ -14,7 +14,7 @@ export const DEFAULT_TEAM_FORM_VALUES: TeamFormValues = {
 	primaryLanguage: '',
 	contactPhone: '',
 	contactEmail: '',
-	bikeType: 'Road',
+	bikeTypes: [],
 	format: 'In-person',
 	virtualPlatform: [],
 	homeBase: '',

@@ -8,6 +8,7 @@ interface CheckboxDropdownProps {
 	label: string;
 	options: string[];
 	defaultValues?: string[];
+	autoSubmitOnClose?: boolean;
 }
 
 export function CheckboxDropdown({
@@ -15,6 +16,7 @@ export function CheckboxDropdown({
 	label,
 	options,
 	defaultValues = [],
+	autoSubmitOnClose = true,
 }: CheckboxDropdownProps) {
 	const [open, setOpen] = useState(false);
 	const [selected, setSelected] = useState<string[]>(defaultValues);
@@ -27,7 +29,7 @@ export function CheckboxDropdown({
 	// does, letting the user check several boxes without it collapsing
 	// after each one.
 	function closeAndSubmit() {
-		if (open) {
+		if (open && autoSubmitOnClose) {
 			triggerRef.current?.form?.requestSubmit();
 		}
 		setOpen(false);

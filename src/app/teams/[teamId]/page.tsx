@@ -32,6 +32,10 @@ interface TeamPageParams {
 	teamId: string;
 }
 
+function bikeTypesLabel(bikeTypes: string[]): string {
+	return bikeTypes.length > 1 ? 'Mixed' : (bikeTypes[0] ?? 'Mixed');
+}
+
 export async function generateMetadata({
 	params,
 }: {
@@ -46,7 +50,7 @@ export async function generateMetadata({
 	const title = `${team.name}: ${team.type} in ${team.location}`;
 	const summary =
 		team.missionStatement ??
-		`${team.name} is a ${team.bikeType.toLowerCase()} ${team.type.toLowerCase()} based in ${team.location}. See how to join, when they ride, and how to get in touch.`;
+		`${team.name} is a ${bikeTypesLabel(team.bikeTypes).toLowerCase()} ${team.type.toLowerCase()} based in ${team.location}. See how to join, when they ride, and how to get in touch.`;
 	const description =
 		summary.length > 160 ? `${summary.slice(0, 157)}...` : summary;
 
@@ -136,7 +140,7 @@ export default async function TeamPage({
 							{team.visibility}
 						</Badge>
 						<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
-						<Badge tone='gold'>{team.bikeType}</Badge>
+						<Badge tone='gold'>{bikeTypesLabel(team.bikeTypes)}</Badge>
 						{team.discipline && <Badge tone='gold'>{team.discipline}</Badge>}
 						<Badge tone={toneForVerified(team.verified)}>
 							{formatVerification(team.verified, team.lastActiveYear)}
@@ -303,6 +307,10 @@ export default async function TeamPage({
 
 					<div className={styles.main}>
 						<DetailSection title='Format & membership'>
+							<DetailRow
+								label='Cycling Disciplines'
+								value={formatList(team.bikeTypes)}
+							/>
 							<DetailRow label='Virtual or in-person' value={team.format} />
 							{team.discipline && (
 								<DetailRow label='Riding style' value={team.discipline} />

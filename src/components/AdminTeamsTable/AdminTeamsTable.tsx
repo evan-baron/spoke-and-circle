@@ -183,7 +183,7 @@ export function AdminTeamsTable({
 												{team.visibility}
 											</Badge>
 											<span className={tableStyles.cardMeta}>
-												{team.bikeType}
+												{team.bikeTypes.join(', ')}
 											</span>
 											<span className={tableStyles.cardMeta}>
 												{formatSkillLevels(team.skillLevels)}
@@ -233,7 +233,7 @@ export function AdminTeamsTable({
 								<th>Name</th>
 								<th>Type</th>
 								<th>Location</th>
-								<th>Bike type</th>
+								<th>Cycling Disciplines</th>
 								<th>Skill level</th>
 								<th>Pace</th>
 								{/* <th>Members</th> */}
@@ -272,7 +272,7 @@ export function AdminTeamsTable({
 										<Badge tone='ink'>{team.type}</Badge>
 									</td>
 									<td>{team.location}</td>
-									<td>{team.bikeType}</td>
+									<td>{team.bikeTypes.join(', ')}</td>
 									<td>
 										{team.skillLevels.map((level, index, all) => (
 											<span key={level} className={tableStyles.stackedLine}>

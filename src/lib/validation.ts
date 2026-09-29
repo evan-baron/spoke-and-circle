@@ -140,7 +140,9 @@ const teamBaseSchema = z.object({
 		.optional(),
 	contactEmail: z.email('Invalid contact email address').optional(),
 
-	bikeType: bikeTypeSchema,
+	bikeTypes: z
+		.array(bikeTypeSchema)
+		.min(1, 'Choose at least one cycling discipline'),
 	discipline: mtbDisciplineSchema.optional(),
 	eBikeAllowed: z.boolean().optional(),
 	format: formatSchema,

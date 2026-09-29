@@ -52,7 +52,7 @@ model Team {
   verified       Boolean @default(false)
   lastActiveYear Int?
 
-  bikeType            BikeType
+  bikeTypes           BikeType[]
   discipline          MtbDiscipline?
   eBikeAllowed        Boolean           @default(false)
   format              Format
@@ -112,7 +112,7 @@ model Team {
 
   @@index([status])
   @@index([deleteAfter])
-  @@index([bikeType])
+  @@index([bikeTypes], type: Gin)
   @@index([location])
   @@index([latitude, longitude])
   @@index([affiliatedId])

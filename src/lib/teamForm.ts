@@ -92,7 +92,7 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		primaryLanguage: text('primaryLanguage'),
 		contactPhone: text('contactPhone'),
 		contactEmail: text('contactEmail'),
-		bikeType: text('bikeType'),
+		bikeTypes: values('bikeType'),
 		format: text('format'),
 		virtualPlatforms: virtualPlatforms.length > 0 ? virtualPlatforms : undefined,
 		homeBase: text('homeBase'),

@@ -1,3 +1,4 @@
+import { CheckboxDropdown } from '@/components/FilterBar/CheckboxDropdown';
 import type { TeamFormValues } from '@/lib/types';
 import { Checkbox } from './Checkbox';
 import {
@@ -41,19 +42,18 @@ export function DetailsSection({
 		<Section
 			title={groupType === 'Group Ride' ? 'Group Ride Profile' : 'Group Profile'}
 		>
-			<Field label='Cycling Discipline'>
-				<select
-					name='bikeType'
-					defaultValue={values.bikeType}
-					className={styles.input}
-				>
-					{BIKE_TYPES.map((option) => (
-						<option key={option} value={option}>
-							{option}
-						</option>
-					))}
-				</select>
-			</Field>
+			<div className={styles.field}>
+				<span className={styles.fieldLabel}>Cycling Discipline</span>
+				<div>
+					<CheckboxDropdown
+						name='bikeType'
+						label='Cycling Discipline'
+						options={BIKE_TYPES}
+						defaultValues={values.bikeTypes}
+						autoSubmitOnClose={false}
+					/>
+				</div>
+			</div>
 			<Field label='Virtual or in-person'>
 				<select
 					name='format'

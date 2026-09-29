@@ -42,7 +42,9 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 								<Badge tone={toneForVisibility(team.visibility)}>
 									{team.visibility}
 								</Badge>
-								<span className={styles.cardMeta}>{team.bikeType}</span>
+								<span className={styles.cardMeta}>
+									{team.bikeTypes.join(', ')}
+								</span>
 								<span className={styles.cardMeta}>{formatSkillLevels(team.skillLevels)}</span>
 								{/* <span className={styles.cardMeta}>
 									{formatMemberCount(team.memberCount)}
@@ -65,7 +67,7 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 						<th>Name</th>
 						<th>Type</th>
 						<th>Location(s)</th>
-						<th>Bike type</th>
+						<th>Cycling Disciplines</th>
 						<th>Skill level</th>
 						<th>Pace</th>
 						{/* <th>Members</th> */}
@@ -92,7 +94,7 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 									</span>
 								))}
 							</td>
-							<td>{team.bikeType}</td>
+							<td>{team.bikeTypes.join(', ')}</td>
 							<td>
 								{team.skillLevels.map((level, index, all) => (
 									<span key={level} className={styles.stackedLine}>

@@ -91,7 +91,7 @@ export interface Team {
   lastActiveYear: number;
 
   // -- Details --
-  bikeType: BikeType;
+  bikeTypes: BikeType[];
   discipline?: MtbDiscipline;
   eBikeAllowed: boolean;
   format: Format;
@@ -180,7 +180,7 @@ export interface TeamFormValues {
   primaryLanguage: string;
   contactPhone: string;
   contactEmail: string;
-  bikeType: string;
+  bikeTypes: string[];
   format: string;
   virtualPlatform: string[];
   homeBase: string;

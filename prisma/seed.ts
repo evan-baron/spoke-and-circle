@@ -28,7 +28,7 @@ function toTeamData(team: Team): Prisma.TeamCreateInput {
 		contactEmail: team.contact.email,
 		verified: team.verified,
 		lastActiveYear: team.lastActiveYear,
-		bikeType: bikeTypeToDb[team.bikeType],
+		bikeTypes: team.bikeTypes.map((bt) => bikeTypeToDb[bt]),
 		discipline: team.discipline ? disciplineToDb[team.discipline] : undefined,
 		eBikeAllowed: team.eBikeAllowed,
 		format: formatToDb[team.format],

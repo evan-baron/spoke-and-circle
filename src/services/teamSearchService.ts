@@ -95,7 +95,9 @@ function buildWhere(
 
 	if (params.type) and.push({ type: clubTypeToDb[params.type] });
 	if (params.bikeTypes?.length) {
-		and.push({ bikeType: { in: params.bikeTypes.map((b) => bikeTypeToDb[b]) } });
+		and.push({
+			bikeTypes: { hasSome: params.bikeTypes.map((b) => bikeTypeToDb[b]) },
+		});
 	}
 	if (params.discipline) and.push({ discipline: disciplineToDb[params.discipline] });
 	if (params.skillLevel) and.push({ skillLevels: { has: params.skillLevel } });
