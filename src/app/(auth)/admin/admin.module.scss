@@ -8,6 +8,10 @@
 	padding-inline: var(--space-sm);
 	padding-bottom: var(--space-lg);
 	min-height: calc(100dvh - var(--space-lg));
+
+	@include from($bp-md) {
+		min-height: unset;
+	}
 }
 
 .consoleWrap {
