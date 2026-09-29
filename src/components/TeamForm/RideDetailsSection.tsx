@@ -1,6 +1,6 @@
 import type { RideDay, TeamFormValues } from '@/lib/types';
 import { Checkbox } from './Checkbox';
-import { DAYS, DROP_POLICIES, SCHEDULES } from './constants';
+import { DAYS, DROP_POLICIES, SCHEDULES, SEASONS } from './constants';
 import { Field } from './Field';
 import { Section } from './Section';
 import styles from './teamForm.module.scss';
@@ -57,6 +57,20 @@ export function RideDetailsSection({
 					/>
 				</Field>
 			)}
+			<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
+				<span className={styles.fieldLabel}>Season(s)</span>
+				<div className={styles.checkboxRow}>
+					{SEASONS.map((season) => (
+						<Checkbox
+							key={season}
+							label={season}
+							name='season'
+							value={season}
+							defaultChecked={values.seasons.includes(season)}
+						/>
+					))}
+				</div>
+			</div>
 			{rideSchedule === 'Weekly' && (
 				<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
 					<span className={styles.fieldLabel}>Days</span>

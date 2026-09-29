@@ -293,6 +293,12 @@ export default async function TeamPage({
 						{team.type === 'Group Ride' && (
 							<DetailSection title='Ride profile'>
 								<DetailRow label='Schedule' value={team.rideSchedule} />
+								{team.seasons && team.seasons.length > 0 && (
+									<DetailRow
+										label='Season(s)'
+										value={formatList(team.seasons)}
+									/>
+								)}
 								{team.startTimes && (
 									<DetailRow
 										label='Start times'

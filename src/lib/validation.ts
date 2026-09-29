@@ -41,6 +41,13 @@ const mtbDisciplineSchema = z.enum([
 ]);
 const segmentationSchema = z.enum(['A Group', 'B Group', 'C Group', 'N/A']);
 const scheduleFrequencySchema = z.enum(['Weekly', 'Monthly', 'Annually']);
+const seasonSchema = z.enum([
+	'Spring',
+	'Summer',
+	'Fall',
+	'Winter',
+	'Year Round',
+]);
 const dropPolicySchema = z.enum(['Drop', 'No-drop']);
 const visibilitySchema = z.enum(['Public', 'Private']);
 const competitiveOrCasualSchema = z.enum(['Competitive', 'Casual']);
@@ -185,6 +192,7 @@ const teamBaseSchema = z.object({
 	rideSchedule: scheduleFrequencySchema.optional(),
 	startTimes: z.array(teamListItemSchema).max(14).optional(),
 	rideDays: z.array(rideDaySchema).max(7).optional(),
+	seasons: z.array(seasonSchema).max(5).optional(),
 	pace: paceSchema.optional(),
 	segmentation: segmentationSchema.optional(),
 	typicalDistanceMiles: z
