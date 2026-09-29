@@ -1,0 +1,208 @@
+@use '@/styles/mixins' as *;
+
+.hero {
+	width: calc(100% + var(--space-sm) * 2);
+	margin-inline: calc(-1 * var(--space-sm));
+	display: flex;
+	justify-content: center;
+	background: var(--gradient-hero);
+	color: var(--on-gradient);
+	position: relative;
+	isolation: isolate;
+
+	@include from($bp-md) {
+		width: calc(100% + var(--space-lg) * 2);
+		margin-inline: calc(-1 * var(--space-lg));
+	}
+}
+
+.graphicContainer {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow: hidden;
+	z-index: -1;
+}
+
+.graphic {
+	--spin-offset: translate(-10%, 10%);
+
+	width: 300%;
+	animation: spin 60s linear infinite;
+	opacity: 0.1;
+
+	@include from($bp-md) {
+		--spin-offset: translate(-30%, -40%);
+		width: 100%;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		animation: none;
+	}
+}
+
+@keyframes spin {
+	from {
+		transform: var(--spin-offset) rotate(0deg);
+	}
+	to {
+		transform: var(--spin-offset) rotate(360deg);
+	}
+}
+
+.heroInner {
+	@include container;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--space-sm);
+	padding: var(--space-lg) var(--space-sm);
+
+	@include from($bp-md) {
+		padding: var(--space-xl) var(--space-lg);
+	}
+
+	h1 {
+		max-width: 24ch;
+		color: var(--on-gradient);
+		font-size: clamp(1.625rem, 1.15rem + 3.6vw, 3.25rem);
+	}
+}
+
+.eyebrow {
+	@include eyebrow;
+	color: hsl(0, 0%, 100%, 0.82);
+}
+
+.heroCopy {
+	color: hsl(0, 0%, 100%, 0.85);
+	font-size: 1.0625rem;
+	max-width: 56ch;
+}
+
+.body {
+	@include container;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xl);
+	padding-top: var(--space-lg);
+	padding: 0 var(--space-sm);
+
+	@include from($bp-md) {
+		padding-top: var(--space-xl);
+	}
+}
+
+.section {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+	max-width: 44rem;
+
+	h2 {
+		font-size: clamp(1.375rem, 1.1rem + 1.6vw, 2rem);
+	}
+}
+
+.label {
+	@include eyebrow;
+	color: var(--color-coral);
+}
+
+.prose {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+	font-size: 1.0625rem;
+	line-height: 1.65;
+	color: var(--color-ink);
+}
+
+.steps {
+	list-style: none;
+	padding: 0;
+	margin: var(--space-xs) 0 0;
+	display: grid;
+	gap: var(--space-sm);
+
+	@include from($bp-md) {
+		grid-template-columns: repeat(3, 1fr);
+		max-width: none;
+	}
+}
+
+.step {
+	@include card;
+	display: flex;
+	flex-direction: column;
+	gap: 0.4rem;
+	padding: var(--space-md);
+
+	h3 {
+		font-size: 1.125rem;
+	}
+
+	p {
+		color: var(--color-ink-soft);
+		line-height: 1.55;
+	}
+}
+
+.stepNumber {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 2rem;
+	height: 2rem;
+	margin-bottom: 0.25rem;
+	border-radius: 50%;
+	background: var(--color-coral-soft);
+	color: var(--color-coral);
+	font-weight: 800;
+	font-size: 0.9375rem;
+}
+
+.cta {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: var(--space-sm);
+	padding: var(--space-md);
+	border-radius: var(--radius-lg);
+	background: var(--color-primary-soft);
+
+	@include from($bp-md) {
+		padding: var(--space-lg);
+	}
+
+	h2 {
+		font-size: clamp(1.375rem, 1.1rem + 1.6vw, 2rem);
+	}
+
+	p {
+		max-width: 52ch;
+		color: var(--color-ink-soft);
+	}
+}
+
+.actions {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xs);
+	width: 100%;
+
+	@include from($bp-sm) {
+		flex-direction: row;
+		width: auto;
+	}
+}
+
+.primary {
+	@include button-solid;
+}
+
+.secondary {
+	@include button-outline;
+}
