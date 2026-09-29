@@ -8,6 +8,7 @@
 
 .contactLink {
 	a {
+		white-space: nowrap;
 		text-decoration: underline;
 		text-underline-offset: 2px;
 
@@ -18,9 +19,10 @@
 }
 
 .credit {
-	margin-top: 0.25rem;
+	margin-top: var(--space-xs);
 
 	a {
+		white-space: nowrap;
 		text-decoration: underline;
 		text-underline-offset: 2px;
 
@@ -40,8 +42,10 @@
 
 	p {
 		font-size: 0.8125rem;
+		line-height: 1.7;
 		color: var(--color-ink-soft);
 		text-align: center;
+		text-wrap: balance;
 
 		@include from($bp-md) {
 			text-align: left;
