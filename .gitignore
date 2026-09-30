@@ -10,3 +10,6 @@ next-env.d.ts
 .neon
 
 /data/gazetteer
+
+# Private launch checklist (repo is public)
+TODO.md
