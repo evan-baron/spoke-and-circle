@@ -25,6 +25,7 @@ export interface TeamFormProps {
 	submitter?: { name: string; email: string } | null;
 	onReject?: (reason: string | undefined) => Promise<void>;
 	excludeTeamId?: string;
+	showAdminFields?: boolean;
 }
 
 export function TeamForm({
@@ -35,6 +36,7 @@ export function TeamForm({
 	onSubmit,
 	onReject,
 	excludeTeamId,
+	showAdminFields = true,
 }: TeamFormProps) {
 	const values = initialValues ?? DEFAULT_TEAM_FORM_VALUES;
 	const isReview = mode === 'review';
@@ -188,7 +190,7 @@ export function TeamForm({
 
 			{groupType !== 'Group Ride' && <TeamClubDetailsSection values={values} />}
 
-			{(isEdit || isReview) && (
+			{(isEdit || isReview) && showAdminFields && (
 				<Section title='Admin'>
 					<Checkbox
 						label='Verified'

@@ -238,11 +238,19 @@ export interface CreateTeamResponse {
 }
 
 export interface CurrentUser {
+  id: number;
   email: string;
   firstName: string | null;
   lastName: string | null;
   role: "user" | "admin";
   isAdmin: boolean;
+}
+
+export interface UserOption {
+  id: number;
+  firstName: string | null;
+  lastName: string | null;
+  email: string;
 }
 
 export interface LocationOption {

@@ -6,6 +6,7 @@ import type { EmailStatus } from '@/services/mailService';
 import { syncAdditionalPlaces } from '@/services/teamLocationService';
 import { resolveCoordinates } from '@/services/placeService';
 import { sendRejectionEmail } from '@/services/rejectionEmailService';
+import { sendTeamTransferEmail } from '@/services/teamTransferEmailService';
 
 export async function approvePendingTeam(
 	id: string,
@@ -61,10 +62,14 @@ export async function approvePendingTeam(
 export async function updateApprovedTeam(
 	id: string,
 	input: CreateTeamInput,
-	verified?: boolean,
+	{ verified, ownerId }: { verified?: boolean; ownerId?: number } = {},
 ): Promise<boolean> {
 	const result = await prisma.team.updateMany({
-		where: { id, status: 'Approved' },
+		where: {
+			id,
+			status: 'Approved',
+			...(ownerId !== undefined ? { submittedById: ownerId } : {}),
+		},
 		data: {
 			...toApprovedTeamUpdate(input),
 			...((await resolveCoordinates(input.location)) ?? {
@@ -86,6 +91,50 @@ export async function updateApprovedTeam(
 	}
 
 	return true;
+}
+
+export type TransferOwnershipResult =
+	| { status: 'team_not_found' | 'user_not_found' | 'already_owner' }
+	| { status: 'transferred'; emailStatus: EmailStatus };
+
+export async function transferTeamOwnership(
+	teamId: string,
+	newOwnerId: number,
+	adminId: number,
+): Promise<TransferOwnershipResult> {
+	const [team, newOwner] = await Promise.all([
+		prisma.team.findUnique({
+			where: { id: teamId },
+			select: { name: true, status: true, submittedById: true },
+		}),
+		prisma.user.findFirst({
+			where: { id: newOwnerId, active: true },
+			select: { email: true, firstName: true },
+		}),
+	]);
+
+	if (!team) return { status: 'team_not_found' };
+	if (!newOwner) return { status: 'user_not_found' };
+	if (team.submittedById === newOwnerId) return { status: 'already_owner' };
+
+	await prisma.team.update({
+		where: { id: teamId },
+		data: { submittedById: newOwnerId },
+	});
+
+	try {
+		const emailStatus = await sendTeamTransferEmail({
+			to: newOwner.email,
+			firstName: newOwner.firstName,
+			teamName: team.name,
+			approved: team.status === 'Approved',
+			sentByAdminId: adminId,
+		});
+		return { status: 'transferred', emailStatus };
+	} catch (error) {
+		console.error('Failed to send team transfer email:', error);
+		return { status: 'transferred', emailStatus: 'failed' };
+	}
 }
 
 export async function toggleTeamVerified(id: string): Promise<boolean | null> {

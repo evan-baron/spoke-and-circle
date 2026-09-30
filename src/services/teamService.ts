@@ -12,6 +12,16 @@ export const getApprovedTeamById = cache(
 	},
 );
 
+export async function isApprovedTeamOwner(
+	teamId: string,
+	userId: number,
+): Promise<boolean> {
+	const count = await prisma.team.count({
+		where: { id: teamId, status: 'Approved', submittedById: userId },
+	});
+	return count > 0;
+}
+
 export function countApprovedTeams(): Promise<number> {
 	return prisma.team.count({ where: { status: 'Approved' } });
 }

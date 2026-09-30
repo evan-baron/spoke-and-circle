@@ -12,6 +12,7 @@ export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
 		const user = await findOrCreateUser(session.user);
 
 		return {
+			id: user.id,
 			email: user.email,
 			firstName: user.firstName,
 			lastName: user.lastName,
@@ -23,6 +24,12 @@ export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
 		return null;
 	}
 });
+
+export async function requireUser(returnTo: string): Promise<CurrentUser> {
+	const user = await getCurrentUser();
+	if (!user) redirect(`/auth/login?returnTo=${encodeURIComponent(returnTo)}`);
+	return user;
+}
 
 export async function requireAdmin(): Promise<CurrentUser> {
 	const user = await getCurrentUser();

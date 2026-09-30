@@ -3,6 +3,7 @@ import type {
 	LocationsResponse,
 	TeamSearchResponse,
 	TeamsResponse,
+	UserOption,
 } from '@/lib/types';
 import { ApiError } from '@/services/apiError';
 
@@ -39,6 +40,11 @@ export const teamAPI = {
 			method: 'POST',
 			body: JSON.stringify(payload),
 		}),
+	update: (id: string, payload: unknown) =>
+		apiCall<{ success: boolean }>(`/api/teams/${encodeURIComponent(id)}`, {
+			method: 'PUT',
+			body: JSON.stringify(payload),
+		}),
 	search: (
 		query: string,
 		signal?: AbortSignal,
@@ -62,6 +68,16 @@ export const adminAPI = {
 		apiCall<{ success: boolean; emailStatus: string }>(
 			`/api/admin/teams/${encodeURIComponent(id)}`,
 			{ method: 'DELETE', body: JSON.stringify({ reason }) },
+		),
+	searchUsers: (query: string, signal?: AbortSignal) =>
+		apiCall<{ success: boolean; users: UserOption[] }>(
+			`/api/admin/users/search?q=${encodeURIComponent(query)}`,
+			{ method: 'GET', signal },
+		),
+	transferTeam: (id: string, userId: number) =>
+		apiCall<{ success: boolean; emailStatus: string }>(
+			`/api/admin/teams/${encodeURIComponent(id)}/owner`,
+			{ method: 'PUT', body: JSON.stringify({ userId }) },
 		),
 	updateTeam: (id: string, payload: unknown) =>
 		apiCall<{ success: boolean }>(`/api/admin/teams/${encodeURIComponent(id)}`, {

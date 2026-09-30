@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { AdminTeamEdit } from '@/components/TeamForm/AdminTeamEdit';
+import TeamOwnerTransfer from '@/components/TeamOwnerTransfer/TeamOwnerTransfer';
 import { toTeamFormValues } from '@/lib/api/teamMapper';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/services/currentUserService';
@@ -22,6 +23,11 @@ export default async function AdminEditTeamPage({
 	const { teamId } = await params;
 	const team = await prisma.team.findFirst({
 		where: { id: teamId, status: 'Approved' },
+		include: {
+			submittedBy: {
+				select: { id: true, firstName: true, lastName: true, email: true },
+			},
+		},
 	});
 	if (!team) notFound();
 
@@ -32,6 +38,12 @@ export default async function AdminEditTeamPage({
 					&larr; {team.name}
 				</Link>
 				<h1>Edit: {team.name}</h1>
+
+				<TeamOwnerTransfer
+					teamId={team.id}
+					teamName={team.name}
+					owner={team.submittedBy}
+				/>
 
 				<AdminTeamEdit
 					teamId={team.id}

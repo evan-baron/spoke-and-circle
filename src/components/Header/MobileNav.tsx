@@ -28,6 +28,11 @@ const MobileNav = ({ user }: MobileNavProps) => {
 						{user.isAdmin && (
 							<AdminNavLink initialCount={user.pendingCount} />
 						)}
+						{!user.isAdmin && (
+							<Link href='/dashboard' className={styles.navLink}>
+								My Teams
+							</Link>
+						)}
 						<a
 							href='/auth/logout'
 							className={`${styles.navLink} ${styles.navLinkWithIcon}`}

@@ -32,7 +32,7 @@ export const PUT = withAuth(
 		const updated = await updateApprovedTeam(
 			teamId,
 			parsed.data,
-			typeof verified === 'boolean' ? verified : undefined,
+			{ verified: typeof verified === 'boolean' ? verified : undefined },
 		);
 		if (!updated) return json404('Approved team not found');
 

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { PendingTeamReview } from '@/components/TeamForm/PendingTeamReview';
+import TeamOwnerTransfer from '@/components/TeamOwnerTransfer/TeamOwnerTransfer';
 import { toTeamFormValues } from '@/lib/api/teamMapper';
 import { formatSubmittedDate, formatSubmitter } from '@/lib/format';
 import { prisma } from '@/lib/prisma';
@@ -24,7 +25,9 @@ export default async function AdminReviewPendingPage({
 	const team = await prisma.team.findFirst({
 		where: { id: teamId, status: 'Pending' },
 		include: {
-			submittedBy: { select: { firstName: true, lastName: true, email: true } },
+			submittedBy: {
+				select: { id: true, firstName: true, lastName: true, email: true },
+			},
 		},
 	});
 	if (!team) notFound();
@@ -48,6 +51,12 @@ export default async function AdminReviewPendingPage({
 					Submitted {formatSubmittedDate(team.createdAt)} by{' '}
 					{formatSubmitter(team.submittedBy)}
 				</p>
+
+				<TeamOwnerTransfer
+					teamId={team.id}
+					teamName={team.name}
+					owner={team.submittedBy}
+				/>
 
 				<PendingTeamReview
 					teamId={team.id}

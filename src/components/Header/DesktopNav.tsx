@@ -31,6 +31,11 @@ const DesktopNav = ({ user }: DesktopNavProps) => {
 				{user && user.isAdmin && (
 					<AdminNavLink initialCount={user.pendingCount} />
 				)}
+				{user && !user.isAdmin && (
+					<Link href='/dashboard' className={styles.navLink}>
+						My Teams
+					</Link>
+				)}
 				<Link href='/search' className={styles.navLink}>
 					Browse
 				</Link>

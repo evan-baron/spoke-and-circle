@@ -25,7 +25,10 @@ import { jsonLdScript } from '@/lib/jsonLd';
 import { getSiteUrl, OG_IMAGE_PATH, SITE_NAME } from '@/lib/siteConfig';
 import { toneForPace, toneForVerified, toneForVisibility } from '@/lib/tone';
 import { getCurrentUser } from '@/services/currentUserService';
-import { getApprovedTeamById } from '@/services/teamService';
+import {
+	getApprovedTeamById,
+	isApprovedTeamOwner,
+} from '@/services/teamService';
 import styles from './team.module.scss';
 
 interface TeamPageParams {
@@ -93,6 +96,12 @@ export default async function TeamPage({
 		notFound();
 	}
 
+	const editHref =
+		currentUser?.isAdmin ? `/admin/teams/${team.id}/edit`
+		: currentUser && (await isApprovedTeamOwner(team.id, currentUser.id)) ?
+			`/dashboard/teams/${team.id}/edit`
+		:	null;
+
 	const joinFlags = [
 		team.joinRequirements.open && 'Open to all',
 		team.joinRequirements.tryouts && 'Try-outs required',
@@ -123,11 +132,8 @@ export default async function TeamPage({
 			<div className={styles.wrap}>
 				<div className={styles.topRow}>
 					<BackButton />
-					{currentUser?.isAdmin && (
-						<Link
-							href={`/admin/teams/${team.id}/edit`}
-							className={styles.editLink}
-						>
+					{editHref && (
+						<Link href={editHref} className={styles.editLink}>
 							Edit
 						</Link>
 					)}

@@ -202,7 +202,7 @@
 .filterGrid {
 	display: grid;
 	grid-template-columns: 1fr;
-	gap: var(--space-2xs);
+	gap: var(--space-xs);
 
 	@include from($bp-md) {
 		grid-template-columns: repeat(4, 1fr);
