@@ -9,6 +9,7 @@ import { teamAPI } from '@/services/api';
 
 export default function NewTeamPage() {
 	const [submitted, setSubmitted] = useState(false);
+	const [published, setPublished] = useState(false);
 	const invalidatePendingCount = useInvalidatePendingTeamCount();
 
 	if (submitted) {
@@ -17,10 +18,12 @@ export default function NewTeamPage() {
 				<div className={`${styles.wrap} ${styles.confirmation}`}>
 					<div className={styles.confirmationCard}>
 						<p className={styles.confirmationMark}>&#10003;</p>
-						<h1>Submission received</h1>
+						<h1>{published ? 'Team published' : 'Submission received'}</h1>
 						<p>
-							An admin will review this submission before it appears in search
-							results. They may follow up with you if they have any questions.
+							{published ?
+								'The team is live in the directory now.'
+							:	'An admin will review this submission before it appears in search results. They may follow up with you if they have any questions.'
+							}
 						</p>
 						<div className={styles.confirmationActions}>
 							<Link href='/search' className={styles.buttonOutline}>
@@ -59,8 +62,9 @@ export default function NewTeamPage() {
 				<TeamForm
 					mode='create'
 					onSubmit={async (payload) => {
-						await teamAPI.create(payload);
-						await invalidatePendingCount();
+						const result = await teamAPI.create(payload);
+						if (!result.published) await invalidatePendingCount();
+						setPublished(result.published);
 						setSubmitted(true);
 					}}
 				/>

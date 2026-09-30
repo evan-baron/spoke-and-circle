@@ -234,6 +234,7 @@ export interface TeamFormValues {
 
 export interface CreateTeamResponse {
   success: boolean;
+  published: boolean;
   team: { id: string };
 }
 

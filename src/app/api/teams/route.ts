@@ -32,10 +32,13 @@ export const GET = withPublicRateLimit('teams-read', async () => {
 	}
 });
 
-async function getSubmitterId(): Promise<number | undefined> {
+async function getSubmitter(): Promise<
+	{ id: number; isAdmin: boolean } | undefined
+> {
 	try {
 		const { user } = await getApiUser();
-		return user?.active ? user.id : undefined;
+		if (!user?.active) return undefined;
+		return { id: user.id, isAdmin: user.role === 'admin' };
 	} catch {
 		return undefined;
 	}
@@ -66,9 +69,19 @@ export const POST = withPublicRateLimit('teams-write', async (request) => {
 	if (unknownLocationsMessage) return json400(unknownLocationsMessage);
 
 	try {
+		const submitter = await getSubmitter();
+		const published = submitter?.isAdmin === true;
+
 		const team = await prisma.team.create({
 			data: {
-				...toTeamCreateInput(parsed.data, await getSubmitterId()),
+				...toTeamCreateInput(parsed.data, submitter?.id),
+				...(published ?
+					{
+						status: 'Approved' as const,
+						verified: true,
+						lastActiveYear: new Date().getFullYear(),
+					}
+				:	{}),
 				...(await resolveCoordinates(parsed.data.location)),
 			},
 			select: { id: true },
@@ -81,7 +94,7 @@ export const POST = withPublicRateLimit('teams-write', async (request) => {
 		}
 
 		return NextResponse.json(
-			{ success: true, team: { id: team.id } },
+			{ success: true, published, team: { id: team.id } },
 			{ status: 201 },
 		);
 	} catch (error) {

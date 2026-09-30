@@ -38,6 +38,7 @@ const DashboardView = ({ teams }: DashboardViewProps) => {
 	const invalidatePendingCount = useInvalidatePendingTeamCount();
 	const [view, setView] = useState<View>('teams');
 	const [submitted, setSubmitted] = useState(false);
+	const [published, setPublished] = useState(false);
 
 	function selectView(next: View) {
 		setView(next);
@@ -107,11 +108,11 @@ const DashboardView = ({ teams }: DashboardViewProps) => {
 						(submitted ?
 							<div className={styles.confirmationCard}>
 								<p className={styles.confirmationMark}>&#10003;</p>
-								<h2>Submission received</h2>
+								<h2>{published ? 'Team published' : 'Submission received'}</h2>
 								<p>
-									An admin will review this submission before it appears in
-									search results. They may follow up with you if they have any
-									questions.
+									{published ?
+									'Your team is live in the directory now. Admin submissions skip the review step.'
+								:	'An admin will review this submission before it appears in search results. They may follow up with you if they have any questions.'}
 								</p>
 								<div className={styles.confirmationActions}>
 									<button
@@ -133,9 +134,10 @@ const DashboardView = ({ teams }: DashboardViewProps) => {
 						:	<TeamForm
 								mode='create'
 								onSubmit={async (payload) => {
-									await teamAPI.create(payload);
-									await invalidatePendingCount();
+									const result = await teamAPI.create(payload);
+									if (!result.published) await invalidatePendingCount();
 									router.refresh();
+									setPublished(result.published);
 									setSubmitted(true);
 								}}
 							/>)}
