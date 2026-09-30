@@ -322,10 +322,6 @@ export function AdminTeamsTable({
 				</>
 			}
 
-			<p className={styles.note}>
-				This is a wireframe; deleting won&rsquo;t remove any data.
-			</p>
-
 			<dialog
 				ref={dialogRef}
 				className={styles.dialog}
@@ -347,10 +343,6 @@ export function AdminTeamsTable({
 								)}
 							</ul>
 						)}
-						<p className={styles.dialogText}>
-							This is a wireframe. Nothing is saved, and the list comes back
-							when you reload the page.
-						</p>
 						<div className={styles.dialogActions}>
 							<button
 								type='button'
