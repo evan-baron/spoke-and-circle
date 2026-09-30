@@ -131,7 +131,7 @@ main {
 	// above .explainer reads the same as the space below it. Only takes
 	// effect where main has more than one child — every other route wraps
 	// its content in a single page div, so this is a no-op there.
-	gap: var(--space-lg);
+	gap: var(--space-xl);
 
 	@media screen and (min-width: 768px) {
 		gap: var(--space-2xl);
