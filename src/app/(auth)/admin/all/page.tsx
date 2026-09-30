@@ -28,8 +28,8 @@ export default async function AdminAllGroupsPage({
 	);
 
 	const summarySuffix = [
-		params.q && ` for “${params.q}”`,
-		params.location && ` near “${params.location}”`,
+		params.q && ` for "${params.q}"`,
+		params.location && ` near "${params.location}"`,
 		params.bikeTypes.length > 1 && ` riding ${params.bikeTypes.join(', ')}`,
 	]
 		.filter(Boolean)

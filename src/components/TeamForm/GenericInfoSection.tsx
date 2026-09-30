@@ -41,7 +41,7 @@ export function GenericInfoSection({
 				label={groupType === 'Group Ride' ? 'Ride Name' : 'Group Name'}
 				hint={
 					namePrefix ?
-						`Saved as “${namePrefix} - ${name.trim() || 'your ride name'}”. The team name is added for you.`
+						`Saved as "${namePrefix} - ${name.trim() || 'your ride name'}". The team name is added for you.`
 					:	undefined
 				}
 			>

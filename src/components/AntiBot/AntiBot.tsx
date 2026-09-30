@@ -68,7 +68,7 @@ export function AntiBot({ onValidChange }: AntiBotProps) {
 			<input type='hidden' name='antibotIndex' value={questionIndex} />
 			{showError && (
 				<span id={errorId} className={styles.error} role='alert'>
-					{showRequired ? 'This field is required' : 'That answer isn’t right'}
+					{showRequired ? 'This field is required' : `That answer isn't right`}
 				</span>
 			)}
 		</div>

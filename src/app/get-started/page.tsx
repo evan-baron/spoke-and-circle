@@ -5,7 +5,7 @@ import styles from './getStarted.module.scss';
 export const metadata: Metadata = {
 	title: 'Find Your Cycling Team or Group Ride',
 	description:
-		'Answer four quick questions about your ZIP code, riding discipline, and skill level, and we’ll point you to cycling teams, clubs, and group rides that fit.',
+		`Answer four quick questions about your ZIP code, riding discipline, and skill level, and we'll point you to cycling teams, clubs, and group rides that fit.`,
 	alternates: { canonical: '/get-started' },
 };
 

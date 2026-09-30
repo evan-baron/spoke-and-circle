@@ -27,7 +27,7 @@ interface DashboardViewProps {
 const VIEWS: { id: View; label: string }[] = [
 	{ id: 'teams', label: 'My Teams' },
 	{ id: 'rides', label: 'My Group Rides' },
-	{ id: 'submit', label: 'Submit a Team' },
+	{ id: 'submit', label: 'Submit a Team or Group Ride' },
 ];
 
 const STATUS_TONES: Record<string, BadgeTone> = {
@@ -122,7 +122,9 @@ const DashboardView = ({ teams }: DashboardViewProps) => {
 							type='button'
 							role='tab'
 							aria-selected={view === id}
-							className={view === id ? styles.buttonSolid : styles.buttonOutline}
+							className={
+								view === id ? styles.buttonSolid : styles.buttonOutline
+							}
 							onClick={() => selectView(id)}
 						>
 							{label}
@@ -134,14 +136,14 @@ const DashboardView = ({ teams }: DashboardViewProps) => {
 					{view === 'teams' && (
 						<TeamList
 							items={otherTeams}
-							emptyMessage='You haven’t submitted any teams yet.'
+							emptyMessage={`You haven't submitted any teams yet.`}
 						/>
 					)}
 
 					{view === 'rides' && (
 						<TeamList
 							items={groupRides}
-							emptyMessage='You haven’t submitted any group rides yet. Use “Add a group ride” on one of your teams, or submit one from the Submit a Team tab.'
+							emptyMessage={`You haven't submitted any group rides yet. Use "Add a group ride" on one of your teams, or submit one from the Submit a Team tab.`}
 						/>
 					)}
 
@@ -153,13 +155,16 @@ const DashboardView = ({ teams }: DashboardViewProps) => {
 								<p>
 									{published ?
 										'Your team is live in the directory now. Admin submissions skip the review step.'
-									:	'An admin will review this submission before it appears in search results. They may follow up with you if they have any questions.'}
+									:	'An admin will review this submission before it appears in search results. They may follow up with you if they have any questions.'
+									}
 								</p>
 								<div className={styles.confirmationActions}>
 									<button
 										type='button'
 										className={styles.buttonOutline}
-										onClick={() => selectView(submittedRide ? 'rides' : 'teams')}
+										onClick={() =>
+											selectView(submittedRide ? 'rides' : 'teams')
+										}
 									>
 										{submittedRide ? 'View my group rides' : 'View my teams'}
 									</button>

@@ -28,7 +28,7 @@ export async function generateMetadata({
 		params.page > 1;
 
 	const title =
-		params.q ? `“${params.q}” cycling teams and group rides`
+		params.q ? `"${params.q}" cycling teams and group rides`
 		: params.location ? `Cycling teams and group rides near ${params.location}`
 		: 'Search Cycling Teams & Group Rides';
 

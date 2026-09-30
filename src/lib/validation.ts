@@ -350,7 +350,7 @@ const personNameSchema = z
 	.trim()
 	.max(50, 'Names must be less than 50 characters')
 	.refine((value) => !/[\u0000-\u001f\u007f@<>]/.test(value), {
-		message: 'Names can’t contain @, < or >',
+		message: `Names can't contain @, < or >`,
 	});
 
 export const profileNameSchema = z.object({
