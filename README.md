@@ -6,18 +6,8 @@ Hosting: domain on Cloudflare, app on Vercel, database on Neon, auth via Auth0.
 
 ## 1. Blocking before launch
 
-### Cloudflare and Vercel setup
-
-`CLOUDFLARE_ORIGIN_SECRET` is generated and set in both Vercel and a Cloudflare Transform Rule (Modify Request Header, sets `X-Origin-Secret` on all requests to the domain).
-
-- [ ] Confirm the rate limiter actually sees separate visitor IPs now that traffic is live. Hit the API a few times from different networks and check the `identifier` values in the `RateLimit` table. If they are all Cloudflare addresses, the secret or rule is wrong.
-  - Why: the limiter (`src/lib/rateLimit.ts`) only trusts `CF-Connecting-IP` when the `X-Origin-Secret` header matches. Without it, every visitor behind Cloudflare shares a few IPs and would lock each other out of the 60 per minute location search limit.
-
 ### SEO and social sharing
 
-- [ ] Still needed: create `public/og-image.png` (1200 x 630). The site metadata already points at it in `src/app/layout.tsx`, so link previews on social sites and messaging apps show no image until the file exists.
-- [ ] Optional: add a 180 x 180 `public/apple-touch-icon.png` for iPhone home-screen icons, and add it to the `icons` list in `src/app/layout.tsx`.
-- [ ] After launch, add the site to Google Search Console and submit `/sitemap.xml`. Set `APP_BASE_URL` to the exact production origin first (with or without `www`, whichever you serve), because canonical links, the sitemap, and social URLs are built from it.
 
 ### Verify in a real browser
 
@@ -39,13 +29,6 @@ The repo rules say not to use browser automation or run builds unless asked, so 
   - Some form inputs have nowhere to be stored yet: the "Other" text for virtual platforms (`virtualPlatformOtherDescription`), and the segmentation yes/no and description. Persona "Other" text is stored as its own persona entry.
   - There is no duplicate check. The same name can be submitted repeatedly, and only the rate limit slows it down.
 - [ ] **Admin review follow-ups** (approve and reject work at `/admin/pending`):
-  - **Rejection emails are built but need setup.** Rejecting a team emails the logged-in submitter from `support@spokeandcircle.com` through Resend (`src/services/mailService.ts`, `rejectionEmailService.ts`). Before it works in production:
-    - Add the domain in Resend and add the SPF and DKIM DNS records in Cloudflare. Also add a DMARC record.
-    - Create an API key limited to sending, and set `RESEND_API_KEY` in Vercel and in your local `.env`. Without it, rejecting still works and the admin sees a notice that no email was sent.
-    - Make sure `support@spokeandcircle.com` is a real mailbox, since replies to the rejection and approval emails go there, and so do messages from the contact form.
-    - Anonymous submissions get no email, because there is no verified address. The team's public contact email is not used, since anyone could type someone else's address. Decide whether that is acceptable, or whether to collect a verified submitter email.
-    - Decide whether the reason should be required. It is optional today and is not stored anywhere, since the team is deleted.
-    - Check the limits fit real use: 30 emails per hour per admin, 3 per day per recipient, 200 per day overall (`src/lib/rateLimitConfig.ts`).
   - Decide whether reject should really hard delete, or set `Rejected` and keep the row (easier to audit and to answer "why was mine rejected"). `Rejected` exists in the status enum but is unused.
 - [ ] **Persona radio stores display text.** Persona is saved as text like `Women Only`. The plan is to store a code (`womenOnly`) and map it to a label for display, with a separate field for the "Other" text. Not done yet.
 - [ ] **Staged team deletion.** Only the schema exists (`Team.deleteAfter`, `Team.deletionRequestedAt`, with an index on `deleteAfter`). Nothing uses it yet. Design and tasks are under "Staged team deletion design" in the Reference section. To finish it:
@@ -141,6 +124,6 @@ There is no `DATABASE_URL_UNPOOLED` in this project — everything, including mi
 
 ### Environment variable names (values live in `.env` and Vercel only)
 
-`DEVELOPMENT_DATABASE_URL`, `DATABASE_URL`, `NEON_BRANCH`, `APP_BASE_URL`, `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, `AUTH0_SECRET`, `CLOUDFLARE_ORIGIN_SECRET`, `RESEND_API_KEY`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`
+`DEVELOPMENT_DATABASE_URL`, `DATABASE_URL`, `APP_BASE_URL`, `AUTH0_DOMAIN`, `AUTH0_CLIENT_ID`, `AUTH0_CLIENT_SECRET`, `AUTH0_SECRET`, `CLOUDFLARE_ORIGIN_SECRET`, `RESEND_API_KEY`, `NEXT_PUBLIC_GA_MEASUREMENT_ID`
 
 `NEXT_PUBLIC_GA_MEASUREMENT_ID` is the Google Analytics 4 Measurement ID (`src/components/GoogleAnalytics/GoogleAnalytics.tsx`, wired in `src/app/layout.tsx`). It only renders when the var is set, so scope it to the Production environment in Vercel to keep local dev and preview deployments out of analytics.
