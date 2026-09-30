@@ -86,6 +86,14 @@ export const adminAPI = {
 		}),
 };
 
+export const profileAPI = {
+	updateName: (payload: { firstName: string; lastName?: string }) =>
+		apiCall<{ success: boolean }>('/api/profile', {
+			method: 'PUT',
+			body: JSON.stringify(payload),
+		}),
+};
+
 export const contactAPI = {
 	send: (payload: unknown) =>
 		apiCall<{ success: boolean }>('/api/contact', {

@@ -66,6 +66,10 @@ export function formatSubmittedDate(date: Date): string {
 	});
 }
 
+export function isMissingName(name: string | null | undefined): boolean {
+	return !name || name.includes('@');
+}
+
 export function formatSubmitter(
 	user: {
 		firstName: string | null;

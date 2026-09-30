@@ -1,11 +1,12 @@
 import type { User as Auth0User } from '@auth0/nextjs-auth0/types';
+import { isMissingName } from '@/lib/format';
 import { prisma } from '@/lib/prisma';
 
 function extractNames(user: Auth0User) {
 	let firstName: string | null = user.given_name ?? null;
 	let lastName: string | null = user.family_name ?? null;
 
-	if (!firstName && !lastName && user.name) {
+	if (!firstName && !lastName && user.name && !user.name.includes('@')) {
 		const nameParts = user.name.trim().split(' ');
 		if (nameParts.length >= 2) {
 			firstName = nameParts[0] ?? null;
@@ -13,10 +14,6 @@ function extractNames(user: Auth0User) {
 		} else if (nameParts.length === 1) {
 			firstName = nameParts[0] ?? null;
 		}
-	}
-
-	if (!firstName && !lastName) {
-		firstName = user.nickname ?? null;
 	}
 
 	return { firstName, lastName };
@@ -46,8 +43,15 @@ export async function findOrCreateUser(user: Auth0User) {
 	}
 
 	if (existingUser) {
-		const updateData =
-			user.email_verified ? userData : { firstName, lastName };
+		const updateData = {
+			...(user.email_verified ?
+				{ auth0Id: userData.auth0Id, email: userData.email }
+			:	{}),
+			...(isMissingName(existingUser.firstName) && firstName ?
+				{ firstName }
+			:	{}),
+			...(!existingUser.lastName && lastName ? { lastName } : {}),
+		};
 
 		const unchanged = Object.entries(updateData).every(
 			([key, value]) =>
@@ -62,4 +66,16 @@ export async function findOrCreateUser(user: Auth0User) {
 	}
 
 	return prisma.user.create({ data: userData });
+}
+
+export function updateUserName(
+	id: number,
+	firstName: string,
+	lastName: string | null,
+) {
+	return prisma.user.update({
+		where: { id },
+		data: { firstName, lastName },
+		select: { firstName: true, lastName: true },
+	});
 }

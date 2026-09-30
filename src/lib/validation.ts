@@ -303,6 +303,19 @@ export const rejectTeamSchema = z.object({
 		.optional(),
 });
 
+const personNameSchema = z
+	.string()
+	.trim()
+	.max(50, 'Names must be less than 50 characters')
+	.refine((value) => !/[\u0000-\u001f\u007f@<>]/.test(value), {
+		message: 'Names can’t contain @, < or >',
+	});
+
+export const profileNameSchema = z.object({
+	firstName: personNameSchema.min(1, 'First name is required'),
+	lastName: personNameSchema.optional(),
+});
+
 export const antiBotSchema = z.object({
 	antibotIndex: z
 		.number()
