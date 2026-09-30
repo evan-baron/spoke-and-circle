@@ -61,8 +61,8 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		([, label]) => label,
 	);
 
-	function rideDays() {
-		const raw = text('rideDays');
+	function rides() {
+		const raw = text('rides');
 		if (!raw) return undefined;
 		try {
 			const parsed = JSON.parse(raw);
@@ -111,10 +111,8 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		personaRestrictions,
 		eBikeAllowed: flag('eBikeAllowed'),
 		waitlist: flag('waitlist'),
-		rideSchedule: text('rideSchedule'),
-		startTimes: commaList('startTimes'),
-		rideDays: rideDays(),
-		seasons: values('season'),
+		rides: rides(),
+		scheduleNotes: text('scheduleNotes'),
 		pace: text('pace'),
 		typicalDistanceMiles: number('typicalDistanceMiles'),
 		typicalElevationGainFt: number('typicalElevationGainFt'),

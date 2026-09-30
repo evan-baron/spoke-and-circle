@@ -1,0 +1,58 @@
+@use '@/styles/mixins' as *;
+
+.trigger {
+	@include button-outline;
+	padding: 0.4rem 0.95rem;
+	font-size: 0.8125rem;
+	color: var(--color-coral);
+}
+
+.dialog {
+	@include card;
+	margin: auto;
+	padding: var(--space-md);
+	width: min(28rem, calc(100% - 2rem));
+	color: var(--color-ink);
+
+	&::backdrop {
+		background: hsl(291, 25%, 15%, 0.5);
+	}
+
+	&[open] {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+	}
+}
+
+.title {
+	font-size: 1.25rem;
+	overflow-wrap: anywhere;
+}
+
+.text {
+	font-size: 0.875rem;
+	color: var(--color-ink-soft);
+}
+
+.error {
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: var(--color-coral);
+}
+
+.actions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	gap: var(--space-xs);
+}
+
+.buttonOutline {
+	@include button-outline;
+}
+
+.buttonDanger {
+	@include button-solid;
+	background: var(--color-coral);
+}

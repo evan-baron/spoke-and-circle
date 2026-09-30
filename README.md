@@ -72,6 +72,7 @@ The repo rules say not to use browser automation or run builds unless asked, so 
 - [ ] No audit log yet. Repliably has one. Add it when the app has writes worth recording.
 - [ ] Rate limit table cleanup is opportunistic (about 1 in 100 rate-limited requests deletes old rows), there is no scheduled job.
 - [ ] Auth-related pages are not gated by a session cookie check. Decide whether anything needs it once submissions exist.
+- [ ] Drop the legacy schedule columns on `Team` (`rideSchedule`, `startTimes`, `rideDays`, `seasons`). The app no longer writes them, and reads them only as a fallback for teams that have no `rides` value yet (`deriveRides` in `src/lib/api/teamMapper.ts`). Once every team has been re-saved or backfilled, remove the fallback, the columns, and the demo data in `src/lib/teams.ts` and `prisma/seed.ts` that still sets them.
 
 ## Reference
 

@@ -1,7 +1,7 @@
 import type {
 	AgeRequirement,
 	MileageRequirement,
-	RideDay,
+	Ride,
 	Team,
 } from './types';
 
@@ -13,6 +13,23 @@ const WEEKDAY_ORDER = [
 	'Friday',
 	'Saturday',
 	'Sunday',
+];
+
+const ORDINAL_ORDER = ['1st', '2nd', '3rd', '4th', 'Last'];
+
+const MONTH_NAMES = [
+	'January',
+	'February',
+	'March',
+	'April',
+	'May',
+	'June',
+	'July',
+	'August',
+	'September',
+	'October',
+	'November',
+	'December',
 ];
 
 export function formatMemberCount(count: number): string {
@@ -86,14 +103,41 @@ export function formatSkillLevels(levels: string[]): string {
 	return levels.join(', ');
 }
 
-export function formatRideDays(days?: RideDay[]): string {
-	if (!days || days.length === 0) return 'None';
-	return [...days]
-		.sort((a, b) => WEEKDAY_ORDER.indexOf(a.day) - WEEKDAY_ORDER.indexOf(b.day))
-		.map((entry) =>
-			entry.details ? `${entry.day} - (${entry.details})` : entry.day,
-		)
-		.join(', ');
+function joinWithAnd(items: string[]): string {
+	if (items.length <= 1) return items.join('');
+	if (items.length === 2) return `${items[0]} and ${items[1]}`;
+	return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`;
+}
+
+function sortByOrder(items: string[], order: string[]): string[] {
+	return [...items].sort((a, b) => order.indexOf(a) - order.indexOf(b));
+}
+
+export function formatClockTime(time: string): string {
+	const [hours = 0, minutes = 0] = time.split(':').map(Number);
+	const period = hours >= 12 ? 'PM' : 'AM';
+	return `${hours % 12 || 12}:${String(minutes).padStart(2, '0')} ${period}`;
+}
+
+export function formatRideRecurrence(ride: Ride): string {
+	const days = joinWithAnd(sortByOrder(ride.days, WEEKDAY_ORDER));
+	const weeks = joinWithAnd(sortByOrder(ride.ordinals ?? [], ORDINAL_ORDER));
+
+	const cadence =
+		ride.pattern === 'monthly' ? `${weeks} ${days} of the month`
+		: ride.pattern === 'biweekly' ? `Every other ${days}`
+		: `Every ${days}`;
+
+	const months =
+		ride.monthFrom && ride.monthTo ?
+			ride.monthFrom === ride.monthTo ?
+				MONTH_NAMES[ride.monthFrom - 1]
+			:	`${MONTH_NAMES[ride.monthFrom - 1]}–${MONTH_NAMES[ride.monthTo - 1]}`
+		:	null;
+
+	return [cadence, ride.startTime && formatClockTime(ride.startTime), months]
+		.filter(Boolean)
+		.join(' · ');
 }
 
 export function getTeamLocations(

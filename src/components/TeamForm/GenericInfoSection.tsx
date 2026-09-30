@@ -1,4 +1,4 @@
-import { useId } from 'react';
+import { useId, useState } from 'react';
 import { LocationInput } from '@/components/LocationInput/LocationInput';
 import { LocationListInput } from '@/components/LocationInput/LocationListInput';
 import { TeamAffiliationInput } from '@/components/TeamAffiliationInput/TeamAffiliationInput';
@@ -16,6 +16,8 @@ interface GenericInfoSectionProps {
 	affiliatedId: string;
 	onAffiliationChange: (label: string, affiliatedId: string) => void;
 	excludeTeamId?: string;
+	lockedToParent?: boolean;
+	namePrefix?: string;
 }
 
 export function GenericInfoSection({
@@ -26,36 +28,62 @@ export function GenericInfoSection({
 	affiliatedId,
 	onAffiliationChange,
 	excludeTeamId,
+	lockedToParent,
+	namePrefix,
 }: GenericInfoSectionProps) {
+	const [name, setName] = useState(values.name);
 	const locationId = useId();
 	const additionalLocationsId = useId();
 
 	return (
 		<Section title='Generic Info'>
-			<Field label='Group Name'>
+			<Field
+				label={groupType === 'Group Ride' ? 'Ride Name' : 'Group Name'}
+				hint={
+					namePrefix ?
+						`Saved as “${namePrefix} - ${name.trim() || 'your ride name'}”. The team name is added for you.`
+					:	undefined
+				}
+			>
 				<input
 					type='text'
 					name='name'
-					defaultValue={values.name}
+					value={name}
+					onChange={(event) => setName(event.target.value)}
 					required
-					placeholder='e.g. Portland Velo Collective'
+					placeholder={
+						groupType === 'Group Ride' ?
+							'e.g. Saturday No-Drop Ride'
+						:	'e.g. Portland Velo Collective'
+					}
 					className={styles.input}
 				/>
 			</Field>
-			<Field label='Group Type'>
-				<select
-					name='type'
-					value={groupType}
-					onChange={(event) => onGroupTypeChange(event.target.value)}
-					className={styles.input}
-				>
-					{CLUB_TYPES.map((option) => (
-						<option key={option} value={option}>
-							{option}
-						</option>
-					))}
-				</select>
-			</Field>
+			{lockedToParent ?
+				<Field label='Group Type'>
+					<input type='hidden' name='type' value={groupType} />
+					<input
+						type='text'
+						value={groupType}
+						readOnly
+						className={styles.input}
+					/>
+				</Field>
+			:	<Field label='Group Type'>
+					<select
+						name='type'
+						value={groupType}
+						onChange={(event) => onGroupTypeChange(event.target.value)}
+						className={styles.input}
+					>
+						{CLUB_TYPES.map((option) => (
+							<option key={option} value={option}>
+								{option}
+							</option>
+						))}
+					</select>
+				</Field>
+			}
 			{groupType !== 'Group Ride' && (
 				<Field label='Mission statement' full>
 					<textarea
@@ -78,24 +106,36 @@ export function GenericInfoSection({
 					/>
 				</Field>
 			)}
-			<Field
-				label='Affiliation'
-				hint={
-					affiliatedId ?
-						'Linked to an existing team.'
-					:	'Begin typing to search Spoke & Circle for an existing team, club, or organization to link to'
-				}
-			>
-				<TeamAffiliationInput
-					name='affiliation'
-					affiliatedIdName='affiliatedId'
-					value={affiliationLabel}
-					affiliatedId={affiliatedId}
-					onChange={onAffiliationChange}
-					excludeId={excludeTeamId}
-					placeholder='e.g. Team, Bike Shop, Organization, etc.'
-				/>
-			</Field>
+			{lockedToParent ?
+				<Field label='Part of'>
+					<input type='hidden' name='affiliation' value={affiliationLabel} />
+					<input type='hidden' name='affiliatedId' value={affiliatedId} />
+					<input
+						type='text'
+						value={affiliationLabel}
+						readOnly
+						className={styles.input}
+					/>
+				</Field>
+			:	<Field
+					label='Affiliation'
+					hint={
+						affiliatedId ?
+							'Linked to an existing team.'
+						:	'Begin typing to search Spoke & Circle for an existing team, club, or organization to link to'
+					}
+				>
+					<TeamAffiliationInput
+						name='affiliation'
+						affiliatedIdName='affiliatedId'
+						value={affiliationLabel}
+						affiliatedId={affiliatedId}
+						onChange={onAffiliationChange}
+						excludeId={excludeTeamId}
+						placeholder='e.g. Team, Bike Shop, Organization, etc.'
+					/>
+				</Field>
+			}
 			<div className={styles.field}>
 				<label htmlFor={locationId} className={styles.fieldLabel}>
 					Location

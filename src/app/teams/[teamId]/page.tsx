@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { BackButton } from '@/components/BackButton/BackButton';
 import { Badge } from '@/components/Badge/Badge';
 import { ContactModal } from '@/components/ContactModal/ContactModal';
+import DeleteTeamButton from '@/components/DeleteTeamButton/DeleteTeamButton';
 import { MailIcon, PhoneIcon } from '@/components/ContactIcons/ContactIcons';
 import {
 	DetailRow,
@@ -16,7 +17,7 @@ import {
 	formatList,
 	formatMemberCount,
 	formatMileageRequirement,
-	formatRideDays,
+	formatRideRecurrence,
 	formatSkillLevels,
 	formatVerification,
 	formatYesNo,
@@ -26,6 +27,7 @@ import { getSiteUrl, OG_IMAGE_PATH, SITE_NAME } from '@/lib/siteConfig';
 import { toneForPace, toneForVerified, toneForVisibility } from '@/lib/tone';
 import { getCurrentUser } from '@/services/currentUserService';
 import {
+	getApprovedGroupRides,
 	getApprovedTeamById,
 	isApprovedTeamOwner,
 } from '@/services/teamService';
@@ -96,11 +98,24 @@ export default async function TeamPage({
 		notFound();
 	}
 
+	const groupRides =
+		team.type === 'Group Ride' ? [] : await getApprovedGroupRides(team.id);
+
+	const isOwner =
+		currentUser && !currentUser.isAdmin ?
+			await isApprovedTeamOwner(team.id, currentUser.id)
+		:	false;
+
 	const editHref =
 		currentUser?.isAdmin ? `/admin/teams/${team.id}/edit`
-		: currentUser && (await isApprovedTeamOwner(team.id, currentUser.id)) ?
-			`/dashboard/teams/${team.id}/edit`
-		:	null;
+		: isOwner ? `/dashboard/teams/${team.id}/edit`
+		: null;
+
+	const canDeleteGroupRide =
+		team.type === 'Group Ride' && (currentUser?.isAdmin || isOwner);
+
+	const canAddGroupRide =
+		team.type !== 'Group Ride' && (currentUser?.isAdmin || isOwner);
 
 	const joinFlags = [
 		team.joinRequirements.open && 'Open to all',
@@ -133,9 +148,28 @@ export default async function TeamPage({
 				<div className={styles.topRow}>
 					<BackButton />
 					{editHref && (
-						<Link href={editHref} className={styles.editLink}>
-							Edit
-						</Link>
+						<div className={styles.topActions}>
+							{canAddGroupRide && (
+								<Link
+									href={`/teams/new?from=${team.id}`}
+									className={styles.editLink}
+								>
+									Add a group ride
+								</Link>
+							)}
+							<Link href={editHref} className={styles.editLink}>
+								Edit
+							</Link>
+							{canDeleteGroupRide && (
+								<DeleteTeamButton
+									teamId={team.id}
+									teamName={team.name}
+									redirectTo={
+										currentUser?.isAdmin ? '/admin/all' : '/dashboard'
+									}
+								/>
+							)}
+						</div>
 					)}
 				</div>
 
@@ -352,23 +386,30 @@ export default async function TeamPage({
 
 						{team.type === 'Group Ride' && (
 							<DetailSection title='Ride profile'>
-								<DetailRow label='Schedule' value={team.rideSchedule} />
-								{team.seasons && team.seasons.length > 0 && (
+								{team.rides.map((ride, index) => (
 									<DetailRow
-										label='Season(s)'
-										value={formatList(team.seasons)}
+										key={index}
+										label={
+											team.rides.length > 1 ?
+												`Schedule ${index + 1}`
+											:	'Schedule'
+										}
+										value={
+											<>
+												{formatRideRecurrence(ride)}
+												{ride.details && (
+													<span className={styles.rideDetails}>
+														{ride.details}
+													</span>
+												)}
+											</>
+										}
 									/>
-								)}
-								{team.startTimes && (
+								))}
+								{team.scheduleNotes && (
 									<DetailRow
-										label='Start times'
-										value={formatList(team.startTimes)}
-									/>
-								)}
-								{team.rideDays && team.rideDays.length > 0 && (
-									<DetailRow
-										label='Ride days'
-										value={formatRideDays(team.rideDays)}
+										label='Schedule notes'
+										value={team.scheduleNotes}
 									/>
 								)}
 								<DetailRow label='Segmentation' value={team.segmentation} />
@@ -431,6 +472,32 @@ export default async function TeamPage({
 									value={formatList(team.eventTypes)}
 								/>
 								<DetailRow label='Sponsors' value={formatList(team.sponsors)} />
+							</DetailSection>
+						)}
+
+						{groupRides.length > 0 && (
+							<DetailSection title='Group rides'>
+								{groupRides.map((ride) => (
+									<DetailRow
+										key={ride.id}
+										label={
+											ride.rides[0] ?
+												formatRideRecurrence(ride.rides[0])
+											:	'Group ride'
+										}
+										value={
+											<>
+												<Link
+													href={`/teams/${ride.id}`}
+													className={styles.affiliationLink}
+												>
+													{ride.name}
+												</Link>{' '}
+												<Badge tone={toneForPace(ride.pace)}>{ride.pace}</Badge>
+											</>
+										}
+									/>
+								))}
 							</DetailSection>
 						)}
 					</div>

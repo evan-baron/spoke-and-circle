@@ -12,7 +12,7 @@ export function describeSubmitError(error: unknown): string[] {
 			const messages = details.filter(
 				(detail): detail is string => typeof detail === 'string',
 			);
-			if (messages.length > 0) return messages;
+			if (messages.length > 0) return [...new Set(messages)];
 		}
 
 		return [error.message];

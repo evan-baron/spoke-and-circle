@@ -98,6 +98,13 @@
 	}
 }
 
+.teamButtons {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	gap: var(--space-xs);
+}
+
 .editLink {
 	@include button-outline;
 	padding: 0.4rem 0.95rem;

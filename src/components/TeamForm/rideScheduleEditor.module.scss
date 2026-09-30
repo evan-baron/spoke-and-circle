@@ -1,0 +1,29 @@
+@use '@/styles/mixins' as *;
+
+.grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--space-sm) var(--space-md);
+
+	@include from($bp-md) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+.group {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
+
+.full {
+	@include from($bp-md) {
+		grid-column: 1 / -1;
+	}
+}
+
+.chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-2xs) var(--space-sm);
+}

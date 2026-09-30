@@ -19,6 +19,21 @@
 	gap: var(--space-sm);
 }
 
+.topActions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: flex-end;
+	gap: var(--space-xs);
+}
+
+.rideDetails {
+	display: block;
+	margin-top: 0.15rem;
+	font-size: 0.875rem;
+	color: var(--color-ink-soft);
+}
+
 .editLink {
 	@include button-outline;
 	padding: 0.4rem 0.95rem;

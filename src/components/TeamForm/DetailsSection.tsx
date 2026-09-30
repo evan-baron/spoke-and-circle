@@ -67,15 +67,17 @@ export function DetailsSection({
 					))}
 				</select>
 			</Field>
-			<Field label='Average Riding Pace'>
-				<select name='pace' defaultValue={values.pace} className={styles.input}>
-					{PACES.map((option) => (
-						<option key={option} value={option}>
-							{option}
-						</option>
-					))}
-				</select>
-			</Field>
+			{groupType !== 'Group Ride' && (
+				<Field label='Average Riding Pace'>
+					<select name='pace' defaultValue={values.pace} className={styles.input}>
+						{PACES.map((option) => (
+							<option key={option} value={option}>
+								{option}
+							</option>
+						))}
+					</select>
+				</Field>
+			)}
 			<SkillLevelsField defaultValues={values.skillLevels} />
 
 			{groupType !== 'Group Ride' && (

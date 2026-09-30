@@ -45,6 +45,10 @@ export const teamAPI = {
 			method: 'PUT',
 			body: JSON.stringify(payload),
 		}),
+	remove: (id: string) =>
+		apiCall<{ success: boolean }>(`/api/teams/${encodeURIComponent(id)}`, {
+			method: 'DELETE',
+		}),
 	search: (
 		query: string,
 		signal?: AbortSignal,

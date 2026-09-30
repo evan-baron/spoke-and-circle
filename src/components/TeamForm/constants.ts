@@ -40,4 +40,23 @@ export const DAYS = [
 	'Sunday',
 ];
 
-export const SEASONS = ['Spring', 'Summer', 'Fall', 'Winter', 'Year Round'];
+export const RIDE_PATTERNS = [
+	{ value: 'weekly', label: 'Every week' },
+	{ value: 'biweekly', label: 'Every other week' },
+	{ value: 'monthly', label: 'Certain weeks of the month' },
+];
+export const RIDE_ORDINALS = ['1st', '2nd', '3rd', '4th', 'Last'];
+export const MONTHS = [
+	'January',
+	'February',
+	'March',
+	'April',
+	'May',
+	'June',
+	'July',
+	'August',
+	'September',
+	'October',
+	'November',
+	'December',
+];

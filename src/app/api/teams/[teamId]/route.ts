@@ -7,6 +7,23 @@ import {
 	findUnknownLocations,
 } from '@/services/placeService';
 import { updateApprovedTeam } from '@/services/teamAdminService';
+import { deleteGroupRide } from '@/services/teamService';
+
+export const DELETE = withAuth(
+	{ rateLimit: 'teams-write' },
+	async (_request, user, params) => {
+		const teamId = typeof params?.teamId === 'string' ? params.teamId : '';
+		if (!teamId) return json400('Invalid team id');
+
+		const deleted = await deleteGroupRide(teamId, {
+			id: user.id,
+			isAdmin: user.role === 'admin',
+		});
+		if (!deleted) return json404('Group ride not found');
+
+		return NextResponse.json({ success: true });
+	},
+);
 
 export const PUT = withAuth(
 	{ rateLimit: 'teams-write' },

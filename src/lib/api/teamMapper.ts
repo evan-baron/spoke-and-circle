@@ -14,7 +14,7 @@ import {
 	segmentationFromDb,
 	segmentationToDb,
 } from '../teamEnums';
-import type { RideDay, Team, TeamFormValues } from '../types';
+import type { Ride, RideDay, Team, TeamFormValues } from '../types';
 import type { CreateTeamInput } from '../validation';
 
 function nonEmpty<T>(items: T[] | null | undefined): T[] | undefined {
@@ -32,6 +32,44 @@ function deriveTeamTags(personaRestrictions: string[]): string[] {
 		(restriction) => PERSONA_SEARCH_TAGS[restriction] ?? [restriction.toLowerCase()],
 	);
 	return [...new Set(tags)];
+}
+
+function deriveRides(row: TeamRow): Ride[] {
+	if (Array.isArray(row.rides)) return row.rides as unknown as Ride[];
+
+	if (
+		row.rideSchedule === 'Weekly' &&
+		Array.isArray(row.rideDays) &&
+		row.rideDays.length > 0
+	) {
+		const entries = row.rideDays as unknown as RideDay[];
+		const details = entries
+			.filter((entry) => entry.details)
+			.map((entry) => `${entry.day}: ${entry.details}`)
+			.join('; ')
+			.slice(0, 300);
+
+		return [
+			{
+				pattern: 'weekly',
+				days: entries.map((entry) => entry.day),
+				...(details ? { details } : {}),
+			},
+		];
+	}
+
+	return [];
+}
+
+function deriveScheduleNotes(row: TeamRow): string | undefined {
+	if (row.scheduleNotes) return row.scheduleNotes;
+	if (Array.isArray(row.rides) || deriveRides(row).length > 0) return undefined;
+
+	const notes = [
+		row.rideSchedule && row.rideSchedule !== 'Weekly' ? row.rideSchedule : null,
+		row.startTimes.length > 0 ? row.startTimes.join(', ') : null,
+	].filter(Boolean);
+	return notes.length > 0 ? notes.join(' · ') : undefined;
 }
 
 export function toTeam(row: TeamRow): Team {
@@ -81,7 +119,8 @@ export function toTeam(row: TeamRow): Team {
 		rideSchedule: row.rideSchedule ?? 'Weekly',
 		startTimes: nonEmpty(row.startTimes),
 		rideDays: (row.rideDays as RideDay[] | null) ?? undefined,
-		seasons: nonEmpty(row.seasons),
+		rides: deriveRides(row),
+		scheduleNotes: deriveScheduleNotes(row),
 		pace: row.pace ?? 'Casual',
 		segmentation: row.segmentation ? segmentationFromDb[row.segmentation] : 'N/A',
 		typicalDistanceMiles: row.typicalDistanceMiles ?? 0,
@@ -155,10 +194,8 @@ export function toTeamCreateInput(
 		memberLimit: input.memberLimit,
 		waitlist: input.waitlist,
 		howToJoin: input.howToJoin,
-		rideSchedule: input.rideSchedule,
-		startTimes: input.startTimes ?? [],
-		rideDays: (input.rideDays as Prisma.InputJsonValue) ?? undefined,
-		seasons: input.seasons ?? [],
+		rides: (input.rides ?? []) as unknown as Prisma.InputJsonValue,
+		scheduleNotes: input.scheduleNotes,
 		pace: input.pace,
 		segmentation: input.segmentation ? segmentationToDb[input.segmentation] : undefined,
 		typicalDistanceMiles: input.typicalDistanceMiles,
@@ -231,10 +268,8 @@ export function toTeamFormValues(row: TeamRow): TeamFormValues {
 		personaOtherDescription: personaCode === 'other' ? (persona ?? '') : '',
 		eBikeAllowed: row.eBikeAllowed,
 		waitlist: row.waitlist,
-		rideSchedule: row.rideSchedule ?? 'Weekly',
-		startTimes: row.startTimes.join(', '),
-		rideDays: (row.rideDays as RideDay[] | null) ?? [],
-		seasons: row.seasons ?? [],
+		rides: deriveRides(row),
+		scheduleNotes: deriveScheduleNotes(row) ?? '',
 		pace: row.pace ?? 'Steady',
 		typicalDistanceMiles: row.typicalDistanceMiles?.toString() ?? '',
 		typicalElevationGainFt: row.typicalElevationGainFt?.toString() ?? '',
@@ -260,6 +295,25 @@ export function toTeamFormValues(row: TeamRow): TeamFormValues {
 		joinReferral: row.joinReferral,
 		joinInviteOnly: row.joinInviteOnly,
 		joinOpen: row.joinOpen,
+	};
+}
+
+export function toGroupRideFormValues(row: TeamRow): TeamFormValues {
+	return {
+		...toTeamFormValues(row),
+		type: 'Group Ride',
+		name: '',
+		affiliation: row.name,
+		affiliatedId: row.id,
+		missionStatement: '',
+		codeOfConduct: '',
+		additionalLocations: [],
+		founded: '',
+		rides: [],
+		scheduleNotes: '',
+		pace: 'Casual',
+		typicalDistanceMiles: '',
+		typicalElevationGainFt: '',
 	};
 }
 
@@ -300,10 +354,11 @@ export function toApprovedTeamUpdate(
 		memberLimit: input.memberLimit ?? null,
 		waitlist: input.waitlist ?? false,
 		howToJoin: input.howToJoin ?? null,
-		rideSchedule: input.rideSchedule ?? null,
-		startTimes: input.startTimes ?? [],
-		rideDays: (input.rideDays as Prisma.InputJsonValue) ?? Prisma.JsonNull,
-		seasons: input.seasons ?? [],
+		rideSchedule: null,
+		startTimes: [],
+		rideDays: Prisma.JsonNull,
+		rides: (input.rides ?? []) as unknown as Prisma.InputJsonValue,
+		scheduleNotes: input.scheduleNotes ?? null,
 		pace: input.pace ?? null,
 		typicalDistanceMiles: input.typicalDistanceMiles ?? null,
 		typicalElevationGainFt: input.typicalElevationGainFt ?? null,

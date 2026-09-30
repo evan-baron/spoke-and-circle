@@ -1,5 +1,6 @@
 import DashboardView from '@/components/DashboardView/DashboardView';
 import { prisma } from '@/lib/prisma';
+import { clubTypeFromDb } from '@/lib/teamEnums';
 import { requireUser } from '@/services/currentUserService';
 
 export default async function DashboardPage() {
@@ -10,10 +11,21 @@ export default async function DashboardPage() {
 		select: {
 			teams: {
 				orderBy: { name: 'asc' },
-				select: { id: true, name: true, location: true, status: true },
+				select: {
+						id: true,
+						name: true,
+						location: true,
+						status: true,
+						type: true,
+					},
 			},
 		},
 	});
 
-	return <DashboardView teams={user?.teams ?? []} />;
+	const teams = (user?.teams ?? []).map((team) => ({
+		...team,
+		type: clubTypeFromDb[team.type],
+	}));
+
+	return <DashboardView teams={teams} />;
 }

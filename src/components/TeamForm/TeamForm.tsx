@@ -4,7 +4,7 @@ import { type FormEvent, useRef, useState } from 'react';
 import { Checkbox } from './Checkbox';
 import { DEFAULT_TEAM_FORM_VALUES } from '@/lib/teamFormDefaults';
 import { buildTeamPayload } from '@/lib/teamForm';
-import type { RideDay, TeamFormValues } from '@/lib/types';
+import type { TeamFormValues } from '@/lib/types';
 import { describeSubmitError } from './describeSubmitError';
 import { DetailsSection } from './DetailsSection';
 import { GenericInfoSection } from './GenericInfoSection';
@@ -26,6 +26,7 @@ export interface TeamFormProps {
 	onReject?: (reason: string | undefined) => Promise<void>;
 	excludeTeamId?: string;
 	showAdminFields?: boolean;
+	lockedToParent?: boolean;
 }
 
 export function TeamForm({
@@ -37,6 +38,7 @@ export function TeamForm({
 	onReject,
 	excludeTeamId,
 	showAdminFields = true,
+	lockedToParent = false,
 }: TeamFormProps) {
 	const values = initialValues ?? DEFAULT_TEAM_FORM_VALUES;
 	const isReview = mode === 'review';
@@ -64,9 +66,6 @@ export function TeamForm({
 		null,
 	);
 	const [segmentationDescription, setSegmentationDescription] = useState('');
-	const [rideSchedule, setRideSchedule] = useState(values.rideSchedule);
-	const [rideDays, setRideDays] = useState<RideDay[]>(values.rideDays);
-	const [seasons, setSeasons] = useState<string[]>(values.seasons);
 
 	async function run(action: () => Promise<void>) {
 		busyRef.current = true;
@@ -112,37 +111,6 @@ export function TeamForm({
 		setHasSegmentation((prev) => (prev === value ? null : value));
 	}
 
-	function handleRideScheduleChange(next: string) {
-		setRideSchedule(next);
-		if (next !== 'Weekly') setRideDays([]);
-	}
-
-	function handleToggleRideDay(day: string) {
-		setRideDays((prev) =>
-			prev.some((entry) => entry.day === day) ?
-				prev.filter((entry) => entry.day !== day)
-			:	[...prev, { day, details: '' }],
-		);
-	}
-
-	function handleRideDayDetailsChange(day: string, details: string) {
-		setRideDays((prev) =>
-			prev.map((entry) => (entry.day === day ? { ...entry, details } : entry)),
-		);
-	}
-
-	function handleSeasonChange(season: string) {
-		setSeasons((prev) => {
-			if (season === 'Year Round') {
-				return prev.includes('Year Round') ? [] : ['Year Round'];
-			}
-			const withoutYearRound = prev.filter((entry) => entry !== 'Year Round');
-			return withoutYearRound.includes(season) ?
-					withoutYearRound.filter((entry) => entry !== season)
-				:	[...withoutYearRound, season];
-		});
-	}
-
 	return (
 		<form onSubmit={handleSubmit} className={styles.form}>
 			<GenericInfoSection
@@ -156,6 +124,12 @@ export function TeamForm({
 					setAffiliatedId(id);
 				}}
 				excludeTeamId={excludeTeamId}
+				lockedToParent={lockedToParent}
+				namePrefix={
+					mode === 'create' && groupType === 'Group Ride' && affiliatedId ?
+						affiliationLabel
+					:	undefined
+				}
 			/>
 
 			<DetailsSection
@@ -174,13 +148,6 @@ export function TeamForm({
 			{groupType === 'Group Ride' && (
 				<RideDetailsSection
 					values={values}
-					rideSchedule={rideSchedule}
-					onRideScheduleChange={handleRideScheduleChange}
-					rideDays={rideDays}
-					onToggleRideDay={handleToggleRideDay}
-					onRideDayDetailsChange={handleRideDayDetailsChange}
-					seasons={seasons}
-					onSeasonChange={handleSeasonChange}
 					hasSegmentation={hasSegmentation}
 					onSegmentationChange={handleSegmentationChange}
 					segmentationDescription={segmentationDescription}

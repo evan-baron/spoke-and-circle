@@ -1,19 +1,13 @@
-import type { RideDay, TeamFormValues } from '@/lib/types';
+import type { TeamFormValues } from '@/lib/types';
 import { Checkbox } from './Checkbox';
-import { DAYS, DROP_POLICIES, SCHEDULES, SEASONS } from './constants';
+import { DROP_POLICIES, PACES } from './constants';
 import { Field } from './Field';
+import { RideScheduleEditor } from './RideScheduleEditor';
 import { Section } from './Section';
 import styles from './teamForm.module.scss';
 
 interface RideDetailsSectionProps {
 	values: TeamFormValues;
-	rideSchedule: string;
-	onRideScheduleChange: (value: string) => void;
-	rideDays: RideDay[];
-	onToggleRideDay: (day: string) => void;
-	onRideDayDetailsChange: (day: string, details: string) => void;
-	seasons: string[];
-	onSeasonChange: (season: string) => void;
 	hasSegmentation: 'yes' | 'no' | null;
 	onSegmentationChange: (value: 'yes' | 'no') => void;
 	segmentationDescription: string;
@@ -22,13 +16,6 @@ interface RideDetailsSectionProps {
 
 export function RideDetailsSection({
 	values,
-	rideSchedule,
-	onRideScheduleChange,
-	rideDays,
-	onToggleRideDay,
-	onRideDayDetailsChange,
-	seasons,
-	onSeasonChange,
 	hasSegmentation,
 	onSegmentationChange,
 	segmentationDescription,
@@ -36,92 +23,20 @@ export function RideDetailsSection({
 }: RideDetailsSectionProps) {
 	return (
 		<Section title='Ride Details'>
-			<Field label='Schedule'>
-				<select
-					name='rideSchedule'
-					value={rideSchedule}
-					onChange={(event) => onRideScheduleChange(event.target.value)}
+			<RideScheduleEditor initialRide={values.rides[0]} />
+			<Field
+				label='Schedule notes'
+				hint='Anything the schedule above cannot capture, like weather-permitting rides or holiday changes'
+				full
+			>
+				<textarea
+					name='scheduleNotes'
+					defaultValue={values.scheduleNotes}
+					maxLength={500}
+					rows={3}
 					className={styles.input}
-				>
-					{SCHEDULES.map((option) => (
-						<option key={option} value={option}>
-							{option}
-						</option>
-					))}
-				</select>
+				/>
 			</Field>
-			{rideSchedule !== 'Weekly' && (
-				<Field label='Start times' hint='Comma-separated'>
-					<input
-						type='text'
-						name='startTimes'
-						defaultValue={values.startTimes}
-						placeholder='e.g. Tue 6:00 PM, Sat 8:00 AM'
-						className={styles.input}
-					/>
-				</Field>
-			)}
-			<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
-				<span className={styles.fieldLabel}>Season(s)</span>
-				<div className={styles.checkboxRow}>
-					{SEASONS.map((season) => (
-						<Checkbox
-							key={season}
-							label={season}
-							name='season'
-							value={season}
-							checked={seasons.includes(season)}
-							onChange={() => onSeasonChange(season)}
-						/>
-					))}
-				</div>
-			</div>
-			{rideSchedule === 'Weekly' && (
-				<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
-					<span className={styles.fieldLabel}>Days</span>
-					<div className={styles.rideDayList}>
-						{DAYS.map((day) => {
-							const entry = rideDays.find((d) => d.day === day);
-							return (
-								<div key={day} className={styles.rideDayRow}>
-									<Checkbox
-										label={
-											<>
-												<span className={styles.dayFull}>{day}</span>
-												<span className={styles.dayShort}>
-													{day.slice(0, 3)}
-												</span>
-											</>
-										}
-										name='rideDay'
-										value={day}
-										checked={entry !== undefined}
-										onChange={() => onToggleRideDay(day)}
-									/>
-									<label className={styles.rideDayDetails}>
-										<span className={styles.fieldLabel}>Details</span>
-										<input
-											type='text'
-											placeholder='e.g. 5:30pm meet outside The Broken Spoke'
-											value={entry?.details ?? ''}
-											disabled={!entry}
-											onChange={(event) =>
-												onRideDayDetailsChange(day, event.target.value)
-											}
-											className={styles.input}
-										/>
-									</label>
-								</div>
-							);
-						})}
-					</div>
-					<input
-						type='hidden'
-						name='rideDays'
-						value={JSON.stringify(rideDays)}
-					/>
-				</div>
-			)}
 			<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
 				<span className={styles.fieldLabel}>Skill/Speed Segmentation</span>
 				<div className={styles.checkboxRow}>
@@ -153,6 +68,15 @@ export function RideDetailsSection({
 					/>
 				)}
 			</div>
+			<Field label='Average Riding Pace'>
+				<select name='pace' defaultValue={values.pace} className={styles.input}>
+					{PACES.map((option) => (
+						<option key={option} value={option}>
+							{option}
+						</option>
+					))}
+				</select>
+			</Field>
 			<Field label='Typical distance' hint='Miles'>
 				<input
 					type='number'

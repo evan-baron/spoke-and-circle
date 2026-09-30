@@ -43,13 +43,6 @@ const mtbDisciplineSchema = z.enum([
 ]);
 const segmentationSchema = z.enum(['A Group', 'B Group', 'C Group', 'N/A']);
 const scheduleFrequencySchema = z.enum(['Weekly', 'Monthly', 'Annually']);
-const seasonSchema = z.enum([
-	'Spring',
-	'Summer',
-	'Fall',
-	'Winter',
-	'Year Round',
-]);
 const dropPolicySchema = z.enum(['Drop', 'No-drop']);
 const visibilitySchema = z.enum(['Public', 'Private']);
 const competitiveOrCasualSchema = z.enum(['Competitive', 'Casual']);
@@ -62,14 +55,58 @@ const dayOfWeekSchema = z.enum([
 	'Saturday',
 	'Sunday',
 ]);
-const rideDaySchema = z.object({
-	day: dayOfWeekSchema,
-	details: z
-		.string()
-		.trim()
-		.max(200, 'Details must be less than 200 characters')
-		.optional(),
-});
+const rideOrdinalSchema = z.enum(['1st', '2nd', '3rd', '4th', 'Last']);
+const rideMonthSchema = z.number().int().min(1).max(12);
+const rideSchema = z
+	.object({
+		pattern: z.enum(['weekly', 'biweekly', 'monthly']),
+		days: z
+			.array(dayOfWeekSchema)
+			.min(1, 'Choose at least one day for the ride')
+			.max(7),
+		ordinals: z.array(rideOrdinalSchema).max(5).optional(),
+		startDate: z
+			.string()
+			.regex(/^\d{4}-\d{2}-\d{2}$/, 'Enter a valid first ride date')
+			.refine((value) => !Number.isNaN(Date.parse(value)), {
+				message: 'Enter a valid first ride date',
+			})
+			.optional(),
+		startTime: z
+			.string()
+			.regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Enter a valid start time')
+			.optional(),
+		monthFrom: rideMonthSchema.optional(),
+		monthTo: rideMonthSchema.optional(),
+		details: z
+			.string()
+			.trim()
+			.max(300, 'Ride details must be less than 300 characters')
+			.optional(),
+	})
+	.superRefine((ride, ctx) => {
+		if (ride.pattern === 'monthly' && !ride.ordinals?.length) {
+			ctx.addIssue({
+				code: 'custom',
+				path: ['ordinals'],
+				message: 'Choose which weeks of the month each monthly ride happens',
+			});
+		}
+		if (ride.pattern === 'biweekly' && !ride.startDate) {
+			ctx.addIssue({
+				code: 'custom',
+				path: ['startDate'],
+				message: 'Enter a first ride date for every-other-week rides',
+			});
+		}
+		if ((ride.monthFrom === undefined) !== (ride.monthTo === undefined)) {
+			ctx.addIssue({
+				code: 'custom',
+				path: ['monthFrom'],
+				message: 'Choose both a first and last month',
+			});
+		}
+	});
 
 const eventTypeSchema = z.enum([
 	'Sponsor Events',
@@ -89,7 +126,7 @@ const teamBaseSchema = z.object({
 		.string()
 		.trim()
 		.min(1, 'Name is required')
-		.max(100, 'Name must be less than 100 characters'),
+		.max(200, 'Name must be less than 200 characters'),
 	type: clubTypeSchema,
 	missionStatement: z
 		.string()
@@ -201,10 +238,15 @@ const teamBaseSchema = z.object({
 		.max(1000, 'How to join must be less than 1000 characters')
 		.optional(),
 
-	rideSchedule: scheduleFrequencySchema.optional(),
-	startTimes: z.array(teamListItemSchema).max(14).optional(),
-	rideDays: z.array(rideDaySchema).max(7).optional(),
-	seasons: z.array(seasonSchema).max(5).optional(),
+	rides: z
+		.array(rideSchema)
+		.max(1, 'A ride has one schedule. Submit another ride as its own listing')
+		.optional(),
+	scheduleNotes: z
+		.string()
+		.trim()
+		.max(500, 'Schedule notes must be less than 500 characters')
+		.optional(),
 	pace: paceSchema.optional(),
 	segmentation: segmentationSchema.optional(),
 	typicalDistanceMiles: z

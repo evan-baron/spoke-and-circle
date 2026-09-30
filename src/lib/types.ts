@@ -48,6 +48,21 @@ export interface RideDay {
   details?: string;
 }
 
+export type RidePattern = "weekly" | "biweekly" | "monthly";
+
+export type RideOrdinal = "1st" | "2nd" | "3rd" | "4th" | "Last";
+
+export interface Ride {
+  pattern: RidePattern;
+  days: string[];
+  ordinals?: RideOrdinal[];
+  startDate?: string;
+  startTime?: string;
+  monthFrom?: number;
+  monthTo?: number;
+  details?: string;
+}
+
 export interface JoinRequirements {
   tryouts: boolean;
   referralRequired: boolean;
@@ -111,7 +126,8 @@ export interface Team {
   rideSchedule: ScheduleFrequency;
   startTimes?: string[];
   rideDays?: RideDay[];
-  seasons?: string[];
+  rides: Ride[];
+  scheduleNotes?: string;
   pace: Pace;
   segmentation: Segmentation;
   typicalDistanceMiles: number;
@@ -201,10 +217,8 @@ export interface TeamFormValues {
   personaOtherDescription: string;
   eBikeAllowed: boolean;
   waitlist: boolean;
-  rideSchedule: string;
-  startTimes: string;
-  rideDays: RideDay[];
-  seasons: string[];
+  rides: Ride[];
+  scheduleNotes: string;
   pace: string;
   typicalDistanceMiles: string;
   typicalElevationGainFt: string;

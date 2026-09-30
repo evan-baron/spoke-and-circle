@@ -1,74 +1,39 @@
-'use client';
+import { NewTeamForm } from '@/components/NewTeamForm/NewTeamForm';
+import { toGroupRideFormValues } from '@/lib/api/teamMapper';
+import { prisma } from '@/lib/prisma';
+import { clubTypeFromDb } from '@/lib/teamEnums';
+import type { TeamFormValues } from '@/lib/types';
+import { getCurrentUser } from '@/services/currentUserService';
 
-import Link from 'next/link';
-import { useState } from 'react';
-import { useInvalidatePendingTeamCount } from '@/hooks/usePendingTeamCount';
-import { TeamForm } from '@/components/TeamForm/TeamForm';
-import styles from '@/components/TeamForm/teamForm.module.scss';
-import { teamAPI } from '@/services/api';
+async function getGroupRideDefaults(
+	sourceTeamId: string | undefined,
+): Promise<TeamFormValues | undefined> {
+	if (!sourceTeamId) return undefined;
 
-export default function NewTeamPage() {
-	const [submitted, setSubmitted] = useState(false);
-	const [published, setPublished] = useState(false);
-	const invalidatePendingCount = useInvalidatePendingTeamCount();
+	const user = await getCurrentUser();
+	if (!user) return undefined;
 
-	if (submitted) {
-		return (
-			<div className={styles.page}>
-				<div className={`${styles.wrap} ${styles.confirmation}`}>
-					<div className={styles.confirmationCard}>
-						<p className={styles.confirmationMark}>&#10003;</p>
-						<h1>{published ? 'Team published' : 'Submission received'}</h1>
-						<p>
-							{published ?
-								'The team is live in the directory now.'
-							:	'An admin will review this submission before it appears in search results. They may follow up with you if they have any questions.'
-							}
-						</p>
-						<div className={styles.confirmationActions}>
-							<Link href='/search' className={styles.buttonOutline}>
-								Back to search
-							</Link>
-							<button
-								type='button'
-								className={styles.buttonSolid}
-								onClick={() => setSubmitted(false)}
-							>
-								Submit another
-							</button>
-						</div>
-					</div>
-				</div>
-			</div>
-		);
-	}
+	const team = await prisma.team.findFirst({
+		where: {
+			id: sourceTeamId,
+			status: 'Approved',
+			...(user.isAdmin ? {} : { submittedById: user.id }),
+		},
+	});
+	if (!team || clubTypeFromDb[team.type] === 'Group Ride') return undefined;
 
-	return (
-		<div className={styles.page}>
-			<div className={styles.wrap}>
-				<Link href='/search' className={styles.backLink}>
-					&larr; Back to search
-				</Link>
+	return toGroupRideFormValues(team);
+}
 
-				<header className={styles.header}>
-					<p className={styles.eyebrow}>Submit a team, club, or group</p>
-					<h1>Submit a new team, club, or group ride</h1>
-					<p>
-						Send a team, club, or group ride for an admin to review. They may
-						follow up with you before it goes live.
-					</p>
-				</header>
-
-				<TeamForm
-					mode='create'
-					onSubmit={async (payload) => {
-						const result = await teamAPI.create(payload);
-						if (!result.published) await invalidatePendingCount();
-						setPublished(result.published);
-						setSubmitted(true);
-					}}
-				/>
-			</div>
-		</div>
+export default async function NewTeamPage({
+	searchParams,
+}: {
+	searchParams: Promise<{ from?: string | string[] }>;
+}) {
+	const { from } = await searchParams;
+	const initialValues = await getGroupRideDefaults(
+		typeof from === 'string' ? from : undefined,
 	);
+
+	return <NewTeamForm initialValues={initialValues} />;
 }

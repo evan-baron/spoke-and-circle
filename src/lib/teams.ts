@@ -52,6 +52,7 @@ function makeTeam(input: TeamInput): Team {
     primaryLanguage: "English",
     contact: { email: `hello@${input.id.replace(/-/g, "")}.club` },
     social: {},
+    rides: [],
     joinRequirements: {
       tryouts: false,
       referralRequired: false,

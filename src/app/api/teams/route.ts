@@ -9,7 +9,11 @@ import {
 import { readJsonObject } from '@/lib/api/readJsonObject';
 import { toTeam, toTeamCreateInput } from '@/lib/api/teamMapper';
 import { isAntiBotAnswerCorrect } from '@/lib/data/mathQuestions';
-import { antiBotSchema, createTeamSchema } from '@/lib/validation';
+import {
+	antiBotSchema,
+	type CreateTeamInput,
+	createTeamSchema,
+} from '@/lib/validation';
 import { getApiUser } from '@/services/getUserService';
 import {
 	describeUnknownLocations,
@@ -44,6 +48,32 @@ async function getSubmitter(): Promise<
 	}
 }
 
+const MAX_TEAM_NAME_LENGTH = 200;
+
+async function resolveTeamName(
+	data: CreateTeamInput,
+): Promise<{ name: string } | { error: string }> {
+	if (data.type !== 'Group Ride' || !data.affiliatedId) {
+		return { name: data.name };
+	}
+
+	const parent = await prisma.team.findUnique({
+		where: { id: data.affiliatedId },
+		select: { name: true },
+	});
+	if (!parent) return { error: 'Affiliated team not found' };
+
+	const prefix = `${parent.name} - `;
+	const name = data.name.startsWith(prefix) ? data.name : `${prefix}${data.name}`;
+	if (name.length > MAX_TEAM_NAME_LENGTH) {
+		return {
+			error: `Name must be less than ${MAX_TEAM_NAME_LENGTH} characters including the affiliated team's name`,
+		};
+	}
+
+	return { name };
+}
+
 export const POST = withPublicRateLimit('teams-write', async (request) => {
 	const result = await readJsonObject(request);
 	if ('error' in result) return result.error;
@@ -68,13 +98,19 @@ export const POST = withPublicRateLimit('teams-write', async (request) => {
 	const unknownLocationsMessage = describeUnknownLocations(unknownLocations);
 	if (unknownLocationsMessage) return json400(unknownLocationsMessage);
 
+	const resolvedName = await resolveTeamName(parsed.data);
+	if ('error' in resolvedName) return json400(resolvedName.error);
+
 	try {
 		const submitter = await getSubmitter();
 		const published = submitter?.isAdmin === true;
 
 		const team = await prisma.team.create({
 			data: {
-				...toTeamCreateInput(parsed.data, submitter?.id),
+				...toTeamCreateInput(
+					{ ...parsed.data, name: resolvedName.name },
+					submitter?.id,
+				),
 				...(published ?
 					{
 						status: 'Approved' as const,
