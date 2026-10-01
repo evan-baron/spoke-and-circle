@@ -104,6 +104,7 @@ export const TAG_OPTIONS: string[] = [
 	'earn-a-bike',
 	'east coast',
 	'echelon',
+	'educational',
 	'electric',
 	'elite',
 	'endurance',
