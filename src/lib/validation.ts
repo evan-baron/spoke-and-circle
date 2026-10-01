@@ -204,6 +204,17 @@ const teamBaseSchema = z.object({
 		.min(1, 'Choose at least one cycling discipline'),
 	discipline: mtbDisciplineSchema.optional(),
 	racingDisciplines: z.array(racingDisciplineSchema).max(21).optional(),
+	tags: z
+		.array(
+			z
+				.string()
+				.trim()
+				.toLowerCase()
+				.min(1, 'Tags cannot be empty')
+				.max(40, 'Tags must be 40 characters or fewer'),
+		)
+		.max(10, 'Add up to 10 tags')
+		.optional(),
 	eBikeAllowed: z.boolean().optional(),
 	format: formatSchema,
 	virtualPlatforms: z.array(virtualPlatformSchema).max(4).optional(),

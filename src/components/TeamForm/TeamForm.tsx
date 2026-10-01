@@ -14,6 +14,7 @@ import { RideDetailsSection } from './RideDetailsSection';
 import { Section } from './Section';
 import { SubmitActions } from './SubmitActions';
 import { SubmitErrors } from './SubmitErrors';
+import { TagsSection } from './TagsSection';
 import { TeamClubDetailsSection } from './TeamClubDetailsSection';
 import styles from './teamForm.module.scss';
 
@@ -158,6 +159,8 @@ export function TeamForm({
 			)}
 
 			{groupType !== 'Group Ride' && <TeamClubDetailsSection values={values} />}
+
+			<TagsSection values={values} />
 
 			{(isEdit || isReview) && showAdminFields && (
 				<Section title='Admin'>

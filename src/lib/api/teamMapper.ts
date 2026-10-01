@@ -36,6 +36,18 @@ function deriveTeamTags(personaRestrictions: string[]): string[] {
 	return [...new Set(tags)];
 }
 
+function mergeTags(
+	tags: string[] | undefined,
+	personaRestrictions: string[],
+): string[] {
+	return [
+		...new Set([
+			...(tags ?? []),
+			...deriveTeamTags(personaRestrictions),
+		]),
+	];
+}
+
 function deriveRides(row: TeamRow): Ride[] {
 	if (Array.isArray(row.rides)) return row.rides as unknown as Ride[];
 
@@ -227,7 +239,7 @@ export function toTeamCreateInput(
 		joinReferral: input.joinReferral,
 		joinInviteOnly: input.joinInviteOnly,
 		joinOpen: input.joinOpen,
-		tags: deriveTeamTags(input.personaRestrictions ?? []),
+		tags: mergeTags(input.tags, input.personaRestrictions ?? []),
 	};
 }
 
@@ -259,6 +271,7 @@ export function toTeamFormValues(row: TeamRow): TeamFormValues {
 		racingDisciplines: row.racingDisciplines.map(
 			(rd) => racingDisciplineFromDb[rd],
 		),
+		tags: row.tags,
 		format: formatFromDb[row.format],
 		virtualPlatform: row.virtualPlatforms,
 		homeBase: row.homeBase ?? '',
@@ -311,6 +324,7 @@ export function toGroupRideFormValues(row: TeamRow): TeamFormValues {
 	return {
 		...toTeamFormValues(row),
 		type: 'Group Ride',
+		tags: [],
 		name: '',
 		affiliation: row.name,
 		affiliatedId: row.id,
@@ -395,6 +409,6 @@ export function toApprovedTeamUpdate(
 		joinReferral: input.joinReferral ?? false,
 		joinInviteOnly: input.joinInviteOnly ?? false,
 		joinOpen: input.joinOpen ?? false,
-		tags: deriveTeamTags(input.personaRestrictions ?? []),
+		tags: mergeTags(input.tags, input.personaRestrictions ?? []),
 	};
 }

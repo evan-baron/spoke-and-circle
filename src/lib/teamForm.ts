@@ -93,6 +93,7 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		contactEmail: text('contactEmail'),
 		bikeTypes: values('bikeType'),
 		racingDisciplines: values('racingDiscipline'),
+		tags: values('tag'),
 		format: text('format'),
 		virtualPlatforms: virtualPlatforms.length > 0 ? virtualPlatforms : undefined,
 		homeBase: text('homeBase'),

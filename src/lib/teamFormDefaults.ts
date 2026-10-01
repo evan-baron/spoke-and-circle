@@ -15,6 +15,7 @@ export const DEFAULT_TEAM_FORM_VALUES: TeamFormValues = {
 	contactEmail: '',
 	bikeTypes: [],
 	racingDisciplines: [],
+	tags: [],
 	format: 'In-person',
 	virtualPlatform: [],
 	homeBase: '',

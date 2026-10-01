@@ -220,6 +220,7 @@ export interface TeamFormValues {
   contactEmail: string;
   bikeTypes: string[];
   racingDisciplines: string[];
+  tags: string[];
   format: string;
   virtualPlatform: string[];
   homeBase: string;
