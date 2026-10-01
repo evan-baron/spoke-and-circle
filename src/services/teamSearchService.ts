@@ -118,7 +118,7 @@ const ENUM_TERM_CLAUSES: [string, Prisma.TeamWhereInput][] = [
 			{ skillLevels: { has: level } },
 		],
 	),
-	...(['Casual', 'Steady', 'Competitive'] as const).map(
+	...(['Relaxed', 'Steady', 'Competitive'] as const).map(
 		(pace): [string, Prisma.TeamWhereInput] => [pace, { pace }],
 	),
 	...(['Zwift', 'Strava', 'TrainerRoad'] as const).map(

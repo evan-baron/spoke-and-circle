@@ -18,7 +18,7 @@ export type Format = "In-person" | "Virtual" | "Hybrid";
 
 export type VirtualPlatform = "Zwift" | "Strava" | "TrainerRoad" | "Other";
 
-export type Pace = "Casual" | "Steady" | "Competitive";
+export type Pace = "Relaxed" | "Steady" | "Competitive";
 
 export type SkillLevel = "Beginner" | "Intermediate" | "Advanced" | "Expert";
 

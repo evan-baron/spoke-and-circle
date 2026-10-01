@@ -6,7 +6,6 @@ import { Badge } from '@/components/Badge/Badge';
 import tableStyles from '@/components/ResultsTable/resultsTable.module.scss';
 import {
 	formatMemberCount,
-	formatPace,
 	formatSkillLevelLines,
 } from '@/lib/format';
 import {
@@ -187,7 +186,7 @@ export function AdminTeamsTable({
 										<p className={tableStyles.cardLocation}>{team.location}</p>
 										<div className={tableStyles.cardBadges}>
 											{team.type === 'Group Ride' ? (
-												<Badge tone={toneForPace(team.pace)}>{formatPace(team.pace)}</Badge>
+												<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
 											) : (
 												<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
 													{team.competitiveOrCasual}
@@ -304,7 +303,7 @@ export function AdminTeamsTable({
 										))}
 									</td>
 									<td>
-										<Badge tone={toneForPace(team.pace)}>{formatPace(team.pace)}</Badge>
+										<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
 									</td>
 									{/* <td>{team.memberCount}</td> */}
 									<td>

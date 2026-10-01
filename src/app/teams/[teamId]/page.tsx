@@ -16,7 +16,6 @@ import {
 	formatElevation,
 	formatList,
 	formatMemberCount,
-	formatPace,
 	formatMileageRequirement,
 	formatRideRecurrence,
 	formatSkillLevels,
@@ -177,7 +176,7 @@ export default async function TeamPage({
 				<header className={styles.header}>
 					<div className={styles.badgeRow}>
 						<Badge tone='ink'>{team.type}</Badge>
-						<Badge tone={toneForPace(team.pace)}>{formatPace(team.pace)}</Badge>
+						<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
 						<Badge tone='gold'>{bikeTypesLabel(team.bikeTypes)}</Badge>
 						{team.discipline && <Badge tone='gold'>{team.discipline}</Badge>}
 						<Badge tone={toneForVerified(team.verified)}>
@@ -487,7 +486,7 @@ export default async function TeamPage({
 												>
 													{ride.name}
 												</Link>{' '}
-												<Badge tone={toneForPace(ride.pace)}>{formatPace(ride.pace)}</Badge>
+												<Badge tone={toneForPace(ride.pace)}>{ride.pace}</Badge>
 											</>
 										}
 									/>

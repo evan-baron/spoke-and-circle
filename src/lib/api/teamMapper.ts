@@ -120,7 +120,7 @@ export function toTeam(row: TeamRow): Team {
 		rideDays: (row.rideDays as RideDay[] | null) ?? undefined,
 		rides: deriveRides(row),
 		scheduleNotes: deriveScheduleNotes(row),
-		pace: row.pace ?? 'Casual',
+		pace: row.pace ?? 'Relaxed',
 		segmentation: row.segmentation ? segmentationFromDb[row.segmentation] : 'N/A',
 		typicalDistanceMiles: row.typicalDistanceMiles ?? 0,
 		typicalElevationGainFt: row.typicalElevationGainFt ?? 0,
@@ -305,7 +305,7 @@ export function toGroupRideFormValues(row: TeamRow): TeamFormValues {
 		founded: '',
 		rides: [],
 		scheduleNotes: '',
-		pace: 'Casual',
+		pace: 'Relaxed',
 		typicalDistanceMiles: '',
 		typicalElevationGainFt: '',
 	};

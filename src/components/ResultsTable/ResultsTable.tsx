@@ -2,7 +2,6 @@ import Link from 'next/link';
 import { Badge } from '@/components/Badge/Badge';
 import {
 	formatMemberCount,
-	formatPace,
 	formatSkillLevelLines,
 	getTeamLocations,
 	formatVerification,
@@ -45,7 +44,7 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 							<div className={styles.cardBadges}>
 								{team.type === 'Group Ride' ?
 									<Badge tone={toneForPace(team.pace)}>
-										{formatPace(team.pace)}
+										{team.pace}
 									</Badge>
 								:	<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
 										{team.competitiveOrCasual}
@@ -129,7 +128,7 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 							</td>
 							<td>
 								<Badge tone={toneForPace(team.pace)}>
-									{formatPace(team.pace)}
+									{team.pace}
 								</Badge>
 							</td>
 							{/* <td>{team.memberCount}</td> */}

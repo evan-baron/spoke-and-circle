@@ -27,7 +27,7 @@ const virtualPlatformSchema = z.enum([
 	'TrainerRoad',
 	'Other',
 ]);
-const paceSchema = z.enum(['Casual', 'Steady', 'Competitive']);
+const paceSchema = z.enum(['Relaxed', 'Steady', 'Competitive']);
 const skillLevelSchema = z.enum([
 	'Beginner',
 	'Intermediate',
