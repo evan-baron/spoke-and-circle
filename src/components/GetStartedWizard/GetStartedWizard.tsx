@@ -3,27 +3,13 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { bikeType, skillLevel } from '@/lib/enums';
 import type { RiderPreferences } from '@/lib/types';
 import styles from './getStartedWizard.module.scss';
 
-const DISCIPLINE_OPTIONS: RiderPreferences['disciplines'][number][] = [
-	'Road',
-	'Gravel',
-	'Cyclocross',
-	'MTB',
-	'Track',
-	'BMX',
-	'Tri',
-	'E-bike',
-	'Mixed',
-];
+const DISCIPLINE_OPTIONS = bikeType.labels;
 
-const SKILL_LEVEL_OPTIONS: NonNullable<RiderPreferences['skillLevel']>[] = [
-	'Beginner',
-	'Intermediate',
-	'Advanced',
-	'Expert',
-];
+const SKILL_LEVEL_OPTIONS = skillLevel.labels;
 
 const LOOKING_FOR_OPTIONS: NonNullable<RiderPreferences['lookingFor']>[] = [
 	'Team',

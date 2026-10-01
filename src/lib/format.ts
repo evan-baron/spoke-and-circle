@@ -1,16 +1,9 @@
+import { dayOfWeek, rideOrdinal, skillLevel } from './enums';
 import type { AgeRequirement, MileageRequirement, Ride, Team } from './types';
 
-const WEEKDAY_ORDER = [
-	'Monday',
-	'Tuesday',
-	'Wednesday',
-	'Thursday',
-	'Friday',
-	'Saturday',
-	'Sunday',
-];
+const WEEKDAY_ORDER = dayOfWeek.labels;
 
-const ORDINAL_ORDER = ['1st', '2nd', '3rd', '4th', 'Last'];
+const ORDINAL_ORDER = rideOrdinal.labels;
 
 const MONTH_NAMES = [
 	'January',
@@ -94,12 +87,7 @@ export function formatSubmitter(
 	return name || user.email;
 }
 
-export const ALL_SKILL_LEVELS = [
-	'Beginner',
-	'Intermediate',
-	'Advanced',
-	'Expert',
-] as const;
+export const ALL_SKILL_LEVELS = skillLevel.labels;
 
 export const ALL_SKILL_LEVELS_LABEL = 'All levels welcome';
 
@@ -121,7 +109,7 @@ function joinWithAnd(items: string[]): string {
 	return `${items.slice(0, -1).join(', ')}, and ${items[items.length - 1]}`;
 }
 
-function sortByOrder(items: string[], order: string[]): string[] {
+function sortByOrder(items: string[], order: readonly string[]): string[] {
 	return [...items].sort((a, b) => order.indexOf(a) - order.indexOf(b));
 }
 

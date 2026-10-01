@@ -1,57 +1,35 @@
+import type {
+	ClubType,
+	BikeType,
+	RacingDiscipline,
+	Format,
+	VirtualPlatform,
+	Pace,
+	SkillLevel,
+	MtbDiscipline,
+	Segmentation,
+	ScheduleFrequency,
+	DropPolicy,
+	RideOrdinal,
+} from './enums';
+
+export type {
+	ClubType,
+	BikeType,
+	RacingDiscipline,
+	Format,
+	VirtualPlatform,
+	Pace,
+	SkillLevel,
+	MtbDiscipline,
+	Segmentation,
+	ScheduleFrequency,
+	DropPolicy,
+	RideOrdinal,
+} from './enums';
+
 // Data shape mirrors the club/team intake form, grouped into the same
 // four sections so the detail page can render section-for-section.
-
-export type ClubType = "Team" | "Club" | "Group Ride" | "Youth Program" | "Organization" | "Association";
-
-export type BikeType =
-  | "Road"
-  | "Gravel"
-  | "Cyclocross"
-  | "MTB"
-  | "Track"
-  | "BMX"
-  | "Tri"
-  | "E-bike"
-  | "Mixed";
-
-export type RacingDiscipline =
-  | "Road"
-  | "Criterium"
-  | "Time Trial"
-  | "Stage Racing"
-  | "Hill Climb"
-  | "Gravel"
-  | "Cyclocross"
-  | "Track"
-  | "Cross-Country"
-  | "Cross-Country Marathon"
-  | "Short Track"
-  | "Downhill"
-  | "Enduro"
-  | "Dual Slalom"
-  | "Four-Cross"
-  | "Slopestyle"
-  | "BMX Racing"
-  | "Freestyle"
-  | "Ultra-Endurance"
-  | "Triathlon"
-  | "Virtual";
-
-export type Format = "In-person" | "Virtual" | "Hybrid";
-
-export type VirtualPlatform = "Zwift" | "Strava" | "TrainerRoad" | "Other";
-
-export type Pace = "Relaxed" | "Steady" | "Competitive";
-
-export type SkillLevel = "Beginner" | "Intermediate" | "Advanced" | "Expert";
-
-export type MtbDiscipline = "Cross-country" | "Trail" | "Enduro" | "Downhill" | "All-mountain";
-
-export type Segmentation = "A Group" | "B Group" | "C Group" | "N/A";
-
-export type ScheduleFrequency = "Weekly" | "Monthly" | "Annually";
-
-export type DropPolicy = "Drop" | "No-drop";
 
 
 
@@ -71,8 +49,6 @@ export interface RideDay {
 }
 
 export type RidePattern = "weekly" | "biweekly" | "monthly";
-
-export type RideOrdinal = "1st" | "2nd" | "3rd" | "4th" | "Last";
 
 export interface Ride {
   pattern: RidePattern;

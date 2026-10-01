@@ -9,7 +9,7 @@ import type {
   Segmentation,
   SkillLevel,
   Team,
-} from "./types";
+} from "../../src/lib/types";
 
 interface TeamInput {
   id: string;
@@ -853,11 +853,3 @@ export const teams: Team[] = [
     },
   }),
 ];
-
-export function getAllTeams(): Team[] {
-  return teams;
-}
-
-export function getTeamById(id: string): Team | undefined {
-  return teams.find((team) => team.id === id);
-}

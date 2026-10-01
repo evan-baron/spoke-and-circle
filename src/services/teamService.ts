@@ -1,8 +1,8 @@
 import { cache } from 'react';
 import { toTeam } from '@/lib/api/teamMapper';
 import { prisma } from '@/lib/prisma';
-import { clubTypeToDb } from '@/lib/teamEnums';
 import type { Team } from '@/lib/types';
+import { clubType } from '@/lib/enums';
 
 export const getApprovedTeamById = cache(
 	async (id: string): Promise<Team | null> => {
@@ -18,7 +18,7 @@ export async function getApprovedGroupRides(parentId: string): Promise<Team[]> {
 		where: {
 			affiliatedId: parentId,
 			status: 'Approved',
-			type: clubTypeToDb['Group Ride'],
+			type: clubType.toDb['Group Ride'],
 		},
 		orderBy: { name: 'asc' },
 	});
@@ -32,7 +32,7 @@ export async function deleteGroupRide(
 	const result = await prisma.team.deleteMany({
 		where: {
 			id: teamId,
-			type: clubTypeToDb['Group Ride'],
+			type: clubType.toDb['Group Ride'],
 			...(user.isAdmin ? {} : { submittedById: user.id }),
 		},
 	});

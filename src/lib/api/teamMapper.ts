@@ -1,23 +1,16 @@
 import { Prisma } from '../../../generated/prisma/client';
 import type { Team as TeamRow } from '../../../generated/prisma/client';
-import {
-	bikeTypeFromDb,
-	racingDisciplineFromDb,
-	racingDisciplineToDb,
-	bikeTypeToDb,
-	clubTypeFromDb,
-	clubTypeToDb,
-	disciplineFromDb,
-	disciplineToDb,
-	dropPolicyFromDb,
-	dropPolicyToDb,
-	formatFromDb,
-	formatToDb,
-	segmentationFromDb,
-	segmentationToDb,
-} from '../teamEnums';
 import type { Ride, RideDay, Team, TeamFormValues } from '../types';
 import type { CreateTeamInput } from '../validation';
+import {
+	bikeType,
+	clubType,
+	dropPolicy,
+	format,
+	mtbDiscipline,
+	racingDiscipline,
+	segmentation,
+} from '../enums';
 
 function nonEmpty<T>(items: T[] | null | undefined): T[] | undefined {
 	return items && items.length > 0 ? items : undefined;
@@ -78,7 +71,7 @@ export function toTeam(row: TeamRow): Team {
 	return {
 		id: row.id,
 		name: row.name,
-		type: clubTypeFromDb[row.type],
+		type: clubType.fromDb[row.type],
 		missionStatement: row.missionStatement ?? undefined,
 		codeOfConduct: row.codeOfConduct ?? undefined,
 		affiliation: row.affiliation ?? undefined,
@@ -93,13 +86,13 @@ export function toTeam(row: TeamRow): Team {
 		primaryLanguage: row.primaryLanguage ?? undefined,
 		verified: row.verified,
 		lastActiveYear: row.lastActiveYear ?? 0,
-		bikeTypes: row.bikeTypes.map((bt) => bikeTypeFromDb[bt]),
+		bikeTypes: row.bikeTypes.map((bt) => bikeType.fromDb[bt]),
 		racingDisciplines: row.racingDisciplines.map(
-			(rd) => racingDisciplineFromDb[rd],
+			(rd) => racingDiscipline.fromDb[rd],
 		),
-		discipline: row.discipline ? disciplineFromDb[row.discipline] : undefined,
+		discipline: row.discipline ? mtbDiscipline.fromDb[row.discipline] : undefined,
 		eBikeAllowed: row.eBikeAllowed,
-		format: formatFromDb[row.format],
+		format: format.fromDb[row.format],
 		virtualPlatform: row.virtualPlatforms[0],
 		homeBase: row.homeBase ?? undefined,
 		website: row.website ?? undefined,
@@ -126,10 +119,10 @@ export function toTeam(row: TeamRow): Team {
 		rides: deriveRides(row),
 		scheduleNotes: deriveScheduleNotes(row),
 		pace: row.pace ?? 'Relaxed',
-		segmentation: row.segmentation ? segmentationFromDb[row.segmentation] : 'N/A',
+		segmentation: row.segmentation ? segmentation.fromDb[row.segmentation] : 'N/A',
 		typicalDistanceMiles: row.typicalDistanceMiles ?? 0,
 		typicalElevationGainFt: row.typicalElevationGainFt ?? 0,
-		dropPolicy: row.dropPolicy ? dropPolicyFromDb[row.dropPolicy] : 'No-drop',
+		dropPolicy: row.dropPolicy ? dropPolicy.fromDb[row.dropPolicy] : 'No-drop',
 		competitiveOrCasual: row.competitiveOrCasual,
 		skillLevels: row.skillLevels,
 		instructional: row.instructional,
@@ -163,7 +156,7 @@ export function toTeamCreateInput(
 		status: 'Pending',
 		submittedBy: submittedById ? { connect: { id: submittedById } } : undefined,
 		name: input.name,
-		type: clubTypeToDb[input.type],
+		type: clubType.toDb[input.type],
 		missionStatement: input.missionStatement,
 		codeOfConduct: input.codeOfConduct,
 		affiliation: input.affiliation,
@@ -176,14 +169,14 @@ export function toTeamCreateInput(
 		primaryLanguage: input.primaryLanguage,
 		contactPhone: input.contactPhone,
 		contactEmail: input.contactEmail,
-		bikeTypes: input.bikeTypes.map((bt) => bikeTypeToDb[bt]),
+		bikeTypes: input.bikeTypes.map((bt) => bikeType.toDb[bt]),
 		racingDisciplines:
 			input.type === 'Team' ?
-				(input.racingDisciplines ?? []).map((rd) => racingDisciplineToDb[rd])
+				(input.racingDisciplines ?? []).map((rd) => racingDiscipline.toDb[rd])
 			:	[],
-		discipline: input.discipline ? disciplineToDb[input.discipline] : undefined,
+		discipline: input.discipline ? mtbDiscipline.toDb[input.discipline] : undefined,
 		eBikeAllowed: input.eBikeAllowed,
-		format: formatToDb[input.format],
+		format: format.toDb[input.format],
 		virtualPlatforms: input.virtualPlatforms ?? [],
 		homeBase: input.homeBase,
 		website: input.website,
@@ -203,10 +196,10 @@ export function toTeamCreateInput(
 		rides: (input.rides ?? []) as unknown as Prisma.InputJsonValue,
 		scheduleNotes: input.scheduleNotes,
 		pace: input.pace,
-		segmentation: input.segmentation ? segmentationToDb[input.segmentation] : undefined,
+		segmentation: input.segmentation ? segmentation.toDb[input.segmentation] : undefined,
 		typicalDistanceMiles: input.typicalDistanceMiles,
 		typicalElevationGainFt: input.typicalElevationGainFt,
-		dropPolicy: input.dropPolicy ? dropPolicyToDb[input.dropPolicy] : undefined,
+		dropPolicy: input.dropPolicy ? dropPolicy.toDb[input.dropPolicy] : undefined,
 		competitiveOrCasual:
 			input.type === 'Group Ride' ?
 				'Recreational'
@@ -244,7 +237,7 @@ export function toTeamFormValues(row: TeamRow): TeamFormValues {
 
 	return {
 		name: row.name,
-		type: clubTypeFromDb[row.type],
+		type: clubType.fromDb[row.type],
 		missionStatement: row.missionStatement ?? '',
 		codeOfConduct: row.codeOfConduct ?? '',
 		affiliation: row.affiliation ?? '',
@@ -255,12 +248,12 @@ export function toTeamFormValues(row: TeamRow): TeamFormValues {
 		primaryLanguage: row.primaryLanguage ?? '',
 		contactPhone: row.contactPhone ?? '',
 		contactEmail: row.contactEmail ?? '',
-		bikeTypes: row.bikeTypes.map((bt) => bikeTypeFromDb[bt]),
+		bikeTypes: row.bikeTypes.map((bt) => bikeType.fromDb[bt]),
 		racingDisciplines: row.racingDisciplines.map(
-			(rd) => racingDisciplineFromDb[rd],
+			(rd) => racingDiscipline.fromDb[rd],
 		),
 		tags: userTags(row),
-		format: formatFromDb[row.format],
+		format: format.fromDb[row.format],
 		virtualPlatform: row.virtualPlatforms,
 		homeBase: row.homeBase ?? '',
 		website: row.website ?? '',
@@ -284,7 +277,7 @@ export function toTeamFormValues(row: TeamRow): TeamFormValues {
 		pace: row.pace ?? 'Steady',
 		typicalDistanceMiles: row.typicalDistanceMiles?.toString() ?? '',
 		typicalElevationGainFt: row.typicalElevationGainFt?.toString() ?? '',
-		dropPolicy: row.dropPolicy ? dropPolicyFromDb[row.dropPolicy] : 'No-drop',
+		dropPolicy: row.dropPolicy ? dropPolicy.fromDb[row.dropPolicy] : 'No-drop',
 		competitiveOrCasual: row.competitiveOrCasual,
 		skillLevels: row.skillLevels,
 		duesAmount: row.duesAmount ?? '',
@@ -334,7 +327,7 @@ export function toApprovedTeamUpdate(
 	return {
 		status: 'Approved',
 		name: input.name,
-		type: clubTypeToDb[input.type],
+		type: clubType.toDb[input.type],
 		missionStatement: input.missionStatement ?? null,
 		codeOfConduct: input.codeOfConduct ?? null,
 		affiliation: input.affiliation ?? null,
@@ -345,13 +338,13 @@ export function toApprovedTeamUpdate(
 		primaryLanguage: input.primaryLanguage ?? null,
 		contactPhone: input.contactPhone ?? null,
 		contactEmail: input.contactEmail ?? null,
-		bikeTypes: input.bikeTypes.map((bt) => bikeTypeToDb[bt]),
+		bikeTypes: input.bikeTypes.map((bt) => bikeType.toDb[bt]),
 		racingDisciplines:
 			input.type === 'Team' ?
-				(input.racingDisciplines ?? []).map((rd) => racingDisciplineToDb[rd])
+				(input.racingDisciplines ?? []).map((rd) => racingDiscipline.toDb[rd])
 			:	[],
 		eBikeAllowed: input.eBikeAllowed ?? false,
-		format: formatToDb[input.format],
+		format: format.toDb[input.format],
 		virtualPlatforms: input.virtualPlatforms ?? [],
 		homeBase: input.homeBase ?? null,
 		website: input.website ?? null,
@@ -376,7 +369,7 @@ export function toApprovedTeamUpdate(
 		pace: input.pace ?? null,
 		typicalDistanceMiles: input.typicalDistanceMiles ?? null,
 		typicalElevationGainFt: input.typicalElevationGainFt ?? null,
-		dropPolicy: input.dropPolicy ? dropPolicyToDb[input.dropPolicy] : null,
+		dropPolicy: input.dropPolicy ? dropPolicy.toDb[input.dropPolicy] : null,
 		competitiveOrCasual:
 			input.type === 'Group Ride' ?
 				'Recreational'

@@ -1,9 +1,9 @@
 import { NewTeamForm } from '@/components/NewTeamForm/NewTeamForm';
 import { toGroupRideFormValues } from '@/lib/api/teamMapper';
 import { prisma } from '@/lib/prisma';
-import { clubTypeFromDb } from '@/lib/teamEnums';
 import type { TeamFormValues } from '@/lib/types';
 import { getCurrentUser } from '@/services/currentUserService';
+import { clubType } from '@/lib/enums';
 
 async function getGroupRideDefaults(
 	sourceTeamId: string | undefined,
@@ -20,7 +20,7 @@ async function getGroupRideDefaults(
 			...(user.isAdmin ? {} : { submittedById: user.id }),
 		},
 	});
-	if (!team || clubTypeFromDb[team.type] === 'Group Ride') return undefined;
+	if (!team || clubType.fromDb[team.type] === 'Group Ride') return undefined;
 
 	return toGroupRideFormValues(team);
 }

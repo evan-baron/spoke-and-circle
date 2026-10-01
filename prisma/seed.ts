@@ -1,22 +1,22 @@
 import 'dotenv/config';
 import type { Prisma } from '../generated/prisma/client';
-import {
-	bikeTypeToDb,
-	racingDisciplineToDb,
-	clubTypeToDb,
-	disciplineToDb,
-	dropPolicyToDb,
-	formatToDb,
-	segmentationToDb,
-} from '../src/lib/teamEnums';
-import { teams } from '../src/lib/teams';
+import { teams } from './seedData/teams';
 import type { Team } from '../src/lib/types';
+import {
+	bikeType,
+	clubType,
+	dropPolicy,
+	format,
+	mtbDiscipline,
+	racingDiscipline,
+	segmentation,
+} from '../src/lib/enums';
 
 function toTeamData(team: Team): Prisma.TeamCreateInput {
 	return {
 		status: 'Approved',
 		name: team.name,
-		type: clubTypeToDb[team.type],
+		type: clubType.toDb[team.type],
 		missionStatement: team.missionStatement,
 		codeOfConduct: team.codeOfConduct,
 		affiliation: team.affiliation,
@@ -28,13 +28,13 @@ function toTeamData(team: Team): Prisma.TeamCreateInput {
 		contactEmail: team.contact.email,
 		verified: team.verified,
 		lastActiveYear: team.lastActiveYear,
-		bikeTypes: team.bikeTypes.map((bt) => bikeTypeToDb[bt]),
+		bikeTypes: team.bikeTypes.map((bt) => bikeType.toDb[bt]),
 		racingDisciplines: team.racingDisciplines.map(
-			(rd) => racingDisciplineToDb[rd],
+			(rd) => racingDiscipline.toDb[rd],
 		),
-		discipline: team.discipline ? disciplineToDb[team.discipline] : undefined,
+		discipline: team.discipline ? mtbDiscipline.toDb[team.discipline] : undefined,
 		eBikeAllowed: team.eBikeAllowed,
-		format: formatToDb[team.format],
+		format: format.toDb[team.format],
 		virtualPlatforms: team.virtualPlatform ? [team.virtualPlatform] : [],
 		homeBase: team.homeBase,
 		website: team.website,
@@ -52,10 +52,10 @@ function toTeamData(team: Team): Prisma.TeamCreateInput {
 		rideSchedule: team.rideSchedule,
 		startTimes: team.startTimes ?? [],
 		pace: team.pace,
-		segmentation: segmentationToDb[team.segmentation],
+		segmentation: segmentation.toDb[team.segmentation],
 		typicalDistanceMiles: team.typicalDistanceMiles,
 		typicalElevationGainFt: team.typicalElevationGainFt,
-		dropPolicy: dropPolicyToDb[team.dropPolicy],
+		dropPolicy: dropPolicy.toDb[team.dropPolicy],
 		competitiveOrCasual: team.competitiveOrCasual,
 		skillLevels: team.skillLevels,
 		instructional: team.instructional,
