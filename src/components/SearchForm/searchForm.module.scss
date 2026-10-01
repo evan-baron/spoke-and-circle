@@ -58,6 +58,10 @@
 	@include field-input;
 }
 
+select.input {
+	@include select-field;
+}
+
 .submit {
 	@include button-solid;
 	width: 100%;
@@ -81,7 +85,7 @@
 	}
 
 	.input {
-		background: var(--color-paper);
+		background-color: var(--color-paper);
 		border-color: transparent;
 	}
 
