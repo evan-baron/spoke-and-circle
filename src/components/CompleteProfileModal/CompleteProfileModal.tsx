@@ -104,7 +104,12 @@ export function CompleteProfileModal() {
 				</p>
 
 				<label className={styles.field}>
-					<span>First name</span>
+					<span>
+						First name{' '}
+						<span className={styles.required} aria-hidden='true'>
+							*
+						</span>
+					</span>
 					<input
 						name='firstName'
 						type='text'

@@ -5,6 +5,7 @@ import type { Ride, RideOrdinal, RidePattern } from '@/lib/types';
 import { Checkbox } from './Checkbox';
 import { DAYS, MONTHS, RIDE_ORDINALS, RIDE_PATTERNS } from './constants';
 import { Field } from './Field';
+import { RequiredMark } from './RequiredMark';
 import formStyles from './teamForm.module.scss';
 import styles from './rideScheduleEditor.module.scss';
 
@@ -87,6 +88,7 @@ export function RideScheduleEditor({ initialRide }: RideScheduleEditorProps) {
 				<div className={`${styles.group} ${styles.full}`}>
 					<span className={formStyles.fieldLabel}>
 						{ride.pattern === 'monthly' ? 'Day of the week' : 'Days'}
+						<RequiredMark />
 					</span>
 					<div className={styles.chips}>
 						{DAYS.map((day) => (

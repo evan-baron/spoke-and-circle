@@ -2,6 +2,7 @@ import Link from 'next/link';
 import { Badge } from '@/components/Badge/Badge';
 import {
 	formatMemberCount,
+	formatSkillLevelLines,
 	formatSkillLevels,
 	getTeamLocations,
 	formatVerification,
@@ -96,7 +97,7 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 							</td>
 							<td>{team.bikeTypes.join(', ')}</td>
 							<td>
-								{team.skillLevels.map((level, index, all) => (
+								{formatSkillLevelLines(team.skillLevels).map((level, index, all) => (
 									<span key={level} className={styles.stackedLine}>
 										{level}
 										{index < all.length - 1 && ','}

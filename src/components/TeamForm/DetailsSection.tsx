@@ -9,6 +9,7 @@ import {
 	VIRTUAL_PLATFORMS,
 } from './constants';
 import { Field } from './Field';
+import { RequiredMark } from './RequiredMark';
 import { Section } from './Section';
 import { SkillLevelsField } from './SkillLevelsField';
 import styles from './teamForm.module.scss';
@@ -43,7 +44,10 @@ export function DetailsSection({
 			title={groupType === 'Group Ride' ? 'Group Ride Profile' : 'Group Profile'}
 		>
 			<div className={styles.field}>
-				<span className={styles.fieldLabel}>Cycling Discipline</span>
+				<span className={styles.fieldLabel}>
+						Cycling Discipline
+						<RequiredMark />
+					</span>
 				<div>
 					<CheckboxDropdown
 						name='bikeType'

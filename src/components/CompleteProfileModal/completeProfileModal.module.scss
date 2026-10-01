@@ -35,6 +35,10 @@
 	font-weight: 700;
 }
 
+.required {
+	color: var(--color-coral);
+}
+
 .input {
 	@include field-input;
 }

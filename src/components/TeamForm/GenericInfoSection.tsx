@@ -5,6 +5,7 @@ import { TeamAffiliationInput } from '@/components/TeamAffiliationInput/TeamAffi
 import type { TeamFormValues } from '@/lib/types';
 import { CLUB_TYPES } from './constants';
 import { Field } from './Field';
+import { RequiredMark } from './RequiredMark';
 import { Section } from './Section';
 import styles from './teamForm.module.scss';
 
@@ -39,6 +40,7 @@ export function GenericInfoSection({
 		<Section title='Generic Info'>
 			<Field
 				label={groupType === 'Group Ride' ? 'Ride Name' : 'Group Name'}
+					required
 				hint={
 					namePrefix ?
 						`Saved as "${namePrefix} - ${name.trim() || 'your ride name'}". The team name is added for you.`
@@ -69,7 +71,7 @@ export function GenericInfoSection({
 						className={styles.input}
 					/>
 				</Field>
-			:	<Field label='Group Type'>
+			:	<Field label='Group Type' required>
 					<select
 						name='type'
 						value={groupType}
@@ -139,6 +141,7 @@ export function GenericInfoSection({
 			<div className={styles.field}>
 				<label htmlFor={locationId} className={styles.fieldLabel}>
 					Location
+					<RequiredMark />
 				</label>
 				<LocationInput
 					id={locationId}

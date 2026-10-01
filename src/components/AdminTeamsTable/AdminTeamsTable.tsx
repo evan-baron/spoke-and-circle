@@ -4,7 +4,11 @@ import Link from 'next/link';
 import { useEffect, useId, useRef, useState } from 'react';
 import { Badge } from '@/components/Badge/Badge';
 import tableStyles from '@/components/ResultsTable/resultsTable.module.scss';
-import { formatMemberCount, formatSkillLevels } from '@/lib/format';
+import {
+	formatMemberCount,
+	formatSkillLevelLines,
+	formatSkillLevels,
+} from '@/lib/format';
 import { toneForPace, toneForVerified, toneForVisibility } from '@/lib/tone';
 import type { Team } from '@/lib/types';
 import styles from './adminTeamsTable.module.scss';
@@ -274,7 +278,7 @@ export function AdminTeamsTable({
 									<td>{team.location}</td>
 									<td>{team.bikeTypes.join(', ')}</td>
 									<td>
-										{team.skillLevels.map((level, index, all) => (
+										{formatSkillLevelLines(team.skillLevels).map((level, index, all) => (
 											<span key={level} className={tableStyles.stackedLine}>
 												{level}
 												{index < all.length - 1 && ','}

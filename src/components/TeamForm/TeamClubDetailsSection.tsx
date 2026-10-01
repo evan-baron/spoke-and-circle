@@ -14,7 +14,7 @@ export function TeamClubDetailsSection({
 }: TeamClubDetailsSectionProps) {
 	return (
 		<Section title='Group Structure'>
-			<Field label='Competitive or casual'>
+			<Field label='Competitive or casual' required>
 				<select
 					name='competitiveOrCasual'
 					defaultValue={values.competitiveOrCasual}

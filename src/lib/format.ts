@@ -1,9 +1,4 @@
-import type {
-	AgeRequirement,
-	MileageRequirement,
-	Ride,
-	Team,
-} from './types';
+import type { AgeRequirement, MileageRequirement, Ride, Team } from './types';
 
 const WEEKDAY_ORDER = [
 	'Monday',
@@ -99,8 +94,25 @@ export function formatSubmitter(
 	return name || user.email;
 }
 
+export const ALL_SKILL_LEVELS = [
+	'Beginner',
+	'Intermediate',
+	'Advanced',
+	'Expert',
+] as const;
+
+export const ALL_SKILL_LEVELS_LABEL = 'All levels welcome';
+
+export function isAllSkillLevels(levels: readonly string[]): boolean {
+	return ALL_SKILL_LEVELS.every((level) => levels.includes(level));
+}
+
+export function formatSkillLevelLines(levels: readonly string[]): string[] {
+	return isAllSkillLevels(levels) ? [ALL_SKILL_LEVELS_LABEL] : [...levels];
+}
+
 export function formatSkillLevels(levels: string[]): string {
-	return levels.join(', ');
+	return formatSkillLevelLines(levels).join(', ');
 }
 
 function joinWithAnd(items: string[]): string {

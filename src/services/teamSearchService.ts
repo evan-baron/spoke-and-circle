@@ -259,24 +259,19 @@ async function findTeamMilesWithin(
 	return new Map(rows.map((row) => [row.id, row.miles]));
 }
 
-async function searchNear(
-	where: Prisma.TeamWhereInput,
-	point: PointLocation,
-	radius: number,
+interface RankedMatch {
+	id: string;
+	name: string;
+	skillLevels: string[];
+}
+
+const bySkillSpecificity = (a: RankedMatch, b: RankedMatch) =>
+	a.skillLevels.length - b.skillLevels.length;
+
+async function pageFromRanked(
+	matches: RankedMatch[],
 	requestedPage: number,
 ): Promise<TeamSearchPage> {
-	const miles = await findTeamMilesWithin(point, radius);
-
-	const matches = await prisma.team.findMany({
-		where: { AND: [where, { id: { in: [...miles.keys()] } }] },
-		select: { id: true, name: true },
-	});
-	matches.sort(
-		(a, b) =>
-			(miles.get(a.id) ?? 0) - (miles.get(b.id) ?? 0) ||
-			a.name.localeCompare(b.name),
-	);
-
 	const { page, pageCount, skip } = pageBounds(matches.length, requestedPage);
 	const pageIds = matches.slice(skip, skip + TEAMS_PAGE_SIZE).map((m) => m.id);
 	const rows = await prisma.team.findMany({ where: { id: { in: pageIds } } });
@@ -289,6 +284,44 @@ async function searchNear(
 	});
 
 	return { teams, total: matches.length, page, pageCount };
+}
+
+async function searchNear(
+	where: Prisma.TeamWhereInput,
+	point: PointLocation,
+	radius: number,
+	requestedPage: number,
+	rankBySkill: boolean,
+): Promise<TeamSearchPage> {
+	const miles = await findTeamMilesWithin(point, radius);
+
+	const matches = await prisma.team.findMany({
+		where: { AND: [where, { id: { in: [...miles.keys()] } }] },
+		select: { id: true, name: true, skillLevels: true },
+	});
+	matches.sort(
+		(a, b) =>
+			(rankBySkill ? bySkillSpecificity(a, b) : 0) ||
+			(miles.get(a.id) ?? 0) - (miles.get(b.id) ?? 0) ||
+			a.name.localeCompare(b.name),
+	);
+
+	return pageFromRanked(matches, requestedPage);
+}
+
+async function searchBySkillSpecificity(
+	where: Prisma.TeamWhereInput,
+	requestedPage: number,
+): Promise<TeamSearchPage> {
+	const matches = await prisma.team.findMany({
+		where,
+		select: { id: true, name: true, skillLevels: true },
+	});
+	matches.sort(
+		(a, b) => bySkillSpecificity(a, b) || a.name.localeCompare(b.name),
+	);
+
+	return pageFromRanked(matches, requestedPage);
 }
 
 export async function searchApprovedTeams(
@@ -305,8 +338,11 @@ export async function searchApprovedTeams(
 			resolved,
 			params.radius ?? DEFAULT_RADIUS_MILES,
 			requestedPage,
+			Boolean(params.skillLevel),
 		);
 	}
+
+	if (params.skillLevel) return searchBySkillSpecificity(where, requestedPage);
 
 	const total = await prisma.team.count({ where });
 	const { page, pageCount, skip } = pageBounds(total, requestedPage);
