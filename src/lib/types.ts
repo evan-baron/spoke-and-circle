@@ -170,6 +170,7 @@ export interface SearchParams {
   discipline?: MtbDiscipline;
   skillLevel?: SkillLevel;
   competitiveOrCasual?: "Competitive" | "Recreational";
+  pace?: Pace;
   womensOnly?: boolean;
   youthOnly?: boolean;
   acceptingNewRiders?: boolean;

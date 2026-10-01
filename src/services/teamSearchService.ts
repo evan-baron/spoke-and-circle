@@ -195,6 +195,13 @@ async function buildWhere(
 	}
 	if (params.discipline) and.push({ discipline: disciplineToDb[params.discipline] });
 	if (params.skillLevel) and.push({ skillLevels: { has: params.skillLevel } });
+	if (params.pace) {
+		and.push(
+			params.pace === 'Relaxed' ?
+				{ OR: [{ pace: 'Relaxed' }, { pace: null }] }
+			:	{ pace: params.pace },
+		);
+	}
 	if (params.competitiveOrCasual) {
 		and.push({ competitiveOrCasual: params.competitiveOrCasual });
 	}

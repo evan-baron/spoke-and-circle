@@ -21,6 +21,7 @@ export async function generateMetadata({
 				params.discipline ||
 				params.skillLevel ||
 				params.competitiveOrCasual ||
+				params.pace ||
 				params.womensOnly ||
 				params.youthOnly ||
 				params.acceptingNewRiders,
@@ -68,6 +69,7 @@ export default async function SearchPage({
 					defaultDiscipline={params.discipline ?? ''}
 					defaultSkillLevel={params.skillLevel ?? ''}
 					defaultCompetitiveOrCasual={params.competitiveOrCasual ?? ''}
+					defaultPace={params.pace ?? ''}
 					defaultWomensOnly={params.womensOnly}
 					defaultYouthOnly={params.youthOnly}
 					defaultAcceptingNewRiders={params.acceptingNewRiders}

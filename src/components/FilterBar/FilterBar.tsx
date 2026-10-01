@@ -17,6 +17,7 @@ interface FilterBarProps {
 	defaultDiscipline?: string;
 	defaultSkillLevel?: string;
 	defaultCompetitiveOrCasual?: string;
+	defaultPace?: string;
 	defaultWomensOnly?: boolean;
 	defaultYouthOnly?: boolean;
 	defaultAcceptingNewRiders?: boolean;
@@ -50,6 +51,7 @@ const DISCIPLINE_OPTIONS = [
 ];
 const SKILL_LEVEL_OPTIONS = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 const RACING_OPTIONS = ['Competitive', 'Recreational'];
+const PACE_OPTIONS = ['Relaxed', 'Steady', 'Competitive'];
 
 const AUTO_SUBMIT_DEBOUNCE_MS = 300;
 const pendingAutoSubmits = new WeakMap<
@@ -83,6 +85,7 @@ export function FilterBar({
 	defaultDiscipline = '',
 	defaultSkillLevel = '',
 	defaultCompetitiveOrCasual = '',
+	defaultPace = '',
 	defaultWomensOnly = false,
 	defaultYouthOnly = false,
 	defaultAcceptingNewRiders = false,
@@ -93,6 +96,7 @@ export function FilterBar({
 			defaultDiscipline,
 			defaultSkillLevel,
 			defaultCompetitiveOrCasual,
+			defaultPace,
 		].filter(Boolean).length +
 		defaultBikeTypes.length +
 		(defaultWomensOnly ? 1 : 0) +
@@ -220,6 +224,20 @@ export function FilterBar({
 					>
 						<option value=''>Competitive or recreational</option>
 						{RACING_OPTIONS.map((option) => (
+							<option key={option} value={option}>
+								{option}
+							</option>
+						))}
+					</select>
+					<select
+						name='pace'
+						defaultValue={defaultPace}
+						aria-label='Ride pace'
+						onChange={autoSubmit}
+						className={styles.input}
+					>
+						<option value=''>Any ride pace</option>
+						{PACE_OPTIONS.map((option) => (
 							<option key={option} value={option}>
 								{option}
 							</option>
