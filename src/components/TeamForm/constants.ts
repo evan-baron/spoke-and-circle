@@ -22,7 +22,6 @@ export const PACES = pace.labels;
 export const DROP_POLICIES = dropPolicy.labels;
 export const SKILL_LEVELS = skillLevel.labels;
 export const PERSONA_OPTIONS = [
-	{ value: 'allAllowed', label: 'All allowed' },
 	{ value: 'womenOnly', label: 'Women only' },
 	{ value: 'menOnly', label: 'Men only' },
 	{ value: 'lgbtOnly', label: 'LGBT only' },

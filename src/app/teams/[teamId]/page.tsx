@@ -176,8 +176,14 @@ export default async function TeamPage({
 				<header className={styles.header}>
 					<div className={styles.badgeRow}>
 						<Badge tone='ink'>{team.type}</Badge>
-						<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
-						<Badge tone='gold'>{bikeTypesLabel(team.bikeTypes)}</Badge>
+						{team.type === 'Group Ride' && (
+							<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
+						)}
+						{team.bikeTypes.map((bikeType) => (
+							<Badge key={bikeType} tone='gold'>
+								{bikeType}
+							</Badge>
+						))}
 						{team.discipline && <Badge tone='gold'>{team.discipline}</Badge>}
 						<Badge tone={toneForVerified(team.verified)}>
 							{formatVerification(team.verified, team.lastActiveYear)}
