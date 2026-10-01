@@ -41,13 +41,15 @@ export function DetailsSection({
 }: DetailsSectionProps) {
 	return (
 		<Section
-			title={groupType === 'Group Ride' ? 'Group Ride Profile' : 'Group Profile'}
+			title={
+				groupType === 'Group Ride' ? 'Group Ride Profile' : 'Group Profile'
+			}
 		>
 			<div className={styles.field}>
 				<span className={styles.fieldLabel}>
-						Cycling Discipline
-						<RequiredMark />
-					</span>
+					Cycling Discipline
+					<RequiredMark />
+				</span>
 				<div>
 					<CheckboxDropdown
 						name='bikeType'
@@ -73,7 +75,11 @@ export function DetailsSection({
 			</Field>
 			{groupType !== 'Group Ride' && (
 				<Field label='Average Riding Pace'>
-					<select name='pace' defaultValue={values.pace} className={styles.input}>
+					<select
+						name='pace'
+						defaultValue={values.pace}
+						className={styles.input}
+					>
 						{PACES.map((option) => (
 							<option key={option} value={option}>
 								{option}
@@ -93,7 +99,7 @@ export function DetailsSection({
 						type='text'
 						name='homeBase'
 						defaultValue={values.homeBase}
-						placeholder='e.g. Zwift Racing League'
+						placeholder='e.g. The Broken Spoke Bike Shop'
 						className={styles.input}
 					/>
 				</Field>

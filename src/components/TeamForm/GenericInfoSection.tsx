@@ -40,7 +40,7 @@ export function GenericInfoSection({
 		<Section title='Generic Info'>
 			<Field
 				label={groupType === 'Group Ride' ? 'Ride Name' : 'Group Name'}
-					required
+				required
 				hint={
 					namePrefix ?
 						`Saved as "${namePrefix} - ${name.trim() || 'your ride name'}". The team name is added for you.`
@@ -124,7 +124,7 @@ export function GenericInfoSection({
 					hint={
 						affiliatedId ?
 							'Linked to an existing team.'
-						:	'Begin typing to search Spoke & Circle for an existing team, club, or organization to link to'
+						:	'Begin typing to search for an existing team, club, or organization to link to. If one does not exist, you can enter a new one here.'
 					}
 				>
 					<TeamAffiliationInput
