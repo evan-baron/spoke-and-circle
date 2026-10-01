@@ -23,29 +23,17 @@ function nonEmpty<T>(items: T[] | null | undefined): T[] | undefined {
 	return items && items.length > 0 ? items : undefined;
 }
 
-const PERSONA_SEARCH_TAGS: Record<string, string[]> = {
-	'Women Only': ['women'],
-	'Men Only': ['men'],
-	'LGBT Only': ['lgbt', 'lgbtq'],
-};
-
-function deriveTeamTags(personaRestrictions: string[]): string[] {
-	const tags = personaRestrictions.flatMap(
-		(restriction) => PERSONA_SEARCH_TAGS[restriction] ?? [restriction.toLowerCase()],
-	);
-	return [...new Set(tags)];
+function cleanTags(tags: string[] | undefined): string[] {
+	return [...new Set(tags ?? [])];
 }
 
-function mergeTags(
-	tags: string[] | undefined,
-	personaRestrictions: string[],
-): string[] {
-	return [
-		...new Set([
-			...(tags ?? []),
-			...deriveTeamTags(personaRestrictions),
-		]),
-	];
+function userTags(row: TeamRow): string[] {
+	const personaText = new Set(
+		row.personaRestrictions
+			.filter((restriction) => !PERSONA_CODE_BY_LABEL[restriction])
+			.map((restriction) => restriction.toLowerCase()),
+	);
+	return row.tags.filter((tag) => !personaText.has(tag));
 }
 
 function deriveRides(row: TeamRow): Ride[] {
@@ -239,7 +227,7 @@ export function toTeamCreateInput(
 		joinReferral: input.joinReferral,
 		joinInviteOnly: input.joinInviteOnly,
 		joinOpen: input.joinOpen,
-		tags: mergeTags(input.tags, input.personaRestrictions ?? []),
+		tags: cleanTags(input.tags),
 	};
 }
 
@@ -271,7 +259,7 @@ export function toTeamFormValues(row: TeamRow): TeamFormValues {
 		racingDisciplines: row.racingDisciplines.map(
 			(rd) => racingDisciplineFromDb[rd],
 		),
-		tags: row.tags,
+		tags: userTags(row),
 		format: formatFromDb[row.format],
 		virtualPlatform: row.virtualPlatforms,
 		homeBase: row.homeBase ?? '',
@@ -409,6 +397,6 @@ export function toApprovedTeamUpdate(
 		joinReferral: input.joinReferral ?? false,
 		joinInviteOnly: input.joinInviteOnly ?? false,
 		joinOpen: input.joinOpen ?? false,
-		tags: mergeTags(input.tags, input.personaRestrictions ?? []),
+		tags: cleanTags(input.tags),
 	};
 }

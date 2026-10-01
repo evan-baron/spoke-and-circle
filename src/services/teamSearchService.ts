@@ -95,6 +95,19 @@ const ENUM_TERM_CLAUSES: [string, Prisma.TeamWhereInput][] = [
 			{ bikeTypes: { has: value } },
 		],
 	),
+	...(
+		[
+			['women', 'Women Only'],
+			['men', 'Men Only'],
+			['lgbt', 'LGBT Only'],
+			['lgbtq', 'LGBT Only'],
+		] as const
+	).map(
+		([term, persona]): [string, Prisma.TeamWhereInput] => [
+			term,
+			{ personaRestrictions: { has: persona } },
+		],
+	),
 	...Object.entries(racingDisciplineToDb).map(
 		([label, value]): [string, Prisma.TeamWhereInput] => [
 			label,
