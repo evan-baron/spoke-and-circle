@@ -226,7 +226,7 @@ export function FilterBar({
 					</select>
 					*/}
 				</div>
-
+				{/* 
 				<div className={styles.toggleRow}>
 					<label className={styles.toggle}>
 						<input
@@ -258,7 +258,7 @@ export function FilterBar({
 						/>
 						<span>Accepting new riders</span>
 					</label>
-				</div>
+				</div> */}
 			</div>
 
 			{/* Mobile: sits directly above the search button, below every
