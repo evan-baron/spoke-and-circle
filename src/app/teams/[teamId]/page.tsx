@@ -486,15 +486,17 @@ export default async function TeamPage({
 											:	'Group ride'
 										}
 										value={
-											<>
+											<span className={styles.rideValue}>
 												<Link
 													href={`/teams/${ride.id}`}
 													className={styles.affiliationLink}
 												>
 													{ride.name}
-												</Link>{' '}
-												<Badge tone={toneForPace(ride.pace)}>{ride.pace}</Badge>
-											</>
+												</Link>
+												<Badge tone={toneForPace(ride.pace)}>
+													{ride.pace} pace
+												</Badge>
+											</span>
 										}
 									/>
 								))}

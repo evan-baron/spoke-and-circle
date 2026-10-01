@@ -184,6 +184,13 @@
 	}
 }
 
+.rideValue {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 0.25rem 0.6rem;
+}
+
 .affiliationLink {
 	color: #f4aa34;
 	text-decoration: underline;
