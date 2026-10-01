@@ -185,13 +185,12 @@ export function AdminTeamsTable({
 										</div>
 										<p className={tableStyles.cardLocation}>{team.location}</p>
 										<div className={tableStyles.cardBadges}>
-											{team.type === 'Group Ride' ? (
-												<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
-											) : (
-												<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
+											{team.type === 'Group Ride' ?
+												<Badge tone={toneForPace(team.pace)}>{team.pace} pace</Badge>
+											:	<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
 													{team.competitiveOrCasual}
 												</Badge>
-											)}
+											}
 											{team.bikeTypes.map((bikeType) => (
 												<Badge key={bikeType} tone='gold'>
 													{bikeType}
@@ -286,11 +285,9 @@ export function AdminTeamsTable({
 										<Badge tone='ink'>{team.type}</Badge>
 									</td>
 									<td>
-										{team.type !== 'Group Ride' && (
-											<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
-												{team.competitiveOrCasual}
-											</Badge>
-										)}
+										<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
+											{team.competitiveOrCasual}
+										</Badge>
 									</td>
 									<td>{team.location}</td>
 									<td>{team.bikeTypes.join(', ')}</td>

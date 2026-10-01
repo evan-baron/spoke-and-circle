@@ -43,9 +43,7 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 							</p>
 							<div className={styles.cardBadges}>
 								{team.type === 'Group Ride' ?
-									<Badge tone={toneForPace(team.pace)}>
-										{team.pace}
-									</Badge>
+									<Badge tone={toneForPace(team.pace)}>{team.pace} pace</Badge>
 								:	<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
 										{team.competitiveOrCasual}
 									</Badge>
@@ -101,11 +99,9 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 								<Badge tone='ink'>{team.type}</Badge>
 							</td>
 							<td>
-								{team.type !== 'Group Ride' && (
-									<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
-										{team.competitiveOrCasual}
-									</Badge>
-								)}
+								<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
+									{team.competitiveOrCasual}
+								</Badge>
 							</td>
 							<td>
 								{getTeamLocations(team).map((location, index, all) => (

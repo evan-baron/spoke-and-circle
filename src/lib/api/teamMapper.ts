@@ -198,7 +198,10 @@ export function toTeamCreateInput(
 		typicalDistanceMiles: input.typicalDistanceMiles,
 		typicalElevationGainFt: input.typicalElevationGainFt,
 		dropPolicy: input.dropPolicy ? dropPolicyToDb[input.dropPolicy] : undefined,
-		competitiveOrCasual: input.competitiveOrCasual ?? 'Recreational',
+		competitiveOrCasual:
+			input.type === 'Group Ride' ?
+				'Recreational'
+			:	(input.competitiveOrCasual ?? 'Recreational'),
 		skillLevels: input.skillLevels,
 		instructional: input.instructional,
 		duesRequired: input.duesRequired,
@@ -356,7 +359,10 @@ export function toApprovedTeamUpdate(
 		typicalDistanceMiles: input.typicalDistanceMiles ?? null,
 		typicalElevationGainFt: input.typicalElevationGainFt ?? null,
 		dropPolicy: input.dropPolicy ? dropPolicyToDb[input.dropPolicy] : null,
-		competitiveOrCasual: input.competitiveOrCasual ?? 'Recreational',
+		competitiveOrCasual:
+			input.type === 'Group Ride' ?
+				'Recreational'
+			:	(input.competitiveOrCasual ?? 'Recreational'),
 		skillLevels: input.skillLevels,
 		instructional: input.instructional ?? false,
 		duesRequired: input.duesRequired ?? false,

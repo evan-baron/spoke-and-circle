@@ -225,6 +225,7 @@ export function FilterBar({
 							</option>
 						))}
 					</select>
+					{/*
 					<select
 						name='discipline'
 						defaultValue={defaultDiscipline}
@@ -239,6 +240,7 @@ export function FilterBar({
 							</option>
 						))}
 					</select>
+					*/}
 				</div>
 
 				<div className={styles.toggleRow}>
