@@ -123,6 +123,10 @@
 	@include field-input;
 }
 
+select.input {
+	@include select-field;
+}
+
 textarea.input {
 	resize: vertical;
 	min-height: 4.5rem;

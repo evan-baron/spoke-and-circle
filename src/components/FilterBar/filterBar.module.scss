@@ -32,6 +32,10 @@
 	padding: 0.6rem 0.85rem;
 }
 
+select.input {
+	@include select-field;
+}
+
 .keywordInput {
 	min-width: 0;
 
@@ -131,14 +135,9 @@
 	font-weight: 800;
 }
 
-.filtersCaret {
-	font-size: 0.7rem;
-	color: var(--color-ink-soft);
-	transition: transform 0.2s ease;
-}
-
-.filtersToggle[aria-expanded='true'] .filtersCaret {
-	transform: rotate(180deg);
+.filtersIcon {
+	flex-shrink: 0;
+	color: var(--color-ink);
 }
 
 // Wraps the "More Filters" toggle + "Clear filters" link as one unit that
@@ -247,7 +246,7 @@
 	justify-content: space-between;
 	gap: 0.5rem;
 	font-size: 0.9375rem;
-	padding: 0.6rem 0.85rem;
+	padding: 0.6rem 0.95rem 0.6rem 0.85rem;
 	text-align: left;
 	cursor: pointer;
 
@@ -260,8 +259,7 @@
 
 .checkboxDropdownCaret {
 	flex-shrink: 0;
-	color: var(--color-ink-soft);
-	font-size: 0.7rem;
+	color: var(--color-ink);
 }
 
 .checkboxDropdownPanel {

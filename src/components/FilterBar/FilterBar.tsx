@@ -144,7 +144,7 @@ export function FilterBar({
 					onChange={autoSubmit}
 					className={`${styles.input} ${styles.typeSelect}`}
 				>
-					<option value=''>Any type</option>
+					<option value=''>Any group type</option>
 					{TYPE_OPTIONS.map((option) => (
 						<option key={option} value={option}>
 							{option}
@@ -226,7 +226,7 @@ export function FilterBar({
 					</select>
 					*/}
 				</div>
-
+				{/* 
 				<div className={styles.toggleRow}>
 					<label className={styles.toggle}>
 						<input
@@ -258,7 +258,7 @@ export function FilterBar({
 						/>
 						<span>Accepting new riders</span>
 					</label>
-				</div>
+				</div> */}
 			</div>
 
 			{/* Mobile: sits directly above the search button, below every
@@ -277,9 +277,20 @@ export function FilterBar({
 					{activeFilterCount > 0 && (
 						<span className={styles.filtersCount}>{activeFilterCount}</span>
 					)}
-					<span className={styles.filtersCaret} aria-hidden='true'>
-						&#9662;
-					</span>
+					<svg
+						className={styles.filtersIcon}
+						viewBox='0 0 10 10'
+						width='10'
+						height='10'
+						fill='none'
+						stroke='currentColor'
+						strokeWidth='1.25'
+						strokeLinecap='round'
+						aria-hidden='true'
+					>
+						<path d='M1 5h8' />
+						{!filtersOpen && <path d='M5 1v8' />}
+					</svg>
 				</button>
 
 				<a href={action} className={styles.clearFilters}>
