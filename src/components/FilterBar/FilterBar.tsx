@@ -144,7 +144,7 @@ export function FilterBar({
 					onChange={autoSubmit}
 					className={`${styles.input} ${styles.typeSelect}`}
 				>
-					<option value=''>Any type</option>
+					<option value=''>Group type</option>
 					{TYPE_OPTIONS.map((option) => (
 						<option key={option} value={option}>
 							{option}
