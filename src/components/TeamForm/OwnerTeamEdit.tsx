@@ -19,6 +19,7 @@ export function OwnerTeamEdit({ teamId, initialValues }: OwnerTeamEditProps) {
 			initialValues={initialValues}
 			excludeTeamId={teamId}
 			showAdminFields={false}
+			cancelHref={`/teams/${teamId}`}
 			onSubmit={async (payload) => {
 				await teamAPI.update(teamId, payload);
 				router.push(`/teams/${teamId}`);

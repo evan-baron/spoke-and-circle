@@ -24,6 +24,7 @@ export function AdminTeamEdit({
 			initialValues={initialValues}
 			initialVerified={initialVerified}
 			excludeTeamId={teamId}
+			cancelHref={`/teams/${teamId}`}
 			onSubmit={async (payload) => {
 				await adminAPI.updateTeam(teamId, payload);
 				router.push(`/teams/${teamId}`);

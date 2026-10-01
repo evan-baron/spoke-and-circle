@@ -1,7 +1,9 @@
+import Link from 'next/link';
 import styles from './teamForm.module.scss';
 
 interface SubmitActionsProps {
 	mode: 'create' | 'review' | 'edit';
+	cancelHref?: string;
 	isSubmitting: boolean;
 	isAntiBotValid: boolean;
 	confirmingReject: boolean;
@@ -12,6 +14,7 @@ interface SubmitActionsProps {
 
 export function SubmitActions({
 	mode,
+	cancelHref,
 	isSubmitting,
 	isAntiBotValid,
 	confirmingReject,
@@ -64,13 +67,20 @@ export function SubmitActions({
 					}
 				</>
 			: mode === 'edit' ?
-				<button
-					type='submit'
-					className={styles.buttonSolid}
-					disabled={isSubmitting}
-				>
-					{isSubmitting ? 'Saving…' : 'Save changes'}
-				</button>
+				<>
+					<button
+						type='submit'
+						className={styles.buttonSolid}
+						disabled={isSubmitting}
+					>
+						{isSubmitting ? 'Saving…' : 'Save changes'}
+					</button>
+					{cancelHref && (
+						<Link href={cancelHref} className={styles.buttonOutline}>
+							Cancel
+						</Link>
+					)}
+				</>
 			:	<button
 					type='submit'
 					className={styles.buttonSolid}

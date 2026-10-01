@@ -27,6 +27,7 @@ export interface TeamFormProps {
 	excludeTeamId?: string;
 	showAdminFields?: boolean;
 	lockedToParent?: boolean;
+	cancelHref?: string;
 }
 
 export function TeamForm({
@@ -39,6 +40,7 @@ export function TeamForm({
 	excludeTeamId,
 	showAdminFields = true,
 	lockedToParent = false,
+	cancelHref,
 }: TeamFormProps) {
 	const values = initialValues ?? DEFAULT_TEAM_FORM_VALUES;
 	const isReview = mode === 'review';
@@ -183,6 +185,7 @@ export function TeamForm({
 
 			<SubmitActions
 				mode={mode}
+				cancelHref={cancelHref}
 				isSubmitting={isSubmitting}
 				isAntiBotValid={isAntiBotValid}
 				confirmingReject={confirmingReject}
