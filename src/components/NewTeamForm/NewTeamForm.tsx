@@ -15,6 +15,7 @@ interface NewTeamFormProps {
 export function NewTeamForm({ initialValues }: NewTeamFormProps) {
 	const [submitted, setSubmitted] = useState(false);
 	const [published, setPublished] = useState(false);
+	const [publishedTeamId, setPublishedTeamId] = useState<string | null>(null);
 	const invalidatePendingCount = useInvalidatePendingTeamCount();
 
 	const parentId = initialValues?.affiliatedId;
@@ -39,6 +40,14 @@ export function NewTeamForm({ initialValues }: NewTeamFormProps) {
 							>
 								{parentName ? `Back to ${parentName}` : 'Back to search'}
 							</Link>
+							{published && publishedTeamId && (
+								<Link
+									href={`/teams/${publishedTeamId}`}
+									className={styles.buttonOutline}
+								>
+									View team
+								</Link>
+							)}
 							<button
 								type='button'
 								className={styles.buttonSolid}
@@ -85,6 +94,7 @@ export function NewTeamForm({ initialValues }: NewTeamFormProps) {
 						const result = await teamAPI.create(payload);
 						if (!result.published) await invalidatePendingCount();
 						setPublished(result.published);
+						setPublishedTeamId(result.published ? result.team.id : null);
 						setSubmitted(true);
 					}}
 				/>

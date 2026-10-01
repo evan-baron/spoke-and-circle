@@ -98,6 +98,7 @@ const DashboardView = ({ teams }: DashboardViewProps) => {
 	const [view, setView] = useState<View>('teams');
 	const [submitted, setSubmitted] = useState(false);
 	const [published, setPublished] = useState(false);
+	const [publishedTeamId, setPublishedTeamId] = useState<string | null>(null);
 	const [submittedRide, setSubmittedRide] = useState(false);
 
 	const groupRides = teams.filter((team) => team.type === 'Group Ride');
@@ -168,6 +169,14 @@ const DashboardView = ({ teams }: DashboardViewProps) => {
 									>
 										{submittedRide ? 'View my group rides' : 'View my teams'}
 									</button>
+									{published && publishedTeamId && (
+										<Link
+											href={`/teams/${publishedTeamId}`}
+											className={styles.buttonOutline}
+										>
+											View team
+										</Link>
+									)}
 									<button
 										type='button'
 										className={styles.buttonSolid}
@@ -184,6 +193,7 @@ const DashboardView = ({ teams }: DashboardViewProps) => {
 									if (!result.published) await invalidatePendingCount();
 									router.refresh();
 									setPublished(result.published);
+									setPublishedTeamId(result.published ? result.team.id : null);
 									setSubmittedRide(payload.type === 'Group Ride');
 									setSubmitted(true);
 								}}
