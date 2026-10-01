@@ -128,7 +128,7 @@ const ENUM_TERM_CLAUSES: [string, Prisma.TeamWhereInput][] = [
 		],
 	),
 	['Competitive', { competitiveOrCasual: 'Competitive' }],
-	['Casual', { competitiveOrCasual: 'Casual' }],
+	['Recreational', { competitiveOrCasual: 'Recreational' }],
 	['Instructional', { instructional: true }],
 ];
 

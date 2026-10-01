@@ -1,5 +1,5 @@
 import type { BadgeTone } from "@/components/Badge/Badge";
-import type { Pace, Visibility } from "./types";
+import type { Pace } from "./types";
 
 export function toneForPace(pace: Pace): BadgeTone {
   if (pace === "Competitive") return "rust";
@@ -7,8 +7,8 @@ export function toneForPace(pace: Pace): BadgeTone {
   return "forest";
 }
 
-export function toneForVisibility(visibility: Visibility): BadgeTone {
-  return visibility === "Private" ? "rust" : "forest";
+export function toneForCompetitiveOrCasual(value: string): BadgeTone {
+  return value === "Competitive" ? "rust" : "forest";
 }
 
 export function toneForVerified(verified: boolean): BadgeTone {

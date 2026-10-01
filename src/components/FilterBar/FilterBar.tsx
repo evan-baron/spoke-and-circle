@@ -49,7 +49,7 @@ const DISCIPLINE_OPTIONS = [
 	'All-mountain',
 ];
 const SKILL_LEVEL_OPTIONS = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
-const RACING_OPTIONS = ['Competitive', 'Casual'];
+const RACING_OPTIONS = ['Competitive', 'Recreational'];
 
 const AUTO_SUBMIT_DEBOUNCE_MS = 300;
 const pendingAutoSubmits = new WeakMap<
@@ -214,11 +214,11 @@ export function FilterBar({
 					<select
 						name='competitiveOrCasual'
 						defaultValue={defaultCompetitiveOrCasual}
-						aria-label='Racing or recreational'
+						aria-label='Competitive or recreational'
 						onChange={autoSubmit}
 						className={styles.input}
 					>
-						<option value=''>Racing or recreational</option>
+						<option value=''>Competitive or recreational</option>
 						{RACING_OPTIONS.map((option) => (
 							<option key={option} value={option}>
 								{option}

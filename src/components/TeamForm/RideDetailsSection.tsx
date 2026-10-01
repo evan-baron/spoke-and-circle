@@ -108,16 +108,6 @@ export function RideDetailsSection({
 					))}
 				</select>
 			</Field>
-			<Field label='Ride visibility'>
-				<select
-					name='rideVisibility'
-					defaultValue={values.rideVisibility}
-					className={styles.input}
-				>
-					<option value='Public'>Public</option>
-					<option value='Private'>Private</option>
-				</select>
-			</Field>
 		</Section>
 	);
 }

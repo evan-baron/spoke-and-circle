@@ -16,6 +16,7 @@ import {
 	formatElevation,
 	formatList,
 	formatMemberCount,
+	formatPace,
 	formatMileageRequirement,
 	formatRideRecurrence,
 	formatSkillLevels,
@@ -24,7 +25,7 @@ import {
 } from '@/lib/format';
 import { jsonLdScript } from '@/lib/jsonLd';
 import { getSiteUrl, OG_IMAGE_PATH, SITE_NAME } from '@/lib/siteConfig';
-import { toneForPace, toneForVerified, toneForVisibility } from '@/lib/tone';
+import { toneForPace, toneForVerified } from '@/lib/tone';
 import { getCurrentUser } from '@/services/currentUserService';
 import {
 	getApprovedGroupRides,
@@ -176,10 +177,7 @@ export default async function TeamPage({
 				<header className={styles.header}>
 					<div className={styles.badgeRow}>
 						<Badge tone='ink'>{team.type}</Badge>
-						<Badge tone={toneForVisibility(team.visibility)}>
-							{team.visibility}
-						</Badge>
-						<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
+						<Badge tone={toneForPace(team.pace)}>{formatPace(team.pace)}</Badge>
 						<Badge tone='gold'>{bikeTypesLabel(team.bikeTypes)}</Badge>
 						{team.discipline && <Badge tone='gold'>{team.discipline}</Badge>}
 						<Badge tone={toneForVerified(team.verified)}>
@@ -422,17 +420,13 @@ export default async function TeamPage({
 									value={formatElevation(team.typicalElevationGainFt)}
 								/>
 								<DetailRow label='Drop / no-drop' value={team.dropPolicy} />
-								<DetailRow
-									label='Ride visibility'
-									value={team.rideVisibility}
-								/>
 							</DetailSection>
 						)}
 
 						{team.type !== 'Group Ride' && (
 							<DetailSection title='Team structure'>
 								<DetailRow
-									label='Competitive or casual'
+									label='Competitive or recreational'
 									value={team.competitiveOrCasual}
 								/>
 								<DetailRow
@@ -493,7 +487,7 @@ export default async function TeamPage({
 												>
 													{ride.name}
 												</Link>{' '}
-												<Badge tone={toneForPace(ride.pace)}>{ride.pace}</Badge>
+												<Badge tone={toneForPace(ride.pace)}>{formatPace(ride.pace)}</Badge>
 											</>
 										}
 									/>

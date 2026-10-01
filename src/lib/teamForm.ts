@@ -88,7 +88,6 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		additionalLocations:
 			additionalLocations.length > 0 ? additionalLocations : undefined,
 		founded: number('founded'),
-		visibility: text('visibility'),
 		primaryLanguage: text('primaryLanguage'),
 		contactPhone: text('contactPhone'),
 		contactEmail: text('contactEmail'),
@@ -117,7 +116,6 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		typicalDistanceMiles: number('typicalDistanceMiles'),
 		typicalElevationGainFt: number('typicalElevationGainFt'),
 		dropPolicy: text('dropPolicy'),
-		rideVisibility: text('rideVisibility'),
 		competitiveOrCasual: text('competitiveOrCasual'),
 		skillLevels: values('skillLevel'),
 		duesRequired,

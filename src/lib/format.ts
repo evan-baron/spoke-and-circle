@@ -107,6 +107,10 @@ export function isAllSkillLevels(levels: readonly string[]): boolean {
 	return ALL_SKILL_LEVELS.every((level) => levels.includes(level));
 }
 
+export function formatPace(pace: string): string {
+	return pace === 'Casual' ? 'Relaxed' : pace;
+}
+
 export function formatSkillLevelLines(levels: readonly string[]): string[] {
 	return isAllSkillLevels(levels) ? [ALL_SKILL_LEVELS_LABEL] : [...levels];
 }

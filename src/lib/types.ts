@@ -31,7 +31,6 @@ export type ScheduleFrequency = "Weekly" | "Monthly" | "Annually";
 export type DropPolicy = "Drop" | "No-drop";
 
 
-export type Visibility = "Public" | "Private";
 
 export interface AgeRequirement {
   min?: number;
@@ -97,7 +96,6 @@ export interface Team {
   location: string;
   additionalLocations?: string[];
   founded: number;
-  visibility: Visibility;
   contact: ContactInfo;
   primaryLanguage?: string;
 
@@ -133,10 +131,9 @@ export interface Team {
   typicalDistanceMiles: number;
   typicalElevationGainFt: number;
   dropPolicy: DropPolicy;
-  rideVisibility: Visibility;
 
   // -- Team/Club Details --
-  competitiveOrCasual: "Competitive" | "Casual";
+  competitiveOrCasual: "Competitive" | "Recreational";
   skillLevels: SkillLevel[];
   instructional: boolean;
   duesRequired: boolean;
@@ -172,7 +169,7 @@ export interface SearchParams {
   bikeTypes?: BikeType[];
   discipline?: MtbDiscipline;
   skillLevel?: SkillLevel;
-  competitiveOrCasual?: "Competitive" | "Casual";
+  competitiveOrCasual?: "Competitive" | "Recreational";
   womensOnly?: boolean;
   youthOnly?: boolean;
   acceptingNewRiders?: boolean;
@@ -193,7 +190,6 @@ export interface TeamFormValues {
   location: string;
   additionalLocations: string[];
   founded: string;
-  visibility: string;
   primaryLanguage: string;
   contactPhone: string;
   contactEmail: string;
@@ -223,7 +219,6 @@ export interface TeamFormValues {
   typicalDistanceMiles: string;
   typicalElevationGainFt: string;
   dropPolicy: string;
-  rideVisibility: string;
   competitiveOrCasual: string;
   skillLevels: string[];
   duesAmount: string;

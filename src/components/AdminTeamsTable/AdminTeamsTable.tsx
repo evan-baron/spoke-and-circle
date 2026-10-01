@@ -6,10 +6,14 @@ import { Badge } from '@/components/Badge/Badge';
 import tableStyles from '@/components/ResultsTable/resultsTable.module.scss';
 import {
 	formatMemberCount,
+	formatPace,
 	formatSkillLevelLines,
-	formatSkillLevels,
 } from '@/lib/format';
-import { toneForPace, toneForVerified, toneForVisibility } from '@/lib/tone';
+import {
+	toneForCompetitiveOrCasual,
+	toneForPace,
+	toneForVerified,
+} from '@/lib/tone';
 import type { Team } from '@/lib/types';
 import styles from './adminTeamsTable.module.scss';
 
@@ -182,16 +186,23 @@ export function AdminTeamsTable({
 										</div>
 										<p className={tableStyles.cardLocation}>{team.location}</p>
 										<div className={tableStyles.cardBadges}>
-											<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
-											<Badge tone={toneForVisibility(team.visibility)}>
-												{team.visibility}
-											</Badge>
-											<span className={tableStyles.cardMeta}>
-												{team.bikeTypes.join(', ')}
-											</span>
-											<span className={tableStyles.cardMeta}>
-												{formatSkillLevels(team.skillLevels)}
-											</span>
+											{team.type === 'Group Ride' ? (
+												<Badge tone={toneForPace(team.pace)}>{formatPace(team.pace)}</Badge>
+											) : (
+												<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
+													{team.competitiveOrCasual}
+												</Badge>
+											)}
+											{team.bikeTypes.map((bikeType) => (
+												<Badge key={bikeType} tone='gold'>
+													{bikeType}
+												</Badge>
+											))}
+											{formatSkillLevelLines(team.skillLevels).map((level) => (
+												<Badge key={level} tone='ink'>
+													{level}
+												</Badge>
+											))}
 											{/* <span className={tableStyles.cardMeta}>
 												{formatMemberCount(team.memberCount)}
 											</span> */}
@@ -235,13 +246,13 @@ export function AdminTeamsTable({
 									<span className={styles.srOnly}>Select</span>
 								</th>
 								<th>Name</th>
-								<th>Type</th>
+								<th>Group type</th>
+								<th>Competitive or recreational</th>
 								<th>Location</th>
 								<th>Cycling Disciplines</th>
 								<th>Skill level</th>
-								<th>Pace</th>
+								<th>Ride pace</th>
 								{/* <th>Members</th> */}
-								<th>Visibility</th>
 								<th>Status</th>
 								<th>
 									<span className={styles.srOnly}>Actions</span>
@@ -275,6 +286,13 @@ export function AdminTeamsTable({
 									<td>
 										<Badge tone='ink'>{team.type}</Badge>
 									</td>
+									<td>
+										{team.type !== 'Group Ride' && (
+											<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
+												{team.competitiveOrCasual}
+											</Badge>
+										)}
+									</td>
 									<td>{team.location}</td>
 									<td>{team.bikeTypes.join(', ')}</td>
 									<td>
@@ -286,14 +304,9 @@ export function AdminTeamsTable({
 										))}
 									</td>
 									<td>
-										<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
+										<Badge tone={toneForPace(team.pace)}>{formatPace(team.pace)}</Badge>
 									</td>
 									{/* <td>{team.memberCount}</td> */}
-									<td>
-										<Badge tone={toneForVisibility(team.visibility)}>
-											{team.visibility}
-										</Badge>
-									</td>
 									<td>
 										<button
 											type='button'

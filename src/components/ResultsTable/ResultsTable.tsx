@@ -2,12 +2,16 @@ import Link from 'next/link';
 import { Badge } from '@/components/Badge/Badge';
 import {
 	formatMemberCount,
+	formatPace,
 	formatSkillLevelLines,
-	formatSkillLevels,
 	getTeamLocations,
 	formatVerification,
 } from '@/lib/format';
-import { toneForPace, toneForVerified, toneForVisibility } from '@/lib/tone';
+import {
+	toneForCompetitiveOrCasual,
+	toneForPace,
+	toneForVerified,
+} from '@/lib/tone';
 import type { Team } from '@/lib/types';
 import styles from './resultsTable.module.scss';
 
@@ -39,14 +43,24 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 								{getTeamLocations(team).join(', ')}
 							</p>
 							<div className={styles.cardBadges}>
-								<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
-								<Badge tone={toneForVisibility(team.visibility)}>
-									{team.visibility}
-								</Badge>
-								<span className={styles.cardMeta}>
-									{team.bikeTypes.join(', ')}
-								</span>
-								<span className={styles.cardMeta}>{formatSkillLevels(team.skillLevels)}</span>
+								{team.type === 'Group Ride' ?
+									<Badge tone={toneForPace(team.pace)}>
+										{formatPace(team.pace)}
+									</Badge>
+								:	<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
+										{team.competitiveOrCasual}
+									</Badge>
+								}
+								{team.bikeTypes.map((bikeType) => (
+									<Badge key={bikeType} tone='gold'>
+										{bikeType}
+									</Badge>
+								))}
+								{formatSkillLevelLines(team.skillLevels).map((level) => (
+									<Badge key={level} tone='ink'>
+										{level}
+									</Badge>
+								))}
 								{/* <span className={styles.cardMeta}>
 									{formatMemberCount(team.memberCount)}
 								</span> */}
@@ -66,13 +80,13 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 				<thead>
 					<tr>
 						<th>Name</th>
-						<th>Type</th>
+						<th>Group type</th>
+						<th>Competitive or recreational</th>
 						<th>Location(s)</th>
 						<th>Cycling Disciplines</th>
 						<th>Skill level</th>
-						<th>Pace</th>
+						<th>Riding pace</th>
 						{/* <th>Members</th> */}
-						<th>Visibility</th>
 						<th>Status</th>
 					</tr>
 				</thead>
@@ -88,6 +102,13 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 								<Badge tone='ink'>{team.type}</Badge>
 							</td>
 							<td>
+								{team.type !== 'Group Ride' && (
+									<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
+										{team.competitiveOrCasual}
+									</Badge>
+								)}
+							</td>
+							<td>
 								{getTeamLocations(team).map((location, index, all) => (
 									<span key={location} className={styles.stackedLine}>
 										{location}
@@ -97,22 +118,21 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 							</td>
 							<td>{team.bikeTypes.join(', ')}</td>
 							<td>
-								{formatSkillLevelLines(team.skillLevels).map((level, index, all) => (
-									<span key={level} className={styles.stackedLine}>
-										{level}
-										{index < all.length - 1 && ','}
-									</span>
-								))}
+								{formatSkillLevelLines(team.skillLevels).map(
+									(level, index, all) => (
+										<span key={level} className={styles.stackedLine}>
+											{level}
+											{index < all.length - 1 && ','}
+										</span>
+									),
+								)}
 							</td>
 							<td>
-								<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
-							</td>
-							{/* <td>{team.memberCount}</td> */}
-							<td>
-								<Badge tone={toneForVisibility(team.visibility)}>
-									{team.visibility}
+								<Badge tone={toneForPace(team.pace)}>
+									{formatPace(team.pace)}
 								</Badge>
 							</td>
+							{/* <td>{team.memberCount}</td> */}
 							<td>
 								<Badge tone={toneForVerified(team.verified)}>
 									{team.verified ?

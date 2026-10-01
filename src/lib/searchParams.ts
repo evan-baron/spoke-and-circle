@@ -32,7 +32,7 @@ const SKILL_LEVELS: SkillLevel[] = [
 	'Advanced',
 	'Expert',
 ];
-const RACING_OPTIONS = ['Competitive', 'Casual'] as const;
+const RACING_OPTIONS = ['Competitive', 'Recreational'] as const;
 
 export type RawSearchParams = Record<string, string | string[] | undefined>;
 

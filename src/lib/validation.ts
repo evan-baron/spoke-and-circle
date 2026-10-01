@@ -44,8 +44,7 @@ const mtbDisciplineSchema = z.enum([
 const segmentationSchema = z.enum(['A Group', 'B Group', 'C Group', 'N/A']);
 const scheduleFrequencySchema = z.enum(['Weekly', 'Monthly', 'Annually']);
 const dropPolicySchema = z.enum(['Drop', 'No-drop']);
-const visibilitySchema = z.enum(['Public', 'Private']);
-const competitiveOrCasualSchema = z.enum(['Competitive', 'Casual']);
+const competitiveOrCasualSchema = z.enum(['Competitive', 'Recreational']);
 const dayOfWeekSchema = z.enum([
 	'Monday',
 	'Tuesday',
@@ -165,7 +164,6 @@ const teamBaseSchema = z.object({
 		.min(1970, 'Founded year must be 1970 or later')
 		.max(new Date().getFullYear(), 'Founded year cannot be in the future')
 		.optional(),
-	visibility: visibilitySchema.optional(),
 	primaryLanguage: z
 		.string()
 		.trim()
@@ -262,7 +260,6 @@ const teamBaseSchema = z.object({
 		.max(100000, 'Elevation gain is too large')
 		.optional(),
 	dropPolicy: dropPolicySchema.optional(),
-	rideVisibility: visibilitySchema.optional(),
 
 	competitiveOrCasual: competitiveOrCasualSchema.optional(),
 	skillLevels: z
@@ -324,7 +321,7 @@ const mileageIssue = {
 };
 
 const competitiveOrCasualIssue = {
-	message: 'Competitive or casual is required',
+	message: 'Competitive or recreational is required',
 	path: ['competitiveOrCasual'],
 };
 

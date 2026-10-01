@@ -41,7 +41,6 @@ model Team {
   longitude           Float?
   additionalLocations String[]
   founded             Int?
-  visibility          Visibility @default(Public)
   primaryLanguage     String?
   contactPhone        String?
   contactEmail        String?
@@ -84,7 +83,6 @@ model Team {
   typicalDistanceMiles   Int?
   typicalElevationGainFt Int?
   dropPolicy             DropPolicy?
-  rideVisibility         Visibility         @default(Public)
 
   competitiveOrCasual CompetitiveOrCasual
   skillLevels         SkillLevel[]
@@ -239,14 +237,9 @@ enum DropPolicy {
   NoDrop @map("No-drop")
 }
 
-enum Visibility {
-  Public
-  Private
-}
-
 enum CompetitiveOrCasual {
   Competitive
-  Casual
+  Recreational
 }
 
 enum ReviewStatus {

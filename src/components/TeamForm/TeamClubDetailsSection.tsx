@@ -14,13 +14,13 @@ export function TeamClubDetailsSection({
 }: TeamClubDetailsSectionProps) {
 	return (
 		<Section title='Group Structure'>
-			<Field label='Competitive or casual' required>
+			<Field label='Competitive or recreational' required>
 				<select
 					name='competitiveOrCasual'
 					defaultValue={values.competitiveOrCasual}
 					className={styles.input}
 				>
-					<option value='Casual'>Casual</option>
+					<option value='Recreational'>Recreational</option>
 					<option value='Competitive'>Competitive</option>
 				</select>
 			</Field>

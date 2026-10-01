@@ -10,14 +10,14 @@
 	white-space: nowrap;
 }
 
-// "forest" = calm / positive status (casual pace, public visibility, verified).
+// "forest" = calm / positive status (casual pace, verified).
 // Kept as a small muted sage — a conventional status color, not a brand hue.
 .forest {
 	background: var(--color-calm-soft);
 	color: var(--color-calm);
 }
 
-// "rust" = higher-intensity status (competitive pace, private visibility).
+// "rust" = higher-intensity status (competitive pace).
 .rust {
 	background: var(--color-coral-soft);
 	color: var(--color-coral);

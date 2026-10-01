@@ -181,16 +181,6 @@ export function GenericInfoSection({
 					/>
 				</Field>
 			)}
-			<Field label='Public or private'>
-				<select
-					name='visibility'
-					defaultValue={values.visibility}
-					className={styles.input}
-				>
-					<option value='Public'>Public</option>
-					<option value='Private'>Private</option>
-				</select>
-			</Field>
 			<Field label='Primary language'>
 				<input
 					type='text'
