@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, type ChangeEvent } from 'react';
+import { Chevron } from './Chevron';
 import styles from './filterBar.module.scss';
 
 interface CheckboxDropdownProps {
@@ -93,9 +94,7 @@ export function CheckboxDropdown({
 				onClick={() => (open ? closeAndSubmit() : setOpen(true))}
 			>
 				<span>{summary}</span>
-				<span className={styles.checkboxDropdownCaret} aria-hidden='true'>
-					&#9662;
-				</span>
+				<Chevron className={styles.checkboxDropdownCaret} />
 			</button>
 			<div
 				className={`${styles.checkboxDropdownPanel} ${open ? '' : styles.checkboxDropdownPanelClosed}`}

@@ -1,5 +1,7 @@
 @use '@/styles/mixins' as *;
 
+$select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%232d1d30' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5'/%3E%3C/svg%3E");
+
 // ----------------------------------------------------------------------
 // .form IS the flex container for every control (no extra wrapper div).
 // Mobile is a plain column, so source order already matches the visual
@@ -30,6 +32,19 @@
 	@include field-input;
 	font-size: 0.9375rem;
 	padding: 0.6rem 0.85rem;
+}
+
+select.input {
+	appearance: none;
+	padding-right: 2.25rem;
+	background-image: $select-chevron;
+	background-repeat: no-repeat;
+	background-position: right 1rem center;
+	background-size: 9px 6px;
+
+	&:focus {
+		background-image: $select-chevron;
+	}
 }
 
 .keywordInput {
@@ -132,8 +147,7 @@
 }
 
 .filtersCaret {
-	font-size: 0.7rem;
-	color: var(--color-ink-soft);
+	color: var(--color-ink);
 	transition: transform 0.2s ease;
 }
 
@@ -247,7 +261,7 @@
 	justify-content: space-between;
 	gap: 0.5rem;
 	font-size: 0.9375rem;
-	padding: 0.6rem 0.85rem;
+	padding: 0.6rem 0.95rem 0.6rem 0.85rem;
 	text-align: left;
 	cursor: pointer;
 
@@ -260,8 +274,7 @@
 
 .checkboxDropdownCaret {
 	flex-shrink: 0;
-	color: var(--color-ink-soft);
-	font-size: 0.7rem;
+	color: var(--color-ink);
 }
 
 .checkboxDropdownPanel {
