@@ -347,12 +347,12 @@ export default async function TeamPage({
 					<div className={styles.main}>
 						<DetailSection title='Format & membership'>
 							<DetailRow
-								label='Cycling Disciplines'
+								label='Cycling Discipline(s)'
 								value={formatList(team.bikeTypes)}
 							/>
 							{team.racingDisciplines.length > 0 && (
 								<DetailRow
-									label='Racing Disciplines'
+									label='Racing Discipline(s)'
 									value={formatList(team.racingDisciplines)}
 								/>
 							)}
