@@ -1,14 +1,5 @@
 @use '@/styles/mixins' as *;
 
-$select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8' fill='none' stroke='%232d1d30' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5 6 6.5 11 1.5'/%3E%3C/svg%3E");
-
-@mixin select-chevron {
-	background-image: $select-chevron;
-	background-repeat: no-repeat;
-	background-position: right 1rem center;
-	background-size: 9px 6px;
-}
-
 // ----------------------------------------------------------------------
 // .form IS the flex container for every control (no extra wrapper div).
 // Mobile is a plain column, so source order already matches the visual
@@ -42,13 +33,7 @@ $select-chevron: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/sv
 }
 
 select.input {
-	appearance: none;
-	padding-right: 2.25rem;
-	@include select-chevron;
-
-	&:focus {
-		@include select-chevron;
-	}
+	@include select-field;
 }
 
 .keywordInput {
