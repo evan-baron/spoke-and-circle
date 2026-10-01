@@ -13,7 +13,6 @@ import {
 } from '@/lib/enums';
 import { DEFAULT_RADIUS_MILES, RADIUS_OPTIONS } from '@/lib/searchParams';
 import { CheckboxDropdown } from './CheckboxDropdown';
-import { Chevron } from './Chevron';
 import styles from './filterBar.module.scss';
 
 interface FilterBarProps {
@@ -278,7 +277,20 @@ export function FilterBar({
 					{activeFilterCount > 0 && (
 						<span className={styles.filtersCount}>{activeFilterCount}</span>
 					)}
-					<Chevron className={styles.filtersCaret} />
+					<svg
+						className={styles.filtersIcon}
+						viewBox='0 0 10 10'
+						width='10'
+						height='10'
+						fill='none'
+						stroke='currentColor'
+						strokeWidth='1.25'
+						strokeLinecap='round'
+						aria-hidden='true'
+					>
+						<path d='M1 5h8' />
+						{!filtersOpen && <path d='M5 1v8' />}
+					</svg>
 				</button>
 
 				<a href={action} className={styles.clearFilters}>
