@@ -53,7 +53,7 @@ export default async function AdminAllGroupsPage({
 					defaultDiscipline={params.discipline ?? ''}
 					defaultSkillLevel={params.skillLevel ?? ''}
 					defaultCompetitiveOrCasual={params.competitiveOrCasual ?? ''}
-					defaultRacingDiscipline={params.racingDiscipline ?? ''}
+					defaultRacingDisciplines={params.racingDisciplines}
 					defaultWomensOnly={params.womensOnly}
 					defaultYouthOnly={params.youthOnly}
 					defaultAcceptingNewRiders={params.acceptingNewRiders}

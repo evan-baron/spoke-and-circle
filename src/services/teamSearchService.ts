@@ -202,10 +202,10 @@ async function buildWhere(
 	}
 	if (params.discipline) and.push({ discipline: disciplineToDb[params.discipline] });
 	if (params.skillLevel) and.push({ skillLevels: { has: params.skillLevel } });
-	if (params.racingDiscipline) {
+	if (params.racingDisciplines?.length) {
 		and.push({
 			racingDisciplines: {
-				has: racingDisciplineToDb[params.racingDiscipline],
+				hasSome: params.racingDisciplines.map((rd) => racingDisciplineToDb[rd]),
 			},
 		});
 	}

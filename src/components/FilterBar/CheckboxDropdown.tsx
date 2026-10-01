@@ -9,6 +9,7 @@ interface CheckboxDropdownProps {
 	options: string[];
 	defaultValues?: string[];
 	autoSubmitOnClose?: boolean;
+	searchable?: boolean;
 }
 
 export function CheckboxDropdown({
@@ -17,9 +18,12 @@ export function CheckboxDropdown({
 	options,
 	defaultValues = [],
 	autoSubmitOnClose = true,
+	searchable = false,
 }: CheckboxDropdownProps) {
 	const [open, setOpen] = useState(false);
 	const [selected, setSelected] = useState<string[]>(defaultValues);
+	const [query, setQuery] = useState('');
+	const searchRef = useRef<HTMLInputElement>(null);
 	const rootRef = useRef<HTMLDivElement>(null);
 	const triggerRef = useRef<HTMLButtonElement>(null);
 
@@ -33,7 +37,12 @@ export function CheckboxDropdown({
 			triggerRef.current?.form?.requestSubmit();
 		}
 		setOpen(false);
+		setQuery('');
 	}
+
+	useEffect(() => {
+		if (open && searchable) searchRef.current?.focus();
+	}, [open, searchable]);
 
 	useEffect(() => {
 		if (!open) return;
@@ -63,6 +72,11 @@ export function CheckboxDropdown({
 		);
 	}
 
+	const normalizedQuery = query.trim().toLowerCase();
+	const matches = (option: string) =>
+		option.toLowerCase().includes(normalizedQuery);
+	const hasMatches = options.some(matches);
+
 	const summary =
 		selected.length === 0 ? label
 		: selected.length === 1 ? selected[0]
@@ -88,8 +102,27 @@ export function CheckboxDropdown({
 				role='group'
 				aria-label={label}
 			>
+				{searchable && (
+					<input
+						ref={searchRef}
+						type='search'
+						value={query}
+						placeholder='Search&hellip;'
+						aria-label={`Search ${label}`}
+						autoComplete='off'
+						className={styles.checkboxDropdownSearch}
+						onChange={(event) => setQuery(event.target.value)}
+						onKeyDown={(event) => {
+							if (event.key === 'Enter') event.preventDefault();
+						}}
+					/>
+				)}
 				{options.map((option) => (
-					<label key={option} className={styles.checkboxDropdownOption}>
+					<label
+						key={option}
+						className={styles.checkboxDropdownOption}
+						hidden={!matches(option)}
+					>
 						<input
 							type='checkbox'
 							name={name}
@@ -100,6 +133,9 @@ export function CheckboxDropdown({
 						<span>{option}</span>
 					</label>
 				))}
+				{searchable && !hasMatches && (
+					<p className={styles.checkboxDropdownEmpty}>No matches</p>
+				)}
 			</div>
 		</div>
 	);

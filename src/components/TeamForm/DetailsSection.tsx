@@ -72,6 +72,7 @@ export function DetailsSection({
 							options={RACING_DISCIPLINES}
 							defaultValues={values.racingDisciplines}
 							autoSubmitOnClose={false}
+							searchable
 						/>
 					</div>
 				</div>

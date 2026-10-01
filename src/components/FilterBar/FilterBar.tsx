@@ -18,7 +18,7 @@ interface FilterBarProps {
 	defaultDiscipline?: string;
 	defaultSkillLevel?: string;
 	defaultCompetitiveOrCasual?: string;
-	defaultRacingDiscipline?: string;
+	defaultRacingDisciplines?: string[];
 	defaultWomensOnly?: boolean;
 	defaultYouthOnly?: boolean;
 	defaultAcceptingNewRiders?: boolean;
@@ -85,7 +85,7 @@ export function FilterBar({
 	defaultDiscipline = '',
 	defaultSkillLevel = '',
 	defaultCompetitiveOrCasual = '',
-	defaultRacingDiscipline = '',
+	defaultRacingDisciplines = [],
 	defaultWomensOnly = false,
 	defaultYouthOnly = false,
 	defaultAcceptingNewRiders = false,
@@ -96,23 +96,12 @@ export function FilterBar({
 			defaultDiscipline,
 			defaultSkillLevel,
 			defaultCompetitiveOrCasual,
-			defaultRacingDiscipline,
 		].filter(Boolean).length +
 		defaultBikeTypes.length +
+		defaultRacingDisciplines.length +
 		(defaultWomensOnly ? 1 : 0) +
 		(defaultYouthOnly ? 1 : 0) +
 		(defaultAcceptingNewRiders ? 1 : 0);
-
-	// Clearing drops every filter facet but keeps the keyword/location/radius
-	// search itself intact — "clear filters" isn't "clear my search".
-	const clearParams = new URLSearchParams();
-	if (defaultQ) clearParams.set('q', defaultQ);
-	if (defaultLocation) clearParams.set('location', defaultLocation);
-	if (defaultRadius !== DEFAULT_RADIUS_MILES) {
-		clearParams.set('radius', String(defaultRadius));
-	}
-	const clearHref =
-		clearParams.size > 0 ? `${action}?${clearParams.toString()}` : action;
 
 	// Below $bp-md this also gates .typeBikeGroup and .moreFilters (both
 	// collapsed unless open); at $bp-md and up neither ever collapses, so
@@ -229,20 +218,13 @@ export function FilterBar({
 							</option>
 						))}
 					</select>
-					<select
+					<CheckboxDropdown
 						name='racingDiscipline'
-						defaultValue={defaultRacingDiscipline}
-						aria-label='Racing discipline'
-						onChange={autoSubmit}
-						className={styles.input}
-					>
-						<option value=''>Any racing discipline</option>
-						{RACING_DISCIPLINES.map((option) => (
-							<option key={option} value={option}>
-								{option}
-							</option>
-						))}
-					</select>
+						label='Any racing discipline'
+						options={RACING_DISCIPLINES}
+						defaultValues={defaultRacingDisciplines}
+						searchable
+					/>
 					{/*
 					<select
 						name='discipline'
@@ -316,11 +298,9 @@ export function FilterBar({
 					</span>
 				</button>
 
-				{activeFilterCount > 0 && (
-					<a href={clearHref} className={styles.clearFilters}>
-						Clear filters
-					</a>
-				)}
+				<a href={action} className={styles.clearFilters}>
+					Clear all
+				</a>
 			</div>
 
 			{/* Mobile: the final action, below every filter. Desktop: rejoins

@@ -16,12 +16,12 @@ export async function generateMetadata({
 	const hasFilters =
 		Boolean(params.q || params.location) ||
 		params.bikeTypes.length > 0 ||
+		params.racingDisciplines.length > 0 ||
 		Boolean(
 			params.type ||
 				params.discipline ||
 				params.skillLevel ||
 				params.competitiveOrCasual ||
-				params.racingDiscipline ||
 				params.womensOnly ||
 				params.youthOnly ||
 				params.acceptingNewRiders,
@@ -69,7 +69,7 @@ export default async function SearchPage({
 					defaultDiscipline={params.discipline ?? ''}
 					defaultSkillLevel={params.skillLevel ?? ''}
 					defaultCompetitiveOrCasual={params.competitiveOrCasual ?? ''}
-					defaultRacingDiscipline={params.racingDiscipline ?? ''}
+					defaultRacingDisciplines={params.racingDisciplines}
 					defaultWomensOnly={params.womensOnly}
 					defaultYouthOnly={params.youthOnly}
 					defaultAcceptingNewRiders={params.acceptingNewRiders}

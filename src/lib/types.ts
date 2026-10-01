@@ -194,7 +194,7 @@ export interface SearchParams {
   discipline?: MtbDiscipline;
   skillLevel?: SkillLevel;
   competitiveOrCasual?: "Competitive" | "Recreational";
-  racingDiscipline?: RacingDiscipline;
+  racingDisciplines?: RacingDiscipline[];
   womensOnly?: boolean;
   youthOnly?: boolean;
   acceptingNewRiders?: boolean;

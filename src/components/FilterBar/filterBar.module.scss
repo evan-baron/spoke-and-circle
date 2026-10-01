@@ -287,6 +287,22 @@
 	display: none;
 }
 
+.checkboxDropdownSearch {
+	@include field-input;
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	flex-shrink: 0;
+	font-size: 0.875rem;
+	padding: 0.45rem 0.7rem;
+}
+
+.checkboxDropdownEmpty {
+	padding: 0.4rem 0.5rem;
+	font-size: 0.875rem;
+	color: var(--color-ink-soft);
+}
+
 .checkboxDropdownOption {
 	display: flex;
 	align-items: center;
@@ -296,6 +312,10 @@
 	font-size: 0.875rem;
 	white-space: nowrap;
 	cursor: pointer;
+
+	&[hidden] {
+		display: none;
+	}
 
 	&:hover {
 		background: var(--color-paper-raised);

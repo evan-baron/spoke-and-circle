@@ -74,7 +74,6 @@ export function parseSearchParams(raw: RawSearchParams) {
 	const disciplineRaw = firstValue(raw.discipline);
 	const skillLevelRaw = firstValue(raw.skillLevel);
 	const competitiveOrCasualRaw = firstValue(raw.competitiveOrCasual);
-	const racingDisciplineRaw = firstValue(raw.racingDiscipline);
 
 	const type =
 		CLUB_TYPES.includes(typeRaw as ClubType) ?
@@ -95,10 +94,10 @@ export function parseSearchParams(raw: RawSearchParams) {
 		(RACING_OPTIONS as readonly string[]).includes(competitiveOrCasualRaw) ?
 			(competitiveOrCasualRaw as (typeof RACING_OPTIONS)[number])
 		:	undefined;
-	const racingDiscipline =
-		RACING_DISCIPLINES.includes(racingDisciplineRaw as RacingDiscipline) ?
-			(racingDisciplineRaw as RacingDiscipline)
-		:	undefined;
+	const racingDisciplines = allValues(raw.racingDiscipline).filter(
+		(value): value is RacingDiscipline =>
+			RACING_DISCIPLINES.includes(value as RacingDiscipline),
+	);
 	const womensOnly = firstValue(raw.womensOnly) === 'true';
 	const youthOnly = firstValue(raw.youthOnly) === 'true';
 	const acceptingNewRiders = firstValue(raw.acceptingNewRiders) === 'true';
@@ -122,7 +121,7 @@ export function parseSearchParams(raw: RawSearchParams) {
 		discipline,
 		skillLevel,
 		competitiveOrCasual,
-		racingDiscipline,
+		racingDisciplines,
 		womensOnly,
 		youthOnly,
 		acceptingNewRiders,
