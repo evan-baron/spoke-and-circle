@@ -28,7 +28,7 @@ const MONTH_NAMES = [
 ];
 
 export function formatMemberCount(count: number): string {
-	return `${count} members`;
+	return `${count} ${count === 1 ? 'member' : 'members'}`;
 }
 
 export function formatDistance(miles: number): string {

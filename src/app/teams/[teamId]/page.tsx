@@ -187,8 +187,9 @@ export default async function TeamPage({
 					<p className={styles.subline}>
 						{team.location}
 						{team.founded > 0 && <> &middot; Founded {team.founded}</>}
-						{/* &middot;{' '}
-						{formatMemberCount(team.memberCount)} */}
+						{team.memberCount > 0 && (
+							<> &middot; {formatMemberCount(team.memberCount)}</>
+						)}
 					</p>
 					{team.missionStatement && (
 						<p className={styles.mission}>

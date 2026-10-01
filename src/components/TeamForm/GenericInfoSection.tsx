@@ -7,6 +7,7 @@ import { CLUB_TYPES } from './constants';
 import { Field } from './Field';
 import { RequiredMark } from './RequiredMark';
 import { Section } from './Section';
+import { Subsection } from './Subsection';
 import styles from './teamForm.module.scss';
 
 interface GenericInfoSectionProps {
@@ -181,33 +182,46 @@ export function GenericInfoSection({
 					/>
 				</Field>
 			)}
-			<Field label='Primary language'>
-				<input
-					type='text'
-					name='primaryLanguage'
-					defaultValue={values.primaryLanguage}
-					placeholder='English'
-					className={styles.input}
-				/>
-			</Field>
-			<Field label='Contact phone'>
-				<input
-					type='tel'
-					name='contactPhone'
-					defaultValue={values.contactPhone}
-					placeholder='555-555-0100'
-					className={styles.input}
-				/>
-			</Field>
-			<Field label='Contact email'>
-				<input
-					type='email'
-					name='contactEmail'
-					defaultValue={values.contactEmail}
-					placeholder='hello@yourteam.org'
-					className={styles.input}
-				/>
-			</Field>
+			<Subsection title='Contact info'>
+				{groupType !== 'Group Ride' && (
+					<Field label='Website'>
+						<input
+							type='url'
+							name='website'
+							defaultValue={values.website}
+							placeholder='https://'
+							className={styles.input}
+						/>
+					</Field>
+				)}
+				<Field label='Contact phone'>
+					<input
+						type='tel'
+						name='contactPhone'
+						defaultValue={values.contactPhone}
+						placeholder='555-555-0100'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Contact email'>
+					<input
+						type='email'
+						name='contactEmail'
+						defaultValue={values.contactEmail}
+						placeholder='hello@yourteam.org'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Primary language'>
+					<input
+						type='text'
+						name='primaryLanguage'
+						defaultValue={values.primaryLanguage}
+						placeholder='English'
+						className={styles.input}
+					/>
+				</Field>
+			</Subsection>
 		</Section>
 	);
 }

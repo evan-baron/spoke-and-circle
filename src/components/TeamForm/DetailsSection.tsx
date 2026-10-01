@@ -12,6 +12,7 @@ import { Field } from './Field';
 import { RequiredMark } from './RequiredMark';
 import { Section } from './Section';
 import { SkillLevelsField } from './SkillLevelsField';
+import { Subsection } from './Subsection';
 import styles from './teamForm.module.scss';
 
 interface DetailsSectionProps {
@@ -104,205 +105,201 @@ export function DetailsSection({
 					/>
 				</Field>
 			)}
-			{groupType !== 'Group Ride' && (
-				<Field label='Website'>
-					<input
-						type='url'
-						name='website'
-						defaultValue={values.website}
-						placeholder='https://'
-						className={styles.input}
-					/>
-				</Field>
-			)}
-			{groupType !== 'Group Ride' && (
-				<Field label='Instagram'>
-					<input
-						type='text'
-						name='instagram'
-						defaultValue={values.instagram}
-						placeholder='@yourteam'
-						className={styles.input}
-					/>
-				</Field>
-			)}
-			{groupType !== 'Group Ride' && (
-				<Field label='Instagram link'>
-					<input
-						type='url'
-						name='instagramLink'
-						defaultValue={values.instagramLink}
-						placeholder='https://instagram.com/yourteam'
-						className={styles.input}
-					/>
-				</Field>
-			)}
-			{groupType !== 'Group Ride' && (
-				<Field label='Facebook'>
-					<input
-						type='text'
-						name='facebook'
-						defaultValue={values.facebook}
-						placeholder='Page name'
-						className={styles.input}
-					/>
-				</Field>
-			)}
-			{groupType !== 'Group Ride' && (
-				<Field label='Facebook link'>
-					<input
-						type='url'
-						name='facebookLink'
-						defaultValue={values.facebookLink}
-						placeholder='https://facebook.com/yourteam'
-						className={styles.input}
-					/>
-				</Field>
-			)}
-			<Field label='Strava'>
-				<input
-					type='text'
-					name='strava'
-					defaultValue={values.strava}
-					placeholder='Club name'
-					className={styles.input}
-				/>
-			</Field>
-			<Field label='Discord'>
-				<input
-					type='text'
-					name='discord'
-					defaultValue={values.discord}
-					placeholder='discord.gg/&hellip;'
-					className={styles.input}
-				/>
-			</Field>
-			<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
-				<span className={styles.fieldLabel}>Platform(s)</span>
-				<div className={styles.checkboxRow}>
-					{VIRTUAL_PLATFORMS.map((platform) => (
-						<Checkbox
-							key={platform}
-							label={platform}
-							name='virtualPlatform'
-							value={platform}
-							checked={virtualPlatforms.includes(platform)}
-							onChange={() => onVirtualPlatformChange(platform)}
+			<Subsection title='Socials'>
+				{groupType !== 'Group Ride' && (
+					<Field label='Instagram'>
+						<input
+							type='text'
+							name='instagram'
+							defaultValue={values.instagram}
+							placeholder='@yourteam'
+							className={styles.input}
 						/>
-					))}
-				</div>
-				{virtualPlatforms.includes('Other') && (
+					</Field>
+				)}
+				{groupType !== 'Group Ride' && (
+					<Field label='Instagram link'>
+						<input
+							type='url'
+							name='instagramLink'
+							defaultValue={values.instagramLink}
+							placeholder='https://instagram.com/yourteam'
+							className={styles.input}
+						/>
+					</Field>
+				)}
+				{groupType !== 'Group Ride' && (
+					<Field label='Facebook'>
+						<input
+							type='text'
+							name='facebook'
+							defaultValue={values.facebook}
+							placeholder='Page name'
+							className={styles.input}
+						/>
+					</Field>
+				)}
+				{groupType !== 'Group Ride' && (
+					<Field label='Facebook link'>
+						<input
+							type='url'
+							name='facebookLink'
+							defaultValue={values.facebookLink}
+							placeholder='https://facebook.com/yourteam'
+							className={styles.input}
+						/>
+					</Field>
+				)}
+				<Field label='Strava'>
 					<input
 						type='text'
-						name='virtualPlatformOtherDescription'
-						placeholder='Please describe'
-						value={virtualPlatformOtherText}
-						onChange={(event) =>
-							onVirtualPlatformOtherTextChange(event.target.value)
-						}
+						name='strava'
+						defaultValue={values.strava}
+						placeholder='Club name'
 						className={styles.input}
 					/>
-				)}
-			</div>
-			<Field label='Minimum age'>
-				<input
-					type='number'
-					name='ageMin'
-					defaultValue={values.ageMin}
-					min={0}
-					max={120}
-					className={styles.input}
-				/>
-			</Field>
-			{groupType !== 'Group Ride' && (
-				<Field label='Maximum age'>
+				</Field>
+				<Field label='Discord'>
+					<input
+						type='text'
+						name='discord'
+						defaultValue={values.discord}
+						placeholder='discord.gg/&hellip;'
+						className={styles.input}
+					/>
+				</Field>
+				<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
+					<span className={styles.fieldLabel}>Platform(s)</span>
+					<div className={styles.checkboxRow}>
+						{VIRTUAL_PLATFORMS.map((platform) => (
+							<Checkbox
+								key={platform}
+								label={platform}
+								name='virtualPlatform'
+								value={platform}
+								checked={virtualPlatforms.includes(platform)}
+								onChange={() => onVirtualPlatformChange(platform)}
+							/>
+						))}
+					</div>
+					{virtualPlatforms.includes('Other') && (
+						<input
+							type='text'
+							name='virtualPlatformOtherDescription'
+							placeholder='Please describe'
+							value={virtualPlatformOtherText}
+							onChange={(event) =>
+								onVirtualPlatformOtherTextChange(event.target.value)
+							}
+							className={styles.input}
+						/>
+					)}
+				</div>
+			</Subsection>
+			<Subsection title='Member information'>
+				<Field label='Minimum age'>
 					<input
 						type='number'
-						name='ageMax'
-						defaultValue={values.ageMax}
+						name='ageMin'
+						defaultValue={values.ageMin}
 						min={0}
 						max={120}
 						className={styles.input}
 					/>
 				</Field>
-			)}
-			{/* {groupType !== 'Group Ride' && (
-				<Field label='Current member count'>
+				{groupType !== 'Group Ride' && (
+					<Field label='Maximum age'>
+						<input
+							type='number'
+							name='ageMax'
+							defaultValue={values.ageMax}
+							min={0}
+							max={120}
+							className={styles.input}
+						/>
+					</Field>
+				)}
+				{groupType !== 'Group Ride' && (
+					<Field
+						label='Current member count'
+						hint='Approximate is fine. Leave blank if you are not sure'
+					>
+						<input
+							type='number'
+							name='memberCount'
+							defaultValue={values.memberCount}
+							min={0}
+							className={styles.input}
+						/>
+					</Field>
+				)}
+				<Field label='Maximum member limit'>
 					<input
 						type='number'
-						name='memberCount'
-						defaultValue={values.memberCount}
+						name='memberLimit'
+						defaultValue={values.memberLimit}
 						min={0}
 						className={styles.input}
 					/>
 				</Field>
-			)} */}
-			<Field label='Maximum member limit'>
-				<input
-					type='number'
-					name='memberLimit'
-					defaultValue={values.memberLimit}
-					min={0}
-					className={styles.input}
-				/>
-			</Field>
-			<Field label='How to join' full>
-				<textarea
-					name='howToJoin'
-					defaultValue={values.howToJoin}
-					rows={2}
-					placeholder={
-						groupType !== 'Group Ride' ?
-							'What should a prospective member do?'
-						:	'What should a prospective rider do?'
-					}
-					className={styles.input}
-				/>
-			</Field>
-
-			<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
-				<span className={styles.fieldLabel}>Persona restrictions</span>
-				<div className={styles.checkboxRow}>
-					{PERSONA_OPTIONS.map((option) => (
-						<Checkbox
-							key={option.value}
-							label={option.label}
-							name='personaRestriction'
-							value={option.value}
-							checked={personaRestriction === option.value}
-							onChange={() => onPersonaChange(option.value)}
-						/>
-					))}
-				</div>
-				{personaRestriction === 'other' && (
-					<input
-						type='text'
-						name='personaOtherDescription'
-						placeholder='Please describe'
-						value={personaOtherText}
-						onChange={(event) => onPersonaOtherTextChange(event.target.value)}
+				<Field label='How to join' full>
+					<textarea
+						name='howToJoin'
+						defaultValue={values.howToJoin}
+						rows={2}
+						placeholder={
+							groupType !== 'Group Ride' ?
+								'What should a prospective member do?'
+							:	'What should a prospective rider do?'
+						}
 						className={styles.input}
 					/>
-				)}
-			</div>
-			<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
-				<span className={styles.fieldLabel}>Other restrictions</span>
+				</Field>
 
-				<div className={styles.checkboxRow}>
-					<Checkbox
-						label='E-bike allowed'
-						name='eBikeAllowed'
-						defaultChecked={values.eBikeAllowed}
-					/>
-					{groupType !== 'Group Ride' && (
-						<Checkbox
-							label='Waitlist active'
-							name='waitlist'
-							defaultChecked={values.waitlist}
+				<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
+					<span className={styles.fieldLabel}>Persona restrictions</span>
+					<div className={styles.checkboxRow}>
+						{PERSONA_OPTIONS.map((option) => (
+							<Checkbox
+								key={option.value}
+								label={option.label}
+								name='personaRestriction'
+								value={option.value}
+								checked={personaRestriction === option.value}
+								onChange={() => onPersonaChange(option.value)}
+							/>
+						))}
+					</div>
+					{personaRestriction === 'other' && (
+						<input
+							type='text'
+							name='personaOtherDescription'
+							placeholder='Please describe'
+							value={personaOtherText}
+							onChange={(event) => onPersonaOtherTextChange(event.target.value)}
+							className={styles.input}
 						/>
 					)}
 				</div>
-			</div>
+				<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
+					<span className={styles.fieldLabel}>Other restrictions</span>
+
+					<div className={styles.checkboxRow}>
+						<Checkbox
+							label='E-bike allowed'
+							name='eBikeAllowed'
+							defaultChecked={values.eBikeAllowed}
+						/>
+						{groupType !== 'Group Ride' && (
+							<Checkbox
+								label='Waitlist active'
+								name='waitlist'
+								defaultChecked={values.waitlist}
+							/>
+						)}
+					</div>
+				</div>
+			</Subsection>
 		</Section>
 	);
 }
