@@ -14,6 +14,29 @@ export type BikeType =
   | "E-bike"
   | "Mixed";
 
+export type RacingDiscipline =
+  | "Road"
+  | "Criterium"
+  | "Time Trial"
+  | "Stage Racing"
+  | "Hill Climb"
+  | "Gravel"
+  | "Cyclocross"
+  | "Track"
+  | "Cross-Country"
+  | "Cross-Country Marathon"
+  | "Short Track"
+  | "Downhill"
+  | "Enduro"
+  | "Dual Slalom"
+  | "Four-Cross"
+  | "Slopestyle"
+  | "BMX Racing"
+  | "Freestyle"
+  | "Ultra-Endurance"
+  | "Triathlon"
+  | "Virtual";
+
 export type Format = "In-person" | "Virtual" | "Hybrid";
 
 export type VirtualPlatform = "Zwift" | "Strava" | "TrainerRoad" | "Other";
@@ -107,6 +130,7 @@ export interface Team {
   // -- Details --
   bikeTypes: BikeType[];
   discipline?: MtbDiscipline;
+  racingDisciplines: RacingDiscipline[];
   eBikeAllowed: boolean;
   format: Format;
   virtualPlatform?: VirtualPlatform;
@@ -170,7 +194,7 @@ export interface SearchParams {
   discipline?: MtbDiscipline;
   skillLevel?: SkillLevel;
   competitiveOrCasual?: "Competitive" | "Recreational";
-  pace?: Pace;
+  racingDiscipline?: RacingDiscipline;
   womensOnly?: boolean;
   youthOnly?: boolean;
   acceptingNewRiders?: boolean;
@@ -195,6 +219,7 @@ export interface TeamFormValues {
   contactPhone: string;
   contactEmail: string;
   bikeTypes: string[];
+  racingDisciplines: string[];
   format: string;
   virtualPlatform: string[];
   homeBase: string;

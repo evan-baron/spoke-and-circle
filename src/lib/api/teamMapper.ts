@@ -2,6 +2,8 @@ import { Prisma } from '../../../generated/prisma/client';
 import type { Team as TeamRow } from '../../../generated/prisma/client';
 import {
 	bikeTypeFromDb,
+	racingDisciplineFromDb,
+	racingDisciplineToDb,
 	bikeTypeToDb,
 	clubTypeFromDb,
 	clubTypeToDb,
@@ -92,6 +94,9 @@ export function toTeam(row: TeamRow): Team {
 		verified: row.verified,
 		lastActiveYear: row.lastActiveYear ?? 0,
 		bikeTypes: row.bikeTypes.map((bt) => bikeTypeFromDb[bt]),
+		racingDisciplines: row.racingDisciplines.map(
+			(rd) => racingDisciplineFromDb[rd],
+		),
 		discipline: row.discipline ? disciplineFromDb[row.discipline] : undefined,
 		eBikeAllowed: row.eBikeAllowed,
 		format: formatFromDb[row.format],
@@ -172,6 +177,10 @@ export function toTeamCreateInput(
 		contactPhone: input.contactPhone,
 		contactEmail: input.contactEmail,
 		bikeTypes: input.bikeTypes.map((bt) => bikeTypeToDb[bt]),
+		racingDisciplines:
+			input.type === 'Team' ?
+				(input.racingDisciplines ?? []).map((rd) => racingDisciplineToDb[rd])
+			:	[],
 		discipline: input.discipline ? disciplineToDb[input.discipline] : undefined,
 		eBikeAllowed: input.eBikeAllowed,
 		format: formatToDb[input.format],
@@ -247,6 +256,9 @@ export function toTeamFormValues(row: TeamRow): TeamFormValues {
 		contactPhone: row.contactPhone ?? '',
 		contactEmail: row.contactEmail ?? '',
 		bikeTypes: row.bikeTypes.map((bt) => bikeTypeFromDb[bt]),
+		racingDisciplines: row.racingDisciplines.map(
+			(rd) => racingDisciplineFromDb[rd],
+		),
 		format: formatFromDb[row.format],
 		virtualPlatform: row.virtualPlatforms,
 		homeBase: row.homeBase ?? '',
@@ -332,6 +344,10 @@ export function toApprovedTeamUpdate(
 		contactPhone: input.contactPhone ?? null,
 		contactEmail: input.contactEmail ?? null,
 		bikeTypes: input.bikeTypes.map((bt) => bikeTypeToDb[bt]),
+		racingDisciplines:
+			input.type === 'Team' ?
+				(input.racingDisciplines ?? []).map((rd) => racingDisciplineToDb[rd])
+			:	[],
 		eBikeAllowed: input.eBikeAllowed ?? false,
 		format: formatToDb[input.format],
 		virtualPlatforms: input.virtualPlatforms ?? [],

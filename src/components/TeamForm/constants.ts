@@ -17,6 +17,29 @@ export const BIKE_TYPES = [
 	'E-bike',
 	'Mixed',
 ];
+export const RACING_DISCIPLINES = [
+	'Road',
+	'Criterium',
+	'Time Trial',
+	'Stage Racing',
+	'Hill Climb',
+	'Gravel',
+	'Cyclocross',
+	'Track',
+	'Cross-Country',
+	'Cross-Country Marathon',
+	'Short Track',
+	'Downhill',
+	'Enduro',
+	'Dual Slalom',
+	'Four-Cross',
+	'Slopestyle',
+	'BMX Racing',
+	'Freestyle',
+	'Ultra-Endurance',
+	'Triathlon',
+	'Virtual',
+];
 export const FORMATS = ['In-person', 'Virtual', 'Hybrid'];
 export const VIRTUAL_PLATFORMS = ['Zwift', 'Strava', 'TrainerRoad', 'Other'];
 export const SCHEDULES = ['Weekly', 'Monthly', 'Annually'];

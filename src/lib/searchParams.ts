@@ -1,4 +1,15 @@
-import type { BikeType, ClubType, MtbDiscipline, SkillLevel } from '@/lib/types';
+import { racingDisciplineToDb } from '@/lib/teamEnums';
+import type {
+	BikeType,
+	ClubType,
+	MtbDiscipline,
+	RacingDiscipline,
+	SkillLevel,
+} from '@/lib/types';
+
+const RACING_DISCIPLINES = Object.keys(
+	racingDisciplineToDb,
+) as RacingDiscipline[];
 
 const CLUB_TYPES: ClubType[] = [
 	'Team',
@@ -33,7 +44,6 @@ const SKILL_LEVELS: SkillLevel[] = [
 	'Expert',
 ];
 const RACING_OPTIONS = ['Competitive', 'Recreational'] as const;
-const PACE_OPTIONS = ['Relaxed', 'Steady', 'Competitive'] as const;
 
 export type RawSearchParams = Record<string, string | string[] | undefined>;
 
@@ -64,7 +74,7 @@ export function parseSearchParams(raw: RawSearchParams) {
 	const disciplineRaw = firstValue(raw.discipline);
 	const skillLevelRaw = firstValue(raw.skillLevel);
 	const competitiveOrCasualRaw = firstValue(raw.competitiveOrCasual);
-	const paceRaw = firstValue(raw.pace);
+	const racingDisciplineRaw = firstValue(raw.racingDiscipline);
 
 	const type =
 		CLUB_TYPES.includes(typeRaw as ClubType) ?
@@ -85,9 +95,9 @@ export function parseSearchParams(raw: RawSearchParams) {
 		(RACING_OPTIONS as readonly string[]).includes(competitiveOrCasualRaw) ?
 			(competitiveOrCasualRaw as (typeof RACING_OPTIONS)[number])
 		:	undefined;
-	const pace =
-		(PACE_OPTIONS as readonly string[]).includes(paceRaw) ?
-			(paceRaw as (typeof PACE_OPTIONS)[number])
+	const racingDiscipline =
+		RACING_DISCIPLINES.includes(racingDisciplineRaw as RacingDiscipline) ?
+			(racingDisciplineRaw as RacingDiscipline)
 		:	undefined;
 	const womensOnly = firstValue(raw.womensOnly) === 'true';
 	const youthOnly = firstValue(raw.youthOnly) === 'true';
@@ -112,7 +122,7 @@ export function parseSearchParams(raw: RawSearchParams) {
 		discipline,
 		skillLevel,
 		competitiveOrCasual,
-		pace,
+		racingDiscipline,
 		womensOnly,
 		youthOnly,
 		acceptingNewRiders,

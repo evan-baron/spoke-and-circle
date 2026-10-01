@@ -20,6 +20,29 @@ const bikeTypeSchema = z.enum([
 	'E-bike',
 	'Mixed',
 ]);
+const racingDisciplineSchema = z.enum([
+	'Road',
+	'Criterium',
+	'Time Trial',
+	'Stage Racing',
+	'Hill Climb',
+	'Gravel',
+	'Cyclocross',
+	'Track',
+	'Cross-Country',
+	'Cross-Country Marathon',
+	'Short Track',
+	'Downhill',
+	'Enduro',
+	'Dual Slalom',
+	'Four-Cross',
+	'Slopestyle',
+	'BMX Racing',
+	'Freestyle',
+	'Ultra-Endurance',
+	'Triathlon',
+	'Virtual',
+]);
 const formatSchema = z.enum(['In-person', 'Virtual', 'Hybrid']);
 const virtualPlatformSchema = z.enum([
 	'Zwift',
@@ -180,6 +203,7 @@ const teamBaseSchema = z.object({
 		.array(bikeTypeSchema)
 		.min(1, 'Choose at least one cycling discipline'),
 	discipline: mtbDisciplineSchema.optional(),
+	racingDisciplines: z.array(racingDisciplineSchema).max(21).optional(),
 	eBikeAllowed: z.boolean().optional(),
 	format: formatSchema,
 	virtualPlatforms: z.array(virtualPlatformSchema).max(4).optional(),

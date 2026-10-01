@@ -4,6 +4,7 @@ import { prisma } from '@/lib/prisma';
 import { DEFAULT_RADIUS_MILES, TEAMS_PAGE_SIZE } from '@/lib/searchParams';
 import {
 	bikeTypeToDb,
+	racingDisciplineToDb,
 	clubTypeToDb,
 	disciplineToDb,
 	dropPolicyToDb,
@@ -92,6 +93,12 @@ const ENUM_TERM_CLAUSES: [string, Prisma.TeamWhereInput][] = [
 		([label, value]): [string, Prisma.TeamWhereInput] => [
 			label,
 			{ bikeTypes: { has: value } },
+		],
+	),
+	...Object.entries(racingDisciplineToDb).map(
+		([label, value]): [string, Prisma.TeamWhereInput] => [
+			label,
+			{ racingDisciplines: { has: value } },
 		],
 	),
 	...Object.entries(formatToDb).map(
@@ -195,12 +202,12 @@ async function buildWhere(
 	}
 	if (params.discipline) and.push({ discipline: disciplineToDb[params.discipline] });
 	if (params.skillLevel) and.push({ skillLevels: { has: params.skillLevel } });
-	if (params.pace) {
-		and.push(
-			params.pace === 'Relaxed' ?
-				{ OR: [{ pace: 'Relaxed' }, { pace: null }] }
-			:	{ pace: params.pace },
-		);
+	if (params.racingDiscipline) {
+		and.push({
+			racingDisciplines: {
+				has: racingDisciplineToDb[params.racingDiscipline],
+			},
+		});
 	}
 	if (params.competitiveOrCasual) {
 		and.push({ competitiveOrCasual: params.competitiveOrCasual });

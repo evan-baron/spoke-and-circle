@@ -4,6 +4,7 @@ import type {
 	DropPolicy,
 	Format,
 	MtbDiscipline,
+	RacingDiscipline,
 	Segmentation,
 } from '../../generated/prisma/client';
 import type { Team } from './types';
@@ -37,6 +38,33 @@ export const bikeTypeToDb: Record<Team['bikeTypes'][number], BikeType> = {
 	Mixed: 'Mixed',
 };
 
+export const racingDisciplineToDb: Record<
+	Team['racingDisciplines'][number],
+	RacingDiscipline
+> = {
+	'Road': 'Road',
+	'Criterium': 'Criterium',
+	'Time Trial': 'TimeTrial',
+	'Stage Racing': 'StageRacing',
+	'Hill Climb': 'HillClimb',
+	'Gravel': 'Gravel',
+	'Cyclocross': 'Cyclocross',
+	'Track': 'Track',
+	'Cross-Country': 'CrossCountry',
+	'Cross-Country Marathon': 'CrossCountryMarathon',
+	'Short Track': 'ShortTrack',
+	'Downhill': 'Downhill',
+	'Enduro': 'Enduro',
+	'Dual Slalom': 'DualSlalom',
+	'Four-Cross': 'FourCross',
+	'Slopestyle': 'Slopestyle',
+	'BMX Racing': 'BmxRacing',
+	'Freestyle': 'Freestyle',
+	'Ultra-Endurance': 'UltraEndurance',
+	'Triathlon': 'Triathlon',
+	'Virtual': 'Virtual',
+};
+
 export const formatToDb: Record<Team['format'], Format> = {
 	'In-person': 'InPerson',
 	Virtual: 'Virtual',
@@ -68,6 +96,7 @@ export const dropPolicyToDb: Record<Team['dropPolicy'], DropPolicy> = {
 
 export const clubTypeFromDb = invert(clubTypeToDb);
 export const bikeTypeFromDb = invert(bikeTypeToDb);
+export const racingDisciplineFromDb = invert(racingDisciplineToDb);
 export const formatFromDb = invert(formatToDb);
 export const disciplineFromDb = invert(disciplineToDb);
 export const segmentationFromDb = invert(segmentationToDb);

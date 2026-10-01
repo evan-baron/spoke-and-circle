@@ -350,6 +350,12 @@ export default async function TeamPage({
 								label='Cycling Disciplines'
 								value={formatList(team.bikeTypes)}
 							/>
+							{team.racingDisciplines.length > 0 && (
+								<DetailRow
+									label='Racing Disciplines'
+									value={formatList(team.racingDisciplines)}
+								/>
+							)}
 							<DetailRow label='Virtual or in-person' value={team.format} />
 							{team.discipline && (
 								<DetailRow label='Riding style' value={team.discipline} />

@@ -3,6 +3,7 @@ import type { TeamFormValues } from '@/lib/types';
 import { Checkbox } from './Checkbox';
 import {
 	BIKE_TYPES,
+	RACING_DISCIPLINES,
 	FORMATS,
 	PACES,
 	PERSONA_OPTIONS,
@@ -48,7 +49,7 @@ export function DetailsSection({
 		>
 			<div className={styles.field}>
 				<span className={styles.fieldLabel}>
-					Cycling Discipline
+					Cycling Discipline(s)
 					<RequiredMark />
 				</span>
 				<div>
@@ -61,6 +62,20 @@ export function DetailsSection({
 					/>
 				</div>
 			</div>
+			{groupType === 'Team' && (
+				<div className={styles.field}>
+					<span className={styles.fieldLabel}>Racing Discipline(s)</span>
+					<div>
+						<CheckboxDropdown
+							name='racingDiscipline'
+							label='Racing Discipline'
+							options={RACING_DISCIPLINES}
+							defaultValues={values.racingDisciplines}
+							autoSubmitOnClose={false}
+						/>
+					</div>
+				</div>
+			)}
 			<Field label='Virtual or in-person'>
 				<select
 					name='format'

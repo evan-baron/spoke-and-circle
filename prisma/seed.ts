@@ -2,6 +2,7 @@ import 'dotenv/config';
 import type { Prisma } from '../generated/prisma/client';
 import {
 	bikeTypeToDb,
+	racingDisciplineToDb,
 	clubTypeToDb,
 	disciplineToDb,
 	dropPolicyToDb,
@@ -28,6 +29,9 @@ function toTeamData(team: Team): Prisma.TeamCreateInput {
 		verified: team.verified,
 		lastActiveYear: team.lastActiveYear,
 		bikeTypes: team.bikeTypes.map((bt) => bikeTypeToDb[bt]),
+		racingDisciplines: team.racingDisciplines.map(
+			(rd) => racingDisciplineToDb[rd],
+		),
 		discipline: team.discipline ? disciplineToDb[team.discipline] : undefined,
 		eBikeAllowed: team.eBikeAllowed,
 		format: formatToDb[team.format],

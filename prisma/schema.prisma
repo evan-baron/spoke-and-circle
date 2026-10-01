@@ -53,6 +53,7 @@ model Team {
 
   bikeTypes           BikeType[]
   discipline          MtbDiscipline?
+  racingDisciplines   RacingDiscipline[]  @default([])
   eBikeAllowed        Boolean           @default(false)
   format              Format
   virtualPlatforms    VirtualPlatform[]
@@ -183,6 +184,30 @@ enum BikeType {
   Tri
   EBike  @map("E-bike")
   Mixed
+}
+
+enum RacingDiscipline {
+  Road
+  Criterium
+  TimeTrial @map("Time Trial")
+  StageRacing @map("Stage Racing")
+  HillClimb @map("Hill Climb")
+  Gravel
+  Cyclocross
+  Track
+  CrossCountry @map("Cross-Country")
+  CrossCountryMarathon @map("Cross-Country Marathon")
+  ShortTrack @map("Short Track")
+  Downhill
+  Enduro
+  DualSlalom @map("Dual Slalom")
+  FourCross @map("Four-Cross")
+  Slopestyle
+  BmxRacing @map("BMX Racing")
+  Freestyle
+  UltraEndurance @map("Ultra-Endurance")
+  Triathlon
+  Virtual
 }
 
 enum Format {

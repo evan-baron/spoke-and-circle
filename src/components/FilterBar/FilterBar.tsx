@@ -2,6 +2,7 @@
 
 import { useEffect, useState, type ChangeEvent } from 'react';
 import { CAME_FROM_QUIZ_KEY } from '@/components/GetStartedWizard/GetStartedWizard';
+import { RACING_DISCIPLINES } from '@/components/TeamForm/constants';
 import { LocationInput } from '@/components/LocationInput/LocationInput';
 import { DEFAULT_RADIUS_MILES, RADIUS_OPTIONS } from '@/lib/searchParams';
 import { CheckboxDropdown } from './CheckboxDropdown';
@@ -17,7 +18,7 @@ interface FilterBarProps {
 	defaultDiscipline?: string;
 	defaultSkillLevel?: string;
 	defaultCompetitiveOrCasual?: string;
-	defaultPace?: string;
+	defaultRacingDiscipline?: string;
 	defaultWomensOnly?: boolean;
 	defaultYouthOnly?: boolean;
 	defaultAcceptingNewRiders?: boolean;
@@ -51,7 +52,6 @@ const DISCIPLINE_OPTIONS = [
 ];
 const SKILL_LEVEL_OPTIONS = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
 const RACING_OPTIONS = ['Competitive', 'Recreational'];
-const PACE_OPTIONS = ['Relaxed', 'Steady', 'Competitive'];
 
 const AUTO_SUBMIT_DEBOUNCE_MS = 300;
 const pendingAutoSubmits = new WeakMap<
@@ -85,7 +85,7 @@ export function FilterBar({
 	defaultDiscipline = '',
 	defaultSkillLevel = '',
 	defaultCompetitiveOrCasual = '',
-	defaultPace = '',
+	defaultRacingDiscipline = '',
 	defaultWomensOnly = false,
 	defaultYouthOnly = false,
 	defaultAcceptingNewRiders = false,
@@ -96,7 +96,7 @@ export function FilterBar({
 			defaultDiscipline,
 			defaultSkillLevel,
 			defaultCompetitiveOrCasual,
-			defaultPace,
+			defaultRacingDiscipline,
 		].filter(Boolean).length +
 		defaultBikeTypes.length +
 		(defaultWomensOnly ? 1 : 0) +
@@ -230,14 +230,14 @@ export function FilterBar({
 						))}
 					</select>
 					<select
-						name='pace'
-						defaultValue={defaultPace}
-						aria-label='Ride pace'
+						name='racingDiscipline'
+						defaultValue={defaultRacingDiscipline}
+						aria-label='Racing discipline'
 						onChange={autoSubmit}
 						className={styles.input}
 					>
-						<option value=''>Any ride pace</option>
-						{PACE_OPTIONS.map((option) => (
+						<option value=''>Any racing discipline</option>
+						{RACING_DISCIPLINES.map((option) => (
 							<option key={option} value={option}>
 								{option}
 							</option>

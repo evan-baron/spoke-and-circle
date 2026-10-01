@@ -51,6 +51,7 @@ function makeTeam(input: TeamInput): Team {
     contact: { email: `hello@${input.id.replace(/-/g, "")}.club` },
     social: {},
     rides: [],
+    racingDisciplines: [],
     joinRequirements: {
       tryouts: false,
       referralRequired: false,
@@ -139,6 +140,7 @@ export const teams: Team[] = [
     tags: ["road", "racing", "criterium", "competitive"],
     missionStatement: "Field a top-tier crit squad and podium at every regional race on the calendar.",
     overrides: {
+      racingDisciplines: ["Criterium"],
       affiliation: "USA Cycling Club Member",
       codeOfConduct: "Zero tolerance for unsportsmanlike conduct at races or team events.",
       memberLimit: 50,
@@ -205,6 +207,7 @@ export const teams: Team[] = [
     tags: ["mtb", "enduro", "racing", "full-suspension", "competitive"],
     missionStatement: "Race enduro at a regional level while keeping Central Oregon's trail community tight-knit.",
     overrides: {
+      racingDisciplines: ["Enduro"],
       discipline: "Enduro",
       requiredKit: true,
       social: { instagram: "@cascadiaenduro" },
