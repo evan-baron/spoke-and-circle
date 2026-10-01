@@ -3,20 +3,24 @@ import { toTeam } from '@/lib/api/teamMapper';
 import { prisma } from '@/lib/prisma';
 import { DEFAULT_RADIUS_MILES, TEAMS_PAGE_SIZE } from '@/lib/searchParams';
 import {
-	bikeTypeToDb,
-	racingDisciplineToDb,
-	clubTypeToDb,
-	disciplineToDb,
-	dropPolicyToDb,
-	formatToDb,
-} from '@/lib/teamEnums';
+	bikeType,
+	clubType,
+	competitiveOrCasual,
+	dropPolicy,
+	format,
+	mtbDiscipline,
+	pace,
+	racingDiscipline,
+	skillLevel,
+	virtualPlatform,
+} from '@/lib/enums';
 import type { SearchParams, Team, TeamOption } from '@/lib/types';
 import {
 	resolveSearchLocation,
 	type SearchLocation,
 } from '@/services/placeService';
 
-const AFFILIATABLE_TYPES = Object.entries(clubTypeToDb)
+const AFFILIATABLE_TYPES = Object.entries(clubType.toDb)
 	.filter(([label]) => label !== 'Group Ride')
 	.map(([, dbValue]) => dbValue);
 
@@ -82,19 +86,18 @@ function locationClause(
 const normalizeTerm = (value: string) =>
 	value.toLowerCase().replace(/[^a-z0-9]/g, '');
 
+function enumTerms<Label extends string, Db extends string>(
+	registry: { toDb: Record<Label, Db> },
+	clause: (value: Db) => Prisma.TeamWhereInput,
+): [string, Prisma.TeamWhereInput][] {
+	return (Object.entries(registry.toDb) as [string, Db][]).map(
+		([label, value]) => [label, clause(value)],
+	);
+}
+
 const ENUM_TERM_CLAUSES: [string, Prisma.TeamWhereInput][] = [
-	...Object.entries(clubTypeToDb).map(
-		([label, value]): [string, Prisma.TeamWhereInput] => [
-			label,
-			{ type: value },
-		],
-	),
-	...Object.entries(bikeTypeToDb).map(
-		([label, value]): [string, Prisma.TeamWhereInput] => [
-			label,
-			{ bikeTypes: { has: value } },
-		],
-	),
+	...enumTerms(clubType, (value) => ({ type: value })),
+	...enumTerms(bikeType, (value) => ({ bikeTypes: { has: value } })),
 	...(
 		[
 			['women', 'Women Only'],
@@ -108,49 +111,23 @@ const ENUM_TERM_CLAUSES: [string, Prisma.TeamWhereInput][] = [
 			{ personaRestrictions: { has: persona } },
 		],
 	),
-	...Object.entries(racingDisciplineToDb).map(
-		([label, value]): [string, Prisma.TeamWhereInput] => [
-			label,
-			{ racingDisciplines: { has: value } },
-		],
-	),
-	...Object.entries(formatToDb).map(
-		([label, value]): [string, Prisma.TeamWhereInput] => [
-			label,
-			{ format: value },
-		],
-	),
-	...Object.entries(disciplineToDb).map(
-		([label, value]): [string, Prisma.TeamWhereInput] => [
-			label,
-			{ discipline: value },
-		],
-	),
-	...Object.entries(dropPolicyToDb).map(
-		([label, value]): [string, Prisma.TeamWhereInput] => [
-			label,
-			{ dropPolicy: value },
-		],
-	),
-	...(['Beginner', 'Intermediate', 'Advanced', 'Expert'] as const).map(
-		(level): [string, Prisma.TeamWhereInput] => [
-			level,
-			{ skillLevels: { has: level } },
-		],
-	),
-	...(['Relaxed', 'Steady', 'Competitive'] as const).map(
-		(pace): [string, Prisma.TeamWhereInput] => [pace, { pace }],
-	),
-	...(['Zwift', 'Strava', 'TrainerRoad'] as const).map(
-		(platform): [string, Prisma.TeamWhereInput] => [
-			platform,
-			{ virtualPlatforms: { has: platform } },
-		],
-	),
-	['Competitive', { competitiveOrCasual: 'Competitive' }],
-	['Recreational', { competitiveOrCasual: 'Recreational' }],
+	...enumTerms(racingDiscipline, (value) => ({
+		racingDisciplines: { has: value },
+	})),
+	...enumTerms(format, (value) => ({ format: value })),
+	...enumTerms(mtbDiscipline, (value) => ({ discipline: value })),
+	...enumTerms(dropPolicy, (value) => ({ dropPolicy: value })),
+	...enumTerms(skillLevel, (value) => ({ skillLevels: { has: value } })),
+	...enumTerms(pace, (value) => ({ pace: value })),
+	...enumTerms(virtualPlatform, (value) => ({
+		virtualPlatforms: { has: value },
+	})).filter(([label]) => label !== 'Other'),
+	...enumTerms(competitiveOrCasual, (value) => ({
+		competitiveOrCasual: value,
+	})),
 	['Instructional', { instructional: true }],
 ];
+
 
 async function idsWithListMatch(term: string): Promise<string[]> {
 	const pattern = `%${term.replace(/[\\%_]/g, '\\$&')}%`;
@@ -207,18 +184,18 @@ async function buildWhere(
 	const locationFilter = location ? locationClause(location, resolved) : null;
 	if (locationFilter) and.push(locationFilter);
 
-	if (params.type) and.push({ type: clubTypeToDb[params.type] });
+	if (params.type) and.push({ type: clubType.toDb[params.type] });
 	if (params.bikeTypes?.length) {
 		and.push({
-			bikeTypes: { hasSome: params.bikeTypes.map((b) => bikeTypeToDb[b]) },
+			bikeTypes: { hasSome: params.bikeTypes.map((b) => bikeType.toDb[b]) },
 		});
 	}
-	if (params.discipline) and.push({ discipline: disciplineToDb[params.discipline] });
+	if (params.discipline) and.push({ discipline: mtbDiscipline.toDb[params.discipline] });
 	if (params.skillLevel) and.push({ skillLevels: { has: params.skillLevel } });
 	if (params.racingDisciplines?.length) {
 		and.push({
 			racingDisciplines: {
-				hasSome: params.racingDisciplines.map((rd) => racingDisciplineToDb[rd]),
+				hasSome: params.racingDisciplines.map((rd) => racingDiscipline.toDb[rd]),
 			},
 		});
 	}

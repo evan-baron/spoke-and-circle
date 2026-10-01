@@ -1,83 +1,21 @@
 import { z } from 'zod';
+import * as enums from '@/lib/enums';
 import mathQuestions from '@/lib/data/mathQuestions';
 
-const clubTypeSchema = z.enum([
-	'Team',
-	'Club',
-	'Group Ride',
-	'Youth Program',
-	'Organization',
-	'Association',
-]);
-const bikeTypeSchema = z.enum([
-	'Road',
-	'Gravel',
-	'Cyclocross',
-	'MTB',
-	'Track',
-	'BMX',
-	'Tri',
-	'E-bike',
-	'Mixed',
-]);
-const racingDisciplineSchema = z.enum([
-	'Road',
-	'Criterium',
-	'Time Trial',
-	'Stage Racing',
-	'Hill Climb',
-	'Gravel',
-	'Cyclocross',
-	'Track',
-	'Cross-Country',
-	'Cross-Country Marathon',
-	'Short Track',
-	'Downhill',
-	'Enduro',
-	'Dual Slalom',
-	'Four-Cross',
-	'Slopestyle',
-	'BMX Racing',
-	'Freestyle',
-	'Ultra-Endurance',
-	'Triathlon',
-	'Virtual',
-]);
-const formatSchema = z.enum(['In-person', 'Virtual', 'Hybrid']);
-const virtualPlatformSchema = z.enum([
-	'Zwift',
-	'Strava',
-	'TrainerRoad',
-	'Other',
-]);
-const paceSchema = z.enum(['Relaxed', 'Steady', 'Competitive']);
-const skillLevelSchema = z.enum([
-	'Beginner',
-	'Intermediate',
-	'Advanced',
-	'Expert',
-]);
-const mtbDisciplineSchema = z.enum([
-	'Cross-country',
-	'Trail',
-	'Enduro',
-	'Downhill',
-	'All-mountain',
-]);
-const segmentationSchema = z.enum(['A Group', 'B Group', 'C Group', 'N/A']);
-const scheduleFrequencySchema = z.enum(['Weekly', 'Monthly', 'Annually']);
-const dropPolicySchema = z.enum(['Drop', 'No-drop']);
-const competitiveOrCasualSchema = z.enum(['Competitive', 'Recreational']);
-const dayOfWeekSchema = z.enum([
-	'Monday',
-	'Tuesday',
-	'Wednesday',
-	'Thursday',
-	'Friday',
-	'Saturday',
-	'Sunday',
-]);
-const rideOrdinalSchema = z.enum(['1st', '2nd', '3rd', '4th', 'Last']);
+const clubTypeSchema = z.enum(enums.clubType.labels);
+const bikeTypeSchema = z.enum(enums.bikeType.labels);
+const racingDisciplineSchema = z.enum(enums.racingDiscipline.labels);
+const formatSchema = z.enum(enums.format.labels);
+const virtualPlatformSchema = z.enum(enums.virtualPlatform.labels);
+const paceSchema = z.enum(enums.pace.labels);
+const skillLevelSchema = z.enum(enums.skillLevel.labels);
+const mtbDisciplineSchema = z.enum(enums.mtbDiscipline.labels);
+const segmentationSchema = z.enum(enums.segmentation.labels);
+const scheduleFrequencySchema = z.enum(enums.scheduleFrequency.labels);
+const dropPolicySchema = z.enum(enums.dropPolicy.labels);
+const competitiveOrCasualSchema = z.enum(enums.competitiveOrCasual.labels);
+const dayOfWeekSchema = z.enum(enums.dayOfWeek.labels);
+const rideOrdinalSchema = z.enum(enums.rideOrdinal.labels);
 const rideMonthSchema = z.number().int().min(1).max(12);
 const rideSchema = z
 	.object({
@@ -130,12 +68,7 @@ const rideSchema = z
 		}
 	});
 
-const eventTypeSchema = z.enum([
-	'Sponsor Events',
-	'Team-specific Events',
-	'Public Events',
-	'Recruiting Events',
-]);
+const eventTypeSchema = z.enum(enums.eventType.labels);
 
 const teamListItemSchema = z
 	.string()

@@ -6,7 +6,7 @@ import styles from './filterBar.module.scss';
 interface CheckboxDropdownProps {
 	name: string;
 	label: string;
-	options: string[];
+	options: readonly string[];
 	defaultValues?: string[];
 	autoSubmitOnClose?: boolean;
 	searchable?: boolean;

@@ -1,10 +1,12 @@
+import type { EventType } from './enums';
+
 const PERSONA_LABELS: Record<string, string> = {
 	womenOnly: 'Women Only',
 	menOnly: 'Men Only',
 	lgbtOnly: 'LGBT Only',
 };
 
-const EVENT_TYPE_FIELDS: [string, string][] = [
+const EVENT_TYPE_FIELDS: [string, EventType][] = [
 	['eventSponsor', 'Sponsor Events'],
 	['eventTeamSpecific', 'Team-specific Events'],
 	['eventPublic', 'Public Events'],

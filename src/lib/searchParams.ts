@@ -1,4 +1,11 @@
-import { racingDisciplineToDb } from '@/lib/teamEnums';
+import {
+	bikeType,
+	clubType,
+	competitiveOrCasual,
+	mtbDiscipline,
+	racingDiscipline,
+	skillLevel,
+} from '@/lib/enums';
 import type {
 	BikeType,
 	ClubType,
@@ -7,43 +14,13 @@ import type {
 	SkillLevel,
 } from '@/lib/types';
 
-const RACING_DISCIPLINES = Object.keys(
-	racingDisciplineToDb,
-) as RacingDiscipline[];
+const RACING_DISCIPLINES = racingDiscipline.labels;
 
-const CLUB_TYPES: ClubType[] = [
-	'Team',
-	'Club',
-	'Group Ride',
-	'Youth Program',
-	'Organization',
-	'Association',
-];
-const BIKE_TYPES: BikeType[] = [
-	'Road',
-	'Gravel',
-	'Cyclocross',
-	'MTB',
-	'Track',
-	'BMX',
-	'Tri',
-	'E-bike',
-	'Mixed',
-];
-const DISCIPLINES: MtbDiscipline[] = [
-	'Cross-country',
-	'Trail',
-	'Enduro',
-	'Downhill',
-	'All-mountain',
-];
-const SKILL_LEVELS: SkillLevel[] = [
-	'Beginner',
-	'Intermediate',
-	'Advanced',
-	'Expert',
-];
-const RACING_OPTIONS = ['Competitive', 'Recreational'] as const;
+const CLUB_TYPES = clubType.labels;
+const BIKE_TYPES = bikeType.labels;
+const DISCIPLINES = mtbDiscipline.labels;
+const SKILL_LEVELS = skillLevel.labels;
+const RACING_OPTIONS = competitiveOrCasual.labels;
 
 export type RawSearchParams = Record<string, string | string[] | undefined>;
 

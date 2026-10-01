@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import { LocationInput } from '@/components/LocationInput/LocationInput';
+import { clubType } from '@/lib/enums';
 import styles from './searchForm.module.scss';
 
 interface SearchFormProps {
@@ -9,14 +10,7 @@ interface SearchFormProps {
 	onGradient?: boolean;
 }
 
-const TYPE_OPTIONS = [
-	'Team',
-	'Club',
-	'Group Ride',
-	'Youth Program',
-	'Organization',
-	'Association',
-];
+const TYPE_OPTIONS = clubType.labels;
 
 export function SearchForm({
 	defaultQ = '',

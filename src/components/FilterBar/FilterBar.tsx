@@ -2,8 +2,15 @@
 
 import { useEffect, useState, type ChangeEvent } from 'react';
 import { CAME_FROM_QUIZ_KEY } from '@/components/GetStartedWizard/GetStartedWizard';
-import { RACING_DISCIPLINES } from '@/components/TeamForm/constants';
 import { LocationInput } from '@/components/LocationInput/LocationInput';
+import {
+	bikeType,
+	clubType,
+	competitiveOrCasual,
+	mtbDiscipline,
+	racingDiscipline,
+	skillLevel,
+} from '@/lib/enums';
 import { DEFAULT_RADIUS_MILES, RADIUS_OPTIONS } from '@/lib/searchParams';
 import { CheckboxDropdown } from './CheckboxDropdown';
 import styles from './filterBar.module.scss';
@@ -24,34 +31,11 @@ interface FilterBarProps {
 	defaultAcceptingNewRiders?: boolean;
 }
 
-const TYPE_OPTIONS = [
-	'Team',
-	'Club',
-	'Group Ride',
-	'Youth Program',
-	'Organization',
-	'Association',
-];
-const BIKE_TYPE_OPTIONS = [
-	'Road',
-	'Gravel',
-	'Cyclocross',
-	'MTB',
-	'Track',
-	'BMX',
-	'Tri',
-	'E-bike',
-	'Mixed',
-];
-const DISCIPLINE_OPTIONS = [
-	'Cross-country',
-	'Trail',
-	'Enduro',
-	'Downhill',
-	'All-mountain',
-];
-const SKILL_LEVEL_OPTIONS = ['Beginner', 'Intermediate', 'Advanced', 'Expert'];
-const RACING_OPTIONS = ['Competitive', 'Recreational'];
+const TYPE_OPTIONS = clubType.labels;
+const BIKE_TYPE_OPTIONS = bikeType.labels;
+const DISCIPLINE_OPTIONS = mtbDiscipline.labels;
+const SKILL_LEVEL_OPTIONS = skillLevel.labels;
+const RACING_OPTIONS = competitiveOrCasual.labels;
 
 const AUTO_SUBMIT_DEBOUNCE_MS = 300;
 const pendingAutoSubmits = new WeakMap<
@@ -221,7 +205,7 @@ export function FilterBar({
 					<CheckboxDropdown
 						name='racingDiscipline'
 						label='Any racing discipline'
-						options={RACING_DISCIPLINES}
+						options={racingDiscipline.labels}
 						defaultValues={defaultRacingDisciplines}
 						searchable
 					/>
