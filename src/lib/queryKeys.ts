@@ -5,5 +5,7 @@ export const queryKeys = {
 	},
 	admin: {
 		pendingCount: () => ['admin', 'pendingCount'] as const,
+		teamsRoot: () => ['admin', 'teams'] as const,
+		teams: (queryString: string) => ['admin', 'teams', queryString] as const,
 	},
 } as const;

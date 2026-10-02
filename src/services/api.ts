@@ -1,4 +1,5 @@
 import type {
+	AdminTeamsResponse,
 	CreateTeamResponse,
 	LocationsResponse,
 	TeamSearchResponse,
@@ -72,6 +73,11 @@ export const adminAPI = {
 		apiCall<{ success: boolean; emailStatus: string }>(
 			`/api/admin/teams/${encodeURIComponent(id)}`,
 			{ method: 'DELETE', body: JSON.stringify({ reason }) },
+		),
+	listTeams: (queryString: string) =>
+		apiCall<AdminTeamsResponse>(
+			`/api/admin/teams${queryString ? `?${queryString}` : ''}`,
+			{ method: 'GET' },
 		),
 	deleteTeams: (ids: string[]) =>
 		apiCall<{ success: boolean; deleted: number }>('/api/admin/teams', {

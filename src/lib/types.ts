@@ -177,6 +177,17 @@ export interface SearchParams {
   acceptingNewRiders?: boolean;
 }
 
+export interface TeamListPage {
+  teams: Team[];
+  total: number;
+  page: number;
+  pageCount: number;
+}
+
+export interface AdminTeamsResponse extends TeamListPage {
+  success: boolean;
+}
+
 export interface TeamsResponse {
   success: boolean;
   teams: Team[];

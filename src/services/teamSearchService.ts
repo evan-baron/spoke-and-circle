@@ -14,7 +14,11 @@ import {
 	skillLevel,
 	virtualPlatform,
 } from '@/lib/enums';
-import type { SearchParams, Team, TeamOption } from '@/lib/types';
+import type {
+	SearchParams,
+	TeamListPage,
+	TeamOption,
+} from '@/lib/types';
 import {
 	resolveSearchLocation,
 	type SearchLocation,
@@ -47,12 +51,7 @@ export async function searchAffiliatableTeams(
 	}));
 }
 
-export interface TeamSearchPage {
-	teams: Team[];
-	total: number;
-	page: number;
-	pageCount: number;
-}
+export type TeamSearchPage = TeamListPage;
 
 type PointLocation = Extract<SearchLocation, { kind: 'point' }>;
 

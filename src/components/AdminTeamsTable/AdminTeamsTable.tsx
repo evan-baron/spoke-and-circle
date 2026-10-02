@@ -3,15 +3,18 @@
 import Link from 'next/link';
 import { useEffect, useId, useRef, useState } from 'react';
 import { Badge } from '@/components/Badge/Badge';
+import { Pagination } from '@/components/Pagination/Pagination';
 import tableStyles from '@/components/ResultsTable/resultsTable.module.scss';
 import { describeSubmitError } from '@/components/TeamForm/describeSubmitError';
+import { useAdminTeams, useInvalidateAdminTeams } from '@/hooks/useAdminTeams';
 import { formatSkillLevelLines } from '@/lib/format';
+import type { RawSearchParams } from '@/lib/searchParams';
 import {
 	toneForCompetitiveOrCasual,
 	toneForPace,
 	toneForVerified,
 } from '@/lib/tone';
-import type { Team } from '@/lib/types';
+import type { Team, TeamListPage } from '@/lib/types';
 import { adminAPI } from '@/services/api';
 import styles from './adminTeamsTable.module.scss';
 
@@ -21,16 +24,24 @@ function verifiedLabel(verified: boolean, lastActiveYear: number): string {
 }
 
 interface AdminTeamsTableProps {
-	teams: Team[];
-	totalCount: number;
+	queryString: string;
+	initialPage: TeamListPage;
+	initialPageLoadedAt: number;
+	searchParams: RawSearchParams;
 	summarySuffix?: string;
 }
 
 export function AdminTeamsTable({
-	teams,
-	totalCount,
+	queryString,
+	initialPage,
+	initialPageLoadedAt,
+	searchParams,
 	summarySuffix = '',
 }: AdminTeamsTableProps) {
+	const { data } = useAdminTeams(queryString, initialPage, initialPageLoadedAt);
+	const invalidateAdminTeams = useInvalidateAdminTeams();
+	const teams = data.teams;
+	const totalCount = data.total;
 	const [removedIds, setRemovedIds] = useState<string[]>([]);
 	const [selectedIds, setSelectedIds] = useState<string[]>([]);
 	const [pendingDelete, setPendingDelete] = useState<Team[] | null>(null);
@@ -56,6 +67,10 @@ export function AdminTeamsTable({
 				selectedCount > 0 && selectedCount < visible.length;
 		}
 	}, [selectedCount, visible.length]);
+
+	useEffect(() => {
+		setRemovedIds([]);
+	}, [teams]);
 
 	useEffect(() => {
 		const dialog = dialogRef.current;
@@ -90,6 +105,7 @@ export function AdminTeamsTable({
 			setRemovedIds((prev) => [...prev, ...ids]);
 			setSelectedIds((prev) => prev.filter((id) => !ids.includes(id)));
 			setPendingDelete(null);
+			void invalidateAdminTeams();
 		} catch (error) {
 			setDeleteError(describeSubmitError(error).join(' '));
 		} finally {
@@ -267,7 +283,6 @@ export function AdminTeamsTable({
 								<th>Cycling Disciplines</th>
 								<th>Skill level</th>
 								<th>Ride pace</th>
-								{/* <th>Members</th> */}
 								<th>Status</th>
 								<th>
 									<span className={styles.srOnly}>Actions</span>
@@ -325,7 +340,6 @@ export function AdminTeamsTable({
 									<td>
 										<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
 									</td>
-									{/* <td>{team.memberCount}</td> */}
 									<td>
 										<button
 											type='button'
@@ -408,6 +422,13 @@ export function AdminTeamsTable({
 					</>
 				)}
 			</dialog>
+
+			<Pagination
+				basePath='/admin/all'
+				searchParams={searchParams}
+				page={data.page}
+				pageCount={data.pageCount}
+			/>
 		</>
 	);
 }

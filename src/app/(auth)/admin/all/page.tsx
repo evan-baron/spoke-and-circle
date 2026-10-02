@@ -2,8 +2,11 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { AdminTeamsTable } from '@/components/AdminTeamsTable/AdminTeamsTable';
 import { FilterBar } from '@/components/FilterBar/FilterBar';
-import { Pagination } from '@/components/Pagination/Pagination';
-import { parseSearchParams, type RawSearchParams } from '@/lib/searchParams';
+import {
+	parseSearchParams,
+	toQueryString,
+	type RawSearchParams,
+} from '@/lib/searchParams';
 import { requireAdmin } from '@/services/currentUserService';
 import { searchApprovedTeams } from '@/services/teamSearchService';
 import styles from '../admin.module.scss';
@@ -60,16 +63,11 @@ export default async function AdminAllGroupsPage({
 				/>
 
 				<AdminTeamsTable
-					teams={teams}
-					totalCount={total}
-					summarySuffix={summarySuffix}
-				/>
-
-				<Pagination
-					basePath='/admin/all'
+					queryString={toQueryString(rawParams)}
+					initialPage={{ teams, total, page, pageCount }}
+					initialPageLoadedAt={Date.now()}
 					searchParams={rawParams}
-					page={page}
-					pageCount={pageCount}
+					summarySuffix={summarySuffix}
 				/>
 			</div>
 		</div>
