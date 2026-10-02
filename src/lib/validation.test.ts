@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import * as registry from './enums';
-import { createTeamSchema } from './validation';
+import { createTeamSchema, deleteTeamsSchema } from './validation';
 
 const validTeam = {
 	name: 'Test Team',
@@ -146,5 +146,22 @@ describe('createTeamSchema', () => {
 				'Tags must be 40 characters or fewer',
 			);
 		});
+	});
+});
+
+describe('deleteTeamsSchema', () => {
+	it('accepts a list of team ids', () => {
+		expect(deleteTeamsSchema.safeParse({ ids: ['a', 'b'] }).success).toBe(true);
+	});
+
+	it('rejects an empty list, blank ids and more than 100 ids', () => {
+		expect(deleteTeamsSchema.safeParse({ ids: [] }).success).toBe(false);
+		expect(deleteTeamsSchema.safeParse({ ids: ['  '] }).success).toBe(false);
+		expect(
+			deleteTeamsSchema.safeParse({
+				ids: Array.from({ length: 101 }, (_, index) => `team-${index}`),
+			}).success,
+		).toBe(false);
+		expect(deleteTeamsSchema.safeParse({}).success).toBe(false);
 	});
 });

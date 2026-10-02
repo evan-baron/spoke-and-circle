@@ -319,6 +319,13 @@ export const rejectTeamSchema = z.object({
 		.optional(),
 });
 
+export const deleteTeamsSchema = z.object({
+	ids: z
+		.array(z.string().trim().min(1))
+		.min(1, 'Choose at least one team')
+		.max(100, 'Delete up to 100 teams at a time'),
+});
+
 const personNameSchema = z
 	.string()
 	.trim()

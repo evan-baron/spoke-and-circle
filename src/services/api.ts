@@ -73,6 +73,11 @@ export const adminAPI = {
 			`/api/admin/teams/${encodeURIComponent(id)}`,
 			{ method: 'DELETE', body: JSON.stringify({ reason }) },
 		),
+	deleteTeams: (ids: string[]) =>
+		apiCall<{ success: boolean; deleted: number }>('/api/admin/teams', {
+			method: 'DELETE',
+			body: JSON.stringify({ ids }),
+		}),
 	searchUsers: (query: string, signal?: AbortSignal) =>
 		apiCall<{ success: boolean; users: UserOption[] }>(
 			`/api/admin/users/search?q=${encodeURIComponent(query)}`,

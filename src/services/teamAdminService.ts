@@ -157,6 +157,13 @@ export async function toggleTeamVerified(id: string): Promise<boolean | null> {
 	return nextVerified;
 }
 
+export async function deleteApprovedTeams(ids: string[]): Promise<number> {
+	const result = await prisma.team.deleteMany({
+		where: { id: { in: ids }, status: 'Approved' },
+	});
+	return result.count;
+}
+
 export async function rejectPendingTeam(
 	id: string,
 	adminId: number,

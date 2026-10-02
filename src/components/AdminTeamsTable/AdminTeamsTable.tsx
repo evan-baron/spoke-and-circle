@@ -4,16 +4,15 @@ import Link from 'next/link';
 import { useEffect, useId, useRef, useState } from 'react';
 import { Badge } from '@/components/Badge/Badge';
 import tableStyles from '@/components/ResultsTable/resultsTable.module.scss';
-import {
-	formatMemberCount,
-	formatSkillLevelLines,
-} from '@/lib/format';
+import { describeSubmitError } from '@/components/TeamForm/describeSubmitError';
+import { formatSkillLevelLines } from '@/lib/format';
 import {
 	toneForCompetitiveOrCasual,
 	toneForPace,
 	toneForVerified,
 } from '@/lib/tone';
 import type { Team } from '@/lib/types';
+import { adminAPI } from '@/services/api';
 import styles from './adminTeamsTable.module.scss';
 
 function verifiedLabel(verified: boolean, lastActiveYear: number): string {
@@ -35,6 +34,8 @@ export function AdminTeamsTable({
 	const [removedIds, setRemovedIds] = useState<string[]>([]);
 	const [selectedIds, setSelectedIds] = useState<string[]>([]);
 	const [pendingDelete, setPendingDelete] = useState<Team[] | null>(null);
+	const [isDeleting, setIsDeleting] = useState(false);
+	const [deleteError, setDeleteError] = useState<string | null>(null);
 	const [verifiedOverrides, setVerifiedOverrides] = useState<
 		Record<string, boolean>
 	>({});
@@ -77,16 +78,29 @@ export function AdminTeamsTable({
 		setPendingDelete(visible.filter((team) => ids.includes(team.id)));
 	}
 
-	function confirmDelete() {
-		if (!pendingDelete) return;
+	async function confirmDelete() {
+		if (!pendingDelete || isDeleting) return;
 		const ids = pendingDelete.map((team) => team.id);
-		setRemovedIds((prev) => [...prev, ...ids]);
-		setSelectedIds((prev) => prev.filter((id) => !ids.includes(id)));
-		setPendingDelete(null);
+
+		setIsDeleting(true);
+		setDeleteError(null);
+
+		try {
+			await adminAPI.deleteTeams(ids);
+			setRemovedIds((prev) => [...prev, ...ids]);
+			setSelectedIds((prev) => prev.filter((id) => !ids.includes(id)));
+			setPendingDelete(null);
+		} catch (error) {
+			setDeleteError(describeSubmitError(error).join(' '));
+		} finally {
+			setIsDeleting(false);
+		}
 	}
 
 	function cancelDelete() {
+		if (isDeleting) return;
 		setPendingDelete(null);
+		setDeleteError(null);
 	}
 
 	function isVerified(team: Team): boolean {
@@ -186,8 +200,14 @@ export function AdminTeamsTable({
 										<p className={tableStyles.cardLocation}>{team.location}</p>
 										<div className={tableStyles.cardBadges}>
 											{team.type === 'Group Ride' ?
-												<Badge tone={toneForPace(team.pace)}>{team.pace} pace</Badge>
-											:	<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
+												<Badge tone={toneForPace(team.pace)}>
+													{team.pace} pace
+												</Badge>
+											:	<Badge
+													tone={toneForCompetitiveOrCasual(
+														team.competitiveOrCasual,
+													)}
+												>
 													{team.competitiveOrCasual}
 												</Badge>
 											}
@@ -201,9 +221,6 @@ export function AdminTeamsTable({
 													{level}
 												</Badge>
 											))}
-											{/* <span className={tableStyles.cardMeta}>
-												{formatMemberCount(team.memberCount)}
-											</span> */}
 										</div>
 									</Link>
 								</div>
@@ -285,19 +302,25 @@ export function AdminTeamsTable({
 										<Badge tone='ink'>{team.type}</Badge>
 									</td>
 									<td>
-										<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
+										<Badge
+											tone={toneForCompetitiveOrCasual(
+												team.competitiveOrCasual,
+											)}
+										>
 											{team.competitiveOrCasual}
 										</Badge>
 									</td>
 									<td>{team.location}</td>
 									<td>{team.bikeTypes.join(', ')}</td>
 									<td>
-										{formatSkillLevelLines(team.skillLevels).map((level, index, all) => (
-											<span key={level} className={tableStyles.stackedLine}>
-												{level}
-												{index < all.length - 1 && ','}
-											</span>
-										))}
+										{formatSkillLevelLines(team.skillLevels).map(
+											(level, index, all) => (
+												<span key={level} className={tableStyles.stackedLine}>
+													{level}
+													{index < all.length - 1 && ','}
+												</span>
+											),
+										)}
 									</td>
 									<td>
 										<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
@@ -340,6 +363,9 @@ export function AdminTeamsTable({
 				className={styles.dialog}
 				aria-labelledby={dialogTitleId}
 				onClose={cancelDelete}
+				onCancel={(event) => {
+					if (isDeleting) event.preventDefault();
+				}}
 			>
 				{pendingDelete && (
 					<>
@@ -356,10 +382,16 @@ export function AdminTeamsTable({
 								)}
 							</ul>
 						)}
+						{deleteError && (
+							<p role='alert' className={styles.dialogError}>
+								{deleteError}
+							</p>
+						)}
 						<div className={styles.dialogActions}>
 							<button
 								type='button'
 								className={styles.buttonOutline}
+								disabled={isDeleting}
 								onClick={cancelDelete}
 							>
 								Cancel
@@ -367,9 +399,10 @@ export function AdminTeamsTable({
 							<button
 								type='button'
 								className={styles.buttonDanger}
+								disabled={isDeleting}
 								onClick={confirmDelete}
 							>
-								Delete
+								{isDeleting ? 'Deleting…' : 'Delete'}
 							</button>
 						</div>
 					</>
