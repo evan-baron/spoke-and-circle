@@ -108,6 +108,19 @@ export function RideDetailsSection({
 					))}
 				</select>
 			</Field>
+			<Field
+				label='Additional Ride Details'
+				hint='Up to 1,000 characters. Leave a blank line between paragraphs'
+				full
+			>
+				<textarea
+					name='additionalRideDetails'
+					defaultValue={values.additionalRideDetails}
+					maxLength={1000}
+					rows={6}
+					className={styles.input}
+				/>
+			</Field>
 		</Section>
 	);
 }

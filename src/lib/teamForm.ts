@@ -116,6 +116,7 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		waitlist: flag('waitlist'),
 		rides: rides(),
 		scheduleNotes: text('scheduleNotes'),
+		additionalRideDetails: text('additionalRideDetails'),
 		pace: text('pace'),
 		typicalDistanceMiles: number('typicalDistanceMiles'),
 		typicalElevationGainFt: number('typicalElevationGainFt'),

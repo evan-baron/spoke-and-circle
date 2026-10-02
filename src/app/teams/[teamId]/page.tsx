@@ -435,6 +435,18 @@ export default async function TeamPage({
 							</DetailSection>
 						)}
 
+						{team.type === 'Group Ride' && team.additionalRideDetails && (
+							<DetailSection title='Additional ride details'>
+								<div className={styles.longText}>
+									{team.additionalRideDetails
+										.split(/\n{2,}/)
+										.map((paragraph, index) => (
+											<p key={index}>{paragraph}</p>
+										))}
+								</div>
+							</DetailSection>
+						)}
+
 						{team.type !== 'Group Ride' && (
 							<DetailSection title='Team structure'>
 								<DetailRow

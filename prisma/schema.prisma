@@ -78,6 +78,7 @@ model Team {
   rideDays               Json?
   rides                  Json?
   scheduleNotes          String?
+  additionalRideDetails  String?
   seasons                String[]
   pace                   Pace?
   segmentation           Segmentation?

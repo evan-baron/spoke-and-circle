@@ -126,6 +126,7 @@ export interface Team {
   rideDays?: RideDay[];
   rides: Ride[];
   scheduleNotes?: string;
+  additionalRideDetails?: string;
   pace: Pace;
   segmentation: Segmentation;
   typicalDistanceMiles: number;
@@ -218,6 +219,7 @@ export interface TeamFormValues {
   waitlist: boolean;
   rides: Ride[];
   scheduleNotes: string;
+  additionalRideDetails: string;
   pace: string;
   typicalDistanceMiles: string;
   typicalElevationGainFt: string;

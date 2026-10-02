@@ -97,6 +97,35 @@ describe('createTeamSchema', () => {
 		expect(messages({ location: '' })).toContain('Location is required');
 	});
 
+	describe('additionalRideDetails', () => {
+		it('keeps paragraph breaks and normalizes line endings', () => {
+			const result = parse({
+				type: 'Group Ride',
+				additionalRideDetails: '  First paragraph.\r\n\r\nSecond paragraph.  ',
+			});
+			expect(result.success).toBe(true);
+			if (result.success) {
+				expect(result.data.additionalRideDetails).toBe(
+					'First paragraph.\n\nSecond paragraph.',
+				);
+			}
+		});
+
+		it('counts a Windows line break as one character toward the limit', () => {
+			const lines = ['a'.repeat(499), 'b'.repeat(500)].join('\r\n');
+			expect(parse({ additionalRideDetails: lines }).success).toBe(true);
+		});
+
+		it('rejects more than 1,000 characters', () => {
+			expect(
+				messages({ additionalRideDetails: 'x'.repeat(1001) }),
+			).toContain('Additional ride details must be 1,000 characters or fewer');
+			expect(
+				parse({ additionalRideDetails: 'x'.repeat(1000) }).success,
+			).toBe(true);
+		});
+	});
+
 	describe('tags', () => {
 		it('accepts up to 10 tags and trims and lowercases them', () => {
 			const result = parse({ tags: ['  Women Only ', 'MASTERS'] });
