@@ -83,7 +83,10 @@ function locationClause(
 }
 
 const normalizeTerm = (value: string) =>
-	value.toLowerCase().replace(/[^a-z0-9]/g, '');
+	value
+		.toLowerCase()
+		.replace(/[^a-z0-9]/g, '')
+		.replace(/s$/, '');
 
 function enumTerms<Label extends string, Db extends string>(
 	registry: { toDb: Record<Label, Db> },
@@ -125,6 +128,7 @@ const ENUM_TERM_CLAUSES: [string, Prisma.TeamWhereInput][] = [
 		competitiveOrCasual: value,
 	})),
 	['Instructional', { instructional: true }],
+	['Youth', { type: 'YouthProgram' }],
 ];
 
 
