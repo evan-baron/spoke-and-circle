@@ -57,13 +57,27 @@ export function withAuth(
 	};
 }
 
+async function getActiveAdmin() {
+	try {
+		const { user } = await getApiUser();
+		return user?.active && user.role === 'admin' ? user : undefined;
+	} catch {
+		return undefined;
+	}
+}
+
 export function withPublicRateLimit(
 	bucket: RateLimitBucket,
 	handler: PublicHandler,
+	options: { adminRateLimit?: boolean } = {},
 ) {
 	return async (request: NextRequest, context: RouteContext) => {
 		try {
-			const rateLimited = await applyPublicRateLimit(request, bucket);
+			const admin = options.adminRateLimit ? await getActiveAdmin() : undefined;
+			const rateLimited =
+				admin ?
+					await applyRateLimit(admin, bucket)
+				:	await applyPublicRateLimit(request, bucket);
 			if (rateLimited) return rateLimited;
 
 			const params = await context.params;

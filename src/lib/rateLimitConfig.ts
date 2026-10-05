@@ -26,7 +26,7 @@ export const RATE_LIMIT_CONFIG: Record<RateLimitBucket, BucketConfig> = {
 	},
 	'teams-write': {
 		windowSeconds: 3600,
-		maxRequests: { anonymous: 3, user: 10, admin: 60 },
+		maxRequests: { anonymous: 3, user: 10, admin: 100 },
 	},
 	'profile-write': {
 		windowSeconds: 3600,
