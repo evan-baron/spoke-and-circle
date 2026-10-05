@@ -449,7 +449,11 @@ export default async function TeamPage({
 						)}
 
 						{team.type !== 'Group Ride' && (
-							<DetailSection title='Team structure'>
+							<DetailSection
+								title={
+									team.type === 'Team' ? 'Team structure' : 'Group structure'
+								}
+							>
 								<DetailRow
 									label='Competitive or recreational'
 									value={team.competitiveOrCasual}
