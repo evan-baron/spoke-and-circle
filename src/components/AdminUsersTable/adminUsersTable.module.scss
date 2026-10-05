@@ -116,6 +116,16 @@
 	}
 }
 
+.groupsRow {
+	max-height: 12rem;
+
+	dd {
+		min-height: 0;
+		overflow-y: auto;
+		overscroll-behavior: contain;
+	}
+}
+
 .groupList {
 	margin: 0;
 	padding: 0;
