@@ -51,6 +51,54 @@ function toZips(): Prisma.PlaceCreateManyInput[] {
 	}));
 }
 
+const cityKey = (name: string, state: string) =>
+	`${name.toLowerCase()}|${state}`;
+
+function toExtraCities(
+	knownCities: Prisma.PlaceCreateManyInput[],
+): Prisma.PlaceCreateManyInput[] {
+	const knownKeys = new Set(
+		knownCities.map((city) => cityKey(city.name, city.state ?? '')),
+	);
+	const knownStates = new Set(knownCities.map((city) => city.state));
+	const text = readFileSync(join(DATA_DIR, 'US.txt'), 'utf8');
+	const grouped = new Map<
+		string,
+		{ name: string; state: string; points: [number, number][] }
+	>();
+
+	for (const line of text.split(/\r?\n/)) {
+		const cells = line.split('\t');
+		const name = cells[2]?.trim() ?? '';
+		const state = cells[4]?.trim() ?? '';
+		const latitude = Number(cells[9]);
+		const longitude = Number(cells[10]);
+		if (!name || !knownStates.has(state)) continue;
+		if (!Number.isFinite(latitude) || !Number.isFinite(longitude)) continue;
+
+		const key = cityKey(name, state);
+		if (knownKeys.has(key)) continue;
+
+		const entry = grouped.get(key) ?? { name, state, points: [] };
+		entry.points.push([latitude, longitude]);
+		grouped.set(key, entry);
+	}
+
+	const average = (values: number[]) =>
+		values.reduce((sum, value) => sum + value, 0) / values.length;
+
+	return [...grouped.entries()].map(([key, { name, state, points }]) => ({
+		id: `geonames-${key}`,
+		kind: 'City',
+		name,
+		state,
+		label: `${name}, ${state}`,
+		latitude: average(points.map(([latitude]) => latitude)),
+		longitude: average(points.map(([, longitude]) => longitude)),
+		landAreaSqMi: 0,
+	}));
+}
+
 function toExtraZips(knownZips: Set<string>): Prisma.PlaceCreateManyInput[] {
 	const text = readFileSync(join(DATA_DIR, 'US.txt'), 'utf8');
 	const extra = new Map<string, Prisma.PlaceCreateManyInput>();
@@ -85,10 +133,12 @@ async function main() {
 		'../src/services/teamLocationService'
 	);
 
-	const cities = toCities();
+	const censusCities = toCities();
+	const extraCities = toExtraCities(censusCities);
 	const zips = toZips();
 	const extraZips = toExtraZips(new Set(zips.map((zip) => zip.zip ?? '')));
-	const places = [...cities, ...zips, ...extraZips];
+	const places = [...censusCities, ...extraCities, ...zips, ...extraZips];
+	console.log(`Adding ${extraCities.length} cities the Census file lacks (from GeoNames)`);
 	console.log(`Adding ${extraZips.length} ZIPs the Census file lacks (from GeoNames)`);
 	await prisma.place.deleteMany();
 	for (let start = 0; start < places.length; start += BATCH_SIZE) {
