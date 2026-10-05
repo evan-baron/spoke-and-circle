@@ -11,6 +11,7 @@ import {
 	racingDiscipline,
 	segmentation,
 } from '../enums';
+import { stripInstagramHandle } from '../instagram';
 
 function nonEmpty<T>(items: T[] | null | undefined): T[] | undefined {
 	return items && items.length > 0 ? items : undefined;
@@ -260,7 +261,7 @@ export function toTeamFormValues(row: TeamRow): TeamFormValues {
 		virtualPlatform: row.virtualPlatforms,
 		homeBase: row.homeBase ?? '',
 		website: row.website ?? '',
-		instagram: row.instagram ?? '',
+		instagram: stripInstagramHandle(row.instagram ?? ''),
 		instagramLink: row.instagramLink ?? '',
 		facebook: row.facebook ?? '',
 		facebookLink: row.facebookLink ?? '',

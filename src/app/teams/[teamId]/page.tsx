@@ -22,6 +22,7 @@ import {
 	formatVerification,
 	formatYesNo,
 } from '@/lib/format';
+import { formatInstagramHandle } from '@/lib/instagram';
 import { jsonLdScript } from '@/lib/jsonLd';
 import { getSiteUrl, OG_IMAGE_PATH, SITE_NAME } from '@/lib/siteConfig';
 import { toneForPace, toneForVerified } from '@/lib/tone';
@@ -312,9 +313,9 @@ export default async function TeamPage({
 														href={team.social.instagramLink}
 														className={styles.website}
 													>
-														{team.social.instagram}
+														{formatInstagramHandle(team.social.instagram)}
 													</a>
-												:	team.social.instagram}
+												:	formatInstagramHandle(team.social.instagram)}
 											</dd>
 										)}
 										{team.social.facebook && (

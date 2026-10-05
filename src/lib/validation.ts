@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import * as enums from '@/lib/enums';
+import { stripInstagramHandle } from '@/lib/instagram';
 import mathQuestions from '@/lib/data/mathQuestions';
 
 const clubTypeSchema = z.enum(enums.clubType.labels);
@@ -160,7 +161,11 @@ const teamBaseSchema = z.object({
 		.url({ protocol: /^https?$/, message: 'Invalid website URL' })
 		.max(300, 'Website must be less than 300 characters')
 		.optional(),
-	instagram: z.string().trim().max(100).optional(),
+	instagram: z
+		.string()
+		.transform(stripInstagramHandle)
+		.pipe(z.string().max(100))
+		.optional(),
 	instagramLink: z
 		.url({ protocol: /^https?$/, message: 'Invalid Instagram URL' })
 		.max(300, 'Instagram link must be less than 300 characters')

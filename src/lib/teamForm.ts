@@ -1,4 +1,5 @@
 import type { EventType } from './enums';
+import { stripInstagramHandle } from './instagram';
 
 const PERSONA_LABELS: Record<string, string> = {
 	womenOnly: 'Women Only',
@@ -100,7 +101,7 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		virtualPlatforms: virtualPlatforms.length > 0 ? virtualPlatforms : undefined,
 		homeBase: text('homeBase'),
 		website: text('website'),
-		instagram: text('instagram'),
+		instagram: stripInstagramHandle(text('instagram') ?? '') || undefined,
 		instagramLink: text('instagramLink'),
 		facebook: text('facebook'),
 		facebookLink: text('facebookLink'),
