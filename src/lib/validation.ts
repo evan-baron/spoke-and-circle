@@ -247,7 +247,7 @@ const teamBaseSchema = z.object({
 	skillLevels: z
 		.array(skillLevelSchema)
 		.min(1, 'Choose at least one skill level')
-		.max(4),
+		.max(enums.skillLevel.labels.length),
 	instructional: z.boolean().optional(),
 	duesRequired: z.boolean().optional(),
 	duesAmount: z
