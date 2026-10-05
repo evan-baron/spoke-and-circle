@@ -117,6 +117,14 @@ export const contactAPI = {
 		}),
 };
 
+export const feedbackAPI = {
+	send: (payload: unknown) =>
+		apiCall<{ success: boolean }>('/api/feedback', {
+			method: 'POST',
+			body: JSON.stringify(payload),
+		}),
+};
+
 export const locationAPI = {
 	search: (
 		query: string,

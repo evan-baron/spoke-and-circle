@@ -9,6 +9,7 @@ export function Footer() {
 					&copy; {new Date().getFullYear()} Spoke &amp; Circle &middot;{' '}
 					<Link href='/about'>About</Link> &middot;{' '}
 					<Link href='/contact'>Contact us</Link> &middot;{' '}
+					<Link href='/feedback'>Submit feedback</Link> &middot;{' '}
 					<Link href='/privacy'>Privacy Policy</Link> &middot;{' '}
 					<Link href='/terms'>Terms of Service</Link>
 				</p>
