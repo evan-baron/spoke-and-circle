@@ -152,10 +152,15 @@ const DashboardView = ({ teams }: DashboardViewProps) => {
 						(submitted ?
 							<div className={styles.confirmationCard}>
 								<p className={styles.confirmationMark}>&#10003;</p>
-								<h2>{published ? 'Team published' : 'Submission received'}</h2>
+								<h2>
+									{published ?
+										submittedRide ? 'Group ride published'
+										:	'Team published'
+									:	'Submission received'}
+								</h2>
 								<p>
 									{published ?
-										'Your team is live in the directory now. Admin submissions skip the review step.'
+										`Your ${submittedRide ? 'group ride' : 'team'} is live in the directory now. Admin submissions skip the review step.`
 									:	'An admin will review this submission before it appears in search results. They may follow up with you if they have any questions.'
 									}
 								</p>
@@ -174,7 +179,7 @@ const DashboardView = ({ teams }: DashboardViewProps) => {
 											href={`/teams/${publishedTeamId}`}
 											className={styles.buttonOutline}
 										>
-											View team
+											{submittedRide ? 'View group ride' : 'View team'}
 										</Link>
 									)}
 									<button
