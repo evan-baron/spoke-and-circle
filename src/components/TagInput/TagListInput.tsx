@@ -8,6 +8,7 @@ import {
 	normalizeTag,
 	TAG_OPTIONS,
 } from '@/lib/tagOptions';
+import { PillRemoveIcon } from '@/components/LocationInput/PillRemoveIcon';
 import styles from '@/components/LocationInput/locationInput.module.scss';
 
 const MAX_SUGGESTIONS = 8;
@@ -182,7 +183,7 @@ export function TagListInput({
 								aria-label={`Remove ${tag}`}
 								onClick={() => removeTag(tag)}
 							>
-								&times;
+								<PillRemoveIcon />
 							</button>
 							<input type='hidden' name={name} value={tag} />
 						</li>

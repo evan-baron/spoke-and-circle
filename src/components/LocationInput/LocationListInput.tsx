@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import type { LocationOption } from '@/lib/types';
 import { LocationInput } from './LocationInput';
+import { PillRemoveIcon } from './PillRemoveIcon';
 import styles from './locationInput.module.scss';
 
 const MAX_LOCATIONS = 10;
@@ -56,7 +57,7 @@ export function LocationListInput({
 								aria-label={`Remove ${location.label}`}
 								onClick={() => removeLocation(location.label)}
 							>
-								&times;
+								<PillRemoveIcon />
 							</button>
 							<input type='hidden' name={name} value={location.label} />
 						</li>
