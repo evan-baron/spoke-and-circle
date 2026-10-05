@@ -12,6 +12,7 @@ export function Footer() {
 					<Link href='/privacy'>Privacy Policy</Link> &middot;{' '}
 					<Link href='/terms'>Terms of Service</Link>
 				</p>
+				<p className={styles.credit}>Built by cyclists, for cyclists.</p>
 				<p className={styles.credit}>
 					Location data from the US Census Bureau and{' '}
 					<a href='https://www.geonames.org' rel='noopener noreferrer'>

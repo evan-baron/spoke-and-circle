@@ -235,6 +235,7 @@ enum SkillLevel {
   Intermediate
   Advanced
   Expert
+  Elite
 }
 
 enum MtbDiscipline {
