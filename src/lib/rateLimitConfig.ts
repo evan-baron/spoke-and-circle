@@ -11,6 +11,7 @@ export type RateLimitBucket =
 	| 'email-contact-global'
 	| 'contact-form'
 	| 'contact-sender'
+	| 'claims-write'
 	| 'feedback-form'
 	| 'feedback-sender';
 
@@ -61,6 +62,10 @@ export const RATE_LIMIT_CONFIG: Record<RateLimitBucket, BucketConfig> = {
 	'contact-sender': {
 		windowSeconds: 86400,
 		maxRequests: { anonymous: 5, user: 5, admin: 5 },
+	},
+	'claims-write': {
+		windowSeconds: 3600,
+		maxRequests: { anonymous: 0, user: 5, admin: 20 },
 	},
 	'feedback-form': {
 		windowSeconds: 3600,

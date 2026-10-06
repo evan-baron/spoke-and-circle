@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { BackButton } from '@/components/BackButton/BackButton';
 import { Badge } from '@/components/Badge/Badge';
+import { ClaimTeamButton } from '@/components/ClaimTeamButton/ClaimTeamButton';
 import { ContactModal } from '@/components/ContactModal/ContactModal';
 import DeleteTeamButton from '@/components/DeleteTeamButton/DeleteTeamButton';
 import { MailIcon, PhoneIcon } from '@/components/ContactIcons/ContactIcons';
@@ -27,6 +28,7 @@ import { jsonLdScript } from '@/lib/jsonLd';
 import { getSiteUrl, OG_IMAGE_PATH, SITE_NAME } from '@/lib/siteConfig';
 import { toneForPace, toneForVerified } from '@/lib/tone';
 import { getCurrentUser } from '@/services/currentUserService';
+import { getClaimState } from '@/services/teamClaimService';
 import {
 	getApprovedGroupRides,
 	getApprovedTeamById,
@@ -107,6 +109,12 @@ export default async function TeamPage({
 			await isApprovedTeamOwner(team.id, currentUser.id)
 		:	false;
 
+	const claimState =
+		currentUser?.isAdmin || isOwner ?
+			null
+		:	await getClaimState(team.id, currentUser?.id);
+	const canClaim = claimState?.claimable === true;
+
 	const editHref =
 		currentUser?.isAdmin ? `/admin/teams/${team.id}/edit`
 		: isOwner ? `/dashboard/teams/${team.id}/edit`
@@ -148,6 +156,16 @@ export default async function TeamPage({
 			<div className={styles.wrap}>
 				<div className={styles.topRow}>
 					<BackButton />
+					{canClaim && (
+						<div className={styles.topActions}>
+							<ClaimTeamButton
+								teamId={team.id}
+								teamName={team.name}
+								isSignedIn={Boolean(currentUser)}
+								hasPendingClaim={claimState?.hasPendingClaim === true}
+							/>
+						</div>
+					)}
 					{editHref && (
 						<div className={styles.topActions}>
 							{canAddGroupRide && (

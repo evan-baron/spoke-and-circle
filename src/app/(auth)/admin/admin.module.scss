@@ -144,3 +144,102 @@
 		color: var(--color-coral);
 	}
 }
+
+.countBadge {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 1.25rem;
+	height: 1.25rem;
+	padding: 0 0.3rem;
+	margin-left: 0.5rem;
+	border: 1.5px solid currentColor;
+	border-radius: 50%;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	line-height: 1;
+}
+
+.claimList {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.claimCard {
+	@include card;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-xs);
+	padding: var(--space-md);
+}
+
+.claimHeader {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: var(--space-xs);
+
+	time {
+		font-size: 0.8125rem;
+		color: var(--color-ink-soft);
+	}
+}
+
+.claimTeam {
+	font-size: 1.125rem;
+	font-weight: 700;
+	overflow-wrap: anywhere;
+
+	&:hover {
+		color: var(--color-coral);
+	}
+}
+
+.claimMeta {
+	display: flex;
+	flex-direction: column;
+	gap: 0.2rem;
+	margin: 0;
+	font-size: 0.875rem;
+
+	div {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.4rem;
+	}
+
+	dt {
+		font-weight: 700;
+		color: var(--color-ink-soft);
+	}
+
+	dd {
+		margin: 0;
+		overflow-wrap: anywhere;
+	}
+
+	a {
+		text-decoration: underline;
+		text-underline-offset: 2px;
+
+		&:hover {
+			color: var(--color-coral);
+		}
+	}
+}
+
+.claimMessage {
+	padding: var(--space-xs) var(--space-sm);
+	font-size: 0.9375rem;
+	line-height: 1.55;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+	background: var(--color-paper-raised);
+	border-radius: var(--radius-sm);
+}

@@ -1,3 +1,4 @@
+import type { ClaimReviewInput } from '@/lib/claimValidation';
 import type {
 	AdminTeamsResponse,
 	CreateTeamResponse,
@@ -50,6 +51,11 @@ export const teamAPI = {
 		apiCall<{ success: boolean }>(`/api/teams/${encodeURIComponent(id)}`, {
 			method: 'DELETE',
 		}),
+	claim: (id: string, message: string) =>
+		apiCall<{ success: boolean }>(
+			`/api/teams/${encodeURIComponent(id)}/claims`,
+			{ method: 'POST', body: JSON.stringify({ message }) },
+		),
 	search: (
 		query: string,
 		signal?: AbortSignal,
@@ -84,6 +90,11 @@ export const adminAPI = {
 			method: 'DELETE',
 			body: JSON.stringify({ ids }),
 		}),
+	reviewClaim: (id: string, review: ClaimReviewInput) =>
+		apiCall<{ success: boolean; emailStatus?: string }>(
+			`/api/admin/claims/${encodeURIComponent(id)}`,
+			{ method: 'PUT', body: JSON.stringify(review) },
+		),
 	searchUsers: (query: string, signal?: AbortSignal) =>
 		apiCall<{ success: boolean; users: UserOption[] }>(
 			`/api/admin/users/search?q=${encodeURIComponent(query)}`,
