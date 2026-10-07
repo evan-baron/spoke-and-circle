@@ -118,6 +118,7 @@
 	}
 
 	tbody tr {
+		position: relative;
 		transition: background 0.12s ease;
 
 		&:hover {
@@ -137,7 +138,20 @@
 .rowLink {
 	font-weight: 600;
 
+	&::after {
+		content: '';
+		position: absolute;
+		inset: 0;
+		cursor: auto;
+	}
+
 	&:hover {
 		color: var(--color-coral);
 	}
+}
+
+.rowLinkText {
+	position: relative;
+	z-index: 1;
+	cursor: pointer;
 }

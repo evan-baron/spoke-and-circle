@@ -39,6 +39,7 @@ export function TeamClubDetailsSection({
 					defaultValue={values.duesSchedule}
 					className={styles.input}
 				>
+					<option value=''>No dues</option>
 					{SCHEDULES.map((option) => (
 						<option key={option} value={option}>
 							{option}

@@ -92,7 +92,7 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 						<tr key={team.id}>
 							<td>
 								<Link href={`/teams/${team.id}`} className={styles.rowLink}>
-									{team.name}
+									<span className={styles.rowLinkText}>{team.name}</span>
 								</Link>
 							</td>
 							<td>

@@ -45,7 +45,7 @@ export const DEFAULT_TEAM_FORM_VALUES: TeamFormValues = {
 	competitiveOrCasual: 'Recreational',
 	skillLevels: [],
 	duesAmount: '',
-	duesSchedule: 'Annually',
+	duesSchedule: '',
 	requiredRaces: '',
 	mileageMin: '',
 	mileageFrequency: 'Monthly',

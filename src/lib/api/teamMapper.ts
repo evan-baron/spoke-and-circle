@@ -286,7 +286,7 @@ export function toTeamFormValues(row: TeamRow): TeamFormValues {
 		competitiveOrCasual: row.competitiveOrCasual,
 		skillLevels: row.skillLevels,
 		duesAmount: row.duesAmount ?? '',
-		duesSchedule: row.duesSchedule ?? 'Annually',
+		duesSchedule: row.duesSchedule ?? '',
 		requiredRaces: row.requiredRaces?.toString() ?? '',
 		mileageMin: row.mileageMin?.toString() ?? '',
 		mileageFrequency: row.mileageFrequency ?? 'Monthly',
