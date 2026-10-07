@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { bikeType, clubType, racingDiscipline, skillLevel } from './enums';
-import { DEFAULT_RADIUS_MILES, parseSearchParams } from './searchParams';
+import {
+	DEFAULT_RADIUS_MILES,
+	fromQueryString,
+	parseSearchParams,
+	toQueryString,
+} from './searchParams';
 
 describe('parseSearchParams', () => {
 	it('returns sensible defaults for an empty query', () => {
@@ -93,5 +98,19 @@ describe('parseSearchParams', () => {
 		expect(params.womensOnly).toBe(true);
 		expect(params.youthOnly).toBe(false);
 		expect(params.acceptingNewRiders).toBe(true);
+	});
+});
+
+describe('query string helpers', () => {
+	it('round-trips single and repeated values', () => {
+		const raw = { q: 'road bikes', bikeType: ['Road', 'Gravel'], page: '2' };
+		const query = toQueryString(raw);
+		expect(fromQueryString(new URLSearchParams(query))).toEqual(raw);
+	});
+
+	it('skips undefined values and returns an empty string for no params', () => {
+		expect(toQueryString({ q: undefined })).toBe('');
+		expect(toQueryString({})).toBe('');
+		expect(fromQueryString(new URLSearchParams(''))).toEqual({});
 	});
 });

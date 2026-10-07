@@ -19,12 +19,12 @@ export async function generateMetadata({
 		params.racingDisciplines.length > 0 ||
 		Boolean(
 			params.type ||
-				params.discipline ||
-				params.skillLevel ||
-				params.competitiveOrCasual ||
-				params.womensOnly ||
-				params.youthOnly ||
-				params.acceptingNewRiders,
+			params.discipline ||
+			params.skillLevel ||
+			params.competitiveOrCasual ||
+			params.womensOnly ||
+			params.youthOnly ||
+			params.acceptingNewRiders,
 		) ||
 		params.page > 1;
 
@@ -58,7 +58,7 @@ export default async function SearchPage({
 		<div className={styles.page}>
 			<SearchLocationTracker />
 			<div className={styles.wrap}>
-				<h1>Search results</h1>
+				<h1>Browse Cycling Teams & Group Rides</h1>
 
 				<FilterBar
 					defaultQ={params.q}

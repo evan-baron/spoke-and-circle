@@ -1,0 +1,60 @@
+@use '@/styles/mixins' as *;
+
+.wrap {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2xs);
+}
+
+.buttons {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--space-xs);
+}
+
+.label {
+	font-size: 0.8125rem;
+	font-weight: 600;
+}
+
+.textarea {
+	width: 100%;
+	padding: 0.6rem 0.8rem;
+	font: inherit;
+	font-size: 0.9375rem;
+	color: var(--color-ink);
+	background: var(--color-paper);
+	border: 1.5px solid var(--color-line);
+	border-radius: var(--radius-sm);
+	resize: vertical;
+
+	&:focus-visible {
+		outline: 2px solid var(--color-coral);
+		outline-offset: 1px;
+	}
+}
+
+.buttonSolid {
+	@include button-solid;
+	padding: 0.4rem 0.95rem;
+	font-size: 0.8125rem;
+}
+
+.buttonDanger {
+	@include button-solid;
+	padding: 0.4rem 0.95rem;
+	font-size: 0.8125rem;
+	background: var(--color-coral);
+}
+
+.buttonOutline {
+	@include button-outline;
+	padding: 0.4rem 0.95rem;
+	font-size: 0.8125rem;
+}
+
+.error {
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var(--color-coral);
+}

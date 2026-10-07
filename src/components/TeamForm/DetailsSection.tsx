@@ -274,6 +274,9 @@ export function DetailsSection({
 
 				<div className={`${styles.checkboxGroup} ${styles.fieldFull}`}>
 					<span className={styles.fieldLabel}>Persona restrictions</span>
+					<span className={styles.fieldHint}>
+						Leave all unchecked if there are no restrictions
+					</span>
 					<div className={styles.checkboxRow}>
 						{PERSONA_OPTIONS.map((option) => (
 							<Checkbox

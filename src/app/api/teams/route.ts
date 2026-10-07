@@ -151,4 +151,4 @@ export const POST = withPublicRateLimit('teams-write', async (request) => {
 		console.error('Error creating team:', error);
 		return json500('Failed to submit team');
 	}
-});
+}, { adminRateLimit: true });

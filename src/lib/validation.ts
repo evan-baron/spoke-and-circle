@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import * as enums from '@/lib/enums';
+import { stripInstagramHandle } from '@/lib/instagram';
 import mathQuestions from '@/lib/data/mathQuestions';
 import { MAX_TEAM_MEDIA, MEDIA_PUBLIC_ID_PATTERN } from '@/lib/media';
 
@@ -161,7 +162,11 @@ const teamBaseSchema = z.object({
 		.url({ protocol: /^https?$/, message: 'Invalid website URL' })
 		.max(300, 'Website must be less than 300 characters')
 		.optional(),
-	instagram: z.string().trim().max(100).optional(),
+	instagram: z
+		.string()
+		.transform(stripInstagramHandle)
+		.pipe(z.string().max(100))
+		.optional(),
 	instagramLink: z
 		.url({ protocol: /^https?$/, message: 'Invalid Instagram URL' })
 		.max(300, 'Instagram link must be less than 300 characters')
@@ -214,6 +219,15 @@ const teamBaseSchema = z.object({
 		.trim()
 		.max(500, 'Schedule notes must be less than 500 characters')
 		.optional(),
+	additionalRideDetails: z
+		.string()
+		.transform((value) => value.replace(/\r\n?/g, '\n').trim())
+		.pipe(
+			z
+				.string()
+				.max(1000, 'Additional ride details must be 1,000 characters or fewer'),
+		)
+		.optional(),
 	pace: paceSchema.optional(),
 	segmentation: segmentationSchema.optional(),
 	typicalDistanceMiles: z
@@ -234,7 +248,7 @@ const teamBaseSchema = z.object({
 	skillLevels: z
 		.array(skillLevelSchema)
 		.min(1, 'Choose at least one skill level')
-		.max(4),
+		.max(enums.skillLevel.labels.length),
 	instructional: z.boolean().optional(),
 	duesRequired: z.boolean().optional(),
 	duesAmount: z
@@ -313,6 +327,13 @@ export const rejectTeamSchema = z.object({
 		.trim()
 		.max(1000, 'Rejection reason must be less than 1000 characters')
 		.optional(),
+});
+
+export const deleteTeamsSchema = z.object({
+	ids: z
+		.array(z.string().trim().min(1))
+		.min(1, 'Choose at least one team')
+		.max(100, 'Delete up to 100 teams at a time'),
 });
 
 const personNameSchema = z

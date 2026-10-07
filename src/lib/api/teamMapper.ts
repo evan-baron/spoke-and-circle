@@ -21,6 +21,7 @@ import {
 	racingDiscipline,
 	segmentation,
 } from '../enums';
+import { stripInstagramHandle } from '../instagram';
 
 export type TeamRowWithMedia = TeamRow & { media?: TeamMediaRow[] };
 
@@ -142,6 +143,7 @@ export function toTeam(row: TeamRowWithMedia): Team {
 		rideDays: (row.rideDays as RideDay[] | null) ?? undefined,
 		rides: deriveRides(row),
 		scheduleNotes: deriveScheduleNotes(row),
+		additionalRideDetails: row.additionalRideDetails ?? undefined,
 		pace: row.pace ?? 'Relaxed',
 		segmentation: row.segmentation ? segmentation.fromDb[row.segmentation] : 'N/A',
 		typicalDistanceMiles: row.typicalDistanceMiles ?? 0,
@@ -219,6 +221,8 @@ export function toTeamCreateInput(
 		howToJoin: input.howToJoin,
 		rides: (input.rides ?? []) as unknown as Prisma.InputJsonValue,
 		scheduleNotes: input.scheduleNotes,
+		additionalRideDetails:
+			input.type === 'Group Ride' ? input.additionalRideDetails : undefined,
 		pace: input.pace,
 		segmentation: input.segmentation ? segmentation.toDb[input.segmentation] : undefined,
 		typicalDistanceMiles: input.typicalDistanceMiles,
@@ -281,7 +285,7 @@ export function toTeamFormValues(row: TeamRowWithMedia): TeamFormValues {
 		virtualPlatform: row.virtualPlatforms,
 		homeBase: row.homeBase ?? '',
 		website: row.website ?? '',
-		instagram: row.instagram ?? '',
+		instagram: stripInstagramHandle(row.instagram ?? ''),
 		instagramLink: row.instagramLink ?? '',
 		facebook: row.facebook ?? '',
 		facebookLink: row.facebookLink ?? '',
@@ -298,6 +302,7 @@ export function toTeamFormValues(row: TeamRowWithMedia): TeamFormValues {
 		waitlist: row.waitlist,
 		rides: deriveRides(row),
 		scheduleNotes: deriveScheduleNotes(row) ?? '',
+		additionalRideDetails: row.additionalRideDetails ?? '',
 		pace: row.pace ?? 'Steady',
 		typicalDistanceMiles: row.typicalDistanceMiles?.toString() ?? '',
 		typicalElevationGainFt: row.typicalElevationGainFt?.toString() ?? '',
@@ -305,7 +310,7 @@ export function toTeamFormValues(row: TeamRowWithMedia): TeamFormValues {
 		competitiveOrCasual: row.competitiveOrCasual,
 		skillLevels: row.skillLevels,
 		duesAmount: row.duesAmount ?? '',
-		duesSchedule: row.duesSchedule ?? 'Annually',
+		duesSchedule: row.duesSchedule ?? '',
 		requiredRaces: row.requiredRaces?.toString() ?? '',
 		mileageMin: row.mileageMin?.toString() ?? '',
 		mileageFrequency: row.mileageFrequency ?? 'Monthly',
@@ -341,6 +346,7 @@ export function toGroupRideFormValues(row: TeamRow): TeamFormValues {
 		founded: '',
 		rides: [],
 		scheduleNotes: '',
+		additionalRideDetails: '',
 		pace: 'Relaxed',
 		typicalDistanceMiles: '',
 		typicalElevationGainFt: '',
@@ -392,6 +398,8 @@ export function toApprovedTeamUpdate(
 		rideDays: Prisma.JsonNull,
 		rides: (input.rides ?? []) as unknown as Prisma.InputJsonValue,
 		scheduleNotes: input.scheduleNotes ?? null,
+		additionalRideDetails:
+			input.type === 'Group Ride' ? (input.additionalRideDetails ?? null) : null,
 		pace: input.pace ?? null,
 		typicalDistanceMiles: input.typicalDistanceMiles ?? null,
 		typicalElevationGainFt: input.typicalElevationGainFt ?? null,

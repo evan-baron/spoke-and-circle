@@ -92,16 +92,20 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 						<tr key={team.id}>
 							<td>
 								<Link href={`/teams/${team.id}`} className={styles.rowLink}>
-									{team.name}
+									<span className={styles.rowLinkText}>{team.name}</span>
 								</Link>
 							</td>
 							<td>
 								<Badge tone='ink'>{team.type}</Badge>
 							</td>
 							<td>
-								<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
-									{team.competitiveOrCasual}
-								</Badge>
+								{team.type !== 'Group Ride' && (
+									<Badge
+										tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}
+									>
+										{team.competitiveOrCasual}
+									</Badge>
+								)}
 							</td>
 							<td>
 								{getTeamLocations(team).map((location, index, all) => (

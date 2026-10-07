@@ -11,7 +11,10 @@ export type RateLimitBucket =
 	| 'email-global'
 	| 'email-contact-global'
 	| 'contact-form'
-	| 'contact-sender';
+	| 'contact-sender'
+	| 'claims-write'
+	| 'feedback-form'
+	| 'feedback-sender';
 
 export type RateLimitActor = 'anonymous' | 'user' | 'admin';
 
@@ -27,7 +30,7 @@ export const RATE_LIMIT_CONFIG: Record<RateLimitBucket, BucketConfig> = {
 	},
 	'teams-write': {
 		windowSeconds: 3600,
-		maxRequests: { anonymous: 3, user: 10, admin: 60 },
+		maxRequests: { anonymous: 3, user: 10, admin: 100 },
 	},
 	'profile-write': {
 		windowSeconds: 3600,
@@ -62,6 +65,18 @@ export const RATE_LIMIT_CONFIG: Record<RateLimitBucket, BucketConfig> = {
 		maxRequests: { anonymous: 3, user: 5, admin: 10 },
 	},
 	'contact-sender': {
+		windowSeconds: 86400,
+		maxRequests: { anonymous: 5, user: 5, admin: 5 },
+	},
+	'claims-write': {
+		windowSeconds: 3600,
+		maxRequests: { anonymous: 0, user: 5, admin: 20 },
+	},
+	'feedback-form': {
+		windowSeconds: 3600,
+		maxRequests: { anonymous: 3, user: 5, admin: 10 },
+	},
+	'feedback-sender': {
 		windowSeconds: 86400,
 		maxRequests: { anonymous: 5, user: 5, admin: 5 },
 	},

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { BackButton } from '@/components/BackButton/BackButton';
 import { Badge } from '@/components/Badge/Badge';
+import { ClaimTeamButton } from '@/components/ClaimTeamButton/ClaimTeamButton';
 import { ContactModal } from '@/components/ContactModal/ContactModal';
 import DeleteTeamButton from '@/components/DeleteTeamButton/DeleteTeamButton';
 import { MailIcon, PhoneIcon } from '@/components/ContactIcons/ContactIcons';
@@ -22,10 +23,12 @@ import {
 	formatVerification,
 	formatYesNo,
 } from '@/lib/format';
+import { formatInstagramHandle } from '@/lib/instagram';
 import { jsonLdScript } from '@/lib/jsonLd';
 import { getSiteUrl, OG_IMAGE_PATH, SITE_NAME } from '@/lib/siteConfig';
 import { toneForPace, toneForVerified } from '@/lib/tone';
 import { getCurrentUser } from '@/services/currentUserService';
+import { getClaimState } from '@/services/teamClaimService';
 import {
 	getApprovedGroupRides,
 	getApprovedTeamById,
@@ -107,6 +110,12 @@ export default async function TeamPage({
 			await isApprovedTeamOwner(team.id, currentUser.id)
 		:	false;
 
+	const claimState =
+		currentUser?.isAdmin || isOwner ?
+			null
+		:	await getClaimState(team.id, currentUser?.id);
+	const canClaim = claimState?.claimable === true;
+
 	const editHref =
 		currentUser?.isAdmin ? `/admin/teams/${team.id}/edit`
 		: isOwner ? `/dashboard/teams/${team.id}/edit`
@@ -148,6 +157,16 @@ export default async function TeamPage({
 			<div className={styles.wrap}>
 				<div className={styles.topRow}>
 					<BackButton />
+					{canClaim && (
+						<div className={styles.topActions}>
+							<ClaimTeamButton
+								teamId={team.id}
+								teamName={team.name}
+								isSignedIn={Boolean(currentUser)}
+								hasPendingClaim={claimState?.hasPendingClaim === true}
+							/>
+						</div>
+					)}
 					{editHref && (
 						<div className={styles.topActions}>
 							{canAddGroupRide && (
@@ -177,8 +196,14 @@ export default async function TeamPage({
 				<header className={styles.header}>
 					<div className={styles.badgeRow}>
 						<Badge tone='ink'>{team.type}</Badge>
-						<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
-						<Badge tone='gold'>{bikeTypesLabel(team.bikeTypes)}</Badge>
+						{team.type === 'Group Ride' && (
+							<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
+						)}
+						{team.bikeTypes.map((bikeType) => (
+							<Badge key={bikeType} tone='gold'>
+								{bikeType}
+							</Badge>
+						))}
 						{team.discipline && <Badge tone='gold'>{team.discipline}</Badge>}
 						<Badge tone={toneForVerified(team.verified)}>
 							{formatVerification(team.verified, team.lastActiveYear)}
@@ -307,9 +332,9 @@ export default async function TeamPage({
 														href={team.social.instagramLink}
 														className={styles.website}
 													>
-														{team.social.instagram}
+														{formatInstagramHandle(team.social.instagram)}
 													</a>
-												:	team.social.instagram}
+												:	formatInstagramHandle(team.social.instagram)}
 											</dd>
 										)}
 										{team.social.facebook && (
@@ -431,8 +456,24 @@ export default async function TeamPage({
 							</DetailSection>
 						)}
 
+						{team.type === 'Group Ride' && team.additionalRideDetails && (
+							<DetailSection title='Additional ride details'>
+								<div className={styles.longText}>
+									{team.additionalRideDetails
+										.split(/\n{2,}/)
+										.map((paragraph, index) => (
+											<p key={index}>{paragraph}</p>
+										))}
+								</div>
+							</DetailSection>
+						)}
+
 						{team.type !== 'Group Ride' && (
-							<DetailSection title='Team structure'>
+							<DetailSection
+								title={
+									team.type === 'Team' ? 'Team structure' : 'Group structure'
+								}
+							>
 								<DetailRow
 									label='Competitive or recreational'
 									value={team.competitiveOrCasual}

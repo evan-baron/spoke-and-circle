@@ -14,7 +14,11 @@ import {
 	skillLevel,
 	virtualPlatform,
 } from '@/lib/enums';
-import type { SearchParams, Team, TeamOption } from '@/lib/types';
+import type {
+	SearchParams,
+	TeamListPage,
+	TeamOption,
+} from '@/lib/types';
 import {
 	resolveSearchLocation,
 	type SearchLocation,
@@ -47,12 +51,7 @@ export async function searchAffiliatableTeams(
 	}));
 }
 
-export interface TeamSearchPage {
-	teams: Team[];
-	total: number;
-	page: number;
-	pageCount: number;
-}
+export type TeamSearchPage = TeamListPage;
 
 type PointLocation = Extract<SearchLocation, { kind: 'point' }>;
 
@@ -84,7 +83,10 @@ function locationClause(
 }
 
 const normalizeTerm = (value: string) =>
-	value.toLowerCase().replace(/[^a-z0-9]/g, '');
+	value
+		.toLowerCase()
+		.replace(/[^a-z0-9]/g, '')
+		.replace(/s$/, '');
 
 function enumTerms<Label extends string, Db extends string>(
 	registry: { toDb: Record<Label, Db> },
@@ -126,6 +128,7 @@ const ENUM_TERM_CLAUSES: [string, Prisma.TeamWhereInput][] = [
 		competitiveOrCasual: value,
 	})),
 	['Instructional', { instructional: true }],
+	['Youth', { type: 'YouthProgram' }],
 ];
 
 

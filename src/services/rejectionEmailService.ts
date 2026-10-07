@@ -20,6 +20,18 @@ interface RejectionEmail {
 	sentByAdminId: number;
 }
 
+export function renderReasonBlock(reason?: string): string {
+	return reason ?
+			`<p style="${paragraphStyle}font-weight:700;margin-bottom:8px;">Note from our reviewer</p>
+<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
+<tr>
+<td valign="top" style="padding:0 10px 0 4px;font-family:${FONT_STACK};font-size:18px;line-height:1.6;color:${EMAIL_COLORS.coral};">&bull;</td>
+<td valign="top" style="font-family:${FONT_STACK};font-size:16px;line-height:1.6;color:${EMAIL_COLORS.ink};">${escapeHtml(reason).replace(/\n/g, '<br>')}</td>
+</tr>
+</table>`
+		:	'';
+}
+
 export function buildRejectionEmailHtml({
 	greeting,
 	team,
@@ -29,16 +41,7 @@ export function buildRejectionEmailHtml({
 	team: string;
 	reason?: string;
 }): string {
-	const reasonBlock =
-		reason ?
-			`<p style="${paragraphStyle}font-weight:700;margin-bottom:8px;">Note from our reviewer</p>
-<table role="presentation" cellpadding="0" cellspacing="0" style="margin:0 0 20px;">
-<tr>
-<td valign="top" style="padding:0 10px 0 4px;font-family:${FONT_STACK};font-size:18px;line-height:1.6;color:${EMAIL_COLORS.coral};">&bull;</td>
-<td valign="top" style="font-family:${FONT_STACK};font-size:16px;line-height:1.6;color:${EMAIL_COLORS.ink};">${escapeHtml(reason).replace(/\n/g, '<br>')}</td>
-</tr>
-</table>`
-		:	'';
+	const reasonBlock = renderReasonBlock(reason);
 
 	const bodyHtml = [
 		renderParagraph(escapeHtml(greeting)),

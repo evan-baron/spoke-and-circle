@@ -113,6 +113,7 @@ export const skillLevel = defineEnum<DbSkillLevel>()({
 	Intermediate: 'Intermediate',
 	Advanced: 'Advanced',
 	Expert: 'Expert',
+	Elite: 'Elite',
 });
 
 export const mtbDiscipline = defineEnum<DbMtbDiscipline>()({

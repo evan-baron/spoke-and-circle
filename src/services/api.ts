@@ -1,4 +1,6 @@
+import type { ClaimReviewInput } from '@/lib/claimValidation';
 import type {
+	AdminTeamsResponse,
 	CreateTeamResponse,
 	LocationsResponse,
 	TeamSearchResponse,
@@ -49,6 +51,11 @@ export const teamAPI = {
 		apiCall<{ success: boolean }>(`/api/teams/${encodeURIComponent(id)}`, {
 			method: 'DELETE',
 		}),
+	claim: (id: string, message: string) =>
+		apiCall<{ success: boolean }>(
+			`/api/teams/${encodeURIComponent(id)}/claims`,
+			{ method: 'POST', body: JSON.stringify({ message }) },
+		),
 	search: (
 		query: string,
 		signal?: AbortSignal,
@@ -72,6 +79,21 @@ export const adminAPI = {
 		apiCall<{ success: boolean; emailStatus: string }>(
 			`/api/admin/teams/${encodeURIComponent(id)}`,
 			{ method: 'DELETE', body: JSON.stringify({ reason }) },
+		),
+	listTeams: (queryString: string) =>
+		apiCall<AdminTeamsResponse>(
+			`/api/admin/teams${queryString ? `?${queryString}` : ''}`,
+			{ method: 'GET' },
+		),
+	deleteTeams: (ids: string[]) =>
+		apiCall<{ success: boolean; deleted: number }>('/api/admin/teams', {
+			method: 'DELETE',
+			body: JSON.stringify({ ids }),
+		}),
+	reviewClaim: (id: string, review: ClaimReviewInput) =>
+		apiCall<{ success: boolean; emailStatus?: string }>(
+			`/api/admin/claims/${encodeURIComponent(id)}`,
+			{ method: 'PUT', body: JSON.stringify(review) },
 		),
 	searchUsers: (query: string, signal?: AbortSignal) =>
 		apiCall<{ success: boolean; users: UserOption[] }>(
@@ -101,6 +123,14 @@ export const profileAPI = {
 export const contactAPI = {
 	send: (payload: unknown) =>
 		apiCall<{ success: boolean }>('/api/contact', {
+			method: 'POST',
+			body: JSON.stringify(payload),
+		}),
+};
+
+export const feedbackAPI = {
+	send: (payload: unknown) =>
+		apiCall<{ success: boolean }>('/api/feedback', {
 			method: 'POST',
 			body: JSON.stringify(payload),
 		}),

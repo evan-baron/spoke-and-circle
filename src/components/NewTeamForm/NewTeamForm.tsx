@@ -20,6 +20,7 @@ export function NewTeamForm({
 	const [submitted, setSubmitted] = useState(false);
 	const [published, setPublished] = useState(false);
 	const [publishedTeamId, setPublishedTeamId] = useState<string | null>(null);
+	const [submittedRide, setSubmittedRide] = useState(false);
 	const invalidatePendingCount = useInvalidatePendingTeamCount();
 
 	const parentId = initialValues?.affiliatedId;
@@ -31,10 +32,15 @@ export function NewTeamForm({
 				<div className={`${styles.wrap} ${styles.confirmation}`}>
 					<div className={styles.confirmationCard}>
 						<p className={styles.confirmationMark}>&#10003;</p>
-						<h1>{published ? 'Team published' : 'Submission received'}</h1>
+						<h1>
+							{published ?
+								submittedRide ? 'Group ride published'
+								:	'Team published'
+							:	'Submission received'}
+						</h1>
 						<p>
 							{published ?
-								'Your team is live in the directory now. Admin submissions skip the review step.'
+								`Your ${submittedRide ? 'group ride' : 'team'} is live in the directory now. Admin submissions skip the review step.`
 							:	'An admin will review this submission before it appears in search results. They may follow up with you if they have any questions.'}
 						</p>
 						<div className={styles.confirmationActions}>
@@ -49,7 +55,7 @@ export function NewTeamForm({
 									href={`/teams/${publishedTeamId}`}
 									className={styles.buttonOutline}
 								>
-									View team
+									{submittedRide ? 'View group ride' : 'View team'}
 								</Link>
 							)}
 							<button
@@ -100,6 +106,7 @@ export function NewTeamForm({
 						if (!result.published) await invalidatePendingCount();
 						setPublished(result.published);
 						setPublishedTeamId(result.published ? result.team.id : null);
+						setSubmittedRide(payload.type === 'Group Ride');
 						setSubmitted(true);
 					}}
 				/>

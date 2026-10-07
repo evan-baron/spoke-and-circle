@@ -114,7 +114,7 @@ export function MobileUsersTable({ users }: { users: AdminUserRow[] }) {
 									<dt>Registered</dt>
 									<dd>{formatSubmittedDate(selected.createdAt)}</dd>
 								</div>
-								<div className={styles.detailRow}>
+								<div className={`${styles.detailRow} ${styles.groupsRow}`}>
 									<dt>Group(s)</dt>
 									<dd>
 										<GroupList teams={selected.teams} />

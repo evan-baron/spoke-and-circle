@@ -183,6 +183,12 @@
 	color: var(--color-ink-soft);
 }
 
+.dialogError {
+	font-size: 0.875rem;
+	font-weight: 600;
+	color: var(--color-coral);
+}
+
 .dialogActions {
 	display: flex;
 	flex-wrap: wrap;

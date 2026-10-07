@@ -19,6 +19,7 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   teams     Team[]
+  claims    TeamClaim[]
 }
 
 model Team {
@@ -78,6 +79,7 @@ model Team {
   rideDays               Json?
   rides                  Json?
   scheduleNotes          String?
+  additionalRideDetails  String?
   seasons                String[]
   pace                   Pace?
   segmentation           Segmentation?
@@ -107,7 +109,7 @@ model Team {
   tags String[]
 
   additionalPlaces TeamLocation[]
-  media            TeamMedia[]
+  claims           TeamClaim[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -118,6 +120,22 @@ model Team {
   @@index([location])
   @@index([latitude, longitude])
   @@index([affiliatedId])
+}
+
+model TeamClaim {
+  id         String      @id @default(cuid())
+  team       Team        @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId     String
+  user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId     Int
+  message    String
+  status     ClaimStatus @default(Pending)
+  reviewedAt DateTime?
+  createdAt  DateTime    @default(now())
+
+  @@index([status, createdAt])
+  @@index([teamId, status])
+  @@index([userId])
 }
 
 model TeamLocation {
@@ -172,6 +190,12 @@ model RateLimit {
 
   @@unique([identifier, bucket])
   @@index([windowStart])
+}
+
+enum ClaimStatus {
+  Pending
+  Approved
+  Rejected
 }
 
 enum PlaceKind {
@@ -248,6 +272,7 @@ enum SkillLevel {
   Intermediate
   Advanced
   Expert
+  Elite
 }
 
 enum MtbDiscipline {

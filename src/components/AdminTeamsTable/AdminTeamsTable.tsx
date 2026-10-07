@@ -3,17 +3,19 @@
 import Link from 'next/link';
 import { useEffect, useId, useRef, useState } from 'react';
 import { Badge } from '@/components/Badge/Badge';
+import { Pagination } from '@/components/Pagination/Pagination';
 import tableStyles from '@/components/ResultsTable/resultsTable.module.scss';
-import {
-	formatMemberCount,
-	formatSkillLevelLines,
-} from '@/lib/format';
+import { describeSubmitError } from '@/components/TeamForm/describeSubmitError';
+import { useAdminTeams, useInvalidateAdminTeams } from '@/hooks/useAdminTeams';
+import { formatSkillLevelLines } from '@/lib/format';
+import type { RawSearchParams } from '@/lib/searchParams';
 import {
 	toneForCompetitiveOrCasual,
 	toneForPace,
 	toneForVerified,
 } from '@/lib/tone';
-import type { Team } from '@/lib/types';
+import type { Team, TeamListPage } from '@/lib/types';
+import { adminAPI } from '@/services/api';
 import styles from './adminTeamsTable.module.scss';
 
 function verifiedLabel(verified: boolean, lastActiveYear: number): string {
@@ -22,19 +24,29 @@ function verifiedLabel(verified: boolean, lastActiveYear: number): string {
 }
 
 interface AdminTeamsTableProps {
-	teams: Team[];
-	totalCount: number;
+	queryString: string;
+	initialPage: TeamListPage;
+	initialPageLoadedAt: number;
+	searchParams: RawSearchParams;
 	summarySuffix?: string;
 }
 
 export function AdminTeamsTable({
-	teams,
-	totalCount,
+	queryString,
+	initialPage,
+	initialPageLoadedAt,
+	searchParams,
 	summarySuffix = '',
 }: AdminTeamsTableProps) {
+	const { data } = useAdminTeams(queryString, initialPage, initialPageLoadedAt);
+	const invalidateAdminTeams = useInvalidateAdminTeams();
+	const teams = data.teams;
+	const totalCount = data.total;
 	const [removedIds, setRemovedIds] = useState<string[]>([]);
 	const [selectedIds, setSelectedIds] = useState<string[]>([]);
 	const [pendingDelete, setPendingDelete] = useState<Team[] | null>(null);
+	const [isDeleting, setIsDeleting] = useState(false);
+	const [deleteError, setDeleteError] = useState<string | null>(null);
 	const [verifiedOverrides, setVerifiedOverrides] = useState<
 		Record<string, boolean>
 	>({});
@@ -57,6 +69,10 @@ export function AdminTeamsTable({
 	}, [selectedCount, visible.length]);
 
 	useEffect(() => {
+		setRemovedIds([]);
+	}, [teams]);
+
+	useEffect(() => {
 		const dialog = dialogRef.current;
 		if (!dialog) return;
 		if (pendingDelete && !dialog.open) dialog.showModal();
@@ -77,16 +93,30 @@ export function AdminTeamsTable({
 		setPendingDelete(visible.filter((team) => ids.includes(team.id)));
 	}
 
-	function confirmDelete() {
-		if (!pendingDelete) return;
+	async function confirmDelete() {
+		if (!pendingDelete || isDeleting) return;
 		const ids = pendingDelete.map((team) => team.id);
-		setRemovedIds((prev) => [...prev, ...ids]);
-		setSelectedIds((prev) => prev.filter((id) => !ids.includes(id)));
-		setPendingDelete(null);
+
+		setIsDeleting(true);
+		setDeleteError(null);
+
+		try {
+			await adminAPI.deleteTeams(ids);
+			setRemovedIds((prev) => [...prev, ...ids]);
+			setSelectedIds((prev) => prev.filter((id) => !ids.includes(id)));
+			setPendingDelete(null);
+			void invalidateAdminTeams();
+		} catch (error) {
+			setDeleteError(describeSubmitError(error).join(' '));
+		} finally {
+			setIsDeleting(false);
+		}
 	}
 
 	function cancelDelete() {
+		if (isDeleting) return;
 		setPendingDelete(null);
+		setDeleteError(null);
 	}
 
 	function isVerified(team: Team): boolean {
@@ -186,8 +216,14 @@ export function AdminTeamsTable({
 										<p className={tableStyles.cardLocation}>{team.location}</p>
 										<div className={tableStyles.cardBadges}>
 											{team.type === 'Group Ride' ?
-												<Badge tone={toneForPace(team.pace)}>{team.pace} pace</Badge>
-											:	<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
+												<Badge tone={toneForPace(team.pace)}>
+													{team.pace} pace
+												</Badge>
+											:	<Badge
+													tone={toneForCompetitiveOrCasual(
+														team.competitiveOrCasual,
+													)}
+												>
 													{team.competitiveOrCasual}
 												</Badge>
 											}
@@ -201,9 +237,6 @@ export function AdminTeamsTable({
 													{level}
 												</Badge>
 											))}
-											{/* <span className={tableStyles.cardMeta}>
-												{formatMemberCount(team.memberCount)}
-											</span> */}
 										</div>
 									</Link>
 								</div>
@@ -250,7 +283,6 @@ export function AdminTeamsTable({
 								<th>Cycling Disciplines</th>
 								<th>Skill level</th>
 								<th>Ride pace</th>
-								{/* <th>Members</th> */}
 								<th>Status</th>
 								<th>
 									<span className={styles.srOnly}>Actions</span>
@@ -285,24 +317,29 @@ export function AdminTeamsTable({
 										<Badge tone='ink'>{team.type}</Badge>
 									</td>
 									<td>
-										<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
+										<Badge
+											tone={toneForCompetitiveOrCasual(
+												team.competitiveOrCasual,
+											)}
+										>
 											{team.competitiveOrCasual}
 										</Badge>
 									</td>
 									<td>{team.location}</td>
 									<td>{team.bikeTypes.join(', ')}</td>
 									<td>
-										{formatSkillLevelLines(team.skillLevels).map((level, index, all) => (
-											<span key={level} className={tableStyles.stackedLine}>
-												{level}
-												{index < all.length - 1 && ','}
-											</span>
-										))}
+										{formatSkillLevelLines(team.skillLevels).map(
+											(level, index, all) => (
+												<span key={level} className={tableStyles.stackedLine}>
+													{level}
+													{index < all.length - 1 && ','}
+												</span>
+											),
+										)}
 									</td>
 									<td>
 										<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
 									</td>
-									{/* <td>{team.memberCount}</td> */}
 									<td>
 										<button
 											type='button'
@@ -340,6 +377,9 @@ export function AdminTeamsTable({
 				className={styles.dialog}
 				aria-labelledby={dialogTitleId}
 				onClose={cancelDelete}
+				onCancel={(event) => {
+					if (isDeleting) event.preventDefault();
+				}}
 			>
 				{pendingDelete && (
 					<>
@@ -356,10 +396,16 @@ export function AdminTeamsTable({
 								)}
 							</ul>
 						)}
+						{deleteError && (
+							<p role='alert' className={styles.dialogError}>
+								{deleteError}
+							</p>
+						)}
 						<div className={styles.dialogActions}>
 							<button
 								type='button'
 								className={styles.buttonOutline}
+								disabled={isDeleting}
 								onClick={cancelDelete}
 							>
 								Cancel
@@ -367,14 +413,22 @@ export function AdminTeamsTable({
 							<button
 								type='button'
 								className={styles.buttonDanger}
+								disabled={isDeleting}
 								onClick={confirmDelete}
 							>
-								Delete
+								{isDeleting ? 'Deleting…' : 'Delete'}
 							</button>
 						</div>
 					</>
 				)}
 			</dialog>
+
+			<Pagination
+				basePath='/admin/all'
+				searchParams={searchParams}
+				page={data.page}
+				pageCount={data.pageCount}
+			/>
 		</>
 	);
 }

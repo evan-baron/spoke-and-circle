@@ -24,6 +24,26 @@ const RACING_OPTIONS = competitiveOrCasual.labels;
 
 export type RawSearchParams = Record<string, string | string[] | undefined>;
 
+export function toQueryString(raw: RawSearchParams): string {
+	const query = new URLSearchParams();
+	for (const [key, value] of Object.entries(raw)) {
+		if (value === undefined) continue;
+		for (const item of Array.isArray(value) ? value : [value]) {
+			query.append(key, item);
+		}
+	}
+	return query.toString();
+}
+
+export function fromQueryString(searchParams: URLSearchParams): RawSearchParams {
+	const raw: RawSearchParams = {};
+	for (const key of new Set(searchParams.keys())) {
+		const values = searchParams.getAll(key);
+		raw[key] = values.length > 1 ? values : values[0];
+	}
+	return raw;
+}
+
 export const TEAMS_PAGE_SIZE = 20;
 export const RADIUS_OPTIONS = [10, 25, 50, 100] as const;
 export const DEFAULT_RADIUS_MILES = 50;
