@@ -1,6 +1,13 @@
 interface ArrowIconProps {
-	direction: 'left' | 'right';
+	direction: 'left' | 'right' | 'up' | 'down';
 }
+
+const TRANSFORMS: Record<ArrowIconProps['direction'], string | undefined> = {
+	left: undefined,
+	right: 'scaleX(-1)',
+	up: 'rotate(90deg)',
+	down: 'rotate(-90deg)',
+};
 
 export function ArrowIcon({ direction }: ArrowIconProps) {
 	return (
@@ -15,10 +22,7 @@ export function ArrowIcon({ direction }: ArrowIconProps) {
 			strokeLinejoin='round'
 			aria-hidden='true'
 			focusable='false'
-			style={{
-				flexShrink: 0,
-				transform: direction === 'right' ? 'scaleX(-1)' : undefined,
-			}}
+			style={{ flexShrink: 0, transform: TRANSFORMS[direction] }}
 		>
 			<path d='M13 8H3M7.5 3.5L3 8l4.5 4.5' />
 		</svg>

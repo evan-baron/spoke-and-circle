@@ -338,7 +338,12 @@ export function MediaSection({
 										disabled={index === 0}
 										aria-label={`Move photo ${index + 1} earlier`}
 									>
-										<ArrowIcon direction='left' />
+										<span className={styles.arrowWide}>
+											<ArrowIcon direction='left' />
+										</span>
+										<span className={styles.arrowNarrow}>
+											<ArrowIcon direction='up' />
+										</span>
 									</button>
 									<button
 										type='button'
@@ -346,7 +351,12 @@ export function MediaSection({
 										disabled={index === entries.length - 1}
 										aria-label={`Move photo ${index + 1} later`}
 									>
-										<ArrowIcon direction='right' />
+										<span className={styles.arrowWide}>
+											<ArrowIcon direction='right' />
+										</span>
+										<span className={styles.arrowNarrow}>
+											<ArrowIcon direction='down' />
+										</span>
 									</button>
 									<button
 										type='button'

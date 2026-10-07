@@ -59,7 +59,9 @@
 
 .dialog {
 	width: min(60rem, 94vw);
-	max-height: 94dvh;
+	max-width: 94vw;
+	max-height: 90dvh;
+	overflow: auto;
 	padding: var(--space-sm);
 	background: var(--color-paper);
 	border: none;
@@ -72,13 +74,17 @@
 
 .full {
 	display: block;
-	width: 100%;
-	max-height: 76dvh;
+	width: auto;
+	height: auto;
+	max-width: 100%;
+	max-height: 68dvh;
+	margin-inline: auto;
 	object-fit: contain;
 }
 
 .controls {
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	justify-content: center;
 	gap: var(--space-sm);
