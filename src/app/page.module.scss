@@ -11,10 +11,11 @@
 	isolation: isolate;
 
 	@include from($bp-md) {
+		align-items: center;
 		width: calc(100% + var(--space-lg) * 2);
-		max-height: calc(100dvh - var(--space-lg));
+		height: calc(100vh - 4rem);
+		max-height: 850px;
 		margin-inline: calc(-1 * var(--space-lg));
-		padding: var(--space-2xl) var(--space-lg);
 	}
 }
 
