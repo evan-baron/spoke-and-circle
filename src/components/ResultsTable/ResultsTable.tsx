@@ -99,9 +99,13 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 								<Badge tone='ink'>{team.type}</Badge>
 							</td>
 							<td>
-								<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
-									{team.competitiveOrCasual}
-								</Badge>
+								{team.type !== 'Group Ride' && (
+									<Badge
+										tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}
+									>
+										{team.competitiveOrCasual}
+									</Badge>
+								)}
 							</td>
 							<td>
 								{getTeamLocations(team).map((location, index, all) => (
