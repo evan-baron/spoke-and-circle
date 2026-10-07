@@ -24,6 +24,7 @@ export default async function AdminEditTeamPage({
 	const team = await prisma.team.findFirst({
 		where: { id: teamId, status: 'Approved' },
 		include: {
+			media: true,
 			submittedBy: {
 				select: { id: true, firstName: true, lastName: true, email: true },
 			},

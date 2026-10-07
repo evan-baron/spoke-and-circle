@@ -1,6 +1,6 @@
 'use client';
 
-import { type FormEvent, useRef, useState } from 'react';
+import { type FormEvent, useCallback, useRef, useState } from 'react';
 import { Checkbox } from './Checkbox';
 import { DEFAULT_TEAM_FORM_VALUES } from '@/lib/teamFormDefaults';
 import { buildTeamPayload } from '@/lib/teamForm';
@@ -9,6 +9,7 @@ import { describeSubmitError } from './describeSubmitError';
 import { DetailsSection } from './DetailsSection';
 import { GenericInfoSection } from './GenericInfoSection';
 import { HumanCheckSection } from './HumanCheckSection';
+import { MediaSection } from './MediaSection';
 import { RejectionSection } from './RejectionSection';
 import { RideDetailsSection } from './RideDetailsSection';
 import { Section } from './Section';
@@ -29,6 +30,7 @@ export interface TeamFormProps {
 	showAdminFields?: boolean;
 	lockedToParent?: boolean;
 	cancelHref?: string;
+	canUploadMedia?: boolean;
 }
 
 export function TeamForm({
@@ -42,6 +44,7 @@ export function TeamForm({
 	showAdminFields = true,
 	lockedToParent = false,
 	cancelHref,
+	canUploadMedia = true,
 }: TeamFormProps) {
 	const values = initialValues ?? DEFAULT_TEAM_FORM_VALUES;
 	const isReview = mode === 'review';
@@ -52,6 +55,11 @@ export function TeamForm({
 	const [submitErrors, setSubmitErrors] = useState<string[]>([]);
 	const [confirmingReject, setConfirmingReject] = useState(false);
 	const busyRef = useRef(false);
+	const [mediaUploading, setMediaUploading] = useState(false);
+	const handleMediaUploadingChange = useCallback(
+		(uploading: boolean) => setMediaUploading(uploading),
+		[],
+	);
 	const [groupType, setGroupType] = useState(values.type);
 	const [affiliationLabel, setAffiliationLabel] = useState(values.affiliation);
 	const [affiliatedId, setAffiliatedId] = useState(values.affiliatedId);
@@ -87,6 +95,11 @@ export function TeamForm({
 	async function handleSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
 		if ((mode === 'create' && !isAntiBotValid) || busyRef.current) return;
+
+		if (mediaUploading) {
+			setSubmitErrors(['Wait for your photos to finish uploading']);
+			return;
+		}
 
 		const payload = buildTeamPayload(event.currentTarget);
 		await run(() => onSubmit(payload));
@@ -161,6 +174,12 @@ export function TeamForm({
 			{groupType !== 'Group Ride' && <TeamClubDetailsSection values={values} />}
 
 			<TagsSection values={values} />
+
+			<MediaSection
+				initialMedia={values.media}
+				canUpload={canUploadMedia}
+				onUploadingChange={handleMediaUploadingChange}
+			/>
 
 			{(isEdit || isReview) && showAdminFields && (
 				<Section title='Admin'>

@@ -107,6 +107,7 @@ model Team {
   tags String[]
 
   additionalPlaces TeamLocation[]
+  media            TeamMedia[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -131,6 +132,19 @@ model TeamLocation {
   @@index([teamId])
   @@index([state])
   @@index([latitude, longitude])
+}
+
+model TeamMedia {
+  id        String   @id @default(cuid())
+  team      Team     @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  teamId    String
+  publicId  String   @unique
+  width     Int
+  height    Int
+  position  Int
+  createdAt DateTime @default(now())
+
+  @@index([teamId])
 }
 
 model Place {

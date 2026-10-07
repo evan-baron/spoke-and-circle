@@ -3,6 +3,7 @@ import { json400, json404, jsonValidationError, withAuth } from '@/lib/api';
 import { readJsonObject } from '@/lib/api/readJsonObject';
 import { createTeamSchema, rejectTeamSchema } from '@/lib/validation';
 import { describeUnknownLocations, findUnknownLocations } from '@/services/placeService';
+import { prepareTeamMedia, saveTeamMedia } from '@/services/teamMediaService';
 import {
 	rejectPendingTeam,
 	toggleTeamVerified,
@@ -11,7 +12,7 @@ import {
 
 export const PUT = withAuth(
 	{ rateLimit: 'admin-write', role: 'admin' },
-	async (request, _user, params) => {
+	async (request, user, params) => {
 		const teamId = typeof params?.teamId === 'string' ? params.teamId : '';
 		if (!teamId) return json400('Invalid team id');
 
@@ -29,12 +30,25 @@ export const PUT = withAuth(
 		const unknownLocationsMessage = describeUnknownLocations(unknownLocations);
 		if (unknownLocationsMessage) return json400(unknownLocationsMessage);
 
+		const preparedMedia = await prepareTeamMedia(
+			teamId,
+			parsed.data.media?.map((item) => item.publicId),
+			{ id: user.id, isAdmin: true },
+		);
+		if ('error' in preparedMedia) return json400(preparedMedia.error);
+
 		const updated = await updateApprovedTeam(
 			teamId,
 			parsed.data,
 			{ verified: typeof verified === 'boolean' ? verified : undefined },
 		);
 		if (!updated) return json404('Approved team not found');
+
+		try {
+			await saveTeamMedia(teamId, preparedMedia.rows);
+		} catch (error) {
+			console.error('Error saving team media:', error);
+		}
 
 		return NextResponse.json({ success: true });
 	},

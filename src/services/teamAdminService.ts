@@ -6,6 +6,7 @@ import type { EmailStatus } from '@/services/mailService';
 import { syncAdditionalPlaces } from '@/services/teamLocationService';
 import { resolveCoordinates } from '@/services/placeService';
 import { sendRejectionEmail } from '@/services/rejectionEmailService';
+import { destroyTeamMedia, listTeamMediaIds } from '@/services/teamMediaService';
 import { sendTeamTransferEmail } from '@/services/teamTransferEmailService';
 
 export async function approvePendingTeam(
@@ -171,10 +172,12 @@ export async function rejectPendingTeam(
 	});
 	if (!team) return null;
 
+	const mediaIds = await listTeamMediaIds(id);
 	const result = await prisma.team.deleteMany({
 		where: { id, status: 'Pending' },
 	});
 	if (result.count === 0) return null;
+	await destroyTeamMedia(mediaIds);
 
 	if (!team.submittedBy) return { emailStatus: 'no_recipient' };
 

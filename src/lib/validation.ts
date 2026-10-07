@@ -1,6 +1,7 @@
 import { z } from 'zod';
 import * as enums from '@/lib/enums';
 import mathQuestions from '@/lib/data/mathQuestions';
+import { MAX_TEAM_MEDIA, MEDIA_PUBLIC_ID_PATTERN } from '@/lib/media';
 
 const clubTypeSchema = z.enum(enums.clubType.labels);
 const bikeTypeSchema = z.enum(enums.bikeType.labels);
@@ -263,6 +264,10 @@ const teamBaseSchema = z.object({
 	joinReferral: z.boolean().optional(),
 	joinInviteOnly: z.boolean().optional(),
 	joinOpen: z.boolean().optional(),
+	media: z
+		.array(z.object({ publicId: z.string().regex(MEDIA_PUBLIC_ID_PATTERN) }))
+		.max(MAX_TEAM_MEDIA)
+		.optional(),
 });
 
 type TeamFields = z.infer<typeof teamBaseSchema>;

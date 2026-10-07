@@ -2,6 +2,7 @@ export type RateLimitBucket =
 	| 'teams-read'
 	| 'teams-write'
 	| 'profile-write'
+	| 'media-sign'
 	| 'teams-search'
 	| 'locations-search'
 	| 'admin-write'
@@ -31,6 +32,10 @@ export const RATE_LIMIT_CONFIG: Record<RateLimitBucket, BucketConfig> = {
 	'profile-write': {
 		windowSeconds: 3600,
 		maxRequests: { anonymous: 0, user: 10, admin: 30 },
+	},
+	'media-sign': {
+		windowSeconds: 3600,
+		maxRequests: { anonymous: 0, user: 30, admin: 120 },
 	},
 	'admin-write': {
 		windowSeconds: 60,

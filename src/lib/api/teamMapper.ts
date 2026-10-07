@@ -1,6 +1,16 @@
 import { Prisma } from '../../../generated/prisma/client';
-import type { Team as TeamRow } from '../../../generated/prisma/client';
-import type { Ride, RideDay, Team, TeamFormValues } from '../types';
+import type {
+	Team as TeamRow,
+	TeamMedia as TeamMediaRow,
+} from '../../../generated/prisma/client';
+import { mediaBaseUrl } from '../cloudinary';
+import type {
+	Ride,
+	RideDay,
+	Team,
+	TeamFormValues,
+	TeamMediaItem,
+} from '../types';
 import type { CreateTeamInput } from '../validation';
 import {
 	bikeType,
@@ -11,6 +21,19 @@ import {
 	racingDiscipline,
 	segmentation,
 } from '../enums';
+
+export type TeamRowWithMedia = TeamRow & { media?: TeamMediaRow[] };
+
+function toMediaItems(rows: TeamMediaRow[] | undefined): TeamMediaItem[] {
+	return [...(rows ?? [])]
+		.sort((a, b) => a.position - b.position)
+		.map((row) => ({
+			publicId: row.publicId,
+			width: row.width,
+			height: row.height,
+			url: mediaBaseUrl(row.publicId),
+		}));
+}
 
 function nonEmpty<T>(items: T[] | null | undefined): T[] | undefined {
 	return items && items.length > 0 ? items : undefined;
@@ -67,7 +90,7 @@ function deriveScheduleNotes(row: TeamRow): string | undefined {
 	return notes.length > 0 ? notes.join(' · ') : undefined;
 }
 
-export function toTeam(row: TeamRow): Team {
+export function toTeam(row: TeamRowWithMedia): Team {
 	return {
 		id: row.id,
 		name: row.name,
@@ -113,6 +136,7 @@ export function toTeam(row: TeamRow): Team {
 		memberLimit: row.memberLimit ?? undefined,
 		waitlist: row.waitlist,
 		howToJoin: row.howToJoin ?? '',
+		media: row.media ? toMediaItems(row.media) : undefined,
 		rideSchedule: row.rideSchedule ?? 'Weekly',
 		startTimes: nonEmpty(row.startTimes),
 		rideDays: (row.rideDays as RideDay[] | null) ?? undefined,
@@ -230,7 +254,7 @@ const PERSONA_CODE_BY_LABEL: Record<string, string> = {
 	'LGBT Only': 'lgbtOnly',
 };
 
-export function toTeamFormValues(row: TeamRow): TeamFormValues {
+export function toTeamFormValues(row: TeamRowWithMedia): TeamFormValues {
 	const persona = row.personaRestrictions[0];
 	const personaCode =
 		persona ? (PERSONA_CODE_BY_LABEL[persona] ?? 'other') : null;
@@ -298,12 +322,14 @@ export function toTeamFormValues(row: TeamRow): TeamFormValues {
 		joinReferral: row.joinReferral,
 		joinInviteOnly: row.joinInviteOnly,
 		joinOpen: row.joinOpen,
+		media: toMediaItems(row.media),
 	};
 }
 
 export function toGroupRideFormValues(row: TeamRow): TeamFormValues {
 	return {
 		...toTeamFormValues(row),
+		media: [],
 		type: 'Group Ride',
 		tags: [],
 		name: '',

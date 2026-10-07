@@ -10,9 +10,13 @@ import { teamAPI } from '@/services/api';
 
 interface NewTeamFormProps {
 	initialValues?: TeamFormValues;
+	canUploadMedia: boolean;
 }
 
-export function NewTeamForm({ initialValues }: NewTeamFormProps) {
+export function NewTeamForm({
+	initialValues,
+	canUploadMedia,
+}: NewTeamFormProps) {
 	const [submitted, setSubmitted] = useState(false);
 	const [published, setPublished] = useState(false);
 	const [publishedTeamId, setPublishedTeamId] = useState<string | null>(null);
@@ -90,6 +94,7 @@ export function NewTeamForm({ initialValues }: NewTeamFormProps) {
 					mode='create'
 					initialValues={initialValues}
 					lockedToParent={!!parentId}
+					canUploadMedia={canUploadMedia}
 					onSubmit={async (payload) => {
 						const result = await teamAPI.create(payload);
 						if (!result.published) await invalidatePendingCount();

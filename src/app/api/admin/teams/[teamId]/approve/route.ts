@@ -4,6 +4,7 @@ import { readJsonObject } from '@/lib/api/readJsonObject';
 import { createTeamSchema } from '@/lib/validation';
 import { describeUnknownLocations, findUnknownLocations } from '@/services/placeService';
 import { approvePendingTeam } from '@/services/teamAdminService';
+import { prepareTeamMedia, saveTeamMedia } from '@/services/teamMediaService';
 
 export const POST = withAuth(
 	{ rateLimit: 'admin-write', role: 'admin' },
@@ -25,6 +26,13 @@ export const POST = withAuth(
 		const unknownLocationsMessage = describeUnknownLocations(unknownLocations);
 		if (unknownLocationsMessage) return json400(unknownLocationsMessage);
 
+		const preparedMedia = await prepareTeamMedia(
+			teamId,
+			parsed.data.media?.map((item) => item.publicId),
+			{ id: user.id, isAdmin: true },
+		);
+		if ('error' in preparedMedia) return json400(preparedMedia.error);
+
 		const approved = await approvePendingTeam(
 			teamId,
 			user.id,
@@ -32,6 +40,12 @@ export const POST = withAuth(
 			typeof verified === 'boolean' ? verified : undefined,
 		);
 		if (!approved) return json404('Pending team not found');
+
+		try {
+			await saveTeamMedia(teamId, preparedMedia.rows);
+		} catch (error) {
+			console.error('Error saving team media:', error);
+		}
 
 		return NextResponse.json({
 			success: true,

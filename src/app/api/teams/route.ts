@@ -21,6 +21,7 @@ import {
 	resolveCoordinates,
 } from '@/services/placeService';
 import { syncAdditionalPlaces } from '@/services/teamLocationService';
+import { prepareTeamMedia, saveTeamMedia } from '@/services/teamMediaService';
 
 export const GET = withPublicRateLimit('teams-read', async () => {
 	try {
@@ -105,6 +106,13 @@ export const POST = withPublicRateLimit('teams-write', async (request) => {
 		const submitter = await getSubmitter();
 		const published = submitter?.isAdmin === true;
 
+		const preparedMedia = await prepareTeamMedia(
+			null,
+			parsed.data.media?.map((item) => item.publicId),
+			submitter,
+		);
+		if ('error' in preparedMedia) return json400(preparedMedia.error);
+
 		const team = await prisma.team.create({
 			data: {
 				...toTeamCreateInput(
@@ -127,6 +135,12 @@ export const POST = withPublicRateLimit('teams-write', async (request) => {
 			await syncAdditionalPlaces(team.id, parsed.data.additionalLocations ?? []);
 		} catch (error) {
 			console.error('Error saving additional locations:', error);
+		}
+
+		try {
+			await saveTeamMedia(team.id, preparedMedia.rows);
+		} catch (error) {
+			console.error('Error saving team media:', error);
 		}
 
 		return NextResponse.json(

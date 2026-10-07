@@ -35,5 +35,7 @@ export default async function NewTeamPage({
 		typeof from === 'string' ? from : undefined,
 	);
 
-	return <NewTeamForm initialValues={initialValues} />;
+	const user = await getCurrentUser();
+
+	return <NewTeamForm initialValues={initialValues} canUploadMedia={!!user} />;
 }

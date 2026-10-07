@@ -74,6 +74,20 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		}
 	}
 
+	function mediaIds() {
+		const raw = text('media');
+		if (!raw) return undefined;
+		try {
+			const parsed = JSON.parse(raw);
+			if (!Array.isArray(parsed)) return undefined;
+			return parsed
+				.filter((id): id is string => typeof id === 'string')
+				.map((publicId) => ({ publicId }));
+		} catch {
+			return undefined;
+		}
+	}
+
 	const duesRequired = flag('duesRequired');
 	const mileageMin = number('mileageMin');
 	const virtualPlatforms = values('virtualPlatform');
@@ -138,6 +152,7 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		joinReferral: flag('joinReferral'),
 		joinInviteOnly: flag('joinInviteOnly'),
 		joinOpen: flag('joinOpen'),
+		media: mediaIds(),
 		antibot: text('antibot'),
 		antibotIndex: number('antibotIndex'),
 		verified: flag('verified'),

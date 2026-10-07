@@ -82,6 +82,20 @@ export interface SocialLinks {
   discord?: string;
 }
 
+export interface TeamMediaItem {
+  publicId: string;
+  width: number;
+  height: number;
+  url: string;
+}
+
+export interface TeamMediaItem {
+  publicId: string;
+  width: number;
+  height: number;
+  url: string;
+}
+
 export interface Team {
   id: string;
 
@@ -119,6 +133,7 @@ export interface Team {
   memberLimit?: number;
   waitlist: boolean;
   howToJoin: string;
+  media?: TeamMediaItem[];
 
   // -- Ride Details --
   rideSchedule: ScheduleFrequency;
@@ -242,6 +257,7 @@ export interface TeamFormValues {
   joinReferral: boolean;
   joinInviteOnly: boolean;
   joinOpen: boolean;
+  media: TeamMediaItem[];
 }
 
 export interface CreateTeamResponse {

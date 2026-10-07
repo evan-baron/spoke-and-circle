@@ -61,4 +61,5 @@ export const DEFAULT_TEAM_FORM_VALUES: TeamFormValues = {
 	joinReferral: false,
 	joinInviteOnly: false,
 	joinOpen: false,
+	media: [],
 };

@@ -7,6 +7,7 @@ import {
 	findUnknownLocations,
 } from '@/services/placeService';
 import { updateApprovedTeam } from '@/services/teamAdminService';
+import { prepareTeamMedia, saveTeamMedia } from '@/services/teamMediaService';
 import { deleteGroupRide } from '@/services/teamService';
 
 export const DELETE = withAuth(
@@ -45,10 +46,24 @@ export const PUT = withAuth(
 		const unknownLocationsMessage = describeUnknownLocations(unknownLocations);
 		if (unknownLocationsMessage) return json400(unknownLocationsMessage);
 
+		const actor = { id: user.id, isAdmin: user.role === 'admin' };
+		const preparedMedia = await prepareTeamMedia(
+			teamId,
+			parsed.data.media?.map((item) => item.publicId),
+			actor,
+		);
+		if ('error' in preparedMedia) return json400(preparedMedia.error);
+
 		const updated = await updateApprovedTeam(teamId, parsed.data, {
 			ownerId: user.id,
 		});
 		if (!updated) return json404('Team not found');
+
+		try {
+			await saveTeamMedia(teamId, preparedMedia.rows);
+		} catch (error) {
+			console.error('Error saving team media:', error);
+		}
 
 		return NextResponse.json({ success: true });
 	},

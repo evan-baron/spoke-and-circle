@@ -22,6 +22,7 @@ export default async function OwnerEditTeamPage({
 
 	const team = await prisma.team.findFirst({
 		where: { id: teamId, status: 'Approved', submittedById: user.id },
+		include: { media: true },
 	});
 	if (!team) notFound();
 

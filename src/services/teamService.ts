@@ -3,11 +3,13 @@ import { toTeam } from '@/lib/api/teamMapper';
 import { prisma } from '@/lib/prisma';
 import type { Team } from '@/lib/types';
 import { clubType } from '@/lib/enums';
+import { destroyTeamMedia, listTeamMediaIds } from '@/services/teamMediaService';
 
 export const getApprovedTeamById = cache(
 	async (id: string): Promise<Team | null> => {
 		const row = await prisma.team.findFirst({
 			where: { id, status: 'Approved' },
+			include: { media: true },
 		});
 		return row ? toTeam(row) : null;
 	},
@@ -29,6 +31,7 @@ export async function deleteGroupRide(
 	teamId: string,
 	user: { id: number; isAdmin: boolean },
 ): Promise<boolean> {
+	const mediaIds = await listTeamMediaIds(teamId);
 	const result = await prisma.team.deleteMany({
 		where: {
 			id: teamId,
@@ -36,6 +39,7 @@ export async function deleteGroupRide(
 			...(user.isAdmin ? {} : { submittedById: user.id }),
 		},
 	});
+	if (result.count > 0) await destroyTeamMedia(mediaIds);
 	return result.count > 0;
 }
 

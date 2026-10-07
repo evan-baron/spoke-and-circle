@@ -25,6 +25,7 @@ export default async function AdminReviewPendingPage({
 	const team = await prisma.team.findFirst({
 		where: { id: teamId, status: 'Pending' },
 		include: {
+			media: true,
 			submittedBy: {
 				select: { id: true, firstName: true, lastName: true, email: true },
 			},

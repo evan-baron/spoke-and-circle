@@ -31,6 +31,7 @@ import {
 	getApprovedTeamById,
 	isApprovedTeamOwner,
 } from '@/services/teamService';
+import { TeamMedia } from '@/components/TeamMedia/TeamMedia';
 import styles from './team.module.scss';
 
 interface TeamPageParams {
@@ -345,6 +346,7 @@ export default async function TeamPage({
 					</aside>
 
 					<div className={styles.main}>
+						<TeamMedia media={team.media ?? []} teamName={team.name} />
 						<DetailSection title='Format & membership'>
 							<DetailRow
 								label='Cycling Discipline(s)'
