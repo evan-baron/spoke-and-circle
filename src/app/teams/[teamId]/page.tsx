@@ -371,7 +371,6 @@ export default async function TeamPage({
 					</aside>
 
 					<div className={styles.main}>
-						<TeamMedia media={team.media ?? []} teamName={team.name} />
 						<DetailSection title='Format & membership'>
 							<DetailRow
 								label='Cycling Discipline(s)'
@@ -517,6 +516,8 @@ export default async function TeamPage({
 								<DetailRow label='Sponsors' value={formatList(team.sponsors)} />
 							</DetailSection>
 						)}
+
+						<TeamMedia media={team.media ?? []} teamName={team.name} />
 
 						{groupRides.length > 0 && (
 							<DetailSection title='Group rides'>

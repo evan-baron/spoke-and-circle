@@ -128,6 +128,30 @@ describe('createTeamSchema', () => {
 		});
 	});
 
+	describe('media', () => {
+		const validId = 'assets/spoke_and_circle_uploads/u12/0123456789abcdef01234567';
+
+		it('accepts well-formed public ids', () => {
+			expect(parse({ media: [{ publicId: validId }] }).success).toBe(true);
+		});
+
+		it('rejects ids outside the teams folder', () => {
+			expect(
+				parse({ media: [{ publicId: 'other/u12/0123456789abcdef' }] }).success,
+			).toBe(false);
+			expect(
+				parse({ media: [{ publicId: 'assets/spoke_and_circle_uploads/u12/../../x' }] }).success,
+			).toBe(false);
+		});
+
+		it('rejects more than the maximum number of photos', () => {
+			const media = Array.from({ length: 7 }, (_, index) => ({
+				publicId: `assets/spoke_and_circle_uploads/u12/0123456789abcdef0123456${index}`,
+			}));
+			expect(parse({ media }).success).toBe(false);
+		});
+	});
+
 	describe('tags', () => {
 		it('accepts up to 10 tags and trims and lowercases them', () => {
 			const result = parse({ tags: ['  Women Only ', 'MASTERS'] });

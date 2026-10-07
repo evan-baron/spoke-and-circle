@@ -110,6 +110,7 @@ model Team {
 
   additionalPlaces TeamLocation[]
   claims           TeamClaim[]
+  media            TeamMedia[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
