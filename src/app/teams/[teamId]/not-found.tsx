@@ -1,5 +1,6 @@
 import Link from "next/link";
 import styles from "./notFound.module.scss";
+import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
 
 export default function TeamNotFound() {
   return (
@@ -9,7 +10,7 @@ export default function TeamNotFound() {
         <h1>We couldn&rsquo;t find that team.</h1>
         <p className={styles.copy}>It may have been renamed, removed, or the link may be out of date.</p>
         <Link href="/search" className={styles.link}>
-          &larr; Back to search
+          <ArrowIcon direction='left' /> Back to search
         </Link>
       </div>
     </div>

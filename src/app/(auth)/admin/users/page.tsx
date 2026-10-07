@@ -10,6 +10,7 @@ import {
 } from '@/lib/searchParams';
 import { requireAdmin } from '@/services/currentUserService';
 import styles from '../admin.module.scss';
+import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
 
 export const metadata: Metadata = {
 	title: 'All Users | Admin',
@@ -52,7 +53,7 @@ export default async function AdminUsersPage({
 		<div className={styles.subPage}>
 			<div className={styles.subWrap}>
 				<Link href='/admin' className={styles.backLink}>
-					&larr; Admin console
+					<ArrowIcon direction='left' /> Admin console
 				</Link>
 				<h1>All Users</h1>
 

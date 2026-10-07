@@ -7,6 +7,7 @@ import styles from '@/components/TeamForm/teamForm.module.scss';
 import { useInvalidatePendingTeamCount } from '@/hooks/usePendingTeamCount';
 import type { TeamFormValues } from '@/lib/types';
 import { teamAPI } from '@/services/api';
+import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
 
 interface NewTeamFormProps {
 	initialValues?: TeamFormValues;
@@ -79,7 +80,7 @@ export function NewTeamForm({
 					href={parentId ? `/teams/${parentId}` : '/search'}
 					className={styles.backLink}
 				>
-					&larr; {parentName ? `Back to ${parentName}` : 'Back to search'}
+					<ArrowIcon direction='left' /> {parentName ? `Back to ${parentName}` : 'Back to search'}
 				</Link>
 
 				<header className={styles.header}>

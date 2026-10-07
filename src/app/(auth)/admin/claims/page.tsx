@@ -5,6 +5,7 @@ import { formatSubmittedDate, formatSubmitter } from '@/lib/format';
 import { requireAdmin } from '@/services/currentUserService';
 import { listPendingClaims } from '@/services/teamClaimService';
 import styles from '../admin.module.scss';
+import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
 
 export const metadata: Metadata = {
 	title: 'Claims | Admin',
@@ -43,7 +44,7 @@ export default async function AdminClaimsPage({
 		<div className={styles.subPage}>
 			<div className={styles.subWrap}>
 				<Link href='/admin' className={styles.backLink}>
-					&larr; Admin console
+					<ArrowIcon direction='left' /> Admin console
 				</Link>
 				<h1>Claims</h1>
 				{emailNotice && (

@@ -178,6 +178,7 @@ export function TeamForm({
 			<MediaSection
 				initialMedia={values.media}
 				canUpload={canUploadMedia}
+				submitting={isSubmitting}
 				onUploadingChange={handleMediaUploadingChange}
 			/>
 

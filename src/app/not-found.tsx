@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import styles from './notFound.module.scss';
+import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
 
 export const metadata: Metadata = {
 	title: 'Page not found',
@@ -18,7 +19,7 @@ export default function NotFound() {
 				</p>
 				<div className={styles.links}>
 					<Link href='/search' className={styles.link}>
-						&larr; Search groups
+						<ArrowIcon direction='left' /> Search groups
 					</Link>
 					<Link href='/' className={styles.link}>
 						Go to the homepage

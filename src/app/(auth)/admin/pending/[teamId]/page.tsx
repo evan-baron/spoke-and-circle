@@ -8,6 +8,7 @@ import { formatSubmittedDate, formatSubmitter } from '@/lib/format';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/services/currentUserService';
 import styles from '../../admin.module.scss';
+import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
 
 export const metadata: Metadata = {
 	title: 'Review Group | Admin',
@@ -45,7 +46,7 @@ export default async function AdminReviewPendingPage({
 		<div className={styles.subPage}>
 			<div className={styles.subWrap}>
 				<Link href='/admin/pending' className={styles.backLink}>
-					&larr; Pending groups
+					<ArrowIcon direction='left' /> Pending groups
 				</Link>
 				<h1>Review: {team.name}</h1>
 				<p className={styles.count}>

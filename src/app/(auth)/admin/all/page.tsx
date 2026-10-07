@@ -10,6 +10,7 @@ import {
 import { requireAdmin } from '@/services/currentUserService';
 import { searchApprovedTeams } from '@/services/teamSearchService';
 import styles from '../admin.module.scss';
+import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
 
 export const metadata: Metadata = {
 	title: 'All Groups | Admin',
@@ -42,7 +43,7 @@ export default async function AdminAllGroupsPage({
 		<div className={styles.subPage}>
 			<div className={styles.subWrap}>
 				<Link href='/admin' className={styles.backLink}>
-					&larr; Admin console
+					<ArrowIcon direction='left' /> Admin console
 				</Link>
 				<h1>All Groups</h1>
 

@@ -101,7 +101,17 @@ export async function destroyImages(publicIds: string[]): Promise<void> {
 	});
 }
 
-export async function listStaleUploads(maxAgeHours: number): Promise<string[]> {
+const DELETE_BATCH_SIZE = 100;
+
+export async function deleteStaleUploads(maxAgeHours: number): Promise<number> {
+	const stale = await listStaleUploads(maxAgeHours);
+	for (let index = 0; index < stale.length; index += DELETE_BATCH_SIZE) {
+		await destroyImages(stale.slice(index, index + DELETE_BATCH_SIZE));
+	}
+	return stale.length;
+}
+
+async function listStaleUploads(maxAgeHours: number): Promise<string[]> {
 	if (!configured()) return [];
 
 	const cutoff = Date.now() - maxAgeHours * 60 * 60 * 1000;

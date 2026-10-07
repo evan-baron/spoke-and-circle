@@ -17,10 +17,12 @@ import {
 import type { TeamMediaItem } from '@/lib/types';
 import { Section } from './Section';
 import styles from './mediaSection.module.scss';
+import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
 
 interface MediaSectionProps {
 	initialMedia: TeamMediaItem[];
 	canUpload: boolean;
+	submitting: boolean;
 	onUploadingChange: (uploading: boolean) => void;
 }
 
@@ -59,6 +61,7 @@ async function discardUpload(publicId: string) {
 			method: 'DELETE',
 			headers: { 'Content-Type': 'application/json' },
 			body: JSON.stringify({ publicId }),
+			keepalive: true,
 		});
 	} catch {
 		return;
@@ -112,6 +115,7 @@ function sendToCloudinary(
 export function MediaSection({
 	initialMedia,
 	canUpload,
+	submitting,
 	onUploadingChange,
 }: MediaSectionProps) {
 	const [entries, setEntries] = useState<MediaEntry[]>(() =>
@@ -135,10 +139,41 @@ export function MediaSection({
 		onUploadingChange(uploading);
 	}, [uploading, onUploadingChange]);
 
+	const entriesRef = useRef(entries);
+	const submittingRef = useRef(submitting);
+
+	useEffect(() => {
+		entriesRef.current = entries;
+		submittingRef.current = submitting;
+	});
+
 	useEffect(() => {
 		const pending = requests.current;
 		const urls = objectUrls.current;
+
+		function discardUnsaved() {
+			if (submittingRef.current) return;
+			for (const entry of entriesRef.current) {
+				if (!entry.isNew) continue;
+				pending.get(entry.key)?.abort();
+				const publicId = entry.publicId ?? entry.pendingId;
+				if (publicId) void discardUpload(publicId);
+			}
+		}
+
+		function handlePageShow(event: PageTransitionEvent) {
+			if (event.persisted) {
+				setEntries((current) => current.filter((entry) => !entry.isNew));
+			}
+		}
+
+		window.addEventListener('pagehide', discardUnsaved);
+		window.addEventListener('pageshow', handlePageShow);
+
 		return () => {
+			window.removeEventListener('pagehide', discardUnsaved);
+			window.removeEventListener('pageshow', handlePageShow);
+			discardUnsaved();
 			pending.forEach((request) => request.abort());
 			urls.forEach((url) => URL.revokeObjectURL(url));
 		};
@@ -303,7 +338,7 @@ export function MediaSection({
 										disabled={index === 0}
 										aria-label={`Move photo ${index + 1} earlier`}
 									>
-										&larr;
+										<ArrowIcon direction='left' />
 									</button>
 									<button
 										type='button'
@@ -311,7 +346,7 @@ export function MediaSection({
 										disabled={index === entries.length - 1}
 										aria-label={`Move photo ${index + 1} later`}
 									>
-										&rarr;
+										<ArrowIcon direction='right' />
 									</button>
 									<button
 										type='button'

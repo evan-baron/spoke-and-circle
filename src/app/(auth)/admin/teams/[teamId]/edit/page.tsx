@@ -7,6 +7,7 @@ import { toTeamFormValues } from '@/lib/api/teamMapper';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/services/currentUserService';
 import styles from '../../../admin.module.scss';
+import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
 
 export const metadata: Metadata = {
 	title: 'Edit Group | Admin',
@@ -36,7 +37,7 @@ export default async function AdminEditTeamPage({
 		<div className={styles.subPage}>
 			<div className={styles.subWrap}>
 				<Link href={`/teams/${team.id}`} className={styles.backLink}>
-					&larr; {team.name}
+					<ArrowIcon direction='left' /> {team.name}
 				</Link>
 				<h1>Edit: {team.name}</h1>
 

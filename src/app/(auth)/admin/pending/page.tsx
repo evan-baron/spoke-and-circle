@@ -4,6 +4,7 @@ import { formatSubmittedDate, formatSubmitter } from '@/lib/format';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/services/currentUserService';
 import styles from '../admin.module.scss';
+import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
 
 export const metadata: Metadata = {
 	title: 'Pending Groups | Admin',
@@ -60,7 +61,7 @@ export default async function AdminPendingPage({
 		<div className={styles.subPage}>
 			<div className={styles.subWrap}>
 				<Link href='/admin' className={styles.backLink}>
-					&larr; Admin console
+					<ArrowIcon direction='left' /> Admin console
 				</Link>
 				<h1>Pending Groups</h1>
 				{emailNotice && (

@@ -6,6 +6,7 @@ import styles from '@/components/TeamForm/teamForm.module.scss';
 import { toTeamFormValues } from '@/lib/api/teamMapper';
 import { prisma } from '@/lib/prisma';
 import { requireUser } from '@/services/currentUserService';
+import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
 
 export const metadata: Metadata = {
 	title: 'Edit Team | Dashboard',
@@ -30,7 +31,7 @@ export default async function OwnerEditTeamPage({
 		<div className={styles.page}>
 			<div className={styles.wrap}>
 				<Link href='/dashboard' className={styles.backLink}>
-					&larr; My Dashboard
+					<ArrowIcon direction='left' /> My Dashboard
 				</Link>
 
 				<header className={styles.header}>
