@@ -32,9 +32,9 @@ function joinLabel(team: Team): string {
 	return open ? 'Open to all' : 'See listing';
 }
 
-function scheduleLabel(team: Team): string {
+function scheduleLabel(team: Team): string | null {
 	const ride = team.rides[0];
-	return ride ? formatRideRecurrence(ride) : 'Schedule on listing';
+	return ride ? formatRideRecurrence(ride) : null;
 }
 
 function roundedCount(count: number): string {
@@ -139,7 +139,10 @@ export default async function HomePage() {
 												<span className={styles.recentMain}>
 													<span className={styles.recentName}>{team.name}</span>
 													<span className={styles.recentMeta}>
-														{team.location} &middot; {scheduleLabel(team)}
+														{team.location}
+														{scheduleLabel(team) && (
+															<> &middot; {scheduleLabel(team)}</>
+														)}
 													</span>
 												</span>
 												<span className={styles.recentBadges}>
@@ -216,8 +219,8 @@ export default async function HomePage() {
 							<h2>Why {SITE_NAME}</h2>
 							<p>
 								Most groups are easy to find if you already know someone who
-								rides. {SITE_NAME} puts them in one searchable place, with
-								pace, schedule, and how to join on every listing.
+								rides. {SITE_NAME} puts them in one searchable place, with pace,
+								schedule, and how to join on every listing.
 							</p>
 							<Link href='/about' className={styles.textLink}>
 								Read our story &rarr;
@@ -228,8 +231,8 @@ export default async function HomePage() {
 							<div>
 								<h2>Run a team, club, or group ride?</h2>
 								<p>
-									List it for free so riders in your area can find you, see
-									your pace and schedule, and know exactly how to join.
+									List it for free so riders in your area can find you, see your
+									pace and schedule, and know exactly how to join.
 								</p>
 							</div>
 							<Link href='/teams/new' className={styles.organizersCta}>
