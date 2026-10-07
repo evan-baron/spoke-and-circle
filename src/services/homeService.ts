@@ -41,14 +41,19 @@ export const RIDE_STYLES: RideStyleTile[] = [
 	{
 		label: 'Women only',
 		description: 'Rides and teams run by and for women.',
-		href: '/search?womensOnly=true',
-		where: { personaRestrictions: { has: 'Women Only' } },
+		href: '/search?q=women',
+		where: {
+			OR: [
+				{ personaRestrictions: { has: 'Women Only' } },
+				{ tags: { hasSome: ['women', 'women-only', 'women only', "women's"] } },
+			],
+		},
 	},
 	{
-		label: 'Virtual',
-		description: 'Zwift and trainer rides, from home.',
-		href: '/search?q=virtual',
-		where: { format: { in: ['Virtual', 'Hybrid'] } },
+		label: 'Youth Program',
+		description: 'Programs and teams for young riders.',
+		href: '/search?q=youth',
+		where: { OR: [{ type: 'YouthProgram' }, { tags: { has: 'youth' } }] },
 	},
 ];
 
