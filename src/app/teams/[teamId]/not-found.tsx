@@ -7,7 +7,7 @@ export default function TeamNotFound() {
       <div className={styles.wrap}>
         <p className={styles.code}>404</p>
         <h1>We couldn&rsquo;t find that team.</h1>
-        <p className={styles.copy}>It may have been renamed, disbanded, or never existed in this sample data.</p>
+        <p className={styles.copy}>It may have been renamed, removed, or the link may be out of date.</p>
         <Link href="/search" className={styles.link}>
           &larr; Back to search
         </Link>
