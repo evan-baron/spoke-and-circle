@@ -12,7 +12,7 @@
 
 	@include from($bp-md) {
 		width: calc(100% + var(--space-lg) * 2);
-		max-height: calc(100dvh - var(--spacelg));
+		max-height: calc(100dvh - var(--space-lg));
 		margin-inline: calc(-1 * var(--space-lg));
 		padding: var(--space-2xl) var(--space-lg);
 	}
