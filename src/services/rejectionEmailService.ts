@@ -17,7 +17,7 @@ interface RejectionEmail {
 	firstName?: string | null;
 	teamName: string;
 	reason?: string;
-	sentByAdminId: number;
+	sentByAdminId: string;
 }
 
 export function renderReasonBlock(reason?: string): string {

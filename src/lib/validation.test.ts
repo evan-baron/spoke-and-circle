@@ -129,7 +129,7 @@ describe('createTeamSchema', () => {
 	});
 
 	describe('media', () => {
-		const validId = 'assets/spoke_and_circle_uploads/u12/0123456789abcdef01234567';
+		const validId = 'assets/spoke_and_circle_uploads/3f2b8c1e-5d4a-4e6f-9a7b-0c1d2e3f4a5b/0123456789abcdef01234567';
 
 		it('accepts well-formed public ids', () => {
 			expect(parse({ media: [{ publicId: validId }] }).success).toBe(true);
@@ -140,13 +140,13 @@ describe('createTeamSchema', () => {
 				parse({ media: [{ publicId: 'other/u12/0123456789abcdef' }] }).success,
 			).toBe(false);
 			expect(
-				parse({ media: [{ publicId: 'assets/spoke_and_circle_uploads/u12/../../x' }] }).success,
+				parse({ media: [{ publicId: 'assets/spoke_and_circle_uploads/3f2b8c1e-5d4a-4e6f-9a7b-0c1d2e3f4a5b/../../x' }] }).success,
 			).toBe(false);
 		});
 
 		it('rejects more than the maximum number of photos', () => {
 			const media = Array.from({ length: 7 }, (_, index) => ({
-				publicId: `assets/spoke_and_circle_uploads/u12/0123456789abcdef0123456${index}`,
+				publicId: `assets/spoke_and_circle_uploads/3f2b8c1e-5d4a-4e6f-9a7b-0c1d2e3f4a5b/0123456789abcdef0123456${index}`,
 			}));
 			expect(parse({ media }).success).toBe(false);
 		});

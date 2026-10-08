@@ -36,12 +36,12 @@ export function mediaBaseUrl(publicId: string) {
 	return `https://res.cloudinary.com/${cloudName}/image/upload/${publicId}`;
 }
 
-export function signMediaUpload(userId: number) {
+export function signMediaUpload(userId: string) {
 	const config = configured();
 	if (!config) return null;
 
 	const params = {
-		asset_folder: `${MEDIA_FOLDER}/u${userId}`,
+		asset_folder: `${MEDIA_FOLDER}/${userId}`,
 		allowed_formats: MEDIA_FORMATS.join(','),
 		overwrite: 'false',
 		public_id: `${mediaOwnerPrefix(userId)}${randomBytes(12).toString('hex')}`,

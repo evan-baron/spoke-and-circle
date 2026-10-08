@@ -5,7 +5,7 @@ import { readJsonObject } from '@/lib/api/readJsonObject';
 import { transferTeamOwnership } from '@/services/teamAdminService';
 
 const transferSchema = z.object({
-	userId: z.number().int().positive(),
+	userId: z.string().uuid(),
 });
 
 export const PUT = withAuth(

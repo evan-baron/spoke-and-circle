@@ -13,7 +13,7 @@ import {
 import { prisma } from '@/lib/prisma';
 
 export interface MediaActor {
-	id: number;
+	id: string;
 	isAdmin: boolean;
 }
 

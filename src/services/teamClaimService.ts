@@ -17,7 +17,7 @@ export interface ClaimState {
 
 export async function getClaimState(
 	teamId: string,
-	userId?: number,
+	userId?: string,
 ): Promise<ClaimState> {
 	const [claimable, pending] = await Promise.all([
 		prisma.team.count({ where: { id: teamId, ...claimableTeamWhere } }),
@@ -38,7 +38,7 @@ export type CreateClaimResult =
 
 export async function createClaim(
 	teamId: string,
-	userId: number,
+	userId: string,
 	message: string,
 ): Promise<CreateClaimResult> {
 	const team = await prisma.team.findFirst({
@@ -100,7 +100,7 @@ export type ReviewClaimResult =
 export async function reviewClaim(
 	claimId: string,
 	review: ClaimReviewInput,
-	adminId: number,
+	adminId: string,
 ): Promise<ReviewClaimResult> {
 	const claim = await prisma.teamClaim.findFirst({
 		where: { id: claimId, status: 'Pending' },

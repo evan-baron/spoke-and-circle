@@ -29,7 +29,7 @@ export async function getApprovedGroupRides(parentId: string): Promise<Team[]> {
 
 export async function deleteGroupRide(
 	teamId: string,
-	user: { id: number; isAdmin: boolean },
+	user: { id: string; isAdmin: boolean },
 ): Promise<boolean> {
 	const mediaIds = await listTeamMediaIds(teamId);
 	const result = await prisma.team.deleteMany({
@@ -45,7 +45,7 @@ export async function deleteGroupRide(
 
 export async function isApprovedTeamOwner(
 	teamId: string,
-	userId: number,
+	userId: string,
 ): Promise<boolean> {
 	const count = await prisma.team.count({
 		where: { id: teamId, status: 'Approved', submittedById: userId },

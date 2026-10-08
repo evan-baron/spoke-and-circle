@@ -280,7 +280,7 @@ export interface CreateTeamResponse {
 }
 
 export interface CurrentUser {
-  id: number;
+  id: string;
   email: string;
   firstName: string | null;
   lastName: string | null;
@@ -289,7 +289,7 @@ export interface CurrentUser {
 }
 
 export interface UserOption {
-  id: number;
+  id: string;
   firstName: string | null;
   lastName: string | null;
   email: string;

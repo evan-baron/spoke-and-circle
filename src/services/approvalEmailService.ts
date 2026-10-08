@@ -16,7 +16,7 @@ interface ApprovalEmail {
 	firstName?: string | null;
 	teamName: string;
 	teamId: string;
-	sentByAdminId: number;
+	sentByAdminId: string;
 }
 
 export function buildApprovalEmailHtml({

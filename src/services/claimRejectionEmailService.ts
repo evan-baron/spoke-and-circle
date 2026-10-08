@@ -15,7 +15,7 @@ interface ClaimRejectionEmail {
 	firstName?: string | null;
 	teamName: string;
 	reason: string;
-	sentByAdminId: number;
+	sentByAdminId: string;
 }
 
 export function buildClaimRejectionEmailHtml({

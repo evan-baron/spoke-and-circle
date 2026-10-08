@@ -28,7 +28,7 @@ interface SendMailInput {
 
 export interface SendLimits {
 	global: RateLimitBucket;
-	adminId?: number;
+	adminId?: string;
 	perRecipient?: boolean;
 }
 

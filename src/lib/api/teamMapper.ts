@@ -176,7 +176,7 @@ export function toTeam(row: TeamRowWithMedia): Team {
 
 export function toTeamCreateInput(
 	input: CreateTeamInput,
-	submittedById?: number,
+	submittedById?: string,
 ): Prisma.TeamCreateInput {
 	return {
 		status: 'Pending',

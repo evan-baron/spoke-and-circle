@@ -8,7 +8,7 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid()) @db.Uuid
   auth0Id   String   @unique
   email     String   @unique
   firstName String?
@@ -27,7 +27,7 @@ model Team {
 
   status        ReviewStatus @default(Pending)
   submittedBy   User?        @relation(fields: [submittedById], references: [id])
-  submittedById Int?
+  submittedById String?      @db.Uuid
 
   name                String
   type                ClubType
@@ -128,7 +128,7 @@ model TeamClaim {
   team       Team        @relation(fields: [teamId], references: [id], onDelete: Cascade)
   teamId     String
   user       User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId     Int
+  userId     String      @db.Uuid
   message    String
   status     ClaimStatus @default(Pending)
   reviewedAt DateTime?

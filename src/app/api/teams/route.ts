@@ -38,7 +38,7 @@ export const GET = withPublicRateLimit('teams-read', async () => {
 });
 
 async function getSubmitter(): Promise<
-	{ id: number; isAdmin: boolean } | undefined
+	{ id: string; isAdmin: boolean } | undefined
 > {
 	try {
 		const { user } = await getApiUser();

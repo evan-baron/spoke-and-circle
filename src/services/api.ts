@@ -100,7 +100,7 @@ export const adminAPI = {
 			`/api/admin/users/search?q=${encodeURIComponent(query)}`,
 			{ method: 'GET', signal },
 		),
-	transferTeam: (id: string, userId: number) =>
+	transferTeam: (id: string, userId: string) =>
 		apiCall<{ success: boolean; emailStatus: string }>(
 			`/api/admin/teams/${encodeURIComponent(id)}/owner`,
 			{ method: 'PUT', body: JSON.stringify({ userId }) },

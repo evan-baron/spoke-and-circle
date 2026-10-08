@@ -110,7 +110,7 @@ function buildRateLimitResponse(retryAfterSeconds: number): NextResponse {
 }
 
 export async function applyRateLimit(
-	user: { id: number; role: 'user' | 'admin' },
+	user: { id: string; role: 'user' | 'admin' },
 	bucket: RateLimitBucket,
 ): Promise<NextResponse | null> {
 	const result = await checkRateLimit(`user:${user.id}`, bucket, user.role);

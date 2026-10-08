@@ -69,7 +69,7 @@ export async function findOrCreateUser(user: Auth0User) {
 }
 
 export function updateUserName(
-	id: number,
+	id: string,
 	firstName: string,
 	lastName: string | null,
 ) {

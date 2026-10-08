@@ -1,5 +1,5 @@
 export interface AdminUserRow {
-	id: number;
+	id: string;
 	firstName: string | null;
 	lastName: string | null;
 	email: string;

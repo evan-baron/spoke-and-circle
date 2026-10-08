@@ -16,7 +16,7 @@ interface TransferEmail {
 	firstName?: string | null;
 	teamName: string;
 	approved: boolean;
-	sentByAdminId: number;
+	sentByAdminId: string;
 }
 
 export function buildTransferEmailHtml({

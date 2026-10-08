@@ -11,7 +11,7 @@ import { sendTeamTransferEmail } from '@/services/teamTransferEmailService';
 
 export async function approvePendingTeam(
 	id: string,
-	adminId: number,
+	adminId: string,
 	input: CreateTeamInput,
 	verified?: boolean,
 ): Promise<{ emailStatus: EmailStatus } | null> {
@@ -63,7 +63,7 @@ export async function approvePendingTeam(
 export async function updateApprovedTeam(
 	id: string,
 	input: CreateTeamInput,
-	{ verified, ownerId }: { verified?: boolean; ownerId?: number } = {},
+	{ verified, ownerId }: { verified?: boolean; ownerId?: string } = {},
 ): Promise<boolean> {
 	const result = await prisma.team.updateMany({
 		where: {
@@ -100,8 +100,8 @@ export type TransferOwnershipResult =
 
 export async function transferTeamOwnership(
 	teamId: string,
-	newOwnerId: number,
-	adminId: number,
+	newOwnerId: string,
+	adminId: string,
 ): Promise<TransferOwnershipResult> {
 	const [team, newOwner] = await Promise.all([
 		prisma.team.findUnique({
@@ -167,7 +167,7 @@ export async function deleteApprovedTeams(ids: string[]): Promise<number> {
 
 export async function rejectPendingTeam(
 	id: string,
-	adminId: number,
+	adminId: string,
 	reason?: string,
 ): Promise<{ emailStatus: EmailStatus } | null> {
 	const team = await prisma.team.findFirst({
