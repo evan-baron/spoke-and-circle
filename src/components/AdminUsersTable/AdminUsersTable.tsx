@@ -38,7 +38,7 @@ export function AdminUsersTable({ users, totalCount }: AdminUsersTableProps) {
 						<tbody>
 							{users.map((user) => (
 								<tr key={user.id}>
-									<td title={user.id}>{user.id}</td>
+									<td title={user.id}>{user.id.slice(0, 8)}</td>
 									<td>
 										{user.firstName ?? '—'}
 										{user.role === 'admin' && (
