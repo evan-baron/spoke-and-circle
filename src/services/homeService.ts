@@ -15,10 +15,15 @@ export interface RideStyleTile {
 
 export const RIDE_STYLES: RideStyleTile[] = [
 	{
-		label: 'No-drop',
-		description: 'Nobody gets left behind on the road.',
-		href: '/search?q=no-drop',
-		where: { dropPolicy: 'NoDrop' },
+		label: 'Road',
+		description: 'Pavement miles, paceline rides, and road racing.',
+		href: '/search?q=road',
+		where: {
+			OR: [
+				{ bikeTypes: { has: 'Road' } },
+				{ racingDisciplines: { has: 'Road' } },
+			],
+		},
 	},
 	{
 		label: 'Gravel',
