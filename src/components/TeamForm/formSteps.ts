@@ -3,6 +3,7 @@ export type FormStepId = 'generic' | 'profile' | 'structure' | 'additional';
 export interface FormStep {
 	id: FormStepId;
 	label: string;
+	shortLabel: string;
 }
 
 export interface StepValidation {
@@ -14,13 +15,14 @@ type NativeControl = HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement;
 
 export function getFormSteps(groupType: string): FormStep[] {
 	return [
-		{ id: 'generic', label: 'Generic info' },
-		{ id: 'profile', label: 'Group profile' },
+		{ id: 'generic', label: 'Generic info', shortLabel: 'Info' },
+		{ id: 'profile', label: 'Group profile', shortLabel: 'Profile' },
 		{
 			id: 'structure',
 			label: groupType === 'Group Ride' ? 'Ride details' : 'Group structure',
+			shortLabel: groupType === 'Group Ride' ? 'Ride' : 'Structure',
 		},
-		{ id: 'additional', label: 'Tags and media' },
+		{ id: 'additional', label: 'Tags and media', shortLabel: 'Tags' },
 	];
 }
 

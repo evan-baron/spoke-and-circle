@@ -9,6 +9,7 @@ import {
 } from 'react';
 import { Checkbox } from './Checkbox';
 import { DEFAULT_TEAM_FORM_VALUES } from '@/lib/teamFormDefaults';
+import { useActiveSection } from '@/hooks/useActiveSection';
 import { useUnsavedChangesGuard } from '@/hooks/useUnsavedChangesGuard';
 import { trackEvent } from '@/lib/analytics';
 import { payloadToTeam } from '@/lib/previewTeam';
@@ -25,7 +26,9 @@ import { ListingPreview } from './ListingPreview';
 import { MediaSection } from './MediaSection';
 import { RejectionSection } from './RejectionSection';
 import { RideDetailsSection } from './RideDetailsSection';
+import { SaveBar } from './SaveBar';
 import { Section } from './Section';
+import { SectionNav } from './SectionNav';
 import { StepActions } from './StepActions';
 import { SubmitActions } from './SubmitActions';
 import { SubmitErrors } from './SubmitErrors';
@@ -107,14 +110,61 @@ export function TeamForm({
 	const [previewOpen, setPreviewOpen] = useState(false);
 	const [previewTeam, setPreviewTeam] = useState<Team | null>(null);
 	const [isDirty, setIsDirty] = useState(false);
-	const guard = useUnsavedChangesGuard(isCreate && isDirty);
-	const handleMediaChange = useCallback((items: TeamMediaItem[]) => {
-		mediaItemsRef.current = items;
+	const baselineRef = useRef<string | null>(null);
+	const submitErrorRef = useRef<HTMLDivElement>(null);
+	const hasUnsaved = isDirty || mediaUploading;
+	const guard = useUnsavedChangesGuard((isCreate || isEdit) && hasUnsaved);
+	const { activeId: activeSectionId, select: selectSection } = useActiveSection(
+		steps.map((item) => `section-${item.id}`),
+	);
+
+	function snapshotForm(form: HTMLFormElement) {
+		const entries: [string, string][] = [];
+		new FormData(form).forEach((value, key) => {
+			if (typeof value === 'string') entries.push([key, value]);
+		});
+		return JSON.stringify(entries);
+	}
+
+	function captureBaseline() {
+		const form = formRef.current;
+		if (baselineRef.current !== null || !form) return;
+		baselineRef.current = snapshotForm(form);
+	}
+
+	const refreshDirty = useCallback(() => {
+		setTimeout(() => {
+			const form = formRef.current;
+			if (!form || baselineRef.current === null) return;
+			setIsDirty(snapshotForm(form) !== baselineRef.current);
+		}, 0);
 	}, []);
 
+	const handleMediaChange = useCallback(
+		(items: TeamMediaItem[]) => {
+			mediaItemsRef.current = items;
+			refreshDirty();
+		},
+		[refreshDirty],
+	);
+
+	function scrollToSection(id: string) {
+		const reduceMotion = window.matchMedia(
+			'(prefers-reduced-motion: reduce)',
+		).matches;
+		selectSection(`section-${id}`, !reduceMotion);
+	}
+
 	useEffect(() => {
-		if (submitErrors.length > 0) setPreviewOpen(false);
-	}, [submitErrors]);
+		if (submitErrors.length === 0) return;
+		setPreviewOpen(false);
+		if (isEdit) {
+			submitErrorRef.current?.scrollIntoView({
+				behavior: 'smooth',
+				block: 'center',
+			});
+		}
+	}, [submitErrors, isEdit]);
 
 	const stepName = steps[step]?.label ?? '';
 
@@ -188,6 +238,7 @@ export function TeamForm({
 		try {
 			await action();
 			setIsDirty(false);
+			baselineRef.current = null;
 			if (isCreate) trackEvent('form_submit', { form: 'new_team' });
 		} catch (error) {
 			setSubmitErrors(describeSubmitError(error));
@@ -316,7 +367,11 @@ export function TeamForm({
 				noValidate
 				onSubmit={handleSubmit}
 				onChange={() => stepErrors.length > 0 && setStepErrors([])}
-				onInput={() => setIsDirty(true)}
+				onPointerDownCapture={captureBaseline}
+				onKeyDownCapture={captureBaseline}
+				onFocusCapture={captureBaseline}
+				onInput={refreshDirty}
+				onClick={refreshDirty}
 				className={styles.form}
 			>
 				<div ref={stepperRef} className={styles.stepper}>
@@ -389,14 +444,21 @@ export function TeamForm({
 		);
 	}
 
-	return (
-		<form onSubmit={handleSubmit} className={styles.form}>
+	const sectionGroups = [
+		<div key='generic' id='section-generic' className={styles.sectionGroup}>
 			{genericSection}
-
+		</div>,
+		<div key='profile' id='section-profile' className={styles.sectionGroup}>
 			{profileSection}
-
+		</div>,
+		<div key='structure' id='section-structure' className={styles.sectionGroup}>
 			{structureSection}
-
+		</div>,
+		<div
+			key='additional'
+			id='section-additional'
+			className={styles.sectionGroup}
+		>
 			{additionalSections}
 
 			{showAdminFields && (
@@ -408,26 +470,65 @@ export function TeamForm({
 					/>
 				</Section>
 			)}
+		</div>,
+	];
 
-			<SubmitErrors errors={submitErrors} isReview />
+	return (
+		<form
+			ref={formRef}
+			onSubmit={handleSubmit}
+			onPointerDownCapture={captureBaseline}
+			onKeyDownCapture={captureBaseline}
+			onFocusCapture={captureBaseline}
+			onInput={refreshDirty}
+			onClick={refreshDirty}
+			className={`${styles.form} ${styles.sectionedForm}`}
+		>
+			<SectionNav
+				sections={steps}
+				activeId={activeSectionId.replace(/^section-/, '')}
+				onSelect={scrollToSection}
+			/>
+
+			{sectionGroups}
+
+			<div ref={submitErrorRef}>
+				<SubmitErrors errors={submitErrors} isReview />
+			</div>
 
 			{isReview && (
-				<RejectionSection
-					submitter={submitter}
-					rejectionReason={rejectionReason}
-					onRejectionReasonChange={setRejectionReason}
+				<>
+					<RejectionSection
+						submitter={submitter}
+						rejectionReason={rejectionReason}
+						onRejectionReasonChange={setRejectionReason}
+					/>
+
+					<SubmitActions
+						isSubmitting={isSubmitting}
+						confirmingReject={confirmingReject}
+						onConfirmReject={() => setConfirmingReject(true)}
+						onCancelReject={() => setConfirmingReject(false)}
+						onReject={handleReject}
+					/>
+				</>
+			)}
+
+			{isEdit && (
+				<SaveBar
+					isDirty={hasUnsaved}
+					isSubmitting={isSubmitting}
+					cancelHref={cancelHref}
 				/>
 			)}
 
-			<SubmitActions
-				mode={isReview ? 'review' : 'edit'}
-				cancelHref={cancelHref}
-				isSubmitting={isSubmitting}
-				confirmingReject={confirmingReject}
-				onConfirmReject={() => setConfirmingReject(true)}
-				onCancelReject={() => setConfirmingReject(false)}
-				onReject={handleReject}
-			/>
+			{isEdit && (
+				<LeaveFormDialog
+					open={guard.prompting}
+					onStay={guard.stay}
+					onLeave={guard.leave}
+				/>
+			)}
 		</form>
 	);
 }

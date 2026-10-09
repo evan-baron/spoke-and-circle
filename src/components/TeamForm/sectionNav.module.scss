@@ -1,0 +1,40 @@
+@use '@/styles/mixins' as *;
+
+.sticky {
+	position: sticky;
+	top: var(--header-height);
+	z-index: 9;
+	padding: var(--space-3xs) 0 var(--space-2xs);
+	background: var(--color-paper);
+	border-bottom: 1px solid var(--color-line);
+}
+
+.segment {
+	min-height: 2.5rem;
+	justify-content: flex-start;
+
+	@include from($bp-md) {
+		min-height: 0;
+	}
+}
+
+.shortLabel {
+	display: block;
+	font-size: 0.6875rem;
+	font-weight: 700;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	color: var(--color-ink-soft);
+	transition: color 0.15s ease;
+
+	@include from($bp-md) {
+		display: none;
+	}
+}
+
+.active .shortLabel {
+	color: var(--color-ink);
+}

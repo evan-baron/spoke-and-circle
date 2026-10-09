@@ -12,12 +12,8 @@
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
-		height: 4rem;
+		height: var(--header-height);
 		padding-inline: var(--space-sm);
-
-		@include from($bp-md) {
-			height: 4.5rem;
-		}
 	}
 
 	.desktop {

@@ -80,6 +80,7 @@
 	--space-2xl: 5rem;
 
 	--content-width: 72rem;
+	--header-height: 4rem;
 	--radius-sm: 0.7rem;
 	--radius: 1rem;
 	--radius-lg: 1.35rem;
@@ -88,6 +89,12 @@
 	--shadow-sm: 0 1px 2px hsl(291, 25%, 15%, 0.05);
 	--shadow-md: 0 16px 32px -18px hsl(291, 25%, 15%, 0.32);
 	--shadow-lift: 0 20px 36px -16px hsl(291, 25%, 15%, 0.38);
+}
+
+@media screen and (min-width: 768px) {
+	:root {
+		--header-height: 4.5rem;
+	}
 }
 
 html,

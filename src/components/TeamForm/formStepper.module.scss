@@ -49,6 +49,10 @@
 	transition: background-color 0.2s ease;
 }
 
+.item:not(.current):not(.done) .segment:not(:disabled):hover .bar {
+	background: var(--color-coral-soft);
+}
+
 .done .bar,
 .current .bar {
 	background: var(--gradient-cta);
