@@ -158,23 +158,21 @@ function buildGeometry(width: number) {
 		`${flagLeft.x},${flagLeft.top + bannerHeight}`,
 	].join(' ');
 
+	const halfWheelbase = (13 * bikeScale) / 2;
+
 	function riderTransform(length: number) {
-		const point = pointAt(length);
-		const before = pointAt(length - 3);
-		const after = pointAt(length + 3);
+		const rear = pointAt(length - halfWheelbase);
+		const front = pointAt(length + halfWheelbase);
 		const angle =
-			(Math.atan2(after.y - before.y, after.x - before.x) * 180) / Math.PI;
-		return `translate(${point.x} ${point.y}) rotate(${angle}) translate(0 ${-lift}) scale(${bikeScale}) translate(-12 -21)`;
+			(Math.atan2(front.y - rear.y, front.x - rear.x) * 180) / Math.PI;
+		const midX = (rear.x + front.x) / 2;
+		const midY = (rear.y + front.y) / 2;
+		return `translate(${midX} ${midY}) rotate(${angle}) translate(0 ${-lift}) scale(${bikeScale}) translate(-12 -21)`;
 	}
 
 	function lengthForStep(step: number) {
 		const clamped = Math.min(Math.max(step, 0), STEP_COUNT - 1);
-		const centre = (width * (clamped + 0.5)) / STEP_COUNT;
-		const x =
-			clamped === STEP_COUNT - 1 ?
-				Math.min(centre, flagLeft.x - 66 * unit)
-			:	centre;
-		return lengthAtX(x);
+		return lengthAtX((width * (clamped + 0.5)) / STEP_COUNT);
 	}
 
 	return {

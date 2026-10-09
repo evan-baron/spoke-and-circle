@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import MountainProgress from '@/components/Graphics/MountainProgress';
 import { bikeType, skillLevel } from '@/lib/enums';
 import type { RiderPreferences } from '@/lib/types';
 import styles from './getStartedWizard.module.scss';
@@ -109,14 +110,7 @@ export function GetStartedWizard() {
 
 	return (
 		<div className={styles.wizard}>
-			<div className={styles.progress}>
-				{STEPS.map((key, i) => (
-					<div
-						key={key}
-						className={`${styles.progressSegment} ${i <= stepIndex ? styles.progressActive : ''}`}
-					/>
-				))}
-			</div>
+			<MountainProgress step={stepIndex} />
 
 			<div
 				key={step}
@@ -212,7 +206,7 @@ export function GetStartedWizard() {
 					<>
 						<h2>What are you looking for?</h2>
 						<p className={styles.stepHint}>
-							A team, a club, a casual group ride &mdash; or all of it.
+							A team, a club, a casual group ride, or all of it.
 						</p>
 						<div className={styles.optionGrid}>
 							{LOOKING_FOR_OPTIONS.map((option) => (

@@ -14,23 +14,6 @@
 	}
 }
 
-.progress {
-	display: flex;
-	gap: var(--space-3xs);
-}
-
-.progressSegment {
-	flex: 1;
-	height: 4px;
-	border-radius: var(--radius-pill);
-	background: var(--color-line);
-	transition: background-color 0.2s ease;
-}
-
-.progressActive {
-	background: var(--gradient-cta);
-}
-
 .stepBody {
 	display: flex;
 	flex-direction: column;
