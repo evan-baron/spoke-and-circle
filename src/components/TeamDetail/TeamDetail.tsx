@@ -1,7 +1,11 @@
 import Link from 'next/link';
 import { Badge } from '@/components/Badge/Badge';
 import { ContactModal } from '@/components/ContactModal/ContactModal';
-import { MailIcon, PhoneIcon } from '@/components/ContactIcons/ContactIcons';
+import {
+	MailIcon,
+	PhoneIcon,
+	WebsiteIcon,
+} from '@/components/ContactIcons/ContactIcons';
 import {
 	DetailRow,
 	DetailSection,
@@ -141,7 +145,8 @@ export function TeamDetail({
 										href={`mailto:${team.contact.email}`}
 										className={styles.contactLink}
 									>
-										{team.contact.email}
+										{team.contact.email.split('@')[0]}@<wbr />
+										{team.contact.email.split('@').slice(1).join('@')}
 									</a>
 								</dd>
 							)}
@@ -160,18 +165,21 @@ export function TeamDetail({
 								<dd>Not listed</dd>
 							)}
 							<dt>Website</dt>
-							<dd>
-								{team.website ?
+							{team.website ?
+								<dd className={styles.factWithIcon}>
+									<WebsiteIcon size={16} />
 									<a
 										target='_blank'
 										rel='noopener noreferrer'
 										href={team.website}
 										className={styles.website}
 									>
-										{team.website}
+										{team.website
+											.replace(/^https?:\/\/(www\.)?/i, '')
+											.replace(/\/$/, '')}
 									</a>
-								:	'N/A'}
-							</dd>
+								</dd>
+							:	<dd>N/A</dd>}
 							{hasSocial && (
 								<>
 									<dt>Social</dt>
