@@ -122,50 +122,42 @@ export function DetailsSection({
 				</Field>
 			)}
 			<Subsection title='Socials'>
-				{groupType !== 'Group Ride' && (
-					<Field label='Instagram'>
-						<input
-							type='text'
-							name='instagram'
-							defaultValue={values.instagram}
-							placeholder='@yourteam'
-							className={styles.input}
-						/>
-					</Field>
-				)}
-				{groupType !== 'Group Ride' && (
-					<Field label='Instagram link'>
-						<input
-							type='url'
-							name='instagramLink'
-							defaultValue={values.instagramLink}
-							placeholder='https://instagram.com/yourteam'
-							className={styles.input}
-						/>
-					</Field>
-				)}
-				{groupType !== 'Group Ride' && (
-					<Field label='Facebook'>
-						<input
-							type='text'
-							name='facebook'
-							defaultValue={values.facebook}
-							placeholder='Page name'
-							className={styles.input}
-						/>
-					</Field>
-				)}
-				{groupType !== 'Group Ride' && (
-					<Field label='Facebook link'>
-						<input
-							type='url'
-							name='facebookLink'
-							defaultValue={values.facebookLink}
-							placeholder='https://facebook.com/yourteam'
-							className={styles.input}
-						/>
-					</Field>
-				)}
+				<Field label='Instagram'>
+					<input
+						type='text'
+						name='instagram'
+						defaultValue={values.instagram}
+						placeholder='@yourteam'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Instagram link'>
+					<input
+						type='url'
+						name='instagramLink'
+						defaultValue={values.instagramLink}
+						placeholder='https://instagram.com/yourteam'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Facebook'>
+					<input
+						type='text'
+						name='facebook'
+						defaultValue={values.facebook}
+						placeholder='Page name'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Facebook link'>
+					<input
+						type='url'
+						name='facebookLink'
+						defaultValue={values.facebookLink}
+						placeholder='https://facebook.com/yourteam'
+						className={styles.input}
+					/>
+				</Field>
 				<Field label='Strava'>
 					<input
 						type='text'
