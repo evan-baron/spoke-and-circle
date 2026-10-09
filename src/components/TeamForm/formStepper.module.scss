@@ -1,0 +1,90 @@
+@use '@/styles/mixins' as *;
+
+.progress {
+	display: flex;
+	gap: var(--space-2xs);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+
+	@include from($bp-md) {
+		gap: var(--space-sm);
+	}
+}
+
+.item {
+	flex: 1;
+	min-width: 0;
+}
+
+.segment {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2xs);
+	width: 100%;
+	padding: var(--space-3xs) 0;
+	font: inherit;
+	text-align: left;
+	color: var(--color-ink-soft);
+	background: none;
+	border: 0;
+	cursor: pointer;
+
+	&:disabled {
+		cursor: default;
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--color-coral);
+		outline-offset: 2px;
+		border-radius: var(--radius-sm);
+	}
+}
+
+.bar {
+	display: block;
+	height: 5px;
+	border-radius: var(--radius-pill);
+	background: var(--color-line);
+	transition: background-color 0.2s ease;
+}
+
+.done .bar,
+.current .bar {
+	background: var(--gradient-cta);
+}
+
+.label {
+	display: none;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	transition: color 0.15s ease;
+
+	@include from($bp-md) {
+		display: block;
+	}
+}
+
+.current .label {
+	color: var(--color-ink);
+}
+
+.done .segment:hover .label {
+	color: var(--color-coral);
+}
+
+.srOnly {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}

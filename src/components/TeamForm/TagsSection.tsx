@@ -15,7 +15,7 @@ export function TagsSection({ values }: TagsSectionProps) {
 	return (
 		<Section
 			title='Tags'
-			description={`Add up to ${MAX_TAGS} tags to help people find your group`}
+			description={`Add up to ${MAX_TAGS} tag words to help people find your group`}
 		>
 			<div className={`${styles.field} ${styles.fieldFull}`}>
 				<label htmlFor={tagsId} className={styles.fieldLabel}>

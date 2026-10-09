@@ -56,6 +56,153 @@
 	gap: var(--space-sm);
 }
 
+.stepper {
+	@include card;
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-md);
+	padding: var(--space-md);
+	scroll-margin-top: var(--space-md);
+
+	@include from($bp-md) {
+		padding: var(--space-lg);
+	}
+}
+
+.stepCounter {
+	margin: 0;
+	font-size: 0.75rem;
+	font-weight: 700;
+	letter-spacing: 0.03em;
+	text-transform: uppercase;
+	color: var(--color-coral);
+
+	&:focus {
+		outline: none;
+	}
+}
+
+.stepCounterLabel {
+	@include from($bp-md) {
+		display: none;
+	}
+}
+
+.stepPanel {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-md);
+
+	&[hidden] {
+		display: none;
+	}
+
+	.section {
+		padding: 0;
+		background: none;
+		border: 0;
+		border-radius: 0;
+		box-shadow: none;
+
+		& + .section {
+			padding-top: var(--space-md);
+			border-top: 1px solid var(--color-line);
+		}
+	}
+}
+
+.panelForward {
+	animation: stepSlideInRight 0.28s ease both;
+}
+
+.panelBack {
+	animation: stepSlideInLeft 0.28s ease both;
+}
+
+@keyframes stepSlideInRight {
+	from {
+		opacity: 0;
+		transform: translateX(16px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes stepSlideInLeft {
+	from {
+		opacity: 0;
+		transform: translateX(-16px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.panelForward,
+	.panelBack {
+		animation: none;
+	}
+}
+
+.previewLink {
+	align-self: center;
+	padding: var(--space-3xs) var(--space-2xs);
+	font: inherit;
+	font-size: 0.9375rem;
+	font-weight: 700;
+	color: var(--color-ink-soft);
+	background: none;
+	border: 0;
+	text-decoration: underline;
+	text-underline-offset: 0.2em;
+	cursor: pointer;
+
+	&:hover:not(:disabled) {
+		color: var(--color-coral);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--color-coral);
+		outline-offset: 2px;
+		border-radius: var(--radius-sm);
+	}
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+	}
+}
+
+.stepNav {
+	display: flex;
+	gap: var(--space-xs);
+	padding-top: var(--space-sm);
+	border-top: 1px solid var(--color-line);
+
+	button {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.5em;
+		flex: 1;
+		min-width: 0;
+	}
+
+	@include from($bp-md) {
+		justify-content: center;
+		gap: var(--space-sm);
+
+		button {
+			flex: 0 1 auto;
+			min-width: 10rem;
+		}
+	}
+}
+
 .sectionTitle {
 	@include section-heading;
 }

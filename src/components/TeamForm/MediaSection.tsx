@@ -24,11 +24,13 @@ interface MediaSectionProps {
 	canUpload: boolean;
 	submitting: boolean;
 	onUploadingChange: (uploading: boolean) => void;
+	onMediaChange?: (items: TeamMediaItem[]) => void;
 }
 
 interface MediaEntry {
 	key: string;
 	publicId?: string;
+	item?: TeamMediaItem;
 	pendingId?: string;
 	isNew: boolean;
 	src: string;
@@ -73,7 +75,7 @@ function sendToCloudinary(
 	signed: SignedUpload,
 	onProgress: (percent: number) => void,
 	onRequest: (request: XMLHttpRequest) => void,
-): Promise<string> {
+): Promise<TeamMediaItem> {
 	return new Promise((resolve, reject) => {
 		const form = new FormData();
 		form.append('file', file);
@@ -98,7 +100,12 @@ function sendToCloudinary(
 			try {
 				const body = JSON.parse(request.responseText);
 				if (request.status >= 200 && request.status < 300 && body.public_id) {
-					resolve(body.public_id as string);
+					resolve({
+						publicId: body.public_id as string,
+						width: Number(body.width) || 0,
+						height: Number(body.height) || 0,
+						url: `https://res.cloudinary.com/${signed.cloudName}/image/upload/${body.public_id}`,
+					});
 					return;
 				}
 				reject(new Error(body.error?.message ?? 'Upload failed'));
@@ -117,11 +124,13 @@ export function MediaSection({
 	canUpload,
 	submitting,
 	onUploadingChange,
+	onMediaChange,
 }: MediaSectionProps) {
 	const [entries, setEntries] = useState<MediaEntry[]>(() =>
 		initialMedia.map((item) => ({
 			key: item.publicId,
 			publicId: item.publicId,
+			item,
 			isNew: false,
 			src: mediaSrc(item.url, 480),
 			status: 'done',
@@ -138,6 +147,14 @@ export function MediaSection({
 	useEffect(() => {
 		onUploadingChange(uploading);
 	}, [uploading, onUploadingChange]);
+
+	useEffect(() => {
+		onMediaChange?.(
+			entries.flatMap((entry) =>
+				entry.status === 'done' && entry.item ? [entry.item] : [],
+			),
+		);
+	}, [entries, onMediaChange]);
 
 	const entriesRef = useRef(entries);
 	const submittingRef = useRef(submitting);
@@ -191,13 +208,18 @@ export function MediaSection({
 		try {
 			const signed = await requestSignature();
 			patchEntry(key, { pendingId: String(signed.params.public_id) });
-			const publicId = await sendToCloudinary(
+			const item = await sendToCloudinary(
 				file,
 				signed,
 				(progress) => patchEntry(key, { progress }),
 				(request) => requests.current.set(key, request),
 			);
-			patchEntry(key, { publicId, status: 'done', progress: 100 });
+			patchEntry(key, {
+				publicId: item.publicId,
+				item,
+				status: 'done',
+				progress: 100,
+			});
 		} catch (error) {
 			patchEntry(key, {
 				status: 'error',

@@ -1,18 +1,31 @@
 'use client';
 
-import { type FormEvent, useCallback, useRef, useState } from 'react';
+import {
+	type FormEvent,
+	useCallback,
+	useEffect,
+	useRef,
+	useState,
+} from 'react';
 import { Checkbox } from './Checkbox';
 import { DEFAULT_TEAM_FORM_VALUES } from '@/lib/teamFormDefaults';
+import { useUnsavedChangesGuard } from '@/hooks/useUnsavedChangesGuard';
+import { payloadToTeam } from '@/lib/previewTeam';
 import { buildTeamPayload } from '@/lib/teamForm';
-import type { TeamFormValues } from '@/lib/types';
+import type { Team, TeamFormValues, TeamMediaItem } from '@/lib/types';
 import { describeSubmitError } from './describeSubmitError';
 import { DetailsSection } from './DetailsSection';
+import { FormStepper } from './FormStepper';
+import { getFormSteps, validateStep } from './formSteps';
 import { GenericInfoSection } from './GenericInfoSection';
 import { HumanCheckSection } from './HumanCheckSection';
+import { LeaveFormDialog } from './LeaveFormDialog';
+import { ListingPreview } from './ListingPreview';
 import { MediaSection } from './MediaSection';
 import { RejectionSection } from './RejectionSection';
 import { RideDetailsSection } from './RideDetailsSection';
 import { Section } from './Section';
+import { StepActions } from './StepActions';
 import { SubmitActions } from './SubmitActions';
 import { SubmitErrors } from './SubmitErrors';
 import { TagsSection } from './TagsSection';
@@ -77,6 +90,77 @@ export function TeamForm({
 		null,
 	);
 	const [segmentationDescription, setSegmentationDescription] = useState('');
+	const isCreate = mode === 'create';
+	const steps = getFormSteps(groupType);
+	const lastStep = steps.length - 1;
+	const [step, setStep] = useState(0);
+	const [direction, setDirection] = useState<'forward' | 'back'>('forward');
+	const [stepErrors, setStepErrors] = useState<string[]>([]);
+	const formRef = useRef<HTMLFormElement>(null);
+	const stepperRef = useRef<HTMLDivElement>(null);
+	const counterRef = useRef<HTMLParagraphElement>(null);
+	const stepErrorRef = useRef<HTMLDivElement>(null);
+	const panelRefs = useRef<(HTMLDivElement | null)[]>([]);
+	const stepChangedRef = useRef(false);
+	const mediaItemsRef = useRef<TeamMediaItem[]>([]);
+	const [previewOpen, setPreviewOpen] = useState(false);
+	const [previewTeam, setPreviewTeam] = useState<Team | null>(null);
+	const [isDirty, setIsDirty] = useState(false);
+	const guard = useUnsavedChangesGuard(isCreate && isDirty);
+	const handleMediaChange = useCallback((items: TeamMediaItem[]) => {
+		mediaItemsRef.current = items;
+	}, []);
+
+	useEffect(() => {
+		if (submitErrors.length > 0) setPreviewOpen(false);
+	}, [submitErrors]);
+
+	useEffect(() => {
+		if (!stepChangedRef.current) return;
+		counterRef.current?.focus({ preventScroll: true });
+		stepperRef.current?.scrollIntoView({ block: 'start' });
+	}, [step]);
+
+	function goToStep(index: number, nextDirection: 'forward' | 'back') {
+		stepChangedRef.current = true;
+		setDirection(nextDirection);
+		setStepErrors([]);
+		setStep(index);
+	}
+
+	function isCurrentStepValid() {
+		const form = formRef.current;
+		const panel = panelRefs.current[step];
+		const current = steps[step];
+		if (!form || !panel || !current) return false;
+
+		const { errors, focused } = validateStep(current.id, form, panel);
+		if (errors.length === 0) return true;
+
+		setStepErrors(errors);
+		if (!focused) requestAnimationFrame(() => stepErrorRef.current?.focus());
+		return false;
+	}
+
+	function openPreview() {
+		const form = formRef.current;
+		if (!form) return;
+
+		const payload = buildTeamPayload(form);
+		const hasParentPrefix =
+			payload.type === 'Group Ride' && Boolean(payload.affiliatedId);
+		setPreviewTeam(
+			payloadToTeam(payload, {
+				media: mediaItemsRef.current,
+				namePrefix: hasParentPrefix ? payload.affiliation : undefined,
+			}),
+		);
+		setPreviewOpen(true);
+	}
+
+	function goNext() {
+		if (isCurrentStepValid()) goToStep(step + 1, 'forward');
+	}
 
 	async function run(action: () => Promise<void>) {
 		busyRef.current = true;
@@ -85,6 +169,7 @@ export function TeamForm({
 
 		try {
 			await action();
+			setIsDirty(false);
 		} catch (error) {
 			setSubmitErrors(describeSubmitError(error));
 			busyRef.current = false;
@@ -94,7 +179,12 @@ export function TeamForm({
 
 	async function handleSubmit(event: FormEvent<HTMLFormElement>) {
 		event.preventDefault();
-		if ((mode === 'create' && !isAntiBotValid) || busyRef.current) return;
+		if (isCreate && step < lastStep) {
+			goNext();
+			return;
+		}
+		if (isCreate && !isCurrentStepValid()) return;
+		if ((isCreate && !isAntiBotValid) || busyRef.current) return;
 
 		if (mediaUploading) {
 			setSubmitErrors(['Wait for your photos to finish uploading']);
@@ -127,52 +217,55 @@ export function TeamForm({
 		setHasSegmentation((prev) => (prev === value ? null : value));
 	}
 
-	return (
-		<form onSubmit={handleSubmit} className={styles.form}>
-			<GenericInfoSection
+	const genericSection = (
+		<GenericInfoSection
+			values={values}
+			groupType={groupType}
+			onGroupTypeChange={setGroupType}
+			affiliationLabel={affiliationLabel}
+			affiliatedId={affiliatedId}
+			onAffiliationChange={(label, id) => {
+				setAffiliationLabel(label);
+				setAffiliatedId(id);
+			}}
+			excludeTeamId={excludeTeamId}
+			lockedToParent={lockedToParent}
+			namePrefix={
+				isCreate && groupType === 'Group Ride' && affiliatedId ?
+					affiliationLabel
+				:	undefined
+			}
+		/>
+	);
+
+	const profileSection = (
+		<DetailsSection
+			values={values}
+			groupType={groupType}
+			virtualPlatforms={virtualPlatforms}
+			onVirtualPlatformChange={handleVirtualPlatformChange}
+			virtualPlatformOtherText={virtualPlatformOtherText}
+			onVirtualPlatformOtherTextChange={setVirtualPlatformOtherText}
+			personaRestriction={personaRestriction}
+			onPersonaChange={handlePersonaChange}
+			personaOtherText={personaOtherText}
+			onPersonaOtherTextChange={setPersonaOtherText}
+		/>
+	);
+
+	const structureSection =
+		groupType === 'Group Ride' ?
+			<RideDetailsSection
 				values={values}
-				groupType={groupType}
-				onGroupTypeChange={setGroupType}
-				affiliationLabel={affiliationLabel}
-				affiliatedId={affiliatedId}
-				onAffiliationChange={(label, id) => {
-					setAffiliationLabel(label);
-					setAffiliatedId(id);
-				}}
-				excludeTeamId={excludeTeamId}
-				lockedToParent={lockedToParent}
-				namePrefix={
-					mode === 'create' && groupType === 'Group Ride' && affiliatedId ?
-						affiliationLabel
-					:	undefined
-				}
+				hasSegmentation={hasSegmentation}
+				onSegmentationChange={handleSegmentationChange}
+				segmentationDescription={segmentationDescription}
+				onSegmentationDescriptionChange={setSegmentationDescription}
 			/>
+		:	<TeamClubDetailsSection values={values} />;
 
-			<DetailsSection
-				values={values}
-				groupType={groupType}
-				virtualPlatforms={virtualPlatforms}
-				onVirtualPlatformChange={handleVirtualPlatformChange}
-				virtualPlatformOtherText={virtualPlatformOtherText}
-				onVirtualPlatformOtherTextChange={setVirtualPlatformOtherText}
-				personaRestriction={personaRestriction}
-				onPersonaChange={handlePersonaChange}
-				personaOtherText={personaOtherText}
-				onPersonaOtherTextChange={setPersonaOtherText}
-			/>
-
-			{groupType === 'Group Ride' && (
-				<RideDetailsSection
-					values={values}
-					hasSegmentation={hasSegmentation}
-					onSegmentationChange={handleSegmentationChange}
-					segmentationDescription={segmentationDescription}
-					onSegmentationDescriptionChange={setSegmentationDescription}
-				/>
-			)}
-
-			{groupType !== 'Group Ride' && <TeamClubDetailsSection values={values} />}
-
+	const additionalSections = (
+		<>
 			<TagsSection values={values} />
 
 			<MediaSection
@@ -180,9 +273,118 @@ export function TeamForm({
 				canUpload={canUploadMedia}
 				submitting={isSubmitting}
 				onUploadingChange={handleMediaUploadingChange}
+				onMediaChange={handleMediaChange}
 			/>
+		</>
+	);
 
-			{(isEdit || isReview) && showAdminFields && (
+	if (isCreate) {
+		const panels = [
+			genericSection,
+			profileSection,
+			structureSection,
+			<>
+				{additionalSections}
+				<HumanCheckSection onValidChange={setIsAntiBotValid} />
+			</>,
+		];
+		const slideClass =
+			direction === 'forward' ? styles.panelForward : styles.panelBack;
+
+		return (
+			<form
+				ref={formRef}
+				noValidate
+				onSubmit={handleSubmit}
+				onChange={() => stepErrors.length > 0 && setStepErrors([])}
+				onInput={() => setIsDirty(true)}
+				className={styles.form}
+			>
+				<div ref={stepperRef} className={styles.stepper}>
+					<FormStepper
+						steps={steps}
+						current={step}
+						onSelect={(index) => goToStep(index, 'back')}
+					/>
+
+					<p ref={counterRef} tabIndex={-1} className={styles.stepCounter}>
+						Step {step + 1} of {steps.length}
+						<span className={styles.stepCounterLabel}>
+							{' · '}
+							{steps[step]?.label}
+						</span>
+					</p>
+
+					{panels.map((panel, index) => (
+						<div
+							key={steps[index]?.id}
+							ref={(element) => {
+								panelRefs.current[index] = element;
+							}}
+							hidden={index !== step}
+							className={`${styles.stepPanel} ${index === step ? slideClass : ''}`}
+						>
+							{panel}
+						</div>
+					))}
+
+					{stepErrors.length > 0 && (
+						<div
+							ref={stepErrorRef}
+							tabIndex={-1}
+							className={styles.submitError}
+							role='alert'
+						>
+							<p>Finish this step before continuing:</p>
+							<ul>
+								{stepErrors.map((message) => (
+									<li key={message}>{message}</li>
+								))}
+							</ul>
+						</div>
+					)}
+
+					<SubmitErrors errors={submitErrors} isReview={false} />
+
+					<StepActions
+						step={step}
+						isLastStep={step === lastStep}
+						isSubmitting={isSubmitting}
+						isAntiBotValid={isAntiBotValid}
+						onPrev={() => goToStep(step - 1, 'back')}
+						onNext={goNext}
+						onPreview={openPreview}
+					/>
+				</div>
+
+				<ListingPreview
+					open={previewOpen}
+					team={previewTeam}
+					isSubmitting={isSubmitting}
+					isAntiBotValid={isAntiBotValid}
+					onClose={() => setPreviewOpen(false)}
+				/>
+
+				<LeaveFormDialog
+					open={guard.prompting}
+					onStay={guard.stay}
+					onLeave={guard.leave}
+				/>
+			</form>
+		);
+	}
+
+	return (
+		<form onSubmit={handleSubmit} className={styles.form}>
+			{genericSection}
+
+			{profileSection}
+
+			{structureSection}
+
+			{additionalSections}
+
+			{showAdminFields && (
 				<Section title='Admin'>
 					<Checkbox
 						label='Verified'
@@ -192,11 +394,7 @@ export function TeamForm({
 				</Section>
 			)}
 
-			{mode === 'create' && (
-				<HumanCheckSection onValidChange={setIsAntiBotValid} />
-			)}
-
-			<SubmitErrors errors={submitErrors} isReview={mode !== 'create'} />
+			<SubmitErrors errors={submitErrors} isReview />
 
 			{isReview && (
 				<RejectionSection
@@ -207,10 +405,9 @@ export function TeamForm({
 			)}
 
 			<SubmitActions
-				mode={mode}
+				mode={isReview ? 'review' : 'edit'}
 				cancelHref={cancelHref}
 				isSubmitting={isSubmitting}
-				isAntiBotValid={isAntiBotValid}
 				confirmingReject={confirmingReject}
 				onConfirmReject={() => setConfirmingReject(true)}
 				onCancelReject={() => setConfirmingReject(false)}

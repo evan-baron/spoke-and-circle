@@ -2,10 +2,9 @@ import Link from 'next/link';
 import styles from './teamForm.module.scss';
 
 interface SubmitActionsProps {
-	mode: 'create' | 'review' | 'edit';
+	mode: 'review' | 'edit';
 	cancelHref?: string;
 	isSubmitting: boolean;
-	isAntiBotValid: boolean;
 	confirmingReject: boolean;
 	onConfirmReject: () => void;
 	onCancelReject: () => void;
@@ -16,7 +15,6 @@ export function SubmitActions({
 	mode,
 	cancelHref,
 	isSubmitting,
-	isAntiBotValid,
 	confirmingReject,
 	onConfirmReject,
 	onCancelReject,
@@ -25,9 +23,7 @@ export function SubmitActions({
 	const isReview = mode === 'review';
 
 	return (
-		<div
-			className={`${styles.submitRow} ${mode !== 'create' ? styles.submitRowReview : ''}`}
-		>
+		<div className={`${styles.submitRow} ${styles.submitRowReview}`}>
 			{isReview ?
 				<>
 					<button
@@ -66,8 +62,7 @@ export function SubmitActions({
 						</button>
 					}
 				</>
-			: mode === 'edit' ?
-				<>
+			:	<>
 					<button
 						type='submit'
 						className={styles.buttonSolid}
@@ -81,13 +76,6 @@ export function SubmitActions({
 						</Link>
 					)}
 				</>
-			:	<button
-					type='submit'
-					className={styles.buttonSolid}
-					disabled={!isAntiBotValid || isSubmitting}
-				>
-					{isSubmitting ? 'Submitting…' : 'Submit for review'}
-				</button>
 			}
 		</div>
 	);

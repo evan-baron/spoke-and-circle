@@ -1,0 +1,132 @@
+@use '@/styles/mixins' as *;
+
+.dialog {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	inset: 0;
+	width: 100%;
+	max-width: none;
+	height: 100dvh;
+	max-height: none;
+	color: var(--color-ink);
+	background: var(--color-paper);
+
+	&[open] {
+		display: flex;
+		flex-direction: column;
+		animation: previewIn 0.22s ease both;
+	}
+
+	&::backdrop {
+		background: hsl(291, 25%, 15%, 0.5);
+	}
+}
+
+@keyframes previewIn {
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.dialog[open] {
+		animation: none;
+	}
+}
+
+.banner {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: center;
+	gap: 0.15rem var(--space-xs);
+	padding: var(--space-xs) var(--space-sm);
+	font-size: 0.875rem;
+	text-align: center;
+	color: var(--color-coral);
+	background: var(--color-coral-soft);
+	border-bottom: 1px solid var(--color-coral);
+
+	strong {
+		font-size: 0.75rem;
+		font-weight: 800;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+	}
+}
+
+.scroll {
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+}
+
+.content {
+	@include container;
+	padding: var(--space-lg) var(--space-sm);
+
+	@include from($bp-md) {
+		padding: var(--space-xl) var(--space-lg);
+	}
+}
+
+.bar {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-2xs);
+	padding: var(--space-xs) var(--space-sm);
+	padding-bottom: max(var(--space-xs), env(safe-area-inset-bottom));
+	background: var(--color-paper-raised);
+	border-top: 1px solid var(--color-line);
+	box-shadow: var(--shadow-md);
+}
+
+.hint {
+	font-size: 0.8125rem;
+	font-style: italic;
+	text-align: center;
+	color: var(--color-ink-soft);
+}
+
+.actions {
+	display: flex;
+	gap: var(--space-xs);
+
+	button {
+		flex: 1;
+		min-width: 0;
+	}
+
+	@include from($bp-md) {
+		justify-content: center;
+		gap: var(--space-sm);
+
+		button {
+			flex: 0 1 auto;
+			min-width: 12rem;
+		}
+	}
+}
+
+.buttonSolid {
+	@include button-solid;
+
+	&:disabled {
+		opacity: 0.5;
+		cursor: not-allowed;
+		filter: none;
+		box-shadow: none;
+		transform: none;
+	}
+}
+
+.buttonOutline {
+	@include button-outline;
+}

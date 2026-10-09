@@ -9,7 +9,7 @@ export function HumanCheckSection({ onValidChange }: HumanCheckSectionProps) {
 	return (
 		<Section
 			title='Are you human?'
-			description='Answer this quick question to enable submitting.'
+			description='Answer this question in order to submit your group.'
 		>
 			<AntiBot onValidChange={onValidChange} />
 		</Section>
