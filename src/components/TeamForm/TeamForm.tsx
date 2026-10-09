@@ -309,10 +309,6 @@ export function TeamForm({
 
 					<p ref={counterRef} tabIndex={-1} className={styles.stepCounter}>
 						Step {step + 1} of {steps.length}
-						<span className={styles.stepCounterLabel}>
-							{' · '}
-							{steps[step]?.label}
-						</span>
 					</p>
 
 					{panels.map((panel, index) => (

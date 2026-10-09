@@ -82,12 +82,6 @@
 	}
 }
 
-.stepCounterLabel {
-	@include from($bp-md) {
-		display: none;
-	}
-}
-
 .stepPanel {
 	display: flex;
 	flex-direction: column;
@@ -107,6 +101,19 @@
 		& + .section {
 			padding-top: var(--space-md);
 			border-top: 1px solid var(--color-line);
+		}
+
+		&:only-child > .sectionTitle {
+			@include from($bp-md) {
+				position: absolute;
+				width: 1px;
+				height: 1px;
+				margin: -1px;
+				padding: 0;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
 		}
 	}
 }
