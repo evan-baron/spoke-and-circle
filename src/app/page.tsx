@@ -94,7 +94,8 @@ export default async function HomePage() {
 							<div className={styles.sectionHead}>
 								<h2>Browse by how you ride</h2>
 								<p>
-									Pick the kind of riding you want and see who&rsquo;s doing it.
+									A few popular places to start. Use the search above for
+									anything else.
 								</p>
 							</div>
 							<ul className={styles.tiles}>
