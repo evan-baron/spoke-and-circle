@@ -57,7 +57,8 @@ export default function PrivacyPage() {
 				<p>
 					We also use Google Analytics to understand how the site is used
 					(pages visited, general location derived from IP address, device
-					and browser type, and how you arrived at the site). We don&rsquo;t
+					and browser type, how you arrived at the site, and how you
+					interact with it, such as which steps of a form you reach). We don&rsquo;t
 					enable Google Signals or link this data to Google Ads, so it
 					isn&rsquo;t used for cross-site advertising or to build ad profiles
 					about you.
@@ -205,8 +206,9 @@ export default function PrivacyPage() {
 					<li>
 						<strong>Internet or network activity</strong>: IP address and
 						request metadata used to enforce rate limits, and site usage
-						data (pages visited, device/browser type, referring site)
-						collected via Google Analytics.
+						data (pages visited, device/browser type, referring site, and
+						interactions such as which form steps you reach) collected via
+						Google Analytics.
 					</li>
 					<li>
 						<strong>Information you submit</strong>: team/group listing

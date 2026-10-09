@@ -10,6 +10,7 @@ import {
 import { Checkbox } from './Checkbox';
 import { DEFAULT_TEAM_FORM_VALUES } from '@/lib/teamFormDefaults';
 import { useUnsavedChangesGuard } from '@/hooks/useUnsavedChangesGuard';
+import { trackEvent } from '@/lib/analytics';
 import { payloadToTeam } from '@/lib/previewTeam';
 import { buildTeamPayload } from '@/lib/teamForm';
 import type { Team, TeamFormValues, TeamMediaItem } from '@/lib/types';
@@ -115,6 +116,17 @@ export function TeamForm({
 		if (submitErrors.length > 0) setPreviewOpen(false);
 	}, [submitErrors]);
 
+	const stepName = steps[step]?.label ?? '';
+
+	useEffect(() => {
+		if (!isCreate) return;
+		trackEvent('form_step_view', {
+			form: 'new_team',
+			step: step + 1,
+			step_name: stepName,
+		});
+	}, [isCreate, step, stepName]);
+
 	useEffect(() => {
 		if (!stepChangedRef.current) return;
 		counterRef.current?.focus({ preventScroll: true });
@@ -137,6 +149,11 @@ export function TeamForm({
 		const { errors, focused } = validateStep(current.id, form, panel);
 		if (errors.length === 0) return true;
 
+		trackEvent('form_next_blocked', {
+			form: 'new_team',
+			step: step + 1,
+			step_name: current.label,
+		});
 		setStepErrors(errors);
 		if (!focused) requestAnimationFrame(() => stepErrorRef.current?.focus());
 		return false;
@@ -146,6 +163,7 @@ export function TeamForm({
 		const form = formRef.current;
 		if (!form) return;
 
+		trackEvent('form_preview_open', { form: 'new_team' });
 		const payload = buildTeamPayload(form);
 		const hasParentPrefix =
 			payload.type === 'Group Ride' && Boolean(payload.affiliatedId);
@@ -170,6 +188,7 @@ export function TeamForm({
 		try {
 			await action();
 			setIsDirty(false);
+			if (isCreate) trackEvent('form_submit', { form: 'new_team' });
 		} catch (error) {
 			setSubmitErrors(describeSubmitError(error));
 			busyRef.current = false;
