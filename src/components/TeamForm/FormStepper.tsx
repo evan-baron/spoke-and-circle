@@ -1,3 +1,4 @@
+import MountainProgress from '@/components/Graphics/MountainProgress';
 import type { FormStep } from './formSteps';
 import styles from './formStepper.module.scss';
 
@@ -9,27 +10,32 @@ interface FormStepperProps {
 
 export function FormStepper({ steps, current, onSelect }: FormStepperProps) {
 	return (
-		<nav aria-label='Form progress'>
-			<ol className={styles.progress}>
+		<nav aria-label='Form progress' className={styles.trail}>
+			<div className={styles.mountain}>
+				<MountainProgress step={current} />
+			</div>
+			<ol className={styles.stops}>
 				{steps.map((step, index) => {
 					const state =
-						index < current ? styles.done
-						: index === current ? styles.current
+						index === current ? styles.stopCurrent
+						: index < current ? styles.stopDone
 						: '';
 
 					return (
-						<li key={step.id} className={`${styles.item} ${state}`}>
+						<li key={step.id} className={`${styles.stop} ${state}`}>
 							<button
 								type='button'
-								className={styles.segment}
+								className={styles.stopButton}
 								disabled={index > current}
+								aria-label={`${step.label}${index < current ? ' (completed)' : ''}`}
 								aria-current={index === current ? 'step' : undefined}
 								onClick={() => onSelect(index)}
 							>
-								<span className={styles.bar} />
-								<span className={styles.label}>{step.label}</span>
-								<span className={styles.srOnly}>
-									{index < current ? ' (completed)' : ''}
+								<span className={styles.stopLabel} aria-hidden='true'>
+									{step.label}
+								</span>
+								<span className={styles.stopShort} aria-hidden='true'>
+									{step.shortLabel}
 								</span>
 							</button>
 						</li>
