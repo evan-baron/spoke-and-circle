@@ -145,6 +145,28 @@
 	}
 }
 
+.groupsCell {
+	max-width: 10rem;
+
+	.groupLine {
+		display: flex;
+		align-items: baseline;
+		min-width: 0;
+	}
+
+	.groupLink,
+	.groupLine > span:not(.pendingTag) {
+		min-width: 0;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+
+	.pendingTag {
+		flex-shrink: 0;
+	}
+}
+
 .pendingTag {
 	margin-left: 0.4rem;
 	font-size: 0.6875rem;

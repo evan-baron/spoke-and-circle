@@ -52,7 +52,7 @@ export function AdminUsersTable({ users, totalCount }: AdminUsersTableProps) {
 											{formatSubmittedDate(user.createdAt)}
 										</time>
 									</td>
-									<td>
+									<td className={styles.groupsCell}>
 										<GroupList teams={user.teams} />
 									</td>
 								</tr>
