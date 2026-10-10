@@ -1,6 +1,7 @@
 import type { ClaimReviewInput } from '@/lib/claimValidation';
 import { prisma } from '@/lib/prisma';
 import { sendClaimRejectionEmail } from '@/services/claimRejectionEmailService';
+import { sendClaimSubmittedEmail } from '@/services/claimSubmittedEmailService';
 import { transferTeamOwnership } from '@/services/teamAdminService';
 import { countPendingTeams } from '@/services/teamService';
 import type { EmailStatus } from '@/services/mailService';
@@ -51,7 +52,27 @@ export async function createClaim(
 	if (!claimable) return 'not_claimable';
 	if (hasPendingClaim) return 'already_pending';
 
-	await prisma.teamClaim.create({ data: { teamId, userId, message } });
+	const claim = await prisma.teamClaim.create({
+		data: { teamId, userId, message },
+		select: {
+			message: true,
+			team: { select: { name: true } },
+			user: { select: { firstName: true, lastName: true, email: true } },
+		},
+	});
+
+	try {
+		await sendClaimSubmittedEmail({
+			teamName: claim.team.name,
+			claimantFirstName: claim.user.firstName,
+			claimantLastName: claim.user.lastName,
+			claimantEmail: claim.user.email,
+			message: claim.message,
+		});
+	} catch (error) {
+		console.error('Failed to send claim submitted email:', error);
+	}
+
 	return 'created';
 }
 
