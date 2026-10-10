@@ -16,7 +16,7 @@ export interface RideStyleTile {
 export const RIDE_STYLES: RideStyleTile[] = [
 	{
 		label: 'Road',
-		description: 'Pavement miles, paceline rides, and road racing.',
+		description: 'Pavement, pacelines, and road racing.',
 		href: '/search?q=road',
 		where: {
 			OR: [
