@@ -55,6 +55,7 @@
 .cardName {
 	font-weight: 700;
 	font-size: 1.0625rem;
+	text-wrap: pretty;
 }
 
 .cardLocation {
@@ -115,6 +116,10 @@
 		padding: 0.75rem var(--space-xs);
 		border-bottom: 1px solid var(--color-line);
 		font-size: 0.9375rem;
+
+		&:first-child {
+			text-wrap: pretty;
+		}
 	}
 
 	tbody tr {
