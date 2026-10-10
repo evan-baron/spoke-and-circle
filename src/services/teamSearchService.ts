@@ -132,16 +132,41 @@ const ENUM_TERM_CLAUSES: [string, Prisma.TeamWhereInput][] = [
 ];
 
 
-async function idsWithListMatch(term: string): Promise<string[]> {
-	const pattern = `%${term.replace(/[\\%_]/g, '\\$&')}%`;
+const FILLER_WORDS = new Set([
+	'a',
+	'an',
+	'and',
+	'club',
+	'for',
+	'group',
+	'in',
+	'of',
+	'or',
+	'ride',
+	'rides',
+	'team',
+	'teams',
+	'the',
+	'to',
+	'with',
+]);
+
+async function idsWithWordStartMatch(term: string): Promise<string[]> {
+	const escaped = term.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+	const pattern = `(^|[^[:alnum:]])${escaped}`;
 	const rows = await prisma.$queryRaw<{ id: string }[]>`
 		SELECT id FROM "Team"
-		WHERE EXISTS (
-			SELECT 1 FROM unnest(
-				"tags" || "personaRestrictions" || "sponsors" || "eventTypes" || "additionalLocations"
-			) AS item
-			WHERE item ILIKE ${pattern}
-		)
+		WHERE "name" ~* ${pattern}
+			OR "missionStatement" ~* ${pattern}
+			OR "location" ~* ${pattern}
+			OR "affiliation" ~* ${pattern}
+			OR "homeBase" ~* ${pattern}
+			OR EXISTS (
+				SELECT 1 FROM unnest(
+					"tags" || "personaRestrictions" || "sponsors" || "eventTypes" || "additionalLocations"
+				) AS item
+				WHERE item ~* ${pattern}
+			)
 	`;
 	return rows.map((row) => row.id);
 }
@@ -154,21 +179,19 @@ async function termClause(term: string): Promise<Prisma.TeamWhereInput> {
 
 	return {
 		OR: [
-			{ name: { contains: term, mode: 'insensitive' } },
-			{ missionStatement: { contains: term, mode: 'insensitive' } },
-			{ location: { contains: term, mode: 'insensitive' } },
-			{ affiliation: { contains: term, mode: 'insensitive' } },
-			{ homeBase: { contains: term, mode: 'insensitive' } },
-			{ id: { in: await idsWithListMatch(term) } },
+			{ id: { in: await idsWithWordStartMatch(term) } },
 			...enumClauses,
 		],
 	};
 }
 
 async function queryClause(q: string): Promise<Prisma.TeamWhereInput> {
-	const words = q.split(/[\s\-,/]+/).filter((word) => word.length > 1);
+	const allWords = q.split(/[\s\-,/]+/).filter((word) => word.length > 1);
 	const wholePhrase = await termClause(q);
-	if (words.length < 2) return wholePhrase;
+	if (allWords.length < 2) return wholePhrase;
+
+	const words = allWords.filter((word) => !FILLER_WORDS.has(word.toLowerCase()));
+	if (words.length === 0) return wholePhrase;
 
 	const perWord = await Promise.all(words.map(termClause));
 	return { OR: [wholePhrase, ...perWord] };

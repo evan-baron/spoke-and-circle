@@ -128,6 +128,7 @@ export function FilterBar({
 					defaultValue={defaultLocation}
 					placeholder='City or ZIP code&hellip;'
 					includeZip
+					allowFreeText
 					inputClassName={styles.input}
 				/>
 			</div>

@@ -48,6 +48,7 @@ export function SearchForm({
 						defaultValue={defaultLocation}
 						placeholder='City or ZIP code'
 						includeZip
+						allowFreeText
 						inputClassName={styles.input}
 					/>
 				</div>

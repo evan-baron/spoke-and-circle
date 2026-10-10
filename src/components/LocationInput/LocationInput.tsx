@@ -20,6 +20,7 @@ interface LocationInputProps {
 	disabled?: boolean;
 	defaultValue?: string;
 	includeZip?: boolean;
+	allowFreeText?: boolean;
 	inputClassName?: string;
 	onSelect?: (item: LocationOption) => void;
 }
@@ -36,6 +37,7 @@ export function LocationInput({
 	disabled,
 	defaultValue,
 	includeZip,
+	allowFreeText,
 	inputClassName,
 	onSelect,
 }: LocationInputProps) {
@@ -125,9 +127,12 @@ export function LocationInput({
 
 	useEffect(() => {
 		if (onSelect) return;
-		const invalid = !selectedItem && (required || inputValue.trim() !== '');
+		const invalid =
+			!allowFreeText &&
+			!selectedItem &&
+			(required || inputValue.trim() !== '');
 		inputRef.current?.setCustomValidity(invalid ? INVALID_MESSAGE : '');
-	}, [selectedItem, inputValue, required, onSelect]);
+	}, [selectedItem, inputValue, required, onSelect, allowFreeText]);
 
 	const message =
 		options.length > 0 ? null
@@ -141,7 +146,17 @@ export function LocationInput({
 	return (
 		<div className={styles.root}>
 			<input
-				{...getInputProps({ ref: inputRef, disabled })}
+				{...getInputProps({
+					ref: inputRef,
+					disabled,
+					onKeyDown: (event) => {
+						if (allowFreeText && event.key === 'Enter' && highlightedIndex < 0) {
+							(
+								event as typeof event & { preventDownshiftDefault?: boolean }
+							).preventDownshiftDefault = true;
+						}
+					},
+				})}
 				type='text'
 				autoComplete='off'
 				placeholder={placeholder}
@@ -149,7 +164,13 @@ export function LocationInput({
 				className={inputClassName ?? styles.input}
 			/>
 			{name && !onSelect && (
-				<input type='hidden' name={name} value={selectedItem?.label ?? ''} />
+				<input
+					type='hidden'
+					name={name}
+					value={
+						selectedItem?.label ?? (allowFreeText ? inputValue.trim() : '')
+					}
+				/>
 			)}
 			<div
 				className={`${styles.popover} ${showPopover ? styles.popoverOpen : ''}`}
