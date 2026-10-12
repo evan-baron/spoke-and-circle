@@ -300,6 +300,21 @@ export function GroupRideDetail({
 								value={formatElevation(team.typicalElevationGainFt)}
 							/>
 							<DetailRow label='Drop / no-drop' value={team.dropPolicy} />
+							{team.routeLink && (
+								<DetailRow
+									label='Route link'
+									value={
+										<a
+											target='_blank'
+											rel='noopener noreferrer nofollow'
+											href={team.routeLink}
+											className={styles.website}
+										>
+											{team.routeLink}
+										</a>
+									}
+								/>
+							)}
 						</DetailSection>
 					)}
 

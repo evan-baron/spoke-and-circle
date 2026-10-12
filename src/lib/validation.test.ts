@@ -128,6 +128,34 @@ describe('createTeamSchema', () => {
 		});
 	});
 
+	describe('routeLink', () => {
+		it('accepts an http or https link', () => {
+			expect(
+				parse({
+					type: 'Group Ride',
+					routeLink: 'https://ridewithgps.com/routes/12345',
+				}).success,
+			).toBe(true);
+		});
+
+		it('is optional', () => {
+			expect(parse({ type: 'Group Ride' }).success).toBe(true);
+		});
+
+		it('rejects values that are not http or https links', () => {
+			expect(messages({ routeLink: 'not a link' })).toContain('Invalid route link');
+			expect(messages({ routeLink: 'javascript:alert(1)' })).toContain(
+				'Invalid route link',
+			);
+		});
+
+		it('rejects more than 500 characters', () => {
+			expect(
+				messages({ routeLink: `https://example.com/${'x'.repeat(500)}` }),
+			).toContain('Route link must be less than 500 characters');
+		});
+	});
+
 	describe('media', () => {
 		const validId = 'assets/spoke_and_circle_uploads/3f2b8c1e-5d4a-4e6f-9a7b-0c1d2e3f4a5b/0123456789abcdef01234567';
 

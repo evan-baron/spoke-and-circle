@@ -68,6 +68,20 @@ export function RideDetailsSection({
 					/>
 				)}
 			</div>
+			<Field
+				label='Route link'
+				hint='A link to the route on Ride with GPS, Strava, or another mapping site'
+				full
+			>
+				<input
+					type='url'
+					name='routeLink'
+					defaultValue={values.routeLink}
+					maxLength={500}
+					placeholder='https://'
+					className={styles.input}
+				/>
+			</Field>
 			<Field label='Average Riding Pace'>
 				<select name='pace' defaultValue={values.pace} className={styles.input}>
 					{PACES.map((option) => (
