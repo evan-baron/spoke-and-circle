@@ -6,6 +6,10 @@ export function describeSubmitError(error: unknown): string[] {
 			return ['Too many requests. Please try again later.'];
 		}
 
+		if (error.status === 401) {
+			return ['Your session expired. Please sign in again and retry.'];
+		}
+
 		const details = (error.responseData as { details?: unknown } | null)
 			?.details;
 		if (Array.isArray(details)) {
