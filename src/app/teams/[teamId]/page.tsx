@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { BackButton } from '@/components/BackButton/BackButton';
 import { ClaimTeamButton } from '@/components/ClaimTeamButton/ClaimTeamButton';
 import DeleteTeamButton from '@/components/DeleteTeamButton/DeleteTeamButton';
+import { GroupRideDetail } from '@/components/GroupRideDetail/GroupRideDetail';
 import { TeamDetail } from '@/components/TeamDetail/TeamDetail';
 import { jsonLdScript } from '@/lib/jsonLd';
 import { getSiteUrl, OG_IMAGE_PATH, SITE_NAME } from '@/lib/siteConfig';
@@ -163,7 +164,9 @@ export default async function TeamPage({
 					)}
 				</div>
 
-				<TeamDetail team={team} groupRides={groupRides} />
+				{team.type === 'Group Ride' ?
+					<GroupRideDetail team={team} />
+				:	<TeamDetail team={team} groupRides={groupRides} />}
 			</div>
 		</div>
 	);
