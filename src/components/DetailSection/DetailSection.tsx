@@ -2,12 +2,19 @@ import styles from "./detailSection.module.scss";
 
 interface DetailSectionProps {
   title: string;
+  className?: string;
   children: React.ReactNode;
 }
 
-export function DetailSection({ title, children }: DetailSectionProps) {
+export function DetailSection({
+  title,
+  className,
+  children,
+}: DetailSectionProps) {
   return (
-    <section className={styles.section}>
+    <section
+      className={className ? `${styles.section} ${className}` : styles.section}
+    >
       <h2 className={styles.title}>{title}</h2>
       <div className={styles.grid}>{children}</div>
     </section>

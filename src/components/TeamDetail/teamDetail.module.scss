@@ -6,13 +6,6 @@
 	gap: var(--space-md);
 }
 
-.rideDetails {
-	display: block;
-	margin-top: 0.15rem;
-	font-size: 0.875rem;
-	color: var(--color-ink-soft);
-}
-
 .header {
 	display: flex;
 	flex-direction: column;
@@ -160,20 +153,6 @@
 		line-height: 1.55;
 		overflow-wrap: anywhere;
 		text-wrap: pretty;
-	}
-}
-
-.longText {
-	grid-column: 1 / -1;
-	display: flex;
-	flex-direction: column;
-	gap: var(--space-sm);
-	font-size: 0.9375rem;
-	line-height: 1.55;
-	overflow-wrap: anywhere;
-
-	p {
-		white-space: pre-line;
 	}
 }
 

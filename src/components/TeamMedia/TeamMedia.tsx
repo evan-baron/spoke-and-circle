@@ -8,9 +8,10 @@ import styles from './teamMedia.module.scss';
 interface TeamMediaProps {
 	media: TeamMediaItem[];
 	teamName: string;
+	className?: string;
 }
 
-export function TeamMedia({ media, teamName }: TeamMediaProps) {
+export function TeamMedia({ media, teamName, className }: TeamMediaProps) {
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const [active, setActive] = useState(0);
 
@@ -28,7 +29,9 @@ export function TeamMedia({ media, teamName }: TeamMediaProps) {
 	}
 
 	return (
-		<section className={styles.section}>
+		<section
+			className={className ? `${styles.section} ${className}` : styles.section}
+		>
 			<h2 className={styles.title}>Photos</h2>
 			<ul className={styles.grid}>
 				{media.map((item, index) => (

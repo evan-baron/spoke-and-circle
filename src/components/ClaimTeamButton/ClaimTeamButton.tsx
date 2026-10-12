@@ -9,6 +9,7 @@ import styles from './claimTeamButton.module.scss';
 interface ClaimTeamButtonProps {
 	teamId: string;
 	teamName: string;
+	isGroupRide?: boolean;
 	isSignedIn: boolean;
 	hasPendingClaim: boolean;
 }
@@ -16,9 +17,11 @@ interface ClaimTeamButtonProps {
 export function ClaimTeamButton({
 	teamId,
 	teamName,
+	isGroupRide = false,
 	isSignedIn,
 	hasPendingClaim,
 }: ClaimTeamButtonProps) {
+	const triggerLabel = isGroupRide ? 'Claim this group ride' : 'Claim this team';
 	const dialogRef = useRef<HTMLDialogElement>(null);
 	const titleId = useId();
 	const messageId = useId();
@@ -81,7 +84,7 @@ export function ClaimTeamButton({
 				className={styles.trigger}
 				onClick={() => setOpen(true)}
 			>
-				Claim this team
+				{triggerLabel}
 			</button>
 
 			<dialog
@@ -139,8 +142,8 @@ export function ClaimTeamButton({
 				:	<>
 						<p className={styles.text}>
 							You need a Spoke &amp; Circle account to claim a group. Sign up
-							or log in, then come back to this page and click &ldquo;Claim this
-							team&rdquo; again.
+							or log in, then come back to this page and click &ldquo;{triggerLabel}
+							&rdquo; again.
 						</p>
 						<div className={styles.actions}>
 							<button

@@ -13,3 +13,5 @@ next-env.d.ts
 
 # Private launch checklist (repo is public)
 TODO.md
+
+/scripts/copyProdToDev.ts

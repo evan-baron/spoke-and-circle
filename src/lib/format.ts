@@ -119,23 +119,37 @@ export function formatClockTime(time: string): string {
 	return `${hours % 12 || 12}:${String(minutes).padStart(2, '0')} ${period}`;
 }
 
-export function formatRideRecurrence(ride: Ride): string {
+function formatRideCadence(ride: Ride): string {
 	const days = joinWithAnd(sortByOrder(ride.days, WEEKDAY_ORDER));
 	const weeks = joinWithAnd(sortByOrder(ride.ordinals ?? [], ORDINAL_ORDER));
 
-	const cadence =
+	return (
 		ride.pattern === 'monthly' ? `${weeks} ${days} of the month`
 		: ride.pattern === 'biweekly' ? `Every other ${days}`
-		: `Every ${days}`;
+		: `Every ${days}`
+	);
+}
 
-	const months =
-		ride.monthFrom && ride.monthTo ?
-			ride.monthFrom === ride.monthTo ?
-				MONTH_NAMES[ride.monthFrom - 1]
-			:	`${MONTH_NAMES[ride.monthFrom - 1]}–${MONTH_NAMES[ride.monthTo - 1]}`
-		:	null;
+function formatRideMonths(ride: Ride): string | null {
+	if (!ride.monthFrom || !ride.monthTo) return null;
+	if (ride.monthFrom === ride.monthTo) {
+		return MONTH_NAMES[ride.monthFrom - 1] ?? null;
+	}
+	return `${MONTH_NAMES[ride.monthFrom - 1]}–${MONTH_NAMES[ride.monthTo - 1]}`;
+}
 
-	return [cadence, ride.startTime && formatClockTime(ride.startTime), months]
+export function formatRideTime(ride: Ride): string | null {
+	return ride.startTime ? formatClockTime(ride.startTime) : null;
+}
+
+export function formatRideDates(ride: Ride): string {
+	return [formatRideCadence(ride), formatRideMonths(ride)]
+		.filter(Boolean)
+		.join(' · ');
+}
+
+export function formatRideRecurrence(ride: Ride): string {
+	return [formatRideCadence(ride), formatRideTime(ride), formatRideMonths(ride)]
 		.filter(Boolean)
 		.join(' · ');
 }

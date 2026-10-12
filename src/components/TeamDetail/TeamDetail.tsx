@@ -53,9 +53,6 @@ export function TeamDetail({
 			<header className={styles.header}>
 				<div className={styles.badgeRow}>
 					<Badge tone='ink'>{team.type}</Badge>
-					{team.type === 'Group Ride' && (
-						<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
-					)}
 					{team.bikeTypes.map((bikeType) => (
 						<Badge key={bikeType} tone='gold'>
 							{bikeType}
@@ -75,7 +72,9 @@ export function TeamDetail({
 					)}
 				</p>
 				{team.missionStatement && (
-					<p className={styles.mission}>&ldquo;{team.missionStatement}&rdquo;</p>
+					<p className={styles.mission}>
+						&ldquo;{team.missionStatement}&rdquo;
+					</p>
 				)}
 			</header>
 
@@ -248,7 +247,10 @@ export function TeamDetail({
 							<DetailRow label='Riding style' value={team.discipline} />
 						)}
 						{team.virtualPlatform && (
-							<DetailRow label='Virtual platform' value={team.virtualPlatform} />
+							<DetailRow
+								label='Virtual platform'
+								value={team.virtualPlatform}
+							/>
 						)}
 						{team.homeBase && (
 							<DetailRow label='Home Base' value={team.homeBase} />
@@ -265,103 +267,60 @@ export function TeamDetail({
 							label='Persona restrictions'
 							value={formatList(team.personaRestrictions)}
 						/>
-						<DetailRow label='Member limit' value={team.memberLimit ?? 'None'} />
+						<DetailRow
+							label='Member limit'
+							value={team.memberLimit ?? 'None'}
+						/>
 						<DetailRow label='Waitlist' value={formatYesNo(team.waitlist)} />
 					</DetailSection>
 
-					{team.type === 'Group Ride' && (
-						<DetailSection title='Ride profile'>
-							{team.rides.map((ride, index) => (
-								<DetailRow
-									key={index}
-									label={
-										team.rides.length > 1 ? `Schedule ${index + 1}` : 'Schedule'
-									}
-									value={
-										<>
-											{formatRideRecurrence(ride)}
-											{ride.details && (
-												<span className={styles.rideDetails}>{ride.details}</span>
-											)}
-										</>
-									}
-								/>
-							))}
-							{team.scheduleNotes && (
-								<DetailRow label='Schedule notes' value={team.scheduleNotes} />
-							)}
-							<DetailRow label='Segmentation' value={team.segmentation} />
-							<DetailRow
-								label='Typical distance'
-								value={formatDistance(team.typicalDistanceMiles)}
-							/>
-							<DetailRow
-								label='Typical elevation gain'
-								value={formatElevation(team.typicalElevationGainFt)}
-							/>
-							<DetailRow label='Drop / no-drop' value={team.dropPolicy} />
-						</DetailSection>
-					)}
-
-					{team.type === 'Group Ride' && team.additionalRideDetails && (
-						<DetailSection title='Additional ride details'>
-							<div className={styles.longText}>
-								{team.additionalRideDetails
-									.split(/\n{2,}/)
-									.map((paragraph, index) => (
-										<p key={index}>{paragraph}</p>
-									))}
-							</div>
-						</DetailSection>
-					)}
-
-					{team.type !== 'Group Ride' && (
-						<DetailSection
-							title={team.type === 'Team' ? 'Team structure' : 'Group structure'}
-						>
-							<DetailRow
-								label='Competitive or recreational'
-								value={team.competitiveOrCasual}
-							/>
-							<DetailRow
-								label='Skill levels'
-								value={formatSkillLevels(team.skillLevels)}
-							/>
-							<DetailRow
-								label='Instructional'
-								value={formatYesNo(team.instructional)}
-							/>
-							<DetailRow
-								label='Dues'
-								value={
-									team.duesRequired ?
-										`${team.duesAmount ?? 'Required'}${team.duesSchedule ? ` (${team.duesSchedule})` : ''}`
-									:	'Not required'
-								}
-							/>
-							<DetailRow
-								label='Required rides'
-								value={formatYesNo(team.requiredRides)}
-							/>
-							<DetailRow
-								label='Required races (min)'
-								value={team.requiredRaces ?? 'None'}
-							/>
-							<DetailRow
-								label='Mileage requirement'
-								value={formatMileageRequirement(team.mileageRequirement)}
-							/>
-							<DetailRow
-								label='Required kit / uniform'
-								value={formatYesNo(team.requiredKit)}
-							/>
-							<DetailRow
-								label='Event types'
-								value={formatList(team.eventTypes)}
-							/>
-							<DetailRow label='Sponsors' value={formatList(team.sponsors)} />
-						</DetailSection>
-					)}
+					<DetailSection
+						title={
+							team.type === 'Team' ? 'Team structure' : 'Group structure'
+						}
+					>
+						<DetailRow
+							label='Competitive or recreational'
+							value={team.competitiveOrCasual}
+						/>
+						<DetailRow
+							label='Skill levels'
+							value={formatSkillLevels(team.skillLevels)}
+						/>
+						<DetailRow
+							label='Instructional'
+							value={formatYesNo(team.instructional)}
+						/>
+						<DetailRow
+							label='Dues'
+							value={
+								team.duesRequired ?
+									`${team.duesAmount ?? 'Required'}${team.duesSchedule ? ` (${team.duesSchedule})` : ''}`
+								:	'Not required'
+							}
+						/>
+						<DetailRow
+							label='Required rides'
+							value={formatYesNo(team.requiredRides)}
+						/>
+						<DetailRow
+							label='Required races (min)'
+							value={team.requiredRaces ?? 'None'}
+						/>
+						<DetailRow
+							label='Mileage requirement'
+							value={formatMileageRequirement(team.mileageRequirement)}
+						/>
+						<DetailRow
+							label='Required kit / uniform'
+							value={formatYesNo(team.requiredKit)}
+						/>
+						<DetailRow
+							label='Event types'
+							value={formatList(team.eventTypes)}
+						/>
+						<DetailRow label='Sponsors' value={formatList(team.sponsors)} />
+					</DetailSection>
 
 					<TeamMedia media={team.media ?? []} teamName={team.name} />
 

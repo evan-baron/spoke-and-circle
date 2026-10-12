@@ -80,6 +80,7 @@ model Team {
   rides                  Json?
   scheduleNotes          String?
   additionalRideDetails  String?
+  routeLink              String?
   seasons                String[]
   pace                   Pace?
   segmentation           Segmentation?

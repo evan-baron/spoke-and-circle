@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { GroupRideDetail } from '@/components/GroupRideDetail/GroupRideDetail';
 import { TeamDetail } from '@/components/TeamDetail/TeamDetail';
 import type { Team } from '@/lib/types';
 import styles from './listingPreview.module.scss';
@@ -52,7 +53,12 @@ export function ListingPreview({
 
 			<div className={styles.scroll}>
 				<div className={styles.content}>
-					{open && team && <TeamDetail team={team} preview />}
+					{open && team && team.type === 'Group Ride' && (
+						<GroupRideDetail team={team} preview />
+					)}
+					{open && team && team.type !== 'Group Ride' && (
+						<TeamDetail team={team} preview />
+					)}
 				</div>
 			</div>
 

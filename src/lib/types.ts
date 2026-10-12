@@ -142,6 +142,7 @@ export interface Team {
   rides: Ride[];
   scheduleNotes?: string;
   additionalRideDetails?: string;
+  routeLink?: string;
   pace: Pace;
   segmentation: Segmentation;
   typicalDistanceMiles: number;
@@ -246,6 +247,7 @@ export interface TeamFormValues {
   rides: Ride[];
   scheduleNotes: string;
   additionalRideDetails: string;
+  routeLink: string;
   pace: string;
   typicalDistanceMiles: string;
   typicalElevationGainFt: string;
