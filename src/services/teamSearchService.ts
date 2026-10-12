@@ -194,7 +194,7 @@ async function queryClause(q: string): Promise<Prisma.TeamWhereInput> {
 	if (words.length === 0) return wholePhrase;
 
 	const perWord = await Promise.all(words.map(termClause));
-	return { OR: [wholePhrase, ...perWord] };
+	return { OR: [wholePhrase, { AND: perWord }] };
 }
 
 async function buildWhere(
