@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { applyPublicRateLimit, applyRateLimit } from '@/lib/rateLimit';
 import type { RateLimitBucket } from '@/lib/rateLimitConfig';
+import { SUPPORT_EMAIL } from '@/lib/siteConfig';
 import { getApiUser } from '@/services/getUserService';
 import { json403, json500, jsonAuthError } from './responses';
 
@@ -30,7 +31,7 @@ function handleRouteError(request: NextRequest, error: unknown) {
 		`Route error [${request.method} ${request.nextUrl.pathname}]:`,
 		error,
 	);
-	return json500('Internal server error');
+	return json500('Something went wrong on our end. Please try again.');
 }
 
 export function withAuth(
@@ -41,7 +42,9 @@ export function withAuth(
 		try {
 			const { user, error } = await getApiUser();
 			if (error) return jsonAuthError(error);
-			if (!user.active) return json403('Account is disabled');
+			if (!user.active) return json403(
+					`Your account has been disabled. Please contact ${SUPPORT_EMAIL} for help.`,
+				);
 			if (options.role === 'admin' && user.role !== 'admin') {
 				return json403('Admin access required');
 			}

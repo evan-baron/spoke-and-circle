@@ -26,6 +26,6 @@ export const GET = withPublicRateLimit('locations-search', async (request) => {
 		return NextResponse.json({ success: true, locations });
 	} catch (error) {
 		console.error('Error searching locations:', error);
-		return json500('Failed to search locations');
+		return json500('Location search failed. Please try again.');
 	}
 });

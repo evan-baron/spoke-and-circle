@@ -3,6 +3,9 @@ import { json400, jsonError } from './responses';
 
 const DEFAULT_MAX_BYTES = 100 * 1024;
 
+const TOO_LARGE_MESSAGE =
+	'What you submitted is too long. Please shorten any long fields and try again.';
+
 type JsonObjectResult =
 	| { body: Record<string, unknown> }
 	| { error: NextResponse };
@@ -14,14 +17,14 @@ export async function readJsonObject(
 	const { maxBytes = DEFAULT_MAX_BYTES, allowEmpty = false } = options;
 	const declaredLength = Number(request.headers.get('content-length') ?? 0);
 	if (declaredLength > maxBytes) {
-		return { error: jsonError('Request body is too large', 413) };
+		return { error: jsonError(TOO_LARGE_MESSAGE, 413) };
 	}
 
 	let body: unknown;
 	try {
 		const raw = await request.text();
 		if (raw.length > maxBytes) {
-			return { error: jsonError('Request body is too large', 413) };
+			return { error: jsonError(TOO_LARGE_MESSAGE, 413) };
 		}
 		if (allowEmpty && raw.trim() === '') return { body: {} };
 		body = JSON.parse(raw);

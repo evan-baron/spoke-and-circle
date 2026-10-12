@@ -27,6 +27,6 @@ export const GET = withPublicRateLimit('teams-search', async (request) => {
 		return NextResponse.json({ success: true, teams });
 	} catch (error) {
 		console.error('Error searching teams:', error);
-		return json500('Failed to search teams');
+		return json500('Searching teams failed. Please try again.');
 	}
 });

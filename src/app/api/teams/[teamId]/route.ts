@@ -20,7 +20,10 @@ export const DELETE = withAuth(
 			id: user.id,
 			isAdmin: user.role === 'admin',
 		});
-		if (!deleted) return json404('Group ride not found');
+		if (!deleted)
+			return json404(
+				'We could not find this group ride under your account. It may have already been deleted, or it may belong to another user.',
+			);
 
 		return NextResponse.json({ success: true });
 	},
@@ -57,7 +60,10 @@ export const PUT = withAuth(
 		const updated = await updateApprovedTeam(teamId, parsed.data, {
 			ownerId: user.id,
 		});
-		if (!updated) return json404('Team not found');
+		if (!updated)
+			return json404(
+				'We could not find this team under your account. It may have been removed, transferred to another owner, or is no longer approved.',
+			);
 
 		try {
 			await saveTeamMedia(teamId, preparedMedia.rows);

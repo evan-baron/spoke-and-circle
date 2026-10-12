@@ -33,7 +33,7 @@ export const GET = withPublicRateLimit('teams-read', async () => {
 		return NextResponse.json({ success: true, teams: teams.map(toTeam) });
 	} catch (error) {
 		console.error('Error fetching teams:', error);
-		return json500('Failed to fetch teams');
+		return json500('We could not load teams. Please try again.');
 	}
 });
 
@@ -86,7 +86,9 @@ export const POST = withPublicRateLimit('teams-write', async (request) => {
 		!antiBot.success ||
 		!isAntiBotAnswerCorrect(antiBot.data.antibotIndex, antiBot.data.antibot)
 	) {
-		return json400('Failed anti-bot check');
+		return json400(
+			'Please answer the math question correctly and try again.',
+		);
 	}
 
 	const parsed = createTeamSchema.safeParse(teamFields);
@@ -149,6 +151,6 @@ export const POST = withPublicRateLimit('teams-write', async (request) => {
 		);
 	} catch (error) {
 		console.error('Error creating team:', error);
-		return json500('Failed to submit team');
+		return json500('We could not submit your team. Please try again.');
 	}
 }, { adminRateLimit: true });

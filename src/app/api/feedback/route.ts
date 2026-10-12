@@ -29,7 +29,9 @@ export const POST = withPublicRateLimit('feedback-form', async (request) => {
 		!antiBot.success ||
 		!isAntiBotAnswerCorrect(antiBot.data.antibotIndex, antiBot.data.antibot)
 	) {
-		return json400('Failed anti-bot check');
+		return json400(
+			'Please answer the math question correctly and try again.',
+		);
 	}
 
 	const parsed = feedbackSchema.safeParse(fields);

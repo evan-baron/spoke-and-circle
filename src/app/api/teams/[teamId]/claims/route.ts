@@ -33,7 +33,7 @@ export const POST = withAuth(
 
 		switch (outcome) {
 			case 'team_not_found':
-				return json404('Team not found');
+				return json404('We could not find this team. It may have been removed.');
 			case 'not_claimable':
 				return json403('This group can no longer be claimed');
 			case 'already_pending':
