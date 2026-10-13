@@ -283,14 +283,19 @@ export function GroupRideDetailDesktop({
 				value={formatYesNo(team.eBikeAllowed)}
 			/>
 
-			<DetailRow
-				label='Typical distance'
-				value={formatDistance(team.typicalDistanceMiles)}
-			/>
-			<DetailRow
-				label='Typical elevation gain'
-				value={formatElevation(team.typicalElevationGainFt)}
-			/>
+			{!parsedRouteLink && (
+				<>
+					<DetailRow
+						label='Typical distance'
+						value={formatDistance(team.typicalDistanceMiles)}
+					/>
+
+					<DetailRow
+						label='Typical elevation gain'
+						value={formatElevation(team.typicalElevationGainFt)}
+					/>
+				</>
+			)}
 			<DetailRow label='Drop / no-drop' value={team.dropPolicy} />
 			{team.segmentation ?
 				<DetailRow label='Segmentation' value={team.segmentation} />
