@@ -24,6 +24,7 @@ import {
 	formatYesNo,
 } from '@/lib/format';
 import { formatInstagramHandle } from '@/lib/instagram';
+import { parseRouteLink } from '@/lib/routeLink';
 import { toneForPace, toneForVerified } from '@/lib/tone';
 import type { Team } from '@/lib/types';
 import styles from './groupRideDetail.module.scss';
@@ -47,6 +48,12 @@ export function GroupRideDetail({
 	].filter(Boolean) as string[];
 
 	const hasSocial = Object.values(team.social).some(Boolean);
+
+	const parsedRouteLink = parseRouteLink(team.routeLink);
+	console.log('[GroupRideDetail] route link parse:', {
+		link: team.routeLink ?? null,
+		result: parsedRouteLink,
+	});
 
 	return (
 		<div className={`${styles.detail} ${preview ? styles.preview : ''}`}>
