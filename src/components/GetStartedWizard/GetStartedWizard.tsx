@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import MountainProgress from '@/components/Graphics/MountainProgress';
+import { trackEvent } from '@/lib/analytics';
 import { bikeType, skillLevel } from '@/lib/enums';
 import type { RiderPreferences } from '@/lib/types';
 import styles from './getStartedWizard.module.scss';
@@ -20,11 +21,6 @@ const LOOKING_FOR_OPTIONS: NonNullable<RiderPreferences['lookingFor']>[] = [
 
 const STEPS = ['zipCode', 'discipline', 'skillLevel', 'lookingFor'] as const;
 type StepKey = (typeof STEPS)[number];
-
-// Read (and cleared) by FilterBar on mount: the quiz already asked what the
-// rider wants, so /search shouldn't immediately re-confront them with the
-// filters panel open, even though the quiz's answers land as active filters.
-export const CAME_FROM_QUIZ_KEY = 'cameFromQuiz';
 
 const EMPTY_ANSWERS: RiderPreferences = {
 	zipCode: '',
@@ -52,11 +48,12 @@ export function GetStartedWizard() {
 	function finish(finalAnswers: RiderPreferences) {
 		setIsFinishing(true);
 
-		try {
-			window.sessionStorage.setItem(CAME_FROM_QUIZ_KEY, 'true');
-		} catch {
-			// sessionStorage unavailable (private browsing, etc.) — non-critical
-		}
+		trackEvent('quiz_complete', {
+			looking_for: finalAnswers.lookingFor ?? 'skipped',
+			skill_level: finalAnswers.skillLevel ?? 'skipped',
+			discipline_count: finalAnswers.disciplines.length,
+			has_location: finalAnswers.zipCode ? 'yes' : 'no',
+		});
 
 		const params = new URLSearchParams();
 		if (finalAnswers.zipCode) params.set('location', finalAnswers.zipCode);

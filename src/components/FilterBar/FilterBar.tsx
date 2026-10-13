@@ -1,7 +1,6 @@
 'use client';
 
-import { useEffect, useState, type ChangeEvent } from 'react';
-import { CAME_FROM_QUIZ_KEY } from '@/components/GetStartedWizard/GetStartedWizard';
+import { useState, type ChangeEvent } from 'react';
 import { LocationInput } from '@/components/LocationInput/LocationInput';
 import {
 	bikeType,
@@ -89,29 +88,8 @@ export function FilterBar({
 		(defaultYouthOnly ? 1 : 0) +
 		(defaultAcceptingNewRiders ? 1 : 0);
 
-	// Below $bp-md this also gates .typeBikeGroup and .moreFilters (both
-	// collapsed unless open); at $bp-md and up neither ever collapses, so
-	// this state only matters on mobile. Starts open if filters already came
-	// in via the URL, so they aren't hidden from view on arrival.
-	const [filtersOpen, setFiltersOpen] = useState(activeFilterCount > 0);
+	const [filtersOpen, setFiltersOpen] = useState(false);
 	const openClass = filtersOpen ? styles.open : '';
-
-	// Exception to the above: results reached via the get-started quiz
-	// already reflect answers the rider just gave, so don't immediately
-	// re-confront them with the filters panel open too. Corrected after
-	// mount (not in the useState initializer) since sessionStorage isn't
-	// available during the server render. One-time flag — cleared right
-	// after reading so a later reload/share of this URL isn't affected.
-	useEffect(() => {
-		try {
-			if (sessionStorage.getItem(CAME_FROM_QUIZ_KEY) === 'true') {
-				sessionStorage.removeItem(CAME_FROM_QUIZ_KEY);
-				setFiltersOpen(false);
-			}
-		} catch {
-			// sessionStorage unavailable (private browsing, etc.) — ignore
-		}
-	}, []);
 
 	return (
 		<form action={action} method='GET' className={styles.form}>
