@@ -57,7 +57,7 @@ export function payloadToTeam(
 		additionalRideDetails: payload.additionalRideDetails,
 		routeLink: payload.routeLink,
 		pace: (payload.pace ?? 'Relaxed') as Team['pace'],
-		segmentation: 'N/A',
+		segmentation: payload.segmentation,
 		typicalDistanceMiles: payload.typicalDistanceMiles ?? 0,
 		typicalElevationGainFt: payload.typicalElevationGainFt ?? 0,
 		dropPolicy: (payload.dropPolicy ?? 'No-drop') as Team['dropPolicy'],

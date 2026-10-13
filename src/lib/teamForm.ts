@@ -131,6 +131,8 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		eBikeAllowed: flag('eBikeAllowed'),
 		waitlist: flag('waitlist'),
 		ride: ride(),
+		segmentation:
+			text('hasSegmentation') === 'yes' ? text('segmentationDescription') : undefined,
 		scheduleNotes: text('scheduleNotes'),
 		additionalRideDetails: text('additionalRideDetails'),
 		routeLink: text('routeLink'),

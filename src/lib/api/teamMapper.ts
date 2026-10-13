@@ -18,7 +18,6 @@ import {
 	format,
 	mtbDiscipline,
 	racingDiscipline,
-	segmentation,
 } from '../enums';
 import { stripInstagramHandle } from '../instagram';
 import { timeZoneFor } from '../timeZone';
@@ -110,7 +109,7 @@ export function toTeam(row: TeamRowWithMedia): Team {
 		additionalRideDetails: row.additionalRideDetails ?? undefined,
 		routeLink: row.routeLink ?? undefined,
 		pace: row.pace ?? 'Relaxed',
-		segmentation: row.segmentation ? segmentation.fromDb[row.segmentation] : 'N/A',
+		segmentation: row.segmentation ?? undefined,
 		typicalDistanceMiles: row.typicalDistanceMiles ?? 0,
 		typicalElevationGainFt: row.typicalElevationGainFt ?? 0,
 		dropPolicy: row.dropPolicy ? dropPolicy.fromDb[row.dropPolicy] : 'No-drop',
@@ -189,7 +188,7 @@ export function toTeamCreateInput(
 			input.type === 'Group Ride' ? input.additionalRideDetails : undefined,
 		routeLink: input.type === 'Group Ride' ? input.routeLink : undefined,
 		pace: input.pace,
-		segmentation: input.segmentation ? segmentation.toDb[input.segmentation] : undefined,
+		segmentation: input.type === 'Group Ride' ? input.segmentation : undefined,
 		typicalDistanceMiles: input.typicalDistanceMiles,
 		typicalElevationGainFt: input.typicalElevationGainFt,
 		dropPolicy: input.dropPolicy ? dropPolicy.toDb[input.dropPolicy] : undefined,
@@ -268,6 +267,7 @@ export function toTeamFormValues(row: TeamRowWithMedia): TeamFormValues {
 		scheduleNotes: row.scheduleNotes ?? '',
 		additionalRideDetails: row.additionalRideDetails ?? '',
 		routeLink: row.routeLink ?? '',
+		segmentation: row.segmentation ?? '',
 		pace: row.pace ?? 'Steady',
 		typicalDistanceMiles: row.typicalDistanceMiles?.toString() ?? '',
 		typicalElevationGainFt: row.typicalElevationGainFt?.toString() ?? '',
@@ -312,6 +312,7 @@ export function toGroupRideFormValues(row: TeamRow): TeamFormValues {
 		scheduleNotes: '',
 		additionalRideDetails: '',
 		routeLink: '',
+		segmentation: '',
 		pace: 'Relaxed',
 		typicalDistanceMiles: '',
 		typicalElevationGainFt: '',
@@ -362,6 +363,7 @@ export function toApprovedTeamUpdate(
 		additionalRideDetails:
 			input.type === 'Group Ride' ? (input.additionalRideDetails ?? null) : null,
 		routeLink: input.type === 'Group Ride' ? (input.routeLink ?? null) : null,
+		segmentation: input.type === 'Group Ride' ? (input.segmentation ?? null) : null,
 		pace: input.pace ?? null,
 		typicalDistanceMiles: input.typicalDistanceMiles ?? null,
 		typicalElevationGainFt: input.typicalElevationGainFt ?? null,

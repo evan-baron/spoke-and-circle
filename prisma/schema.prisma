@@ -78,7 +78,7 @@ model Team {
   additionalRideDetails  String?
   routeLink              String?
   pace                   Pace?
-  segmentation           Segmentation?
+  segmentation           String?
   typicalDistanceMiles   Int?
   typicalElevationGainFt Int?
   dropPolicy             DropPolicy?
@@ -278,13 +278,6 @@ enum MtbDiscipline {
   Enduro
   Downhill
   AllMountain  @map("All-mountain")
-}
-
-enum Segmentation {
-  AGroup @map("A Group")
-  BGroup @map("B Group")
-  CGroup @map("C Group")
-  NA     @map("N/A")
 }
 
 enum ScheduleFrequency {

@@ -59,6 +59,7 @@ export function RideDetailsSection({
 					<input
 						type='text'
 						name='segmentationDescription'
+						maxLength={100}
 						placeholder='A Group, B Group, etc.'
 						value={segmentationDescription}
 						onChange={(event) =>

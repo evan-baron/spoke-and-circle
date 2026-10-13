@@ -134,7 +134,7 @@ export function GroupRideDetailMobile({
 					/>
 				)}
 				<DetailRow label='Drop / no-drop' value={team.dropPolicy} />
-				{team.segmentation !== 'N/A' && (
+				{team.segmentation && (
 					<DetailRow label='Segmentation' value={team.segmentation} />
 				)}
 				{summary.length > 0 && (

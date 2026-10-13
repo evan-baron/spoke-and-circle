@@ -12,7 +12,6 @@ const virtualPlatformSchema = z.enum(enums.virtualPlatform.labels);
 const paceSchema = z.enum(enums.pace.labels);
 const skillLevelSchema = z.enum(enums.skillLevel.labels);
 const mtbDisciplineSchema = z.enum(enums.mtbDiscipline.labels);
-const segmentationSchema = z.enum(enums.segmentation.labels);
 const scheduleFrequencySchema = z.enum(enums.scheduleFrequency.labels);
 const dropPolicySchema = z.enum(enums.dropPolicy.labels);
 const competitiveOrCasualSchema = z.enum(enums.competitiveOrCasual.labels);
@@ -225,7 +224,11 @@ const teamBaseSchema = z.object({
 		.max(500, 'Route link must be less than 500 characters')
 		.optional(),
 	pace: paceSchema.optional(),
-	segmentation: segmentationSchema.optional(),
+	segmentation: z
+		.string()
+		.trim()
+		.max(100, 'Segmentation must be less than 100 characters')
+		.optional(),
 	typicalDistanceMiles: z
 		.number()
 		.int('Distance must be a whole number')

@@ -5,7 +5,6 @@ import type {
   Format,
   MtbDiscipline,
   Pace,
-  Segmentation,
   SkillLevel,
   Team,
 } from "../../src/lib/types";
@@ -25,7 +24,7 @@ interface TeamInput {
   typicalDistanceMiles: number;
   typicalElevationGainFt: number;
   dropPolicy: DropPolicy;
-  segmentation: Segmentation;
+  segmentation?: string;
   howToJoin: string;
   tags: string[];
   missionStatement?: string;
@@ -75,7 +74,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 32,
     typicalElevationGainFt: 1200,
     dropPolicy: "No-drop",
-    segmentation: "N/A",
     howToJoin: "Show up to any Tuesday or Saturday ride, no sign-up required.",
     tags: ["road", "social", "no-drop", "weeknight rides", "beginner-friendly"],
     missionStatement:
@@ -102,7 +100,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 28,
     typicalElevationGainFt: 1800,
     dropPolicy: "No-drop",
-    segmentation: "N/A",
     howToJoin: "Join our Strava club and RSVP to the Sunday route.",
     tags: ["gravel", "beginner-friendly", "dirt roads", "social"],
     missionStatement: "Get more people comfortable riding dirt, one gentle Sunday at a time.",
@@ -167,7 +164,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 18,
     typicalElevationGainFt: 2400,
     dropPolicy: "No-drop",
-    segmentation: "N/A",
     howToJoin: "Come to a Saturday trailhead meetup; helmets and full-suspension recommended.",
     tags: ["mtb", "singletrack", "climbing", "trails"],
     overrides: {
@@ -244,7 +240,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 40,
     typicalElevationGainFt: 300,
     dropPolicy: "No-drop",
-    segmentation: "N/A",
     howToJoin: "Sign up for a coached brick workout to meet the group before joining.",
     tags: ["triathlon", "tri", "brick workouts", "coached"],
     overrides: {
@@ -271,7 +266,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 20,
     typicalElevationGainFt: 400,
     dropPolicy: "No-drop",
-    segmentation: "N/A",
     howToJoin: "Message us on Facebook to be added to the next ride.",
     tags: ["e-bike", "accessible", "low-impact", "social"],
     missionStatement: "Prove that e-bikes belong on every group ride: accessible cycling for all ages.",
@@ -325,7 +319,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 30,
     typicalElevationGainFt: 1000,
     dropPolicy: "No-drop",
-    segmentation: "N/A",
     howToJoin: "Open to all: introduce yourself at our monthly meetup ride.",
     tags: ["women", "road", "community", "beginner-friendly"],
     missionStatement: "Build confidence and community for women on bikes, from first ride to first race.",
@@ -351,7 +344,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 22,
     typicalElevationGainFt: 900,
     dropPolicy: "No-drop",
-    segmentation: "N/A",
     howToJoin: "Everyone welcome; check our Instagram for the next meetup spot.",
     tags: ["lgbt", "inclusive", "social", "beginner-friendly"],
     missionStatement: "A safe, joyful space to ride for LGBTQ+ cyclists and allies of every level.",
@@ -376,7 +368,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 15,
     typicalElevationGainFt: 200,
     dropPolicy: "No-drop",
-    segmentation: "N/A",
     howToJoin: "Roll up to the Friday night meetup; lights required after dark.",
     tags: ["urban", "commuter", "night rides", "social"],
     overrides: {
@@ -430,7 +421,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 8,
     typicalElevationGainFt: 150,
     dropPolicy: "No-drop",
-    segmentation: "N/A",
     howToJoin: "Bring the whole family to any Saturday morning ride; trailers and kid bikes welcome.",
     tags: ["family-friendly", "kids-ok", "weekend", "social", "beginner-friendly"],
     overrides: {
@@ -478,7 +468,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 120,
     typicalElevationGainFt: 6000,
     dropPolicy: "No-drop",
-    segmentation: "N/A",
     howToJoin: "Register for a permanent brevet route through Randonneurs USA.",
     tags: ["randonneuring", "brevet", "long-distance", "endurance"],
     missionStatement: "Preserve and promote long-distance unsupported randonneuring in the Green Mountains.",
@@ -506,7 +495,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 18,
     typicalElevationGainFt: 100,
     dropPolicy: "No-drop",
-    segmentation: "N/A",
     howToJoin: "Meet at Monroe Harbor any Wednesday evening, no drop, no stress.",
     tags: ["casual", "scenic", "beginner-friendly", "social"],
     overrides: {
@@ -528,7 +516,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 38,
     typicalElevationGainFt: 900,
     dropPolicy: "No-drop",
-    segmentation: "N/A",
     howToJoin: "Join the Discord for weekly route drops and meetup points.",
     tags: ["gravel", "social", "midwest"],
     overrides: {
@@ -579,7 +566,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 24,
     typicalElevationGainFt: 300,
     dropPolicy: "No-drop",
-    segmentation: "N/A",
     howToJoin: "Se habla español. Join any Saturday clinic to meet the club.",
     tags: ["triathlon", "bilingual", "beginner-friendly", "coached"],
     overrides: {
@@ -603,7 +589,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 12,
     typicalElevationGainFt: 50,
     dropPolicy: "Drop",
-    segmentation: "N/A",
     howToJoin: "Find us through Instagram; fixed gear only, brakes recommended but not required.",
     tags: ["fixed-gear", "urban", "alleycat", "night-rides", "social"],
     overrides: {
@@ -628,7 +613,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 26,
     typicalElevationGainFt: 2200,
     dropPolicy: "No-drop",
-    segmentation: "N/A",
     howToJoin: "RSVP through Meetup; rental e-bikes available for first-timers.",
     tags: ["e-bike", "hills", "adventure", "beginner-friendly"],
     overrides: {
@@ -704,7 +688,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 15,
     typicalElevationGainFt: 400,
     dropPolicy: "No-drop",
-    segmentation: "N/A",
     howToJoin: "Built for first-time group riders; no experience or gear judgment, ever.",
     tags: ["beginner-friendly", "instructional", "no-drop", "social"],
     missionStatement: "Teach brand-new riders group-riding skills in a truly no-drop, no-judgment space.",
@@ -728,7 +711,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 14,
     typicalElevationGainFt: 500,
     dropPolicy: "No-drop",
-    segmentation: "N/A",
     howToJoin: "Contact us directly; we match riders and pilots based on needs and equipment.",
     tags: ["adaptive", "inclusive", "tandem", "accessible"],
     missionStatement: "Make group cycling genuinely accessible for riders of all abilities.",
@@ -781,7 +763,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 80,
     typicalElevationGainFt: 5200,
     dropPolicy: "No-drop",
-    segmentation: "N/A",
     howToJoin: "Join the group chat before your first overnight trip to coordinate gear.",
     tags: ["bikepacking", "adventure", "overnight", "gravel"],
     overrides: {
@@ -804,7 +785,6 @@ export const teams: Team[] = [
     typicalDistanceMiles: 30,
     typicalElevationGainFt: 1300,
     dropPolicy: "No-drop",
-    segmentation: "N/A",
     howToJoin: "Join our Strava club online, then come out to any weekend ride in person.",
     tags: ["strava", "virtual-plus-irl", "kom-hunting", "tech industry"],
     overrides: {

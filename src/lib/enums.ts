@@ -8,7 +8,6 @@ import type {
 	Pace as DbPace,
 	RacingDiscipline as DbRacingDiscipline,
 	ScheduleFrequency as DbScheduleFrequency,
-	Segmentation as DbSegmentation,
 	SkillLevel as DbSkillLevel,
 	VirtualPlatform as DbVirtualPlatform,
 } from '../../generated/prisma/client';
@@ -124,13 +123,6 @@ export const mtbDiscipline = defineEnum<DbMtbDiscipline>()({
 	'All-mountain': 'AllMountain',
 });
 
-export const segmentation = defineEnum<DbSegmentation>()({
-	'A Group': 'AGroup',
-	'B Group': 'BGroup',
-	'C Group': 'CGroup',
-	'N/A': 'NA',
-});
-
 export const scheduleFrequency = defineEnum<DbScheduleFrequency>()({
 	Weekly: 'Weekly',
 	Monthly: 'Monthly',
@@ -174,7 +166,6 @@ export type VirtualPlatform = (typeof virtualPlatform.labels)[number];
 export type Pace = (typeof pace.labels)[number];
 export type SkillLevel = (typeof skillLevel.labels)[number];
 export type MtbDiscipline = (typeof mtbDiscipline.labels)[number];
-export type Segmentation = (typeof segmentation.labels)[number];
 export type ScheduleFrequency = (typeof scheduleFrequency.labels)[number];
 export type DropPolicy = (typeof dropPolicy.labels)[number];
 export type CompetitiveOrCasual = (typeof competitiveOrCasual.labels)[number];

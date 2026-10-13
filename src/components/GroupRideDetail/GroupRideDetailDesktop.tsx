@@ -258,7 +258,9 @@ export function GroupRideDetailDesktop({
 						{team.scheduleNotes && (
 							<DetailRow label='Schedule notes' value={team.scheduleNotes} />
 						)}
-						<DetailRow label='Segmentation' value={team.segmentation} />
+						{team.segmentation && (
+							<DetailRow label='Segmentation' value={team.segmentation} />
+						)}
 						<DetailRow
 							label='Typical distance'
 							value={formatDistance(team.typicalDistanceMiles)}

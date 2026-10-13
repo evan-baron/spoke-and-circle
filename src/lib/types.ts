@@ -7,7 +7,6 @@ import type {
 	Pace,
 	SkillLevel,
 	MtbDiscipline,
-	Segmentation,
 	ScheduleFrequency,
 	DropPolicy,
 	RideOrdinal,
@@ -22,7 +21,6 @@ export type {
 	Pace,
 	SkillLevel,
 	MtbDiscipline,
-	Segmentation,
 	ScheduleFrequency,
 	DropPolicy,
 	RideOrdinal,
@@ -136,7 +134,7 @@ export interface Team {
   additionalRideDetails?: string;
   routeLink?: string;
   pace: Pace;
-  segmentation: Segmentation;
+  segmentation?: string;
   typicalDistanceMiles: number;
   typicalElevationGainFt: number;
   dropPolicy: DropPolicy;
@@ -239,6 +237,7 @@ export interface TeamFormValues {
   scheduleNotes: string;
   additionalRideDetails: string;
   routeLink: string;
+  segmentation: string;
   pace: string;
   typicalDistanceMiles: string;
   typicalElevationGainFt: string;

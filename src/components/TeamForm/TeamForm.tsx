@@ -91,9 +91,11 @@ export function TeamForm({
 	);
 	const [virtualPlatformOtherText, setVirtualPlatformOtherText] = useState('');
 	const [hasSegmentation, setHasSegmentation] = useState<'yes' | 'no' | null>(
-		null,
+		values.segmentation ? 'yes' : null,
 	);
-	const [segmentationDescription, setSegmentationDescription] = useState('');
+	const [segmentationDescription, setSegmentationDescription] = useState(
+		values.segmentation,
+	);
 	const isCreate = mode === 'create';
 	const steps = getFormSteps(groupType);
 	const lastStep = steps.length - 1;

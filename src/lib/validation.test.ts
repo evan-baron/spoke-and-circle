@@ -39,7 +39,6 @@ describe('createTeamSchema', () => {
 		['skillLevels', registry.skillLevel, true],
 		['competitiveOrCasual', registry.competitiveOrCasual, false],
 		['discipline', registry.mtbDiscipline, false],
-		['segmentation', registry.segmentation, false],
 	] as const)('%s', (field, entry, isList) => {
 		const wrap = (value: string) => (isList ? [value] : value);
 
@@ -125,6 +124,30 @@ describe('createTeamSchema', () => {
 			expect(parse({ additionalRideDetails: 'x'.repeat(1000) }).success).toBe(
 				true,
 			);
+		});
+	});
+
+	describe('segmentation', () => {
+		it('accepts free text and trims it', () => {
+			const result = parse({
+				type: 'Group Ride',
+				segmentation: '  A Group, B Group, C Group  ',
+			});
+			expect(result.success).toBe(true);
+			if (result.success) {
+				expect(result.data.segmentation).toBe('A Group, B Group, C Group');
+			}
+		});
+
+		it('is optional', () => {
+			expect(parse({ type: 'Group Ride' }).success).toBe(true);
+		});
+
+		it('rejects more than 100 characters', () => {
+			expect(messages({ segmentation: 'x'.repeat(101) })).toContain(
+				'Segmentation must be less than 100 characters',
+			);
+			expect(parse({ segmentation: 'x'.repeat(100) }).success).toBe(true);
 		});
 	});
 

@@ -9,7 +9,6 @@ import {
 	format,
 	mtbDiscipline,
 	racingDiscipline,
-	segmentation,
 } from '../src/lib/enums';
 
 function toTeamData(team: Team): Prisma.TeamCreateInput {
@@ -49,7 +48,7 @@ function toTeamData(team: Team): Prisma.TeamCreateInput {
 		waitlist: team.waitlist,
 		howToJoin: team.howToJoin,
 		pace: team.pace,
-		segmentation: segmentation.toDb[team.segmentation],
+		segmentation: team.segmentation,
 		typicalDistanceMiles: team.typicalDistanceMiles,
 		typicalElevationGainFt: team.typicalElevationGainFt,
 		dropPolicy: dropPolicy.toDb[team.dropPolicy],

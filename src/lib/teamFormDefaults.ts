@@ -37,6 +37,7 @@ export const DEFAULT_TEAM_FORM_VALUES: TeamFormValues = {
 	scheduleNotes: '',
 	additionalRideDetails: '',
 	routeLink: '',
+	segmentation: '',
 	pace: 'Relaxed',
 	typicalDistanceMiles: '',
 	typicalElevationGainFt: '',

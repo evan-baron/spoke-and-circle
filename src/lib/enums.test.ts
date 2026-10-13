@@ -11,7 +11,6 @@ const prismaEnums = {
 	pace: db.Pace,
 	skillLevel: db.SkillLevel,
 	mtbDiscipline: db.MtbDiscipline,
-	segmentation: db.Segmentation,
 	scheduleFrequency: db.ScheduleFrequency,
 	dropPolicy: db.DropPolicy,
 	competitiveOrCasual: db.CompetitiveOrCasual,
