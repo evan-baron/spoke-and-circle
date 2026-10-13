@@ -20,6 +20,7 @@ export function RejectionSection({
 					<Field
 						label='Rejection reason'
 						hint={`If you reject this team, ${submitter.name} (${submitter.email}) will be emailed this reason. The reason is optional.`}
+						maxLength={1000}
 						full
 					>
 						<textarea

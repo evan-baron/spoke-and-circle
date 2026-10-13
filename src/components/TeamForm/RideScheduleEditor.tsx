@@ -209,6 +209,7 @@ export function RideScheduleEditor({ initialRide }: RideScheduleEditorProps) {
 				<Field
 					label='Details'
 					hint='Meeting spot, start and finish, anything riders should know'
+					maxLength={300}
 					full
 				>
 					<input

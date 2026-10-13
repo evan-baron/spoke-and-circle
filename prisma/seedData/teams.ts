@@ -38,7 +38,7 @@ function makeTeam(input: TeamInput): Team {
     skillLevels: [skillLevel],
     verified: true,
     lastActiveYear: 2026,
-    eBikeAllowed: input.bikeTypes.includes("E-bike"),
+    eBikePolicy: input.bikeTypes.includes("E-bike") ? "Yes" : "No",
     waitlist: false,
     instructional: false,
     duesRequired: false,

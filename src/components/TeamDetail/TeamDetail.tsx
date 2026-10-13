@@ -14,6 +14,7 @@ import { TeamMedia } from '@/components/TeamMedia/TeamMedia';
 import {
 	formatAgeRequirement,
 	formatDistance,
+	formatEBikePolicy,
 	formatElevation,
 	formatList,
 	formatMemberCount,
@@ -249,7 +250,7 @@ export function TeamDetail({
 						)}
 						<DetailRow
 							label='E-bike allowed'
-							value={formatYesNo(team.eBikeAllowed)}
+							value={formatEBikePolicy(team.eBikePolicy, team.eBikeNotes)}
 						/>
 						<DetailRow
 							label='Age requirement'

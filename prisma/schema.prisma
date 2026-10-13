@@ -54,7 +54,8 @@ model Team {
   bikeTypes           BikeType[]
   discipline          MtbDiscipline?
   racingDisciplines   RacingDiscipline[]  @default([])
-  eBikeAllowed        Boolean           @default(false)
+  eBikePolicy         EBikePolicy       @default(No)
+  eBikeNotes          String?
   format              Format
   virtualPlatforms    VirtualPlatform[]
   homeBase String?
@@ -284,6 +285,12 @@ enum ScheduleFrequency {
   Weekly
   Monthly
   Annually
+}
+
+enum EBikePolicy {
+  No
+  Yes
+  Sometimes
 }
 
 enum DropPolicy {

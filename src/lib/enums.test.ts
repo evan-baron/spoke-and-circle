@@ -13,6 +13,7 @@ const prismaEnums = {
 	mtbDiscipline: db.MtbDiscipline,
 	scheduleFrequency: db.ScheduleFrequency,
 	dropPolicy: db.DropPolicy,
+	eBikePolicy: db.EBikePolicy,
 	competitiveOrCasual: db.CompetitiveOrCasual,
 } as const;
 

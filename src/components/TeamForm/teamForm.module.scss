@@ -277,6 +277,13 @@
 	text-wrap: pretty;
 }
 
+.fieldCount {
+	align-self: flex-end;
+	font-size: 0.8125rem;
+	color: var(--color-ink-soft);
+	font-variant-numeric: tabular-nums;
+}
+
 .routeStatus {
 	font-size: 0.8125rem;
 	color: var(--color-ink-soft);
@@ -299,6 +306,12 @@ select.input {
 textarea.input {
 	resize: vertical;
 	min-height: 4.5rem;
+}
+
+.twoRowOnDesktop {
+	@include from($bp-md) {
+		height: 4.5rem;
+	}
 }
 
 .checkboxGroup {

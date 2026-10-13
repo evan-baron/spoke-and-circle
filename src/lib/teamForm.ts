@@ -128,7 +128,9 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		memberLimit: number('memberLimit'),
 		howToJoin: text('howToJoin'),
 		personaRestrictions,
-		eBikeAllowed: flag('eBikeAllowed'),
+		eBikePolicy: text('eBikePolicy'),
+		eBikeNotes:
+			text('eBikePolicy') === 'Sometimes' ? text('eBikeNotes') : undefined,
 		waitlist: flag('waitlist'),
 		ride: ride(),
 		segmentation:

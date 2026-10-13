@@ -13,11 +13,11 @@ import { RouteSection } from '@/components/RouteSection/RouteSection';
 import { TeamMedia } from '@/components/TeamMedia/TeamMedia';
 import {
 	formatDistance,
+	formatEBikePolicy,
 	formatElevation,
 	formatList,
 	formatRideParts,
 	formatRideRecurrence,
-	formatYesNo,
 } from '@/lib/format';
 import { formatInstagramHandle } from '@/lib/instagram';
 import type { ParsedRouteLink } from '@/lib/routeLink';
@@ -280,7 +280,7 @@ export function GroupRideDetailDesktop({
 			/>
 			<DetailRow
 				label='E-Bike Allowed'
-				value={formatYesNo(team.eBikeAllowed)}
+				value={formatEBikePolicy(team.eBikePolicy, team.eBikeNotes)}
 			/>
 
 			{!parsedRouteLink && (

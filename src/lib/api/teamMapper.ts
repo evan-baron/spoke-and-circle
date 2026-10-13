@@ -15,6 +15,7 @@ import {
 	bikeType,
 	clubType,
 	dropPolicy,
+	eBikePolicy,
 	format,
 	mtbDiscipline,
 	racingDiscipline,
@@ -81,7 +82,8 @@ export function toTeam(row: TeamRowWithMedia): Team {
 			(rd) => racingDiscipline.fromDb[rd],
 		),
 		discipline: row.discipline ? mtbDiscipline.fromDb[row.discipline] : undefined,
-		eBikeAllowed: row.eBikeAllowed,
+		eBikePolicy: eBikePolicy.fromDb[row.eBikePolicy],
+		eBikeNotes: row.eBikeNotes ?? undefined,
 		format: format.fromDb[row.format],
 		virtualPlatform: row.virtualPlatforms[0],
 		homeBase: row.homeBase ?? undefined,
@@ -164,7 +166,11 @@ export function toTeamCreateInput(
 				(input.racingDisciplines ?? []).map((rd) => racingDiscipline.toDb[rd])
 			:	[],
 		discipline: input.discipline ? mtbDiscipline.toDb[input.discipline] : undefined,
-		eBikeAllowed: input.eBikeAllowed,
+		eBikePolicy: input.eBikePolicy ? eBikePolicy.toDb[input.eBikePolicy] : undefined,
+		eBikeNotes:
+			input.eBikePolicy === undefined ? undefined
+			: input.eBikePolicy === 'Sometimes' ? (input.eBikeNotes ?? null)
+			: null,
 		format: format.toDb[input.format],
 		virtualPlatforms: input.virtualPlatforms ?? [],
 		homeBase: input.homeBase,
@@ -261,7 +267,8 @@ export function toTeamFormValues(row: TeamRowWithMedia): TeamFormValues {
 		howToJoin: row.howToJoin ?? '',
 		personaRestriction: personaCode,
 		personaOtherDescription: personaCode === 'other' ? (persona ?? '') : '',
-		eBikeAllowed: row.eBikeAllowed,
+		eBikePolicy: eBikePolicy.fromDb[row.eBikePolicy],
+		eBikeNotes: row.eBikeNotes ?? '',
 		waitlist: row.waitlist,
 		ride: deriveRide(row),
 		scheduleNotes: row.scheduleNotes ?? '',
@@ -340,7 +347,9 @@ export function toApprovedTeamUpdate(
 			input.type === 'Team' ?
 				(input.racingDisciplines ?? []).map((rd) => racingDiscipline.toDb[rd])
 			:	[],
-		eBikeAllowed: input.eBikeAllowed ?? false,
+		eBikePolicy: input.eBikePolicy ? eBikePolicy.toDb[input.eBikePolicy] : 'No',
+		eBikeNotes:
+			input.eBikePolicy === 'Sometimes' ? (input.eBikeNotes ?? null) : null,
 		format: format.toDb[input.format],
 		virtualPlatforms: input.virtualPlatforms ?? [],
 		homeBase: input.homeBase ?? null,

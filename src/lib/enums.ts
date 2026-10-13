@@ -3,6 +3,7 @@ import type {
 	ClubType as DbClubType,
 	CompetitiveOrCasual as DbCompetitiveOrCasual,
 	DropPolicy as DbDropPolicy,
+	EBikePolicy as DbEBikePolicy,
 	Format as DbFormat,
 	MtbDiscipline as DbMtbDiscipline,
 	Pace as DbPace,
@@ -134,6 +135,12 @@ export const dropPolicy = defineEnum<DbDropPolicy>()({
 	'No-drop': 'NoDrop',
 });
 
+export const eBikePolicy = defineEnum<DbEBikePolicy>()({
+	No: 'No',
+	Yes: 'Yes',
+	Sometimes: 'Sometimes',
+});
+
 export const competitiveOrCasual = defineEnum<DbCompetitiveOrCasual>()({
 	Competitive: 'Competitive',
 	Recreational: 'Recreational',
@@ -168,6 +175,7 @@ export type SkillLevel = (typeof skillLevel.labels)[number];
 export type MtbDiscipline = (typeof mtbDiscipline.labels)[number];
 export type ScheduleFrequency = (typeof scheduleFrequency.labels)[number];
 export type DropPolicy = (typeof dropPolicy.labels)[number];
+export type EBikePolicy = (typeof eBikePolicy.labels)[number];
 export type CompetitiveOrCasual = (typeof competitiveOrCasual.labels)[number];
 export type EventType = (typeof eventType.labels)[number];
 export type DayOfWeek = (typeof dayOfWeek.labels)[number];

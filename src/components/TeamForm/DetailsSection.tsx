@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { CheckboxDropdown } from '@/components/FilterBar/CheckboxDropdown';
 import type { TeamFormValues } from '@/lib/types';
 import { Checkbox } from './Checkbox';
 import {
 	BIKE_TYPES,
+	EBIKE_POLICIES,
 	RACING_DISCIPLINES,
 	FORMATS,
 	PACES,
@@ -41,6 +43,8 @@ export function DetailsSection({
 	personaOtherText,
 	onPersonaOtherTextChange,
 }: DetailsSectionProps) {
+	const [eBikePolicy, setEBikePolicy] = useState(values.eBikePolicy);
+
 	return (
 		<Section
 			title={
@@ -250,10 +254,11 @@ export function DetailsSection({
 						className={styles.input}
 					/>
 				</Field>
-				<Field label='How to join' full>
+				<Field label='How to join' maxLength={1000} full>
 					<textarea
 						name='howToJoin'
 						defaultValue={values.howToJoin}
+						maxLength={1000}
 						rows={2}
 						placeholder={
 							groupType !== 'Group Ride' ?
@@ -296,11 +301,6 @@ export function DetailsSection({
 					<span className={styles.fieldLabel}>Other restrictions</span>
 
 					<div className={styles.checkboxRow}>
-						<Checkbox
-							label='E-bike allowed'
-							name='eBikeAllowed'
-							defaultChecked={values.eBikeAllowed}
-						/>
 						{groupType !== 'Group Ride' && (
 							<Checkbox
 								label='Waitlist active'
@@ -310,6 +310,32 @@ export function DetailsSection({
 						)}
 					</div>
 				</div>
+				<Field label='E-bikes allowed'>
+					<select
+						name='eBikePolicy'
+						value={eBikePolicy}
+						onChange={(event) => setEBikePolicy(event.target.value)}
+						className={styles.input}
+					>
+						{EBIKE_POLICIES.map((option) => (
+							<option key={option} value={option}>
+								{option}
+							</option>
+						))}
+					</select>
+				</Field>
+				{eBikePolicy === 'Sometimes' && (
+					<Field label='E-bike details' maxLength={150} full>
+						<textarea
+							name='eBikeNotes'
+							maxLength={150}
+							rows={3}
+							defaultValue={values.eBikeNotes}
+							placeholder='e.g. Fine on trails where e-bikes are legal'
+							className={`${styles.input} ${styles.twoRowOnDesktop}`}
+						/>
+					</Field>
+				)}
 			</Subsection>
 		</Section>
 	);

@@ -88,10 +88,11 @@ export function GenericInfoSection({
 				</Field>
 			}
 			{groupType !== 'Group Ride' && (
-				<Field label='Mission statement' full>
+				<Field label='Mission statement' maxLength={1000} full>
 					<textarea
 						name='missionStatement'
 						defaultValue={values.missionStatement}
+						maxLength={1000}
 						rows={2}
 						placeholder='What is this group trying to do?'
 						className={styles.input}

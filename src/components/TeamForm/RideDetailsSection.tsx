@@ -28,6 +28,7 @@ export function RideDetailsSection({
 			<Field
 				label='Schedule notes'
 				hint='Anything the schedule above cannot capture, like weather-permitting rides or holiday changes'
+				maxLength={500}
 				full
 			>
 				<textarea
@@ -113,7 +114,8 @@ export function RideDetailsSection({
 			</Field>
 			<Field
 				label='Additional Ride Details'
-				hint='Up to 1,000 characters. Leave a blank line between paragraphs'
+				hint='Leave a blank line between paragraphs'
+				maxLength={1000}
 				full
 			>
 				<textarea

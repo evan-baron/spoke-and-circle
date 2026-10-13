@@ -54,6 +54,10 @@ export function formatYesNo(value: boolean): string {
 	return value ? 'Yes' : 'No';
 }
 
+export function formatEBikePolicy(policy: string, notes?: string): string {
+	return policy === 'Sometimes' && notes ? `Sometimes: ${notes}` : policy;
+}
+
 export function formatVerification(
 	verified: boolean,
 	lastActiveYear: number,

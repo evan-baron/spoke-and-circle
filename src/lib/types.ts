@@ -9,6 +9,7 @@ import type {
 	MtbDiscipline,
 	ScheduleFrequency,
 	DropPolicy,
+	EBikePolicy,
 	RideOrdinal,
 } from './enums';
 
@@ -23,6 +24,7 @@ export type {
 	MtbDiscipline,
 	ScheduleFrequency,
 	DropPolicy,
+	EBikePolicy,
 	RideOrdinal,
 } from './enums';
 
@@ -114,7 +116,8 @@ export interface Team {
   bikeTypes: BikeType[];
   discipline?: MtbDiscipline;
   racingDisciplines: RacingDiscipline[];
-  eBikeAllowed: boolean;
+  eBikePolicy: EBikePolicy;
+  eBikeNotes?: string;
   format: Format;
   virtualPlatform?: VirtualPlatform;
   homeBase?: string;
@@ -231,7 +234,8 @@ export interface TeamFormValues {
   howToJoin: string;
   personaRestriction: string | null;
   personaOtherDescription: string;
-  eBikeAllowed: boolean;
+  eBikePolicy: string;
+  eBikeNotes: string;
   waitlist: boolean;
   ride?: Ride;
   scheduleNotes: string;

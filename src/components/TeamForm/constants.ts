@@ -3,6 +3,7 @@ import {
 	clubType,
 	dayOfWeek,
 	dropPolicy,
+	eBikePolicy,
 	format,
 	pace,
 	racingDiscipline,
@@ -20,6 +21,7 @@ export const VIRTUAL_PLATFORMS = virtualPlatform.labels;
 export const SCHEDULES = scheduleFrequency.labels;
 export const PACES = pace.labels;
 export const DROP_POLICIES = dropPolicy.labels;
+export const EBIKE_POLICIES = eBikePolicy.labels;
 export const SKILL_LEVELS = skillLevel.labels;
 export const PERSONA_OPTIONS = [
 	{ value: 'womenOnly', label: 'Women only' },

@@ -14,6 +14,7 @@ const skillLevelSchema = z.enum(enums.skillLevel.labels);
 const mtbDisciplineSchema = z.enum(enums.mtbDiscipline.labels);
 const scheduleFrequencySchema = z.enum(enums.scheduleFrequency.labels);
 const dropPolicySchema = z.enum(enums.dropPolicy.labels);
+const eBikePolicySchema = z.enum(enums.eBikePolicy.labels);
 const competitiveOrCasualSchema = z.enum(enums.competitiveOrCasual.labels);
 const dayOfWeekSchema = z.enum(enums.dayOfWeek.labels);
 const rideOrdinalSchema = z.enum(enums.rideOrdinal.labels);
@@ -144,7 +145,12 @@ const teamBaseSchema = z.object({
 		)
 		.max(10, 'Add up to 10 tags')
 		.optional(),
-	eBikeAllowed: z.boolean().optional(),
+	eBikePolicy: eBikePolicySchema.optional(),
+	eBikeNotes: z
+		.string()
+		.trim()
+		.max(150, 'E-bike details must be 150 characters or fewer')
+		.optional(),
 	format: formatSchema,
 	virtualPlatforms: z.array(virtualPlatformSchema).max(4).optional(),
 	homeBase: z

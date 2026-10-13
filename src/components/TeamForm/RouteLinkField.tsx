@@ -27,6 +27,7 @@ export function RouteLinkField({ defaultValue }: RouteLinkFieldProps) {
 		<Field
 			label='Route link'
 			hint="Paste a Ride with GPS, Strava, or Komoot route link and we'll show an interactive map of the route on your ride page. The route needs to be public."
+			maxLength={500}
 			full
 		>
 			<input

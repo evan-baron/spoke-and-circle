@@ -36,6 +36,7 @@ describe('createTeamSchema', () => {
 		['virtualPlatforms', registry.virtualPlatform, true],
 		['pace', registry.pace, false],
 		['dropPolicy', registry.dropPolicy, false],
+		['eBikePolicy', registry.eBikePolicy, false],
 		['skillLevels', registry.skillLevel, true],
 		['competitiveOrCasual', registry.competitiveOrCasual, false],
 		['discipline', registry.mtbDiscipline, false],

@@ -14,11 +14,11 @@ import {
 import { RouteSection } from '@/components/RouteSection/RouteSection';
 import {
 	formatDistance,
+	formatEBikePolicy,
 	formatElevation,
 	formatList,
 	formatRideParts,
 	formatRideTime,
-	formatYesNo,
 } from '@/lib/format';
 import { formatInstagramHandle } from '@/lib/instagram';
 import type { ParsedRouteLink } from '@/lib/routeLink';
@@ -135,7 +135,7 @@ export function GroupRideDetailMobile({
 				)}
 				<DetailRow
 					label='E-bike allowed'
-					value={formatYesNo(team.eBikeAllowed)}
+					value={formatEBikePolicy(team.eBikePolicy, team.eBikeNotes)}
 				/>
 				{showRouteFields && team.typicalDistanceMiles > 0 && (
 					<DetailRow
