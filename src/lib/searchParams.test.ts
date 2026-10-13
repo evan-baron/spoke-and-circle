@@ -113,4 +113,20 @@ describe('query string helpers', () => {
 		expect(toQueryString({})).toBe('');
 		expect(fromQueryString(new URLSearchParams(''))).toEqual({});
 	});
+
+	it('only honors the calendar view for group ride searches', () => {
+		expect(parseSearchParams({ view: 'calendar' }).view).toBe('list');
+		expect(
+			parseSearchParams({ type: 'Team', view: 'calendar' }).view,
+		).toBe('list');
+		expect(
+			parseSearchParams({ type: 'Group Ride', view: 'calendar' }).view,
+		).toBe('calendar');
+	});
+
+	it('accepts only well-formed months', () => {
+		expect(parseSearchParams({ month: '2026-10' }).month).toBe('2026-10');
+		expect(parseSearchParams({ month: '2026-13' }).month).toBeUndefined();
+		expect(parseSearchParams({ month: 'October' }).month).toBeUndefined();
+	});
 });

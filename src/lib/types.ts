@@ -186,6 +186,23 @@ export interface SearchParams {
   acceptingNewRiders?: boolean;
 }
 
+export interface CalendarRide {
+  id: string;
+  name: string;
+  location: string;
+  pace: Pace;
+  skillLevels: string[];
+  dropPolicy: DropPolicy;
+  ride: Ride;
+  timeZone?: string;
+}
+
+export interface CalendarRidesResult {
+  rides: CalendarRide[];
+  total: number;
+  truncated: boolean;
+}
+
 export interface TeamListPage {
   teams: Team[];
   total: number;

@@ -29,6 +29,7 @@ interface FilterBarProps {
 	defaultWomensOnly?: boolean;
 	defaultYouthOnly?: boolean;
 	defaultAcceptingNewRiders?: boolean;
+	defaultView?: 'list' | 'calendar';
 }
 
 const TYPE_OPTIONS = clubType.labels;
@@ -73,6 +74,7 @@ export function FilterBar({
 	defaultWomensOnly = false,
 	defaultYouthOnly = false,
 	defaultAcceptingNewRiders = false,
+	defaultView = 'list',
 }: FilterBarProps) {
 	const activeFilterCount =
 		[
@@ -113,6 +115,9 @@ export function FilterBar({
 
 	return (
 		<form action={action} method='GET' className={styles.form}>
+			{defaultView === 'calendar' && (
+				<input type='hidden' name='view' value='calendar' />
+			)}
 			<input
 				name='q'
 				type='text'

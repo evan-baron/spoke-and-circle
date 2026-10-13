@@ -15,6 +15,8 @@ import {
 	virtualPlatform,
 } from '@/lib/enums';
 import type {
+	CalendarRide,
+	CalendarRidesResult,
 	SearchParams,
 	TeamListPage,
 	TeamOption,
@@ -385,4 +387,63 @@ export async function searchApprovedTeams(
 	});
 
 	return { teams: rows.map(toTeam), total, page, pageCount };
+}
+
+export const CALENDAR_RIDE_CAP = 500;
+
+export async function searchApprovedRides(
+	params: SearchParams,
+): Promise<CalendarRidesResult> {
+	const location = params.location?.trim() ?? '';
+	const resolved = location ? await resolveSearchLocation(location) : null;
+	const where = await buildWhere({ ...params, type: 'Group Ride' }, resolved);
+
+	const scoped: Prisma.TeamWhereInput =
+		resolved?.kind === 'point' ?
+			{
+				AND: [
+					where,
+					{
+						id: {
+							in: [
+								...(
+									await findTeamMilesWithin(
+										resolved,
+										params.radius ?? DEFAULT_RADIUS_MILES,
+									)
+								).keys(),
+							],
+						},
+					},
+				],
+			}
+		:	where;
+
+	const [total, rows] = await Promise.all([
+		prisma.team.count({ where: scoped }),
+		prisma.team.findMany({
+			where: scoped,
+			orderBy: [{ name: 'asc' }, { id: 'asc' }],
+			take: CALENDAR_RIDE_CAP,
+		}),
+	]);
+
+	const rides = rows.flatMap((row): CalendarRide[] => {
+		const team = toTeam(row);
+		if (!team.ride) return [];
+		return [
+			{
+				id: team.id,
+				name: team.name,
+				location: team.location,
+				pace: team.pace,
+				skillLevels: team.skillLevels,
+				dropPolicy: team.dropPolicy,
+				ride: team.ride,
+				timeZone: team.timeZone,
+			},
+		];
+	});
+
+	return { rides, total, truncated: total > CALENDAR_RIDE_CAP };
 }

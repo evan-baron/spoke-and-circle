@@ -48,6 +48,7 @@ export const TEAMS_PAGE_SIZE = 20;
 export const RADIUS_OPTIONS = [10, 25, 50, 100] as const;
 export const DEFAULT_RADIUS_MILES = 50;
 
+const MONTH_PATTERN = /^\d{4}-(0[1-9]|1[0-2])$/;
 const MAX_PAGE = 10000;
 const MAX_PARAM_LENGTH = 100;
 const MAX_PARAM_VALUES = 10;
@@ -98,6 +99,12 @@ export function parseSearchParams(raw: RawSearchParams) {
 	const womensOnly = firstValue(raw.womensOnly) === 'true';
 	const youthOnly = firstValue(raw.youthOnly) === 'true';
 	const acceptingNewRiders = firstValue(raw.acceptingNewRiders) === 'true';
+	const view: 'list' | 'calendar' =
+		type === 'Group Ride' && firstValue(raw.view) === 'calendar' ?
+			'calendar'
+		:	'list';
+	const monthRaw = firstValue(raw.month);
+	const month = MONTH_PATTERN.test(monthRaw) ? monthRaw : undefined;
 	const pageRaw = Number.parseInt(firstValue(raw.page), 10);
 	const page =
 		Number.isFinite(pageRaw) && pageRaw > 0 ? Math.min(pageRaw, MAX_PAGE) : 1;
@@ -122,5 +129,7 @@ export function parseSearchParams(raw: RawSearchParams) {
 		womensOnly,
 		youthOnly,
 		acceptingNewRiders,
+		view,
+		month,
 	};
 }

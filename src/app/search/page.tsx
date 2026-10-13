@@ -2,9 +2,14 @@ import type { Metadata } from 'next';
 import { FilterBar } from '@/components/FilterBar/FilterBar';
 import { Pagination } from '@/components/Pagination/Pagination';
 import { ResultsTable } from '@/components/ResultsTable/ResultsTable';
+import { RideCalendar } from '@/components/RideCalendar/RideCalendar';
 import { SearchLocationTracker } from '@/components/SearchLocationTracker/SearchLocationTracker';
+import { ViewToggle } from '@/components/ViewToggle/ViewToggle';
 import { parseSearchParams, type RawSearchParams } from '@/lib/searchParams';
-import { searchApprovedTeams } from '@/services/teamSearchService';
+import {
+	searchApprovedRides,
+	searchApprovedTeams,
+} from '@/services/teamSearchService';
 import styles from './search.module.scss';
 
 export async function generateMetadata({
@@ -24,7 +29,8 @@ export async function generateMetadata({
 			params.competitiveOrCasual ||
 			params.womensOnly ||
 			params.youthOnly ||
-			params.acceptingNewRiders,
+			params.acceptingNewRiders ||
+			params.view === 'calendar',
 		) ||
 		params.page > 1;
 
@@ -48,13 +54,20 @@ export default async function SearchPage({
 	searchParams: Promise<RawSearchParams>;
 }) {
 	const rawParams = await searchParams;
-	const { page: requestedPage, ...params } = parseSearchParams(rawParams);
-	const { teams, total, page, pageCount } = await searchApprovedTeams(
-		params,
-		requestedPage,
-	);
-
+	const {
+		page: requestedPage,
+		view,
+		month,
+		...params
+	} = parseSearchParams(rawParams);
 	const isGroupRideSearch = params.type === 'Group Ride';
+	const isCalendarView = view === 'calendar';
+
+	const todayIso = new Date().toISOString().slice(0, 10);
+	const calendar = isCalendarView ? await searchApprovedRides(params) : null;
+	const list =
+		isCalendarView ? null : await searchApprovedTeams(params, requestedPage);
+	const total = calendar?.total ?? list?.total ?? 0;
 
 	return (
 		<div className={styles.page}>
@@ -75,6 +88,7 @@ export default async function SearchPage({
 					defaultWomensOnly={params.womensOnly}
 					defaultYouthOnly={params.youthOnly}
 					defaultAcceptingNewRiders={params.acceptingNewRiders}
+					defaultView={view}
 				/>
 
 				<p className={styles.count}>
@@ -86,14 +100,38 @@ export default async function SearchPage({
 					)}
 				</p>
 
-				<ResultsTable teams={teams} isGroupRideSearch={isGroupRideSearch} />
+				{isGroupRideSearch && (
+					<ViewToggle
+						basePath='/search'
+						searchParams={rawParams}
+						view={view}
+					/>
+				)}
 
-				<Pagination
-					basePath='/search'
-					searchParams={rawParams}
-					page={page}
-					pageCount={pageCount}
-				/>
+				{calendar ?
+					<RideCalendar
+						key={`${month ?? todayIso.slice(0, 7)}-${calendar.total}`}
+						rides={calendar.rides}
+						initialMonth={month ?? todayIso.slice(0, 7)}
+						todayIso={todayIso}
+						total={calendar.total}
+						truncated={calendar.truncated}
+					/>
+				: list ?
+					<>
+						<ResultsTable
+							teams={list.teams}
+							isGroupRideSearch={isGroupRideSearch}
+						/>
+
+						<Pagination
+							basePath='/search'
+							searchParams={rawParams}
+							page={list.page}
+							pageCount={list.pageCount}
+						/>
+					</>
+				:	null}
 			</div>
 		</div>
 	);
