@@ -288,54 +288,6 @@
 	}
 }
 
-.noMapBody {
-	@include from($bp-lg) {
-		grid-template-columns: minmax(0, 1fr);
-		grid-template-areas:
-			'main'
-			'contact';
-	}
-}
-
-.noMapWithSide {
-	@include from($bp-lg) {
-		grid-template-columns: 20rem minmax(0, 1fr);
-		grid-template-areas:
-			'side main'
-			'contact contact';
-	}
-}
-
-.areaSide {
-	@include from($bp-lg) {
-		grid-area: side;
-	}
-}
-
-.areaMain {
-	@include from($bp-lg) {
-		grid-area: main;
-	}
-}
-
-.areaContact {
-	@include from($bp-lg) {
-		grid-area: contact;
-	}
-}
-
-.contactStrip {
-	.factList {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(13rem, 1fr));
-		gap: var(--space-md) var(--space-lg);
-	}
-
-	.factGroup + .factGroup {
-		margin-top: 0;
-	}
-}
-
 .seeAll {
 	grid-column: 1 / -1;
 	font-size: 0.9375rem;

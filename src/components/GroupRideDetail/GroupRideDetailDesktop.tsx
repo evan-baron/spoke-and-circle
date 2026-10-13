@@ -70,7 +70,6 @@ export function GroupRideDetailDesktop({
 	const hasJoinCard = Boolean(team.howToJoin) || joinFlags.length > 0;
 	const visibleRides = groupRides.slice(0, MAX_MORE_RIDES);
 	const hasMoreRides = Boolean(team.affiliation) && visibleRides.length > 0;
-	const hasSide = hasJoinCard || hasMoreRides;
 
 	const joinCard = hasJoinCard && (
 		<div className={`${styles.asideCard} ${styles.contactCard}`}>
@@ -136,9 +135,7 @@ export function GroupRideDetailDesktop({
 	);
 
 	const contactCard = (
-		<div
-			className={`${styles.asideCard} ${hasMap ? '' : `${styles.contactStrip} ${styles.areaContact}`}`}
-		>
+		<div className={styles.asideCard}>
 			<p className={styles.asideTitle}>Contact Info</p>
 			<dl className={styles.factList}>
 				<div className={styles.factGroup}>
@@ -330,46 +327,23 @@ export function GroupRideDetailDesktop({
 		</DetailSection>
 	);
 
-	if (hasMap) {
-		return (
-			<div className={styles.body}>
-				<aside className={styles.aside}>
-					{joinCard}
-					{contactCard}
-					{moreRides}
-				</aside>
-
-				<div className={styles.main}>
-					{parsedRouteLink && (
-						<RouteSection route={parsedRouteLink} teamName={team.name} />
-					)}
-					{rideDetails}
-					{rideSummary}
-					<TeamMedia media={team.media ?? []} teamName={team.name} />
-				</div>
-			</div>
-		);
-	}
-
 	return (
-		<div
-			className={`${styles.body} ${styles.noMapBody} ${hasSide ? styles.noMapWithSide : ''}`}
-		>
-			{hasSide && (
-				<div className={`${styles.areaSide} ${styles.main}`}>
-					{joinCard}
-					{moreRides}
-				</div>
-			)}
+		<div className={styles.body}>
+			<aside className={styles.aside}>
+				{joinCard}
+				{contactCard}
+				{moreRides}
+			</aside>
 
-			<div className={`${styles.areaMain} ${styles.main}`}>
+			<div className={styles.main}>
+				{parsedRouteLink && (
+					<RouteSection route={parsedRouteLink} teamName={team.name} />
+				)}
 				{routePrompt}
 				{rideDetails}
 				{rideSummary}
 				<TeamMedia media={team.media ?? []} teamName={team.name} />
 			</div>
-
-			{contactCard}
 		</div>
 	);
 }
