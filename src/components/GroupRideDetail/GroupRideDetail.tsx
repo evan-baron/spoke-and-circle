@@ -27,9 +27,9 @@ export function GroupRideDetail({
 			<header className={styles.header}>
 				<div className={styles.badgeRow}>
 					<Badge tone='ink'>{team.type}</Badge>
-					{team.type === 'Group Ride' && (
-						<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
-					)}
+					{/* {team.type === 'Group Ride' && (
+						<Badge tone={toneForPace(team.pace)}>{team.pace} pace</Badge>
+					)} */}
 					{team.bikeTypes.map((bikeType) => (
 						<Badge key={bikeType} tone='gold'>
 							{bikeType}

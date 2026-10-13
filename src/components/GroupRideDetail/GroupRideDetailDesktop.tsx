@@ -58,9 +58,7 @@ export function GroupRideDetailDesktop({
 	const joinCard = hasJoinCard && (
 		<div className={`${styles.asideCard} ${styles.contactCard}`}>
 			<p className={styles.asideTitle}>How to join</p>
-			{team.howToJoin && (
-				<p className={styles.howToJoin}>{team.howToJoin}</p>
-			)}
+			{team.howToJoin && <p className={styles.howToJoin}>{team.howToJoin}</p>}
 			{joinFlags.length > 0 && (
 				<div className={styles.flagRow}>
 					{joinFlags.map((flag) => (
@@ -115,7 +113,8 @@ export function GroupRideDetailDesktop({
 			<span>
 				{team.routeLink ?
 					'Use a Ride with GPS or Strava route link to display it. Only you can see this note.'
-				:	'Paste a Ride with GPS or Strava route link when you edit this ride. Only you can see this note.'}
+				:	'Paste a Ride with GPS or Strava route link when you edit this ride. Only you can see this note.'
+				}
 			</span>
 		</Link>
 	);
@@ -267,9 +266,7 @@ export function GroupRideDetailDesktop({
 				label='E-Bike Allowed'
 				value={formatYesNo(team.eBikeAllowed)}
 			/>
-			{team.segmentation && (
-				<DetailRow label='Segmentation' value={team.segmentation} />
-			)}
+
 			<DetailRow
 				label='Typical distance'
 				value={formatDistance(team.typicalDistanceMiles)}
@@ -279,6 +276,11 @@ export function GroupRideDetailDesktop({
 				value={formatElevation(team.typicalElevationGainFt)}
 			/>
 			<DetailRow label='Drop / no-drop' value={team.dropPolicy} />
+			{team.segmentation ?
+				<DetailRow label='Segmentation' value={team.segmentation} />
+			: team.pace ?
+				<DetailRow label='Ride pace' value={team.pace} />
+			:	null}
 			{team.routeLink && !parsedRouteLink && (
 				<DetailRow
 					label='Route link'
@@ -300,11 +302,9 @@ export function GroupRideDetailDesktop({
 	const rideSummary = team.additionalRideDetails && (
 		<DetailSection title='Ride summary'>
 			<div className={styles.longText}>
-				{team.additionalRideDetails
-					.split(/\n{2,}/)
-					.map((paragraph, index) => (
-						<p key={index}>{paragraph}</p>
-					))}
+				{team.additionalRideDetails.split(/\n{2,}/).map((paragraph, index) => (
+					<p key={index}>{paragraph}</p>
+				))}
 			</div>
 		</DetailSection>
 	);

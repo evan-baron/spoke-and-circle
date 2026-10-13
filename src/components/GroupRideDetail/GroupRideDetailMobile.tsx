@@ -134,9 +134,12 @@ export function GroupRideDetailMobile({
 					/>
 				)}
 				<DetailRow label='Drop / no-drop' value={team.dropPolicy} />
-				{team.segmentation && (
+
+				{team.segmentation ?
 					<DetailRow label='Segmentation' value={team.segmentation} />
-				)}
+				: team.pace ?
+					<DetailRow label='Ride pace' value={team.pace} />
+				:	null}
 				{summary.length > 0 && (
 					<div className={styles.fullRow}>
 						<DetailRow
