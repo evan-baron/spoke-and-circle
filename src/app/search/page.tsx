@@ -54,6 +54,8 @@ export default async function SearchPage({
 		requestedPage,
 	);
 
+	const isGroupRideSearch = params.type === 'Group Ride';
+
 	return (
 		<div className={styles.page}>
 			<SearchLocationTracker />
@@ -84,7 +86,7 @@ export default async function SearchPage({
 					)}
 				</p>
 
-				<ResultsTable teams={teams} />
+				<ResultsTable teams={teams} isGroupRideSearch={isGroupRideSearch} />
 
 				<Pagination
 					basePath='/search'

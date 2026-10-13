@@ -16,9 +16,10 @@ import styles from './resultsTable.module.scss';
 
 interface ResultsTableProps {
 	teams: Team[];
+	isGroupRideSearch: Boolean;
 }
 
-export function ResultsTable({ teams }: ResultsTableProps) {
+export function ResultsTable({ teams, isGroupRideSearch }: ResultsTableProps) {
 	if (teams.length === 0) {
 		return (
 			<div className={styles.empty}>
@@ -44,7 +45,9 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 							<div className={styles.cardBadges}>
 								{team.type === 'Group Ride' ?
 									<Badge tone={toneForPace(team.pace)}>{team.pace} pace</Badge>
-								:	<Badge tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}>
+								:	<Badge
+										tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}
+									>
 										{team.competitiveOrCasual}
 									</Badge>
 								}
@@ -78,7 +81,7 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 					<tr>
 						<th>Name</th>
 						<th>Group type</th>
-						<th>Competitive or recreational</th>
+						{!isGroupRideSearch && <th>Competitive or recreational</th>}
 						<th>Location(s)</th>
 						<th>Cycling Disciplines</th>
 						<th>Skill level</th>
@@ -98,15 +101,19 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 							<td>
 								<Badge tone='ink'>{team.type}</Badge>
 							</td>
-							<td>
-								{team.type !== 'Group Ride' && (
-									<Badge
-										tone={toneForCompetitiveOrCasual(team.competitiveOrCasual)}
-									>
-										{team.competitiveOrCasual}
-									</Badge>
-								)}
-							</td>
+							{!isGroupRideSearch && (
+								<td>
+									{team.type !== 'Group Ride' && (
+										<Badge
+											tone={toneForCompetitiveOrCasual(
+												team.competitiveOrCasual,
+											)}
+										>
+											{team.competitiveOrCasual}
+										</Badge>
+									)}
+								</td>
+							)}
 							<td>
 								{getTeamLocations(team).map((location, index, all) => (
 									<span key={location} className={styles.stackedLine}>
@@ -127,9 +134,7 @@ export function ResultsTable({ teams }: ResultsTableProps) {
 								)}
 							</td>
 							<td>
-								<Badge tone={toneForPace(team.pace)}>
-									{team.pace}
-								</Badge>
+								<Badge tone={toneForPace(team.pace)}>{team.pace}</Badge>
 							</td>
 							{/* <td>{team.memberCount}</td> */}
 							<td>
