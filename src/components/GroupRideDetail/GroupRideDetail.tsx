@@ -10,6 +10,7 @@ import {
 	DetailRow,
 	DetailSection,
 } from '@/components/DetailSection/DetailSection';
+import { RouteSection } from '@/components/RouteSection/RouteSection';
 import { TeamMedia } from '@/components/TeamMedia/TeamMedia';
 import {
 	formatAgeRequirement,
@@ -413,6 +414,10 @@ export function GroupRideDetail({
 								/>
 							))}
 						</DetailSection>
+					)}
+
+					{parsedRouteLink && (
+						<RouteSection route={parsedRouteLink} teamName={team.name} />
 					)}
 				</div>
 			</div>
