@@ -21,6 +21,7 @@ import {
 	segmentation,
 } from '../enums';
 import { stripInstagramHandle } from '../instagram';
+import { timeZoneFor } from '../timeZone';
 
 export type TeamRowWithMedia = TeamRow & { media?: TeamMediaRow[] };
 
@@ -66,6 +67,7 @@ export function toTeam(row: TeamRowWithMedia): Team {
 		affiliation: row.affiliation ?? undefined,
 		affiliatedId: row.affiliatedId ?? undefined,
 		location: row.location,
+		timeZone: timeZoneFor(row.latitude, row.longitude),
 		additionalLocations: nonEmpty(row.additionalLocations),
 		founded: row.founded ?? 0,
 		contact: {

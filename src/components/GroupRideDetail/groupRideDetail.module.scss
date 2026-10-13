@@ -262,3 +262,17 @@
 	flex-direction: column;
 	gap: var(--space-lg);
 }
+
+.mobileOnly {
+	@include from($bp-lg) {
+		display: none;
+	}
+}
+
+.desktopOnly {
+	display: none;
+
+	@include from($bp-lg) {
+		display: block;
+	}
+}

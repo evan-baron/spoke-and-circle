@@ -101,6 +101,7 @@ export interface Team {
   affiliation?: string;
   affiliatedId?: string;
   location: string;
+  timeZone?: string;
   additionalLocations?: string[];
   founded: number;
   contact: ContactInfo;

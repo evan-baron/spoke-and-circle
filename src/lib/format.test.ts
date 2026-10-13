@@ -3,7 +3,9 @@ import {
 	ALL_SKILL_LEVELS_LABEL,
 	formatClockTime,
 	formatMemberCount,
+	formatRideDates,
 	formatRideRecurrence,
+	formatRideTime,
 	formatSkillLevelLines,
 	formatSkillLevels,
 	isAllSkillLevels,
@@ -82,5 +84,28 @@ describe('formatRideRecurrence', () => {
 				monthTo: 6,
 			}),
 		).toBe('Every Friday · June');
+	});
+});
+
+describe('formatRideTime and formatRideDates', () => {
+	const ride = {
+		pattern: 'monthly' as const,
+		days: ['Sunday'],
+		ordinals: ['1st' as const],
+		startTime: '07:30',
+		monthFrom: 4,
+		monthTo: 9,
+	};
+
+	it('splits the start time from the dates', () => {
+		expect(formatRideTime(ride)).toBe('7:30 AM');
+		expect(formatRideDates(ride)).toBe('1st Sunday of the month · April–September');
+	});
+
+	it('returns no time when the ride has no start time', () => {
+		expect(formatRideTime({ pattern: 'weekly', days: ['Friday'] })).toBeNull();
+		expect(formatRideDates({ pattern: 'weekly', days: ['Friday'] })).toBe(
+			'Every Friday',
+		);
 	});
 });

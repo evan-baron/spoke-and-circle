@@ -1,0 +1,385 @@
+import Link from 'next/link';
+import { Badge } from '@/components/Badge/Badge';
+import { ContactModal } from '@/components/ContactModal/ContactModal';
+import {
+	MailIcon,
+	PhoneIcon,
+	WebsiteIcon,
+} from '@/components/ContactIcons/ContactIcons';
+import {
+	DetailRow,
+	DetailSection,
+} from '@/components/DetailSection/DetailSection';
+import { RouteSection } from '@/components/RouteSection/RouteSection';
+import { TeamMedia } from '@/components/TeamMedia/TeamMedia';
+import {
+	formatAgeRequirement,
+	formatDistance,
+	formatElevation,
+	formatList,
+	formatMileageRequirement,
+	formatRideRecurrence,
+	formatSkillLevels,
+	formatYesNo,
+} from '@/lib/format';
+import { formatInstagramHandle } from '@/lib/instagram';
+import type { ParsedRouteLink } from '@/lib/routeLink';
+import { toneForPace } from '@/lib/tone';
+import type { Team } from '@/lib/types';
+import styles from './groupRideDetail.module.scss';
+
+interface GroupRideDetailDesktopProps {
+	team: Team;
+	groupRides?: Team[];
+	preview?: boolean;
+	parsedRouteLink: ParsedRouteLink | null;
+}
+
+export function GroupRideDetailDesktop({
+	team,
+	groupRides = [],
+	preview = false,
+	parsedRouteLink,
+}: GroupRideDetailDesktopProps) {
+	const joinFlags = [
+		team.joinRequirements.open && 'Open to all',
+		team.joinRequirements.tryouts && 'Try-outs required',
+		team.joinRequirements.referralRequired && 'Referral required',
+		team.joinRequirements.inviteOnly && 'Invite only',
+	].filter(Boolean) as string[];
+
+	const hasSocial = Object.values(team.social).some(Boolean);
+
+	return (
+		<div className={styles.body}>
+			<aside className={styles.aside}>
+				<div className={`${styles.asideCard} ${styles.contactCard}`}>
+					<p className={styles.asideTitle}>How to join</p>
+					<p className={styles.howToJoin}>{team.howToJoin}</p>
+					{team.waitlist && (
+						<p className={styles.waitlistNote}>
+							Currently accepting waitlist signups only.
+						</p>
+					)}
+					{joinFlags.length > 0 && (
+						<div className={styles.flagRow}>
+							{joinFlags.map((flag) => (
+								<span key={flag} className={styles.flag}>
+									{flag}
+								</span>
+							))}
+						</div>
+					)}
+					{!preview && (
+						<ContactModal
+							teamName={team.name}
+							email={team.contact.email}
+							phone={team.contact.phone}
+							website={team.website}
+						/>
+					)}
+				</div>
+
+				<div className={styles.asideCard}>
+					<p className={styles.asideTitle}>Contact Info</p>
+					<dl className={styles.factList}>
+						<dt>Location</dt>
+						<dd>{team.location}</dd>
+						{team.additionalLocations &&
+							team.additionalLocations.length > 0 && (
+								<>
+									<dt>Also rides in</dt>
+									<dd>{formatList(team.additionalLocations)}</dd>
+								</>
+							)}
+						{team.affiliation && (
+							<>
+								<dt>Affiliation</dt>
+								<dd>
+									{team.affiliatedId && !preview ?
+										<Link
+											href={`/teams/${team.affiliatedId}`}
+											className={styles.affiliationLink}
+										>
+											{team.affiliation}
+										</Link>
+									:	team.affiliation}
+								</dd>
+							</>
+						)}
+						<dt>Contact</dt>
+						{team.contact.email && (
+							<dd className={styles.factWithIcon}>
+								<MailIcon size={16} />
+								<a
+									href={`mailto:${team.contact.email}`}
+									className={styles.contactLink}
+								>
+									{team.contact.email.split('@')[0]}@<wbr />
+									{team.contact.email.split('@').slice(1).join('@')}
+								</a>
+							</dd>
+						)}
+						{team.contact.phone && (
+							<dd className={styles.factWithIcon}>
+								<PhoneIcon size={16} />
+								<a
+									href={`tel:${team.contact.phone}`}
+									className={styles.phoneLink}
+								>
+									{team.contact.phone}
+								</a>
+							</dd>
+						)}
+						{!team.contact.email && !team.contact.phone && (
+							<dd>Not listed</dd>
+						)}
+						{team.website && (
+							<>
+								<dt>Website</dt>
+								<dd className={styles.factWithIcon}>
+									<WebsiteIcon size={16} />
+									<a
+										target='_blank'
+										rel='noopener noreferrer'
+										href={team.website}
+										className={styles.website}
+									>
+										{team.website
+											.replace(/^https?:\/\/(www\.)?/i, '')
+											.replace(/\/$/, '')}
+									</a>
+								</dd>
+							</>
+						)}
+						{hasSocial && (
+							<>
+								<dt>Social</dt>
+								{team.social.instagram && (
+									<dd>
+										Instagram &middot;{' '}
+										{team.social.instagramLink ?
+											<a
+												target='_blank'
+												rel='noopener noreferrer'
+												href={team.social.instagramLink}
+												className={styles.website}
+											>
+												{formatInstagramHandle(team.social.instagram)}
+											</a>
+										:	formatInstagramHandle(team.social.instagram)}
+									</dd>
+								)}
+								{team.social.facebook && (
+									<dd>
+										Facebook &middot;{' '}
+										{team.social.facebookLink ?
+											<a
+												target='_blank'
+												rel='noopener noreferrer'
+												href={team.social.facebookLink}
+												className={styles.website}
+											>
+												{team.social.facebook}
+											</a>
+										:	team.social.facebook}
+									</dd>
+								)}
+								{team.social.discord && (
+									<dd>Discord &middot; {team.social.discord}</dd>
+								)}
+							</>
+						)}
+					</dl>
+				</div>
+			</aside>
+
+			<div className={styles.main}>
+				<DetailSection title='Format & membership'>
+					<DetailRow
+						label='Cycling Discipline(s)'
+						value={formatList(team.bikeTypes)}
+					/>
+					{team.racingDisciplines.length > 0 && (
+						<DetailRow
+							label='Racing Discipline(s)'
+							value={formatList(team.racingDisciplines)}
+						/>
+					)}
+					<DetailRow label='Virtual or in-person' value={team.format} />
+					{team.discipline && (
+						<DetailRow label='Riding style' value={team.discipline} />
+					)}
+					{team.virtualPlatform && (
+						<DetailRow
+							label='Virtual platform'
+							value={team.virtualPlatform}
+						/>
+					)}
+					{team.homeBase && (
+						<DetailRow label='Home Base' value={team.homeBase} />
+					)}
+					<DetailRow
+						label='E-bike allowed'
+						value={formatYesNo(team.eBikeAllowed)}
+					/>
+					<DetailRow
+						label='Age requirement'
+						value={formatAgeRequirement(team.ageRequirement)}
+					/>
+					<DetailRow
+						label='Persona restrictions'
+						value={formatList(team.personaRestrictions)}
+					/>
+					<DetailRow
+						label='Member limit'
+						value={team.memberLimit ?? 'None'}
+					/>
+					<DetailRow label='Waitlist' value={formatYesNo(team.waitlist)} />
+				</DetailSection>
+
+				{team.type === 'Group Ride' && (
+					<DetailSection title='Ride details'>
+						{team.ride && (
+							<DetailRow
+								label='Schedule'
+								value={
+									<>
+										{formatRideRecurrence(team.ride)}
+										{team.ride.details && (
+											<span className={styles.rideDetails}>
+												{team.ride.details}
+											</span>
+										)}
+									</>
+								}
+							/>
+						)}
+						{team.scheduleNotes && (
+							<DetailRow label='Schedule notes' value={team.scheduleNotes} />
+						)}
+						<DetailRow label='Segmentation' value={team.segmentation} />
+						<DetailRow
+							label='Typical distance'
+							value={formatDistance(team.typicalDistanceMiles)}
+						/>
+						<DetailRow
+							label='Typical elevation gain'
+							value={formatElevation(team.typicalElevationGainFt)}
+						/>
+						<DetailRow label='Drop / no-drop' value={team.dropPolicy} />
+						{team.routeLink && (
+							<DetailRow
+								label='Route link'
+								value={
+									<a
+										target='_blank'
+										rel='noopener noreferrer nofollow'
+										href={team.routeLink}
+										className={styles.website}
+									>
+										{team.routeLink}
+									</a>
+								}
+							/>
+						)}
+					</DetailSection>
+				)}
+
+				{team.type === 'Group Ride' && team.additionalRideDetails && (
+					<DetailSection title='Additional ride details'>
+						<div className={styles.longText}>
+							{team.additionalRideDetails
+								.split(/\n{2,}/)
+								.map((paragraph, index) => (
+									<p key={index}>{paragraph}</p>
+								))}
+						</div>
+					</DetailSection>
+				)}
+
+				{team.type !== 'Group Ride' && (
+					<DetailSection
+						title={
+							team.type === 'Team' ? 'Team structure' : 'Group structure'
+						}
+					>
+						<DetailRow
+							label='Competitive or recreational'
+							value={team.competitiveOrCasual}
+						/>
+						<DetailRow
+							label='Skill levels'
+							value={formatSkillLevels(team.skillLevels)}
+						/>
+						<DetailRow
+							label='Instructional'
+							value={formatYesNo(team.instructional)}
+						/>
+						<DetailRow
+							label='Dues'
+							value={
+								team.duesRequired ?
+									`${team.duesAmount ?? 'Required'}${team.duesSchedule ? ` (${team.duesSchedule})` : ''}`
+								:	'Not required'
+							}
+						/>
+						<DetailRow
+							label='Required rides'
+							value={formatYesNo(team.requiredRides)}
+						/>
+						<DetailRow
+							label='Required races (min)'
+							value={team.requiredRaces ?? 'None'}
+						/>
+						<DetailRow
+							label='Mileage requirement'
+							value={formatMileageRequirement(team.mileageRequirement)}
+						/>
+						<DetailRow
+							label='Required kit / uniform'
+							value={formatYesNo(team.requiredKit)}
+						/>
+						<DetailRow
+							label='Event types'
+							value={formatList(team.eventTypes)}
+						/>
+						<DetailRow label='Sponsors' value={formatList(team.sponsors)} />
+					</DetailSection>
+				)}
+
+				<TeamMedia media={team.media ?? []} teamName={team.name} />
+
+				{groupRides.length > 0 && (
+					<DetailSection title='Group rides'>
+						{groupRides.map((ride) => (
+							<DetailRow
+								key={ride.id}
+								label={
+									ride.ride ? formatRideRecurrence(ride.ride) : 'Group ride'
+								}
+								value={
+									<span className={styles.rideValue}>
+										<Link
+											href={`/teams/${ride.id}`}
+											className={styles.affiliationLink}
+										>
+											{ride.name}
+										</Link>
+										<Badge tone={toneForPace(ride.pace)}>
+											{ride.pace} pace
+										</Badge>
+									</span>
+								}
+							/>
+						))}
+					</DetailSection>
+				)}
+
+				{parsedRouteLink && (
+					<RouteSection route={parsedRouteLink} teamName={team.name} />
+				)}
+			</div>
+		</div>
+	);
+}
