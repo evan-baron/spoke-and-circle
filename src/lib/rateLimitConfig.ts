@@ -14,7 +14,8 @@ export type RateLimitBucket =
 	| 'contact-sender'
 	| 'claims-write'
 	| 'feedback-form'
-	| 'feedback-sender';
+	| 'feedback-sender'
+	| 'consent-log';
 
 export type RateLimitActor = 'anonymous' | 'user' | 'admin';
 
@@ -79,6 +80,10 @@ export const RATE_LIMIT_CONFIG: Record<RateLimitBucket, BucketConfig> = {
 	'feedback-sender': {
 		windowSeconds: 86400,
 		maxRequests: { anonymous: 5, user: 5, admin: 5 },
+	},
+	'consent-log': {
+		windowSeconds: 3600,
+		maxRequests: { anonymous: 20, user: 20, admin: 20 },
 	},
 	'locations-search': {
 		windowSeconds: 60,

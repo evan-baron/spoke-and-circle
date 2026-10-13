@@ -25,6 +25,8 @@ export const SITE_KEYWORDS = [
 	'racing teams',
 ];
 
+export const PRIVACY_POLICY_VERSION = 'October 13, 2026';
+
 export const SUPPORT_EMAIL = 'support@spokeandcircle.com';
 
 export const OG_IMAGE_PATH = '/og-image.png';

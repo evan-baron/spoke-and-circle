@@ -1,6 +1,10 @@
 import type { Metadata } from 'next';
 import { LegalDocument } from '@/components/LegalDocument/LegalDocument';
-import { SITE_NAME, SUPPORT_EMAIL } from '@/lib/siteConfig';
+import {
+	PRIVACY_POLICY_VERSION,
+	SITE_NAME,
+	SUPPORT_EMAIL,
+} from '@/lib/siteConfig';
 
 export const metadata: Metadata = {
 	title: 'Privacy Policy',
@@ -9,7 +13,7 @@ export const metadata: Metadata = {
 	robots: { index: true, follow: true },
 };
 
-const EFFECTIVE_DATE = 'September 28, 2026';
+const EFFECTIVE_DATE = PRIVACY_POLICY_VERSION;
 
 export default function PrivacyPage() {
 	return (
@@ -55,10 +59,13 @@ export default function PrivacyPage() {
 					profile of you.
 				</p>
 				<p>
-					We also use Google Analytics to understand how the site is used
+					If you choose to accept analytics cookies, we also use Google
+					Analytics to understand how the site is used
 					(pages visited, general location derived from IP address, device
 					and browser type, how you arrived at the site, and how you
-					interact with it, such as which steps of a form you reach). We don&rsquo;t
+					interact with it, such as which steps of a form you reach and the
+					choices you make in the get-started quiz, but not your ZIP code or
+					any contact details). We don&rsquo;t
 					enable Google Signals or link this data to Google Ads, so it
 					isn&rsquo;t used for cross-site advertising or to build ad profiles
 					about you.
@@ -90,7 +97,7 @@ export default function PrivacyPage() {
 					<li>To maintain, secure, and improve the site.</li>
 					<li>
 						To understand aggregate site usage and improve the experience,
-						via Google Analytics.
+						via Google Analytics, if you accept analytics cookies.
 					</li>
 				</ul>
 				<p>
@@ -162,9 +169,29 @@ export default function PrivacyPage() {
 				<h2>Cookies</h2>
 				<p>
 					We use cookies necessary to keep you signed in (managed by Auth0)
-					and to protect the site during login. We also use Google Analytics
-					cookies to measure site usage in aggregate. We don&rsquo;t use
-					advertising or cross-site tracking cookies.
+					and to protect the site during login. These are required for the
+					site to work and are always on.
+				</p>
+				<p>
+					Google Analytics cookies, which measure site usage in aggregate,
+					are optional. They stay off, and Google Analytics does not load,
+					unless you choose &ldquo;Accept all&rdquo; in the cookie
+					notice. If you choose &ldquo;Necessary only&rdquo;, or your browser
+					sends a Global Privacy Control signal, we don&rsquo;t load Google
+					Analytics. You can change your choice at any time with the
+					&ldquo;Cookie settings&rdquo; link in the footer; withdrawing
+					consent turns Google Analytics off and clears its cookies from your
+					browser. We remember your choice in your browser&rsquo;s local
+					storage. We don&rsquo;t use advertising or cross-site tracking
+					cookies.
+				</p>
+				<p>
+					To be able to show that you agreed, when you accept analytics (or
+					later withdraw that choice) we keep a record containing a random
+					identifier generated in your browser, whether you accepted or
+					withdrew, the date and time, and the version of this policy you
+					saw. It is not linked to your name, email address, or account, and
+					we keep these records for four years.
 				</p>
 			</section>
 

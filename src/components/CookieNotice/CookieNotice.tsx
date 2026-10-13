@@ -2,43 +2,53 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
+import {
+	setCookieConsent,
+	subscribeToOpenSettings,
+	useCookieConsent,
+	type ConsentChoice,
+} from '@/lib/cookieConsent';
 import styles from './cookieNotice.module.scss';
 
-const DISMISSED_KEY = 'cookie-notice-dismissed';
-
 export function CookieNotice() {
-	const [dismissed, setDismissed] = useState(true);
+	const consent = useCookieConsent();
+	const [reopened, setReopened] = useState(false);
 
-	useEffect(() => {
-		try {
-			setDismissed(localStorage.getItem(DISMISSED_KEY) === 'true');
-		} catch {
-			// localStorage unavailable (private browsing, etc.), keep hidden
-		}
-	}, []);
+	useEffect(() => subscribeToOpenSettings(() => setReopened(true)), []);
 
-	function handleDismiss() {
-		setDismissed(true);
-		try {
-			localStorage.setItem(DISMISSED_KEY, 'true');
-		} catch {
-			// localStorage unavailable, dismissal just won't persist
-		}
+	if (consent === null) return null;
+	if (consent !== 'unset' && !reopened) return null;
+
+	function choose(choice: ConsentChoice) {
+		setCookieConsent(choice);
+		setReopened(false);
 	}
 
-	if (dismissed) return null;
-
 	return (
-		<div className={styles.notice} role='status'>
+		<section className={styles.notice} aria-label='Cookie settings'>
 			<p>
-				We use cookies to keep you signed in and to measure site usage with
-				Google Analytics. No advertising or cross-site tracking cookies. See
-				our{' '}
-				<Link href='/privacy'>Privacy Policy</Link> for details.
+				We use cookies that are necessary to keep you signed in. With your
+				permission, we&rsquo;d also like to use optional cookies to understand
+				how the site is used. See our{' '}
+				<Link href='/privacy'>Privacy Policy</Link> for what we collect and how
+				it&rsquo;s used.
 			</p>
-			<button type='button' onClick={handleDismiss} className={styles.dismiss}>
-				Got it
-			</button>
-		</div>
+			<div className={styles.actions}>
+				<button
+					type='button'
+					onClick={() => choose('denied')}
+					className={styles.choice}
+				>
+					Necessary only
+				</button>
+				<button
+					type='button'
+					onClick={() => choose('granted')}
+					className={styles.choice}
+				>
+					Accept all
+				</button>
+			</div>
+		</section>
 	);
 }

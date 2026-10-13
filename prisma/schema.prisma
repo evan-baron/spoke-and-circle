@@ -313,3 +313,19 @@ enum UserRole {
   user
   admin
 }
+
+enum CookieConsentEvent {
+  Granted
+  Withdrawn
+}
+
+model CookieConsentLog {
+  id            Int                @id @default(autoincrement())
+  visitorId     String
+  event         CookieConsentEvent
+  policyVersion String
+  createdAt     DateTime           @default(now())
+
+  @@index([visitorId])
+  @@index([createdAt])
+}

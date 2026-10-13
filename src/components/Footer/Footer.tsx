@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { CookieSettingsButton } from '@/components/CookieNotice/CookieSettingsButton';
 import styles from './footer.module.scss';
 
 export function Footer() {
@@ -11,7 +12,8 @@ export function Footer() {
 					<Link href='/contact'>Contact us</Link> &middot;{' '}
 					<Link href='/feedback'>Submit feedback</Link> &middot;{' '}
 					<Link href='/privacy'>Privacy Policy</Link> &middot;{' '}
-					<Link href='/terms'>Terms of Service</Link>
+					<Link href='/terms'>Terms of Service</Link> &middot;{' '}
+					<CookieSettingsButton className={styles.cookieSettings} />
 				</p>
 				<p className={styles.credit}>Built by cyclists, for cyclists.</p>
 				<p className={styles.credit}>
