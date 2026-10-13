@@ -13,13 +13,10 @@ import {
 import { RouteSection } from '@/components/RouteSection/RouteSection';
 import { TeamMedia } from '@/components/TeamMedia/TeamMedia';
 import {
-	formatAgeRequirement,
 	formatDistance,
 	formatElevation,
 	formatList,
-	formatMileageRequirement,
 	formatRideRecurrence,
-	formatSkillLevels,
 	formatYesNo,
 } from '@/lib/format';
 import { formatInstagramHandle } from '@/lib/instagram';
@@ -53,32 +50,23 @@ export function GroupRideDetailDesktop({
 	return (
 		<div className={styles.body}>
 			<aside className={styles.aside}>
-				<div className={`${styles.asideCard} ${styles.contactCard}`}>
-					<p className={styles.asideTitle}>How to join</p>
-					<p className={styles.howToJoin}>{team.howToJoin}</p>
-					{team.waitlist && (
-						<p className={styles.waitlistNote}>
-							Currently accepting waitlist signups only.
-						</p>
-					)}
-					{joinFlags.length > 0 && (
-						<div className={styles.flagRow}>
-							{joinFlags.map((flag) => (
-								<span key={flag} className={styles.flag}>
-									{flag}
-								</span>
-							))}
-						</div>
-					)}
-					{!preview && (
-						<ContactModal
-							teamName={team.name}
-							email={team.contact.email}
-							phone={team.contact.phone}
-							website={team.website}
-						/>
-					)}
-				</div>
+				{(team.howToJoin || joinFlags.length > 0) && (
+					<div className={`${styles.asideCard} ${styles.contactCard}`}>
+						<p className={styles.asideTitle}>How to join</p>
+						{team.howToJoin && (
+							<p className={styles.howToJoin}>{team.howToJoin}</p>
+						)}
+						{joinFlags.length > 0 && (
+							<div className={styles.flagRow}>
+								{joinFlags.map((flag) => (
+									<span key={flag} className={styles.flag}>
+										{flag}
+									</span>
+								))}
+							</div>
+						)}
+					</div>
+				)}
 
 				<div className={styles.asideCard}>
 					<p className={styles.asideTitle}>Contact Info</p>
@@ -131,9 +119,7 @@ export function GroupRideDetailDesktop({
 								</a>
 							</dd>
 						)}
-						{!team.contact.email && !team.contact.phone && (
-							<dd>Not listed</dd>
-						)}
+						{!team.contact.email && !team.contact.phone && <dd>Not listed</dd>}
 						{team.website && (
 							<>
 								<dt>Website</dt>
@@ -185,6 +171,9 @@ export function GroupRideDetailDesktop({
 										:	team.social.facebook}
 									</dd>
 								)}
+								{team.social.strava && (
+									<dd>Strava &middot; {team.social.strava}</dd>
+								)}
 								{team.social.discord && (
 									<dd>Discord &middot; {team.social.discord}</dd>
 								)}
@@ -195,101 +184,68 @@ export function GroupRideDetailDesktop({
 			</aside>
 
 			<div className={styles.main}>
-				<DetailSection title='Format & membership'>
+				{parsedRouteLink && (
+					<RouteSection route={parsedRouteLink} teamName={team.name} />
+				)}
+
+				<DetailSection title='Ride details'>
+					{team.ride && (
+						<DetailRow
+							label='Schedule'
+							value={
+								<>
+									{formatRideRecurrence(team.ride)}
+									{team.ride.details && (
+										<span className={styles.rideDetails}>
+											{team.ride.details}
+										</span>
+									)}
+								</>
+							}
+						/>
+					)}
+					{team.scheduleNotes && (
+						<DetailRow label='Schedule notes' value={team.scheduleNotes} />
+					)}
 					<DetailRow
 						label='Cycling Discipline(s)'
 						value={formatList(team.bikeTypes)}
 					/>
-					{team.racingDisciplines.length > 0 && (
-						<DetailRow
-							label='Racing Discipline(s)'
-							value={formatList(team.racingDisciplines)}
-						/>
-					)}
-					<DetailRow label='Virtual or in-person' value={team.format} />
-					{team.discipline && (
-						<DetailRow label='Riding style' value={team.discipline} />
-					)}
-					{team.virtualPlatform && (
-						<DetailRow
-							label='Virtual platform'
-							value={team.virtualPlatform}
-						/>
-					)}
-					{team.homeBase && (
-						<DetailRow label='Home Base' value={team.homeBase} />
-					)}
 					<DetailRow
-						label='E-bike allowed'
+						label='E-Bike Allowed'
 						value={formatYesNo(team.eBikeAllowed)}
 					/>
+					{team.segmentation && (
+						<DetailRow label='Segmentation' value={team.segmentation} />
+					)}
 					<DetailRow
-						label='Age requirement'
-						value={formatAgeRequirement(team.ageRequirement)}
+						label='Typical distance'
+						value={formatDistance(team.typicalDistanceMiles)}
 					/>
 					<DetailRow
-						label='Persona restrictions'
-						value={formatList(team.personaRestrictions)}
+						label='Typical elevation gain'
+						value={formatElevation(team.typicalElevationGainFt)}
 					/>
-					<DetailRow
-						label='Member limit'
-						value={team.memberLimit ?? 'None'}
-					/>
-					<DetailRow label='Waitlist' value={formatYesNo(team.waitlist)} />
+					<DetailRow label='Drop / no-drop' value={team.dropPolicy} />
+					{team.routeLink && !parsedRouteLink && (
+						<DetailRow
+							label='Route link'
+							value={
+								<a
+									target='_blank'
+									rel='noopener noreferrer nofollow'
+									href={team.routeLink}
+									className={styles.website}
+								>
+									{team.routeLink}
+								</a>
+							}
+						/>
+					)}
 				</DetailSection>
 
-				{team.type === 'Group Ride' && (
-					<DetailSection title='Ride details'>
-						{team.ride && (
-							<DetailRow
-								label='Schedule'
-								value={
-									<>
-										{formatRideRecurrence(team.ride)}
-										{team.ride.details && (
-											<span className={styles.rideDetails}>
-												{team.ride.details}
-											</span>
-										)}
-									</>
-								}
-							/>
-						)}
-						{team.scheduleNotes && (
-							<DetailRow label='Schedule notes' value={team.scheduleNotes} />
-						)}
-						{team.segmentation && (
-							<DetailRow label='Segmentation' value={team.segmentation} />
-						)}
-						<DetailRow
-							label='Typical distance'
-							value={formatDistance(team.typicalDistanceMiles)}
-						/>
-						<DetailRow
-							label='Typical elevation gain'
-							value={formatElevation(team.typicalElevationGainFt)}
-						/>
-						<DetailRow label='Drop / no-drop' value={team.dropPolicy} />
-						{team.routeLink && (
-							<DetailRow
-								label='Route link'
-								value={
-									<a
-										target='_blank'
-										rel='noopener noreferrer nofollow'
-										href={team.routeLink}
-										className={styles.website}
-									>
-										{team.routeLink}
-									</a>
-								}
-							/>
-						)}
-					</DetailSection>
-				)}
-
-				{team.type === 'Group Ride' && team.additionalRideDetails && (
-					<DetailSection title='Additional ride details'>
+				{team.additionalRideDetails && (
+					<DetailSection title='Ride summary'>
 						<div className={styles.longText}>
 							{team.additionalRideDetails
 								.split(/\n{2,}/)
@@ -297,56 +253,6 @@ export function GroupRideDetailDesktop({
 									<p key={index}>{paragraph}</p>
 								))}
 						</div>
-					</DetailSection>
-				)}
-
-				{team.type !== 'Group Ride' && (
-					<DetailSection
-						title={
-							team.type === 'Team' ? 'Team structure' : 'Group structure'
-						}
-					>
-						<DetailRow
-							label='Competitive or recreational'
-							value={team.competitiveOrCasual}
-						/>
-						<DetailRow
-							label='Skill levels'
-							value={formatSkillLevels(team.skillLevels)}
-						/>
-						<DetailRow
-							label='Instructional'
-							value={formatYesNo(team.instructional)}
-						/>
-						<DetailRow
-							label='Dues'
-							value={
-								team.duesRequired ?
-									`${team.duesAmount ?? 'Required'}${team.duesSchedule ? ` (${team.duesSchedule})` : ''}`
-								:	'Not required'
-							}
-						/>
-						<DetailRow
-							label='Required rides'
-							value={formatYesNo(team.requiredRides)}
-						/>
-						<DetailRow
-							label='Required races (min)'
-							value={team.requiredRaces ?? 'None'}
-						/>
-						<DetailRow
-							label='Mileage requirement'
-							value={formatMileageRequirement(team.mileageRequirement)}
-						/>
-						<DetailRow
-							label='Required kit / uniform'
-							value={formatYesNo(team.requiredKit)}
-						/>
-						<DetailRow
-							label='Event types'
-							value={formatList(team.eventTypes)}
-						/>
-						<DetailRow label='Sponsors' value={formatList(team.sponsors)} />
 					</DetailSection>
 				)}
 
@@ -376,10 +282,6 @@ export function GroupRideDetailDesktop({
 							/>
 						))}
 					</DetailSection>
-				)}
-
-				{parsedRouteLink && (
-					<RouteSection route={parsedRouteLink} teamName={team.name} />
 				)}
 			</div>
 		</div>
