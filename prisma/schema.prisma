@@ -74,14 +74,10 @@ model Team {
   waitlist            Boolean           @default(false)
   howToJoin           String?
 
-  rideSchedule           ScheduleFrequency?
-  startTimes             String[]
-  rideDays               Json?
   rides                  Json?
   scheduleNotes          String?
   additionalRideDetails  String?
   routeLink              String?
-  seasons                String[]
   pace                   Pace?
   segmentation           Segmentation?
   typicalDistanceMiles   Int?

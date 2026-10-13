@@ -210,10 +210,7 @@ const teamBaseSchema = z.object({
 		.max(1000, 'How to join must be less than 1000 characters')
 		.optional(),
 
-	rides: z
-		.array(rideSchema)
-		.max(1, 'A ride has one schedule. Submit another ride as its own listing')
-		.optional(),
+	ride: rideSchema.optional(),
 	scheduleNotes: z
 		.string()
 		.trim()

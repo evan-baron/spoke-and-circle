@@ -49,8 +49,6 @@ function toTeamData(team: Team): Prisma.TeamCreateInput {
 		memberLimit: team.memberLimit,
 		waitlist: team.waitlist,
 		howToJoin: team.howToJoin,
-		rideSchedule: team.rideSchedule,
-		startTimes: team.startTimes ?? [],
 		pace: team.pace,
 		segmentation: segmentation.toDb[team.segmentation],
 		typicalDistanceMiles: team.typicalDistanceMiles,

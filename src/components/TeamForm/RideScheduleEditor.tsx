@@ -223,8 +223,8 @@ export function RideScheduleEditor({ initialRide }: RideScheduleEditorProps) {
 			</div>
 			<input
 				type='hidden'
-				name='rides'
-				value={JSON.stringify(cleaned ? [cleaned] : [])}
+				name='ride'
+				value={cleaned ? JSON.stringify(cleaned) : ''}
 			/>
 		</div>
 	);

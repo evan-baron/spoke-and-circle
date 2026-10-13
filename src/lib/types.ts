@@ -43,11 +43,6 @@ export interface MileageRequirement {
   frequency: ScheduleFrequency;
 }
 
-export interface RideDay {
-  day: string;
-  details?: string;
-}
-
 export type RidePattern = "weekly" | "biweekly" | "monthly";
 
 export interface Ride {
@@ -136,10 +131,7 @@ export interface Team {
   media?: TeamMediaItem[];
 
   // -- Ride Details --
-  rideSchedule: ScheduleFrequency;
-  startTimes?: string[];
-  rideDays?: RideDay[];
-  rides: Ride[];
+  ride?: Ride;
   scheduleNotes?: string;
   additionalRideDetails?: string;
   routeLink?: string;
@@ -244,7 +236,7 @@ export interface TeamFormValues {
   personaOtherDescription: string;
   eBikeAllowed: boolean;
   waitlist: boolean;
-  rides: Ride[];
+  ride?: Ride;
   scheduleNotes: string;
   additionalRideDetails: string;
   routeLink: string;

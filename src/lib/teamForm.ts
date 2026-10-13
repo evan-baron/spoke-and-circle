@@ -64,12 +64,14 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		([, label]) => label,
 	);
 
-	function rides() {
-		const raw = text('rides');
+	function ride() {
+		const raw = text('ride');
 		if (!raw) return undefined;
 		try {
 			const parsed = JSON.parse(raw);
-			return Array.isArray(parsed) ? parsed : undefined;
+			return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ?
+					parsed
+				:	undefined;
 		} catch {
 			return undefined;
 		}
@@ -129,7 +131,7 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		personaRestrictions,
 		eBikeAllowed: flag('eBikeAllowed'),
 		waitlist: flag('waitlist'),
-		rides: rides(),
+		ride: ride(),
 		scheduleNotes: text('scheduleNotes'),
 		additionalRideDetails: text('additionalRideDetails'),
 		routeLink: text('routeLink'),

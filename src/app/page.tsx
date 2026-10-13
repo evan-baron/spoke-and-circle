@@ -33,8 +33,7 @@ function joinLabel(team: Team): string {
 }
 
 function scheduleLabel(team: Team): string | null {
-	const ride = team.rides[0];
-	return ride ? formatRideRecurrence(ride) : null;
+	return team.ride ? formatRideRecurrence(team.ride) : null;
 }
 
 function roundedCount(count: number): string {

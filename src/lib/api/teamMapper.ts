@@ -6,7 +6,6 @@ import type {
 import { mediaBaseUrl } from '../cloudinary';
 import type {
 	Ride,
-	RideDay,
 	Team,
 	TeamFormValues,
 	TeamMediaItem,
@@ -53,42 +52,9 @@ function userTags(row: TeamRow): string[] {
 	return row.tags.filter((tag) => !personaText.has(tag));
 }
 
-function deriveRides(row: TeamRow): Ride[] {
-	if (Array.isArray(row.rides)) return row.rides as unknown as Ride[];
-
-	if (
-		row.rideSchedule === 'Weekly' &&
-		Array.isArray(row.rideDays) &&
-		row.rideDays.length > 0
-	) {
-		const entries = row.rideDays as unknown as RideDay[];
-		const details = entries
-			.filter((entry) => entry.details)
-			.map((entry) => `${entry.day}: ${entry.details}`)
-			.join('; ')
-			.slice(0, 300);
-
-		return [
-			{
-				pattern: 'weekly',
-				days: entries.map((entry) => entry.day),
-				...(details ? { details } : {}),
-			},
-		];
-	}
-
-	return [];
-}
-
-function deriveScheduleNotes(row: TeamRow): string | undefined {
-	if (row.scheduleNotes) return row.scheduleNotes;
-	if (Array.isArray(row.rides) || deriveRides(row).length > 0) return undefined;
-
-	const notes = [
-		row.rideSchedule && row.rideSchedule !== 'Weekly' ? row.rideSchedule : null,
-		row.startTimes.length > 0 ? row.startTimes.join(', ') : null,
-	].filter(Boolean);
-	return notes.length > 0 ? notes.join(' · ') : undefined;
+function deriveRide(row: TeamRow): Ride | undefined {
+	if (!Array.isArray(row.rides)) return undefined;
+	return (row.rides[0] as unknown as Ride | undefined) ?? undefined;
 }
 
 export function toTeam(row: TeamRowWithMedia): Team {
@@ -138,11 +104,8 @@ export function toTeam(row: TeamRowWithMedia): Team {
 		waitlist: row.waitlist,
 		howToJoin: row.howToJoin ?? '',
 		media: row.media ? toMediaItems(row.media) : undefined,
-		rideSchedule: row.rideSchedule ?? 'Weekly',
-		startTimes: nonEmpty(row.startTimes),
-		rideDays: (row.rideDays as RideDay[] | null) ?? undefined,
-		rides: deriveRides(row),
-		scheduleNotes: deriveScheduleNotes(row),
+		ride: deriveRide(row),
+		scheduleNotes: row.scheduleNotes ?? undefined,
 		additionalRideDetails: row.additionalRideDetails ?? undefined,
 		routeLink: row.routeLink ?? undefined,
 		pace: row.pace ?? 'Relaxed',
@@ -220,7 +183,7 @@ export function toTeamCreateInput(
 		memberLimit: input.memberLimit,
 		waitlist: input.waitlist,
 		howToJoin: input.howToJoin,
-		rides: (input.rides ?? []) as unknown as Prisma.InputJsonValue,
+		rides: (input.ride ? [input.ride] : []) as unknown as Prisma.InputJsonValue,
 		scheduleNotes: input.scheduleNotes,
 		additionalRideDetails:
 			input.type === 'Group Ride' ? input.additionalRideDetails : undefined,
@@ -302,8 +265,8 @@ export function toTeamFormValues(row: TeamRowWithMedia): TeamFormValues {
 		personaOtherDescription: personaCode === 'other' ? (persona ?? '') : '',
 		eBikeAllowed: row.eBikeAllowed,
 		waitlist: row.waitlist,
-		rides: deriveRides(row),
-		scheduleNotes: deriveScheduleNotes(row) ?? '',
+		ride: deriveRide(row),
+		scheduleNotes: row.scheduleNotes ?? '',
 		additionalRideDetails: row.additionalRideDetails ?? '',
 		routeLink: row.routeLink ?? '',
 		pace: row.pace ?? 'Steady',
@@ -347,7 +310,7 @@ export function toGroupRideFormValues(row: TeamRow): TeamFormValues {
 		codeOfConduct: '',
 		additionalLocations: [],
 		founded: '',
-		rides: [],
+		ride: undefined,
 		scheduleNotes: '',
 		additionalRideDetails: '',
 		routeLink: '',
@@ -397,10 +360,7 @@ export function toApprovedTeamUpdate(
 		memberLimit: input.memberLimit ?? null,
 		waitlist: input.waitlist ?? false,
 		howToJoin: input.howToJoin ?? null,
-		rideSchedule: null,
-		startTimes: [],
-		rideDays: Prisma.JsonNull,
-		rides: (input.rides ?? []) as unknown as Prisma.InputJsonValue,
+		rides: (input.ride ? [input.ride] : []) as unknown as Prisma.InputJsonValue,
 		scheduleNotes: input.scheduleNotes ?? null,
 		additionalRideDetails:
 			input.type === 'Group Ride' ? (input.additionalRideDetails ?? null) : null,

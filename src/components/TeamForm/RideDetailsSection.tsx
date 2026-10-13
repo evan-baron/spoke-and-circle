@@ -23,7 +23,7 @@ export function RideDetailsSection({
 }: RideDetailsSectionProps) {
 	return (
 		<Section title='Ride Details'>
-			<RideScheduleEditor initialRide={values.rides[0]} />
+			<RideScheduleEditor initialRide={values.ride} />
 			<Field
 				label='Schedule notes'
 				hint='Anything the schedule above cannot capture, like weather-permitting rides or holiday changes'

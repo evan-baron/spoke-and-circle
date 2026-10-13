@@ -35,7 +35,6 @@ export const DEFAULT_TEAM_FORM_VALUES: TeamFormValues = {
 	personaOtherDescription: '',
 	eBikeAllowed: false,
 	waitlist: false,
-	rides: [],
 	scheduleNotes: '',
 	additionalRideDetails: '',
 	routeLink: '',

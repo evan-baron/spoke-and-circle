@@ -279,25 +279,20 @@ export function GroupRideDetail({
 					</DetailSection>
 
 					{team.type === 'Group Ride' && (
-						<DetailSection title='Ride profile'>
-							{team.rides.map((ride, index) => (
+						<DetailSection title='Ride details'>
+							{team.ride && (
 								<DetailRow
-									key={index}
-									label={
-										team.rides.length > 1 ? `Schedule ${index + 1}` : 'Schedule'
-									}
+									label='Schedule'
 									value={
 										<>
-											{formatRideRecurrence(ride)}
-											{ride.details && (
-												<span className={styles.rideDetails}>
-													{ride.details}
-												</span>
+											{formatRideRecurrence(team.ride)}
+											{team.ride.details && (
+												<span className={styles.rideDetails}>{team.ride.details}</span>
 											)}
 										</>
 									}
 								/>
-							))}
+							)}
 							{team.scheduleNotes && (
 								<DetailRow label='Schedule notes' value={team.scheduleNotes} />
 							)}
@@ -399,8 +394,8 @@ export function GroupRideDetail({
 								<DetailRow
 									key={ride.id}
 									label={
-										ride.rides[0] ?
-											formatRideRecurrence(ride.rides[0])
+										ride.ride ?
+											formatRideRecurrence(ride.ride)
 										:	'Group ride'
 									}
 									value={
