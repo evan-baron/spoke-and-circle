@@ -32,7 +32,6 @@ model Team {
   name                String
   type                ClubType
   missionStatement    String?
-  codeOfConduct       String?
   affiliation         String?
   affiliatedId        String?
   affiliatedTeam      Team?      @relation("TeamAffiliation", fields: [affiliatedId], references: [id], onDelete: SetNull)

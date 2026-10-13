@@ -100,7 +100,6 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		name: text('name'),
 		type: text('type'),
 		missionStatement: text('missionStatement'),
-		codeOfConduct: text('codeOfConduct'),
 		affiliation: text('affiliation'),
 		affiliatedId: text('affiliatedId'),
 		location: text('location'),

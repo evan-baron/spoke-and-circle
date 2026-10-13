@@ -135,7 +135,6 @@ export const teams: Team[] = [
     overrides: {
       racingDisciplines: ["Criterium"],
       affiliation: "USA Cycling Club Member",
-      codeOfConduct: "Zero tolerance for unsportsmanlike conduct at races or team events.",
       memberLimit: 50,
       waitlist: true,
       duesRequired: true,

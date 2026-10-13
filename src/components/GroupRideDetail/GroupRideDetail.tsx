@@ -224,12 +224,6 @@ export function GroupRideDetail({
 									)}
 								</>
 							)}
-							{team.codeOfConduct && (
-								<>
-									<dt>Code of conduct</dt>
-									<dd>{team.codeOfConduct}</dd>
-								</>
-							)}
 						</dl>
 					</div>
 				</aside>

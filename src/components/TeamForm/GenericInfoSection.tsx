@@ -98,17 +98,6 @@ export function GenericInfoSection({
 					/>
 				</Field>
 			)}
-			{groupType !== 'Group Ride' && (
-				<Field label='Code of conduct' full>
-					<textarea
-						name='codeOfConduct'
-						defaultValue={values.codeOfConduct}
-						rows={2}
-						placeholder='Any ground rules for members and rides'
-						className={styles.input}
-					/>
-				</Field>
-			)}
 			{lockedToParent ?
 				<Field label='Part of'>
 					<input type='hidden' name='affiliation' value={affiliationLabel} />

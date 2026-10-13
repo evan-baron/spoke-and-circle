@@ -20,7 +20,6 @@ export function payloadToTeam(
 		name: namePrefix ? `${namePrefix} - ${name}` : name,
 		type: (payload.type ?? 'Club') as Team['type'],
 		missionStatement: payload.missionStatement,
-		codeOfConduct: payload.codeOfConduct,
 		affiliation: payload.affiliation,
 		affiliatedId: payload.affiliatedId,
 		location: payload.location ?? '',

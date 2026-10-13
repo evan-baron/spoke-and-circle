@@ -18,7 +18,6 @@ function toTeamData(team: Team): Prisma.TeamCreateInput {
 		name: team.name,
 		type: clubType.toDb[team.type],
 		missionStatement: team.missionStatement,
-		codeOfConduct: team.codeOfConduct,
 		affiliation: team.affiliation,
 		location: team.location,
 		additionalLocations: team.additionalLocations ?? [],

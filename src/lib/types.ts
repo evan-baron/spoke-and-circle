@@ -98,7 +98,6 @@ export interface Team {
   name: string;
   type: ClubType;
   missionStatement?: string;
-  codeOfConduct?: string;
   affiliation?: string;
   affiliatedId?: string;
   location: string;
@@ -205,7 +204,6 @@ export interface TeamFormValues {
   name: string;
   type: string;
   missionStatement: string;
-  codeOfConduct: string;
   affiliation: string;
   affiliatedId: string;
   location: string;

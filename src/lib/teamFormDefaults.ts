@@ -4,7 +4,6 @@ export const DEFAULT_TEAM_FORM_VALUES: TeamFormValues = {
 	name: '',
 	type: 'Team',
 	missionStatement: '',
-	codeOfConduct: '',
 	affiliation: '',
 	affiliatedId: '',
 	location: '',

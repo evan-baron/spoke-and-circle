@@ -90,11 +90,6 @@ const teamBaseSchema = z.object({
 		.trim()
 		.max(1000, 'Mission statement must be less than 1000 characters')
 		.optional(),
-	codeOfConduct: z
-		.string()
-		.trim()
-		.max(2000, 'Code of conduct must be less than 2000 characters')
-		.optional(),
 	affiliation: z
 		.string()
 		.trim()
