@@ -7,15 +7,17 @@ import styles from './teamForm.module.scss';
 
 interface TagsSectionProps {
 	values: TeamFormValues;
+	groupType: string;
 }
 
-export function TagsSection({ values }: TagsSectionProps) {
+export function TagsSection({ values, groupType }: TagsSectionProps) {
 	const tagsId = useId();
+	const noun = groupType === 'Group Ride' ? 'group ride' : 'group';
 
 	return (
 		<Section
 			title='Tags'
-			description={`Add up to ${MAX_TAGS} tag words to help people find your group`}
+			description={`Add up to ${MAX_TAGS} tag words to help people find your ${noun}`}
 		>
 			<div className={`${styles.field} ${styles.fieldFull}`}>
 				<label htmlFor={tagsId} className={styles.fieldLabel}>

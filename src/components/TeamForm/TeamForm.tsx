@@ -339,7 +339,7 @@ export function TeamForm({
 
 	const additionalSections = (
 		<>
-			<TagsSection values={values} />
+			<TagsSection values={values} groupType={groupType} />
 
 			{showMedia && (
 				<MediaSection
@@ -360,7 +360,10 @@ export function TeamForm({
 			structureSection,
 			<>
 				{additionalSections}
-				<HumanCheckSection onValidChange={setIsAntiBotValid} />
+				<HumanCheckSection
+					groupType={groupType}
+					onValidChange={setIsAntiBotValid}
+				/>
 			</>,
 		];
 		const slideClass =
