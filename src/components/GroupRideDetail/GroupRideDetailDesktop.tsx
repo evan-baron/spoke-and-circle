@@ -85,7 +85,6 @@ export function GroupRideDetailDesktop({
 							>
 								{ride.name}
 							</Link>
-							<Badge tone={toneForPace(ride.pace)}>{ride.pace} pace</Badge>
 						</span>
 					}
 				/>
