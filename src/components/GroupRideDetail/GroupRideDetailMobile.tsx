@@ -16,14 +16,14 @@ import {
 	formatDistance,
 	formatElevation,
 	formatList,
-	formatRideDates,
+	formatRideParts,
 	formatRideTime,
 	formatYesNo,
 } from '@/lib/format';
 import { formatInstagramHandle } from '@/lib/instagram';
 import type { ParsedRouteLink } from '@/lib/routeLink';
 import { formatTimeZoneLabel } from '@/lib/timeZone';
-import type { Team } from '@/lib/types';
+import type { Ride, Team } from '@/lib/types';
 import styles from './groupRideDetailMobile.module.scss';
 
 interface GroupRideDetailMobileProps {
@@ -46,6 +46,22 @@ function IconRow({ icon, label, children }: IconRowProps) {
 				{children}
 			</div>
 		</div>
+	);
+}
+
+function RideDates({ ride }: { ride: Ride }) {
+	const { cadence, months } = formatRideParts(ride);
+
+	return (
+		<>
+			{cadence}
+			{months && (
+				<>
+					{' · '}
+					<strong className={styles.rideMonths}>{months}</strong>
+				</>
+			)}
+		</>
 	);
 }
 
@@ -97,7 +113,7 @@ export function GroupRideDetailMobile({
 				)}
 				{ride && (
 					<IconRow icon={<CalendarIcon size={20} />} label='Dates of rides'>
-						{formatRideDates(ride)}
+						<RideDates ride={ride} />
 					</IconRow>
 				)}
 				{showRouteFields && team.routeLink && (

@@ -15,16 +15,33 @@ import {
 	formatDistance,
 	formatElevation,
 	formatList,
+	formatRideParts,
 	formatRideRecurrence,
 	formatYesNo,
 } from '@/lib/format';
 import { formatInstagramHandle } from '@/lib/instagram';
 import type { ParsedRouteLink } from '@/lib/routeLink';
 import { toneForPace } from '@/lib/tone';
-import type { Team } from '@/lib/types';
+import type { Ride, Team } from '@/lib/types';
 import styles from './groupRideDetail.module.scss';
 
 const MAX_MORE_RIDES = 3;
+
+function RideSchedule({ ride }: { ride: Ride }) {
+	const { cadence, time, months } = formatRideParts(ride);
+
+	return (
+		<>
+			{[cadence, time].filter(Boolean).join(' · ')}
+			{months && (
+				<>
+					{' · '}
+					<strong className={styles.rideMonths}>{months}</strong>
+				</>
+			)}
+		</>
+	);
+}
 
 interface GroupRideDetailDesktopProps {
 	team: Team;
@@ -246,7 +263,7 @@ export function GroupRideDetailDesktop({
 					label='Schedule'
 					value={
 						<>
-							{formatRideRecurrence(team.ride)}
+							<RideSchedule ride={team.ride} />
 							{team.ride.details && (
 								<span className={styles.rideDetails}>{team.ride.details}</span>
 							)}
@@ -314,6 +331,7 @@ export function GroupRideDetailDesktop({
 				<aside className={styles.aside}>
 					{joinCard}
 					{contactCard}
+					{moreRides}
 				</aside>
 
 				<div className={styles.main}>
@@ -323,7 +341,6 @@ export function GroupRideDetailDesktop({
 					{rideDetails}
 					{rideSummary}
 					<TeamMedia media={team.media ?? []} teamName={team.name} />
-					{moreRides}
 				</div>
 			</div>
 		);

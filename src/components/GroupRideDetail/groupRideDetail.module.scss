@@ -58,8 +58,10 @@
 	min-width: 0;
 
 	@include from($bp-lg) {
-		position: sticky;
-		top: calc(3.75rem + var(--space-md));
+		@media (min-height: 56rem) {
+			position: sticky;
+			top: calc(3.75rem + var(--space-md));
+		}
 	}
 }
 
@@ -359,4 +361,9 @@
 			border-color: var(--color-coral);
 		}
 	}
+}
+
+.rideMonths {
+	font-weight: 600;
+	color: var(--color-ink);
 }

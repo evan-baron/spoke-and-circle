@@ -148,6 +148,14 @@ export function formatRideDates(ride: Ride): string {
 		.join(' · ');
 }
 
+export function formatRideParts(ride: Ride) {
+	return {
+		cadence: formatRideCadence(ride),
+		time: formatRideTime(ride),
+		months: formatRideMonths(ride),
+	};
+}
+
 export function formatRideRecurrence(ride: Ride): string {
 	return [formatRideCadence(ride), formatRideTime(ride), formatRideMonths(ride)]
 		.filter(Boolean)

@@ -4,6 +4,7 @@ import {
 	formatClockTime,
 	formatMemberCount,
 	formatRideDates,
+	formatRideParts,
 	formatRideRecurrence,
 	formatRideTime,
 	formatSkillLevelLines,
@@ -107,5 +108,29 @@ describe('formatRideTime and formatRideDates', () => {
 		expect(formatRideDates({ pattern: 'weekly', days: ['Friday'] })).toBe(
 			'Every Friday',
 		);
+	});
+});
+
+describe('formatRideParts', () => {
+	it('returns the cadence, time and months separately', () => {
+		expect(
+			formatRideParts({
+				pattern: 'weekly',
+				days: ['Thursday'],
+				startTime: '17:30',
+				monthFrom: 3,
+				monthTo: 10,
+			}),
+		).toEqual({
+			cadence: 'Every Thursday',
+			time: '5:30 PM',
+			months: 'March–October',
+		});
+	});
+
+	it('has no months for a year-round ride', () => {
+		expect(
+			formatRideParts({ pattern: 'weekly', days: ['Thursday'] }).months,
+		).toBeNull();
 	});
 });
