@@ -277,6 +277,17 @@
 	text-wrap: pretty;
 }
 
+.routeStatus {
+	font-size: 0.8125rem;
+	color: var(--color-ink-soft);
+	text-wrap: pretty;
+}
+
+.routeStatusGood {
+	color: var(--color-ink);
+	font-weight: 600;
+}
+
 .input {
 	@include field-input;
 }

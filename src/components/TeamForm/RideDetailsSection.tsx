@@ -3,6 +3,7 @@ import { Checkbox } from './Checkbox';
 import { DROP_POLICIES, PACES } from './constants';
 import { Field } from './Field';
 import { RideScheduleEditor } from './RideScheduleEditor';
+import { RouteLinkField } from './RouteLinkField';
 import { Section } from './Section';
 import styles from './teamForm.module.scss';
 
@@ -69,20 +70,7 @@ export function RideDetailsSection({
 					/>
 				)}
 			</div>
-			<Field
-				label='Route link'
-				hint='A link to the route on Ride with GPS, Strava, or another mapping site'
-				full
-			>
-				<input
-					type='url'
-					name='routeLink'
-					defaultValue={values.routeLink}
-					maxLength={500}
-					placeholder='https://'
-					className={styles.input}
-				/>
-			</Field>
+			<RouteLinkField defaultValue={values.routeLink} />
 			<Field label='Average Riding Pace'>
 				<select name='pace' defaultValue={values.pace} className={styles.input}>
 					{PACES.map((option) => (

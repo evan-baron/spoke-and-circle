@@ -9,7 +9,7 @@ const contentSecurityPolicy = [
   "img-src 'self' data: blob: https://res.cloudinary.com",
   "font-src 'self' data:",
   `connect-src 'self' https://api.cloudinary.com https://www.google-analytics.com https://www.googletagmanager.com${isDev ? " ws: wss:" : ""}`,
-  "frame-src https://ridewithgps.com https://strava-embeds.com",
+  "frame-src https://ridewithgps.com https://strava-embeds.com https://www.komoot.com",
   "object-src 'none'",
   "frame-ancestors 'none'",
   "base-uri 'self'",

@@ -78,6 +78,7 @@ export function TeamForm({
 		[],
 	);
 	const [groupType, setGroupType] = useState(values.type);
+	const showMedia = groupType !== 'Group Ride';
 	const [affiliationLabel, setAffiliationLabel] = useState(values.affiliation);
 	const [affiliatedId, setAffiliatedId] = useState(values.affiliatedId);
 	const [personaRestriction, setPersonaRestriction] = useState<string | null>(
@@ -114,7 +115,7 @@ export function TeamForm({
 	const [isDirty, setIsDirty] = useState(false);
 	const baselineRef = useRef<string | null>(null);
 	const submitErrorRef = useRef<HTMLDivElement>(null);
-	const hasUnsaved = isDirty || mediaUploading;
+	const hasUnsaved = isDirty || (showMedia && mediaUploading);
 	const guard = useUnsavedChangesGuard((isCreate || isEdit) && hasUnsaved);
 	const { activeId: activeSectionId, select: selectSection } = useActiveSection(
 		steps.map((item) => `section-${item.id}`),
@@ -221,7 +222,7 @@ export function TeamForm({
 			payload.type === 'Group Ride' && Boolean(payload.affiliatedId);
 		setPreviewTeam(
 			payloadToTeam(payload, {
-				media: mediaItemsRef.current,
+				media: showMedia ? mediaItemsRef.current : [],
 				namePrefix: hasParentPrefix ? payload.affiliation : undefined,
 			}),
 		);
@@ -258,7 +259,7 @@ export function TeamForm({
 		if (isCreate && !isCurrentStepValid()) return;
 		if ((isCreate && !isAntiBotValid) || busyRef.current) return;
 
-		if (mediaUploading) {
+		if (showMedia && mediaUploading) {
 			setSubmitErrors(['Wait for your photos to finish uploading']);
 			return;
 		}
@@ -340,13 +341,15 @@ export function TeamForm({
 		<>
 			<TagsSection values={values} />
 
-			<MediaSection
-				initialMedia={values.media}
-				canUpload={canUploadMedia}
-				submitting={isSubmitting}
-				onUploadingChange={handleMediaUploadingChange}
-				onMediaChange={handleMediaChange}
-			/>
+			{showMedia && (
+				<MediaSection
+					initialMedia={values.media}
+					canUpload={canUploadMedia}
+					submitting={isSubmitting}
+					onUploadingChange={handleMediaUploadingChange}
+					onMediaChange={handleMediaChange}
+				/>
+			)}
 		</>
 	);
 

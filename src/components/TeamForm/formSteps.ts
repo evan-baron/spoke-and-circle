@@ -22,7 +22,11 @@ export function getFormSteps(groupType: string): FormStep[] {
 			label: groupType === 'Group Ride' ? 'Ride details' : 'Group structure',
 			shortLabel: groupType === 'Group Ride' ? 'Ride' : 'Structure',
 		},
-		{ id: 'additional', label: 'Tags and media', shortLabel: 'Tags' },
+		{
+			id: 'additional',
+			label: groupType === 'Group Ride' ? 'Tags' : 'Tags and media',
+			shortLabel: 'Tags',
+		},
 	];
 }
 
