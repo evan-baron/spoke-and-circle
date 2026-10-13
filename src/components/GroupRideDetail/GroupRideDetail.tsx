@@ -11,12 +11,14 @@ interface GroupRideDetailProps {
 	team: Team;
 	groupRides?: Team[];
 	preview?: boolean;
+	routePromptHref?: string;
 }
 
 export function GroupRideDetail({
 	team,
 	groupRides = [],
 	preview = false,
+	routePromptHref,
 }: GroupRideDetailProps) {
 	const parsedRouteLink = parseRouteLink(team.routeLink);
 
@@ -63,6 +65,7 @@ export function GroupRideDetail({
 					groupRides={groupRides}
 					preview={preview}
 					parsedRouteLink={parsedRouteLink}
+					routePromptHref={routePromptHref}
 				/>
 			</div>
 		</div>

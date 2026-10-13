@@ -83,7 +83,13 @@ export default async function TeamPage({
 	}
 
 	const groupRides =
-		team.type === 'Group Ride' ? [] : await getApprovedGroupRides(team.id);
+		team.type === 'Group Ride' ?
+			team.affiliatedId ?
+				(await getApprovedGroupRides(team.affiliatedId)).filter(
+					(ride) => ride.id !== team.id,
+				)
+			:	[]
+		:	await getApprovedGroupRides(team.id);
 
 	const isOwner =
 		currentUser && !currentUser.isAdmin ?
@@ -165,7 +171,11 @@ export default async function TeamPage({
 				</div>
 
 				{team.type === 'Group Ride' ?
-					<GroupRideDetail team={team} />
+					<GroupRideDetail
+						team={team}
+						groupRides={groupRides}
+						routePromptHref={editHref ?? undefined}
+					/>
 				:	<TeamDetail team={team} groupRides={groupRides} />}
 			</div>
 		</div>
