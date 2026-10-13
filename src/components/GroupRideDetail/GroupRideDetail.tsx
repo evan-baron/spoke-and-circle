@@ -51,10 +51,6 @@ export function GroupRideDetail({
 	const hasSocial = Object.values(team.social).some(Boolean);
 
 	const parsedRouteLink = parseRouteLink(team.routeLink);
-	console.log('[GroupRideDetail] route link parse:', {
-		link: team.routeLink ?? null,
-		result: parsedRouteLink,
-	});
 
 	return (
 		<div className={`${styles.detail} ${preview ? styles.preview : ''}`}>
@@ -83,7 +79,9 @@ export function GroupRideDetail({
 					)}
 				</p>
 				{team.missionStatement && (
-					<p className={styles.mission}>&ldquo;{team.missionStatement}&rdquo;</p>
+					<p className={styles.mission}>
+						&ldquo;{team.missionStatement}&rdquo;
+					</p>
 				)}
 			</header>
 
@@ -117,7 +115,7 @@ export function GroupRideDetail({
 					</div>
 
 					<div className={styles.asideCard}>
-						<p className={styles.asideTitle}>Quick facts</p>
+						<p className={styles.asideTitle}>Contact Info</p>
 						<dl className={styles.factList}>
 							<dt>Location</dt>
 							<dd>{team.location}</dd>
@@ -128,8 +126,6 @@ export function GroupRideDetail({
 										<dd>{formatList(team.additionalLocations)}</dd>
 									</>
 								)}
-							<dt>Language</dt>
-							<dd>{team.primaryLanguage ?? 'English'}</dd>
 							{team.affiliation && (
 								<>
 									<dt>Affiliation</dt>
@@ -172,22 +168,24 @@ export function GroupRideDetail({
 							{!team.contact.email && !team.contact.phone && (
 								<dd>Not listed</dd>
 							)}
-							<dt>Website</dt>
-							{team.website ?
-								<dd className={styles.factWithIcon}>
-									<WebsiteIcon size={16} />
-									<a
-										target='_blank'
-										rel='noopener noreferrer'
-										href={team.website}
-										className={styles.website}
-									>
-										{team.website
-											.replace(/^https?:\/\/(www\.)?/i, '')
-											.replace(/\/$/, '')}
-									</a>
-								</dd>
-							:	<dd>N/A</dd>}
+							{team.website && (
+								<>
+									<dt>Website</dt>
+									<dd className={styles.factWithIcon}>
+										<WebsiteIcon size={16} />
+										<a
+											target='_blank'
+											rel='noopener noreferrer'
+											href={team.website}
+											className={styles.website}
+										>
+											{team.website
+												.replace(/^https?:\/\/(www\.)?/i, '')
+												.replace(/\/$/, '')}
+										</a>
+									</dd>
+								</>
+							)}
 							{hasSocial && (
 								<>
 									<dt>Social</dt>
@@ -221,9 +219,6 @@ export function GroupRideDetail({
 											:	team.social.facebook}
 										</dd>
 									)}
-									{team.social.strava && (
-										<dd>Strava &middot; {team.social.strava}</dd>
-									)}
 									{team.social.discord && (
 										<dd>Discord &middot; {team.social.discord}</dd>
 									)}
@@ -256,7 +251,10 @@ export function GroupRideDetail({
 							<DetailRow label='Riding style' value={team.discipline} />
 						)}
 						{team.virtualPlatform && (
-							<DetailRow label='Virtual platform' value={team.virtualPlatform} />
+							<DetailRow
+								label='Virtual platform'
+								value={team.virtualPlatform}
+							/>
 						)}
 						{team.homeBase && (
 							<DetailRow label='Home Base' value={team.homeBase} />
@@ -273,7 +271,10 @@ export function GroupRideDetail({
 							label='Persona restrictions'
 							value={formatList(team.personaRestrictions)}
 						/>
-						<DetailRow label='Member limit' value={team.memberLimit ?? 'None'} />
+						<DetailRow
+							label='Member limit'
+							value={team.memberLimit ?? 'None'}
+						/>
 						<DetailRow label='Waitlist' value={formatYesNo(team.waitlist)} />
 					</DetailSection>
 
@@ -289,7 +290,9 @@ export function GroupRideDetail({
 										<>
 											{formatRideRecurrence(ride)}
 											{ride.details && (
-												<span className={styles.rideDetails}>{ride.details}</span>
+												<span className={styles.rideDetails}>
+													{ride.details}
+												</span>
 											)}
 										</>
 									}
@@ -340,7 +343,9 @@ export function GroupRideDetail({
 
 					{team.type !== 'Group Ride' && (
 						<DetailSection
-							title={team.type === 'Team' ? 'Team structure' : 'Group structure'}
+							title={
+								team.type === 'Team' ? 'Team structure' : 'Group structure'
+							}
 						>
 							<DetailRow
 								label='Competitive or recreational'
