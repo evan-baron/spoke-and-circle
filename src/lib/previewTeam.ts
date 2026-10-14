@@ -56,6 +56,7 @@ export function payloadToTeam(
 		ride: payload.ride,
 		scheduleNotes: payload.scheduleNotes,
 		additionalRideDetails: payload.additionalRideDetails,
+		additionalRequirements: payload.additionalRequirements,
 		routeLink: payload.routeLink,
 		pace: (payload.pace ?? 'Relaxed') as Team['pace'],
 		segmentation: payload.segmentation,

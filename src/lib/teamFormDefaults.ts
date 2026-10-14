@@ -37,6 +37,7 @@ export const DEFAULT_TEAM_FORM_VALUES: TeamFormValues = {
 	waitlist: false,
 	scheduleNotes: '',
 	additionalRideDetails: '',
+	additionalRequirements: '',
 	routeLink: '',
 	segmentation: '',
 	pace: 'Relaxed',

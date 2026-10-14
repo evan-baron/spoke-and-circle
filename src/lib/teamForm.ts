@@ -141,6 +141,7 @@ export function buildTeamPayload(form: HTMLFormElement) {
 			:	undefined,
 		scheduleNotes: text('scheduleNotes'),
 		additionalRideDetails: text('additionalRideDetails'),
+		additionalRequirements: text('additionalRequirements'),
 		routeLink: text('routeLink'),
 		pace: text('pace'),
 		typicalDistanceMiles: number('typicalDistanceMiles'),

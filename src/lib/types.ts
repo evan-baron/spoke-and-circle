@@ -135,6 +135,7 @@ export interface Team {
   ride?: Ride;
   scheduleNotes?: string;
   additionalRideDetails?: string;
+  additionalRequirements?: string;
   routeLink?: string;
   pace: Pace;
   segmentation?: string;
@@ -257,6 +258,7 @@ export interface TeamFormValues {
   ride?: Ride;
   scheduleNotes: string;
   additionalRideDetails: string;
+  additionalRequirements: string;
   routeLink: string;
   segmentation: string;
   pace: string;

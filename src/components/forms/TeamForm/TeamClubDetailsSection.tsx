@@ -165,6 +165,22 @@ export function TeamClubDetailsSection({
 					/>
 				</div>
 			</div>
+
+			<Field
+				label='Additional requirements'
+				hint='Expectations and details beyond the fields above, like attendance, season dates, or what membership includes. Leave a blank line between paragraphs'
+				maxLength={1000}
+				full
+			>
+				<textarea
+					name='additionalRequirements'
+					defaultValue={values.additionalRequirements}
+					maxLength={1000}
+					rows={6}
+					placeholder='e.g. Members are expected to attend at least 90% of training sessions and race four events per season.'
+					className={styles.input}
+				/>
+			</Field>
 		</Section>
 	);
 }

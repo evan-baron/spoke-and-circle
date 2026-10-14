@@ -177,6 +177,18 @@
 	}
 }
 
+.requirementsText {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+	line-height: 1.55;
+	overflow-wrap: anywhere;
+
+	p {
+		white-space: pre-line;
+	}
+}
+
 .rideValue {
 	display: flex;
 	flex-wrap: wrap;

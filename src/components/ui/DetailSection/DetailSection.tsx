@@ -17,11 +17,12 @@ export function DetailSection({ title, children }: DetailSectionProps) {
 interface DetailRowProps {
   label: string;
   value: React.ReactNode;
+  full?: boolean;
 }
 
-export function DetailRow({ label, value }: DetailRowProps) {
+export function DetailRow({ label, value, full }: DetailRowProps) {
   return (
-    <div className={styles.row}>
+    <div className={full ? `${styles.row} ${styles.rowFull}` : styles.row}>
       <span className={styles.rowLabel}>{label}</span>
       <div className={styles.rowValue}>{value}</div>
     </div>

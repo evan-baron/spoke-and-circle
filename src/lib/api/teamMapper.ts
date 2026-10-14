@@ -109,6 +109,7 @@ export function toTeam(row: TeamRowWithMedia): Team {
 		ride: deriveRide(row),
 		scheduleNotes: row.scheduleNotes ?? undefined,
 		additionalRideDetails: row.additionalRideDetails ?? undefined,
+		additionalRequirements: row.additionalRequirements ?? undefined,
 		routeLink: row.routeLink ?? undefined,
 		pace: row.pace ?? 'Relaxed',
 		segmentation: row.segmentation ?? undefined,
@@ -192,6 +193,8 @@ export function toTeamCreateInput(
 		scheduleNotes: input.scheduleNotes,
 		additionalRideDetails:
 			input.type === 'Group Ride' ? input.additionalRideDetails : undefined,
+		additionalRequirements:
+			input.type === 'Group Ride' ? undefined : input.additionalRequirements,
 		routeLink: input.type === 'Group Ride' ? input.routeLink : undefined,
 		pace: input.pace,
 		segmentation: input.type === 'Group Ride' ? input.segmentation : undefined,
@@ -274,6 +277,7 @@ export function toTeamFormValues(row: TeamRowWithMedia): TeamFormValues {
 		ride: deriveRide(row),
 		scheduleNotes: row.scheduleNotes ?? '',
 		additionalRideDetails: row.additionalRideDetails ?? '',
+		additionalRequirements: row.additionalRequirements ?? '',
 		routeLink: row.routeLink ?? '',
 		segmentation: row.segmentation ?? '',
 		pace: row.pace ?? 'Steady',
@@ -319,6 +323,7 @@ export function toGroupRideFormValues(row: TeamRow): TeamFormValues {
 		ride: undefined,
 		scheduleNotes: '',
 		additionalRideDetails: '',
+		additionalRequirements: '',
 		routeLink: '',
 		segmentation: '',
 		pace: 'Relaxed',
@@ -372,6 +377,8 @@ export function toApprovedTeamUpdate(
 		scheduleNotes: input.scheduleNotes ?? null,
 		additionalRideDetails:
 			input.type === 'Group Ride' ? (input.additionalRideDetails ?? null) : null,
+		additionalRequirements:
+			input.type === 'Group Ride' ? null : (input.additionalRequirements ?? null),
 		routeLink: input.type === 'Group Ride' ? (input.routeLink ?? null) : null,
 		segmentation: input.type === 'Group Ride' ? (input.segmentation ?? null) : null,
 		pace: input.pace ?? null,

@@ -354,6 +354,21 @@ export function TeamDetail({
 								value={formatList(team.eventTypes)}
 							/>
 							<DetailRow label='Sponsors' value={formatList(team.sponsors)} />
+							{team.additionalRequirements && (
+								<DetailRow
+									full
+									label='Additional requirements'
+									value={
+										<div className={styles.requirementsText}>
+											{team.additionalRequirements
+												.split(/\n{2,}/)
+												.map((paragraph, index) => (
+													<p key={index}>{paragraph}</p>
+												))}
+										</div>
+									}
+								/>
+							)}
 						</DetailSection>
 					)}
 

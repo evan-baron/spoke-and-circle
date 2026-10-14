@@ -35,6 +35,14 @@
 	gap: 0.2rem;
 }
 
+.rowFull {
+	grid-column: 1 / -1;
+	gap: 0.5rem;
+	margin-top: var(--space-xs);
+	padding-top: var(--space-md);
+	border-top: 1px solid var(--color-line);
+}
+
 .rowLabel {
 	font-size: 0.6875rem;
 	font-weight: 700;

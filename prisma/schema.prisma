@@ -73,6 +73,7 @@ model Team {
   memberLimit         Int?
   waitlist            Boolean           @default(false)
   howToJoin           String?
+  additionalRequirements String?
 
   rides                  Json?
   scheduleNotes          String?

@@ -225,6 +225,15 @@ const teamBaseSchema = z.object({
 				.max(1000, 'Additional ride details must be 1,000 characters or fewer'),
 		)
 		.optional(),
+	additionalRequirements: z
+		.string()
+		.transform((value) => value.replace(/\r\n?/g, '\n').trim())
+		.pipe(
+			z
+				.string()
+				.max(1000, 'Additional requirements must be 1,000 characters or fewer'),
+		)
+		.optional(),
 	routeLink: z
 		.url({ protocol: /^https?$/, message: 'Invalid route link' })
 		.max(500, 'Route link must be less than 500 characters')
