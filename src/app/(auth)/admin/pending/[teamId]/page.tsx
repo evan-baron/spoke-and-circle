@@ -1,14 +1,14 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { PendingTeamReview } from '@/components/TeamForm/PendingTeamReview';
-import TeamOwnerTransfer from '@/components/TeamOwnerTransfer/TeamOwnerTransfer';
+import { PendingTeamReview } from '@/components/forms/TeamForm/PendingTeamReview';
+import TeamOwnerTransfer from '@/components/team/TeamOwnerTransfer/TeamOwnerTransfer';
 import { toTeamFormValues } from '@/lib/api/teamMapper';
 import { formatSubmittedDate, formatSubmitter } from '@/lib/format';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/services/currentUserService';
 import styles from '../../admin.module.scss';
-import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
+import { ArrowIcon } from '@/components/ui/ArrowIcon/ArrowIcon';
 
 export const metadata: Metadata = {
 	title: 'Review Group | Admin',

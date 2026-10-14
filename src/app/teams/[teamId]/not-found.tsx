@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styles from "./notFound.module.scss";
-import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
+import { ArrowIcon } from '@/components/ui/ArrowIcon/ArrowIcon';
 
 export default function TeamNotFound() {
   return (

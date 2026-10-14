@@ -4,7 +4,7 @@ import { formatSubmittedDate, formatSubmitter } from '@/lib/format';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/services/currentUserService';
 import styles from '../admin.module.scss';
-import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
+import { ArrowIcon } from '@/components/ui/ArrowIcon/ArrowIcon';
 
 export const metadata: Metadata = {
 	title: 'Pending Groups | Admin',

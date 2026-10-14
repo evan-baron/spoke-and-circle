@@ -1,4 +1,4 @@
-import { NewTeamForm } from '@/components/NewTeamForm/NewTeamForm';
+import { NewTeamForm } from '@/components/forms/NewTeamForm/NewTeamForm';
 import { toGroupRideFormValues } from '@/lib/api/teamMapper';
 import { prisma } from '@/lib/prisma';
 import type { TeamFormValues } from '@/lib/types';

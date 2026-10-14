@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { AdminTeamsTable } from '@/components/AdminTeamsTable/AdminTeamsTable';
-import { FilterBar } from '@/components/FilterBar/FilterBar';
+import { AdminTeamsTable } from '@/components/admin/AdminTeamsTable/AdminTeamsTable';
+import { FilterBar } from '@/components/search/FilterBar/FilterBar';
 import {
 	parseSearchParams,
 	toQueryString,
@@ -10,7 +10,7 @@ import {
 import { requireAdmin } from '@/services/currentUserService';
 import { searchApprovedTeams } from '@/services/teamSearchService';
 import styles from '../admin.module.scss';
-import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
+import { ArrowIcon } from '@/components/ui/ArrowIcon/ArrowIcon';
 
 export const metadata: Metadata = {
 	title: 'All Groups | Admin',

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
-import { ContactForm } from '@/components/ContactForm/ContactForm';
-import Crank from '@/components/Graphics/Crank';
+import { ContactForm } from '@/components/forms/ContactForm/ContactForm';
+import Crank from '@/components/ui/Graphics/Crank';
 import styles from './contact.module.scss';
 
 export const metadata: Metadata = {

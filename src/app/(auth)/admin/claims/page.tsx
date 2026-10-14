@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ClaimReviewButtons } from '@/components/ClaimReviewButtons/ClaimReviewButtons';
+import { ClaimReviewButtons } from '@/components/admin/ClaimReviewButtons/ClaimReviewButtons';
 import { formatSubmittedDate, formatSubmitter } from '@/lib/format';
 import { requireAdmin } from '@/services/currentUserService';
 import { listPendingClaims } from '@/services/teamClaimService';
 import styles from '../admin.module.scss';
-import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
+import { ArrowIcon } from '@/components/ui/ArrowIcon/ArrowIcon';
 
 export const metadata: Metadata = {
 	title: 'Claims | Admin',

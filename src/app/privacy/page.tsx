@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { LegalDocument } from '@/components/LegalDocument/LegalDocument';
+import { LegalDocument } from '@/components/layout/LegalDocument/LegalDocument';
 import {
 	PRIVACY_POLICY_VERSION,
 	SITE_NAME,

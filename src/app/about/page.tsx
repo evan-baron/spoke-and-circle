@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import Crank from '@/components/Graphics/Crank';
+import Crank from '@/components/ui/Graphics/Crank';
 import { SITE_NAME } from '@/lib/siteConfig';
 import styles from './about.module.scss';
 

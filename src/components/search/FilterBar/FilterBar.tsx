@@ -1,0 +1,311 @@
+'use client';
+
+import { useState, type ChangeEvent } from 'react';
+import { LocationInput } from '@/components/ui/LocationInput/LocationInput';
+import {
+	bikeType,
+	clubType,
+	competitiveOrCasual,
+	mtbDiscipline,
+	racingDiscipline,
+	skillLevel,
+} from '@/lib/enums';
+import { DEFAULT_RADIUS_MILES, RADIUS_OPTIONS } from '@/lib/searchParams';
+import { CheckboxDropdown } from './CheckboxDropdown';
+import styles from './filterBar.module.scss';
+
+interface FilterBarProps {
+	action?: string;
+	defaultQ?: string;
+	defaultLocation?: string;
+	defaultRadius?: number;
+	defaultType?: string;
+	defaultBikeTypes?: string[];
+	defaultDiscipline?: string;
+	defaultSkillLevel?: string;
+	defaultCompetitiveOrCasual?: string;
+	defaultRacingDisciplines?: string[];
+	defaultWomensOnly?: boolean;
+	defaultYouthOnly?: boolean;
+	defaultAcceptingNewRiders?: boolean;
+	defaultView?: 'list' | 'calendar';
+}
+
+const TYPE_OPTIONS = clubType.labels;
+const BIKE_TYPE_OPTIONS = bikeType.labels;
+const DISCIPLINE_OPTIONS = mtbDiscipline.labels;
+const SKILL_LEVEL_OPTIONS = skillLevel.labels;
+const RACING_OPTIONS = competitiveOrCasual.labels;
+
+const AUTO_SUBMIT_DEBOUNCE_MS = 300;
+const pendingAutoSubmits = new WeakMap<
+	HTMLFormElement,
+	ReturnType<typeof setTimeout>
+>();
+
+function autoSubmit(event: ChangeEvent<HTMLSelectElement | HTMLInputElement>) {
+	const form = event.currentTarget.form;
+	if (!form) return;
+
+	const pending = pendingAutoSubmits.get(form);
+	if (pending) clearTimeout(pending);
+
+	pendingAutoSubmits.set(
+		form,
+		setTimeout(() => {
+			pendingAutoSubmits.delete(form);
+			form.requestSubmit();
+		}, AUTO_SUBMIT_DEBOUNCE_MS),
+	);
+}
+
+export function FilterBar({
+	action = '/search',
+	defaultQ = '',
+	defaultLocation = '',
+	defaultRadius = DEFAULT_RADIUS_MILES,
+	defaultType = '',
+	defaultBikeTypes = [],
+	defaultDiscipline = '',
+	defaultSkillLevel = '',
+	defaultCompetitiveOrCasual = '',
+	defaultRacingDisciplines = [],
+	defaultWomensOnly = false,
+	defaultYouthOnly = false,
+	defaultAcceptingNewRiders = false,
+	defaultView = 'list',
+}: FilterBarProps) {
+	const activeFilterCount =
+		[
+			defaultType,
+			defaultDiscipline,
+			defaultSkillLevel,
+			defaultCompetitiveOrCasual,
+		].filter(Boolean).length +
+		defaultBikeTypes.length +
+		defaultRacingDisciplines.length +
+		(defaultWomensOnly ? 1 : 0) +
+		(defaultYouthOnly ? 1 : 0) +
+		(defaultAcceptingNewRiders ? 1 : 0);
+
+	const [filtersOpen, setFiltersOpen] = useState(false);
+	const openClass = filtersOpen ? styles.open : '';
+
+	return (
+		<form action={action} method='GET' className={styles.form}>
+			{defaultView === 'calendar' && (
+				<input type='hidden' name='view' value='calendar' />
+			)}
+			<input
+				name='q'
+				type='text'
+				defaultValue={defaultQ}
+				placeholder='Keyword&hellip;'
+				aria-label='Keyword'
+				className={`${styles.input} ${styles.keywordInput}`}
+			/>
+			<div className={styles.locationInput}>
+				<LocationInput
+					id='filter-location'
+					name='location'
+					defaultValue={defaultLocation}
+					placeholder='City or ZIP code&hellip;'
+					includeZip
+					allowFreeText
+					inputClassName={styles.input}
+				/>
+			</div>
+
+			{/* Collapsed on mobile until "Filters" is tapped (or already open,
+          because filters came in via the URL). On desktop this wrapper
+          becomes display:contents so type/bike-type rejoin the primary
+          row instead of sitting inside the mobile-only collapse group. */}
+			<div className={`${styles.typeBikeGroup} ${openClass}`}>
+				<select
+					name='type'
+					defaultValue={defaultType}
+					aria-label='Type'
+					onChange={autoSubmit}
+					className={`${styles.input} ${styles.typeSelect}`}
+				>
+					<option value=''>Any group type</option>
+					{TYPE_OPTIONS.map((option) => (
+						<option key={option} value={option}>
+							{option}
+						</option>
+					))}
+				</select>
+				<CheckboxDropdown
+					name='bikeType'
+					label='Any bike type'
+					options={BIKE_TYPE_OPTIONS}
+					defaultValues={defaultBikeTypes}
+				/>
+			</div>
+
+			<div id='filter-panel' className={`${styles.moreFilters} ${openClass}`}>
+				<div className={styles.filterGrid}>
+					<select
+						name='radius'
+						defaultValue={String(defaultRadius)}
+						aria-label='Search radius'
+						onChange={autoSubmit}
+						className={styles.input}
+					>
+						{RADIUS_OPTIONS.map((option) => (
+							<option key={option} value={option}>
+								Within {option} miles
+							</option>
+						))}
+					</select>
+					<select
+						name='skillLevel'
+						defaultValue={defaultSkillLevel}
+						aria-label='Skill level'
+						onChange={autoSubmit}
+						className={styles.input}
+					>
+						<option value=''>Any skill level</option>
+						{SKILL_LEVEL_OPTIONS.map((option) => (
+							<option key={option} value={option}>
+								{option}
+							</option>
+						))}
+					</select>
+					<select
+						name='competitiveOrCasual'
+						defaultValue={defaultCompetitiveOrCasual}
+						aria-label='Competitive or recreational'
+						onChange={autoSubmit}
+						className={styles.input}
+					>
+						<option value=''>Competitive or recreational</option>
+						{RACING_OPTIONS.map((option) => (
+							<option key={option} value={option}>
+								{option}
+							</option>
+						))}
+					</select>
+					<CheckboxDropdown
+						name='racingDiscipline'
+						label='Any racing discipline'
+						options={racingDiscipline.labels}
+						defaultValues={defaultRacingDisciplines}
+						searchable
+					/>
+					{/*
+					<select
+						name='discipline'
+						defaultValue={defaultDiscipline}
+						aria-label='Riding style'
+						onChange={autoSubmit}
+						className={styles.input}
+					>
+						<option value=''>Any riding style</option>
+						{DISCIPLINE_OPTIONS.map((option) => (
+							<option key={option} value={option}>
+								{option}
+							</option>
+						))}
+					</select>
+					*/}
+				</div>
+				{/* 
+				<div className={styles.toggleRow}>
+					<label className={styles.toggle}>
+						<input
+							type='checkbox'
+							name='womensOnly'
+							value='true'
+							defaultChecked={defaultWomensOnly}
+							onChange={autoSubmit}
+						/>
+						<span>Women&rsquo;s groups</span>
+					</label>
+					<label className={styles.toggle}>
+						<input
+							type='checkbox'
+							name='youthOnly'
+							value='true'
+							defaultChecked={defaultYouthOnly}
+							onChange={autoSubmit}
+						/>
+						<span>Youth programs</span>
+					</label>
+					<label className={styles.toggle}>
+						<input
+							type='checkbox'
+							name='acceptingNewRiders'
+							value='true'
+							defaultChecked={defaultAcceptingNewRiders}
+							onChange={autoSubmit}
+						/>
+						<span>Accepting new riders</span>
+					</label>
+				</div> */}
+			</div>
+
+			{/* Mobile: sits directly above the search button, below every
+          collapsible filter group. Desktop: display:contents lets the
+          toggle (hidden there) and the clear link (ordered last) each
+          take their own place in the primary row independently. */}
+			<div className={styles.toggleClearRow}>
+				<button
+					type='button'
+					className={styles.filtersToggle}
+					aria-expanded={filtersOpen}
+					aria-controls='filter-panel'
+					onClick={() => setFiltersOpen((open) => !open)}
+				>
+					<span>{filtersOpen ? 'Less' : 'More'} Filters</span>
+					{activeFilterCount > 0 && (
+						<span className={styles.filtersCount}>{activeFilterCount}</span>
+					)}
+					<svg
+						className={styles.filtersIcon}
+						viewBox='0 0 10 10'
+						width='10'
+						height='10'
+						fill='none'
+						stroke='currentColor'
+						strokeWidth='1.25'
+						strokeLinecap='round'
+						aria-hidden='true'
+					>
+						<path d='M1 5h8' />
+						{!filtersOpen && <path d='M5 1v8' />}
+					</svg>
+				</button>
+
+				<a href={action} className={styles.clearFilters}>
+					Clear all
+				</a>
+			</div>
+
+			{/* Mobile: the final action, below every filter. Desktop: rejoins
+          the primary row after bike type (see .searchBtn's `order`). */}
+			<button type='submit' className={styles.searchBtn}>
+				<svg viewBox='0 0 24 24' width='16' height='16' aria-hidden='true'>
+					<circle
+						cx='11'
+						cy='11'
+						r='6.5'
+						fill='none'
+						stroke='currentColor'
+						strokeWidth='2'
+					/>
+					<line
+						x1='20'
+						y1='20'
+						x2='15.8'
+						y2='15.8'
+						stroke='currentColor'
+						strokeWidth='2'
+						strokeLinecap='round'
+					/>
+				</svg>
+				<span>Search</span>
+			</button>
+		</form>
+	);
+}

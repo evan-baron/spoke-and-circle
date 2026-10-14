@@ -1,12 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { OwnerTeamEdit } from '@/components/TeamForm/OwnerTeamEdit';
-import styles from '@/components/TeamForm/teamForm.module.scss';
+import { OwnerTeamEdit } from '@/components/forms/TeamForm/OwnerTeamEdit';
+import styles from '@/components/forms/TeamForm/teamForm.module.scss';
 import { toTeamFormValues } from '@/lib/api/teamMapper';
 import { prisma } from '@/lib/prisma';
 import { requireUser } from '@/services/currentUserService';
-import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
+import { ArrowIcon } from '@/components/ui/ArrowIcon/ArrowIcon';
 
 export const metadata: Metadata = {
 	title: 'Edit Team | Dashboard',

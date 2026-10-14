@@ -1,10 +1,10 @@
 import type { Metadata } from 'next';
-import { FilterBar } from '@/components/FilterBar/FilterBar';
-import { Pagination } from '@/components/Pagination/Pagination';
-import { ResultsTable } from '@/components/ResultsTable/ResultsTable';
-import { RideCalendar } from '@/components/RideCalendar/RideCalendar';
-import { SearchLocationTracker } from '@/components/SearchLocationTracker/SearchLocationTracker';
-import { ViewToggle } from '@/components/ViewToggle/ViewToggle';
+import { FilterBar } from '@/components/search/FilterBar/FilterBar';
+import { Pagination } from '@/components/ui/Pagination/Pagination';
+import { ResultsTable } from '@/components/search/ResultsTable/ResultsTable';
+import { RideCalendar } from '@/components/search/RideCalendar/RideCalendar';
+import { SearchLocationTracker } from '@/components/search/SearchLocationTracker/SearchLocationTracker';
+import { ViewToggle } from '@/components/search/ViewToggle/ViewToggle';
 import { parseSearchParams, type RawSearchParams } from '@/lib/searchParams';
 import {
 	searchApprovedRides,

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import styles from '@/app/contact/contact.module.scss';
-import { FeedbackForm } from '@/components/FeedbackForm/FeedbackForm';
-import Crank from '@/components/Graphics/Crank';
+import { FeedbackForm } from '@/components/forms/FeedbackForm/FeedbackForm';
+import Crank from '@/components/ui/Graphics/Crank';
 
 export const metadata: Metadata = {
 	title: 'Submit Feedback',

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { LegalDocument } from '@/components/LegalDocument/LegalDocument';
+import { LegalDocument } from '@/components/layout/LegalDocument/LegalDocument';
 import { SITE_NAME, SUPPORT_EMAIL } from '@/lib/siteConfig';
 
 export const metadata: Metadata = {

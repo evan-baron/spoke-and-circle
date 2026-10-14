@@ -1,5 +1,5 @@
 import type { Metadata } from 'next';
-import { GetStartedWizard } from '@/components/GetStartedWizard/GetStartedWizard';
+import { GetStartedWizard } from '@/components/search/GetStartedWizard/GetStartedWizard';
 import styles from './getStarted.module.scss';
 
 export const metadata: Metadata = {

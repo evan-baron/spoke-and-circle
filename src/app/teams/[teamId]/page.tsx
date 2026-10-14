@@ -1,11 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { BackButton } from '@/components/BackButton/BackButton';
-import { ClaimTeamButton } from '@/components/ClaimTeamButton/ClaimTeamButton';
-import DeleteTeamButton from '@/components/DeleteTeamButton/DeleteTeamButton';
-import { GroupRideDetail } from '@/components/GroupRideDetail/GroupRideDetail';
-import { TeamDetail } from '@/components/TeamDetail/TeamDetail';
+import { BackButton } from '@/components/ui/BackButton/BackButton';
+import { ClaimTeamButton } from '@/components/team/ClaimTeamButton/ClaimTeamButton';
+import DeleteTeamButton from '@/components/team/DeleteTeamButton/DeleteTeamButton';
+import { GroupRideDetail } from '@/components/team/GroupRideDetail/GroupRideDetail';
+import { TeamDetail } from '@/components/team/TeamDetail/TeamDetail';
 import { jsonLdScript } from '@/lib/jsonLd';
 import { getSiteUrl, OG_IMAGE_PATH, SITE_NAME } from '@/lib/siteConfig';
 import { getCurrentUser } from '@/services/currentUserService';

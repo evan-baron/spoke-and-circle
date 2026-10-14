@@ -1,4 +1,4 @@
-import DashboardView from '@/components/DashboardView/DashboardView';
+import DashboardView from '@/components/team/DashboardView/DashboardView';
 import { prisma } from '@/lib/prisma';
 import { requireUser } from '@/services/currentUserService';
 import { clubType } from '@/lib/enums';

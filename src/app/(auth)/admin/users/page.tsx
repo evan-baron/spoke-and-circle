@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { AdminUsersTable } from '@/components/AdminUsersTable/AdminUsersTable';
-import { Pagination } from '@/components/Pagination/Pagination';
+import { AdminUsersTable } from '@/components/admin/AdminUsersTable/AdminUsersTable';
+import { Pagination } from '@/components/ui/Pagination/Pagination';
 import { prisma } from '@/lib/prisma';
 import {
 	parseSearchParams,
@@ -10,7 +10,7 @@ import {
 } from '@/lib/searchParams';
 import { requireAdmin } from '@/services/currentUserService';
 import styles from '../admin.module.scss';
-import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
+import { ArrowIcon } from '@/components/ui/ArrowIcon/ArrowIcon';
 
 export const metadata: Metadata = {
 	title: 'All Users | Admin',

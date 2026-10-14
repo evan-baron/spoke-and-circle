@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { SearchForm } from '@/components/SearchForm/SearchForm';
-import Crank from '@/components/Graphics/Crank';
-import { Badge } from '@/components/Badge/Badge';
+import { SearchForm } from '@/components/search/SearchForm/SearchForm';
+import Crank from '@/components/ui/Graphics/Crank';
+import { Badge } from '@/components/ui/Badge/Badge';
 import { SITE_NAME } from '@/lib/siteConfig';
 import { formatRideRecurrence } from '@/lib/format';
 import type { Team } from '@/lib/types';

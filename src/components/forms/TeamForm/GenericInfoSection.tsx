@@ -1,0 +1,217 @@
+import { useId, useState } from 'react';
+import { LocationInput } from '@/components/ui/LocationInput/LocationInput';
+import { LocationListInput } from '@/components/ui/LocationInput/LocationListInput';
+import { TeamAffiliationInput } from '@/components/forms/TeamAffiliationInput/TeamAffiliationInput';
+import type { TeamFormValues } from '@/lib/types';
+import { CLUB_TYPES } from './constants';
+import { Field } from './Field';
+import { RequiredMark } from './RequiredMark';
+import { Section } from './Section';
+import { Subsection } from './Subsection';
+import styles from './teamForm.module.scss';
+
+interface GenericInfoSectionProps {
+	values: TeamFormValues;
+	groupType: string;
+	onGroupTypeChange: (type: string) => void;
+	affiliationLabel: string;
+	affiliatedId: string;
+	onAffiliationChange: (label: string, affiliatedId: string) => void;
+	excludeTeamId?: string;
+	lockedToParent?: boolean;
+	namePrefix?: string;
+}
+
+export function GenericInfoSection({
+	values,
+	groupType,
+	onGroupTypeChange,
+	affiliationLabel,
+	affiliatedId,
+	onAffiliationChange,
+	excludeTeamId,
+	lockedToParent,
+	namePrefix,
+}: GenericInfoSectionProps) {
+	const [name, setName] = useState(values.name);
+	const locationId = useId();
+	const additionalLocationsId = useId();
+
+	return (
+		<Section title='Generic Info'>
+			<Field
+				label={groupType === 'Group Ride' ? 'Ride Name' : 'Group Name'}
+				required
+				hint={
+					namePrefix ?
+						`Saved as "${namePrefix} - ${name.trim() || 'your ride name'}". The team name is added for you.`
+					:	undefined
+				}
+			>
+				<input
+					type='text'
+					name='name'
+					value={name}
+					onChange={(event) => setName(event.target.value)}
+					required
+					placeholder={
+						groupType === 'Group Ride' ?
+							'e.g. Saturday No-Drop Ride'
+						:	'e.g. Portland Velo Collective'
+					}
+					className={styles.input}
+				/>
+			</Field>
+			{lockedToParent ?
+				<Field label='Group Type'>
+					<input type='hidden' name='type' value={groupType} />
+					<input
+						type='text'
+						value={groupType}
+						readOnly
+						className={styles.input}
+					/>
+				</Field>
+			:	<Field label='Group Type' required>
+					<select
+						name='type'
+						value={groupType}
+						onChange={(event) => onGroupTypeChange(event.target.value)}
+						className={styles.input}
+					>
+						{CLUB_TYPES.map((option) => (
+							<option key={option} value={option}>
+								{option}
+							</option>
+						))}
+					</select>
+				</Field>
+			}
+			{groupType !== 'Group Ride' && (
+				<Field label='Mission statement' maxLength={1000} full>
+					<textarea
+						name='missionStatement'
+						defaultValue={values.missionStatement}
+						maxLength={1000}
+						rows={2}
+						placeholder='What is this group trying to do?'
+						className={styles.input}
+					/>
+				</Field>
+			)}
+			{lockedToParent ?
+				<Field label='Part of'>
+					<input type='hidden' name='affiliation' value={affiliationLabel} />
+					<input type='hidden' name='affiliatedId' value={affiliatedId} />
+					<input
+						type='text'
+						value={affiliationLabel}
+						readOnly
+						className={styles.input}
+					/>
+				</Field>
+			:	<Field
+					label='Affiliation'
+					hint={
+						affiliatedId ?
+							'Linked to an existing team.'
+						:	'Begin typing to search for an existing team, club, or organization to link to. If one does not exist, you can enter a new one here.'
+					}
+				>
+					<TeamAffiliationInput
+						name='affiliation'
+						affiliatedIdName='affiliatedId'
+						value={affiliationLabel}
+						affiliatedId={affiliatedId}
+						onChange={onAffiliationChange}
+						excludeId={excludeTeamId}
+						placeholder='e.g. Team, Bike Shop, Organization, etc.'
+					/>
+				</Field>
+			}
+			<div className={styles.field}>
+				<label htmlFor={locationId} className={styles.fieldLabel}>
+					Location
+					<RequiredMark />
+				</label>
+				<LocationInput
+					id={locationId}
+					name='location'
+					defaultValue={values.location}
+					required
+					placeholder='Start typing a US city or state'
+				/>
+			</div>
+			{groupType !== 'Group Ride' && (
+				<div className={styles.field}>
+					<label htmlFor={additionalLocationsId} className={styles.fieldLabel}>
+						Additional locations
+					</label>
+					<LocationListInput
+						id={additionalLocationsId}
+						name='additionalLocations'
+						defaultValues={values.additionalLocations}
+						placeholder='Search and add another US city or state'
+					/>
+					<span className={styles.fieldHint}>
+						If your team has additional chapters, add each location they can be
+						found, up to 10
+					</span>
+				</div>
+			)}
+			{groupType !== 'Group Ride' && (
+				<Field label='Founded'>
+					<input
+						type='number'
+						name='founded'
+						defaultValue={values.founded}
+						min={1970}
+						max={2026}
+						placeholder='2024'
+						className={styles.input}
+					/>
+				</Field>
+			)}
+			<Subsection title='Contact info'>
+				{groupType !== 'Group Ride' && (
+					<Field label='Website'>
+						<input
+							type='url'
+							name='website'
+							defaultValue={values.website}
+							placeholder='https://'
+							className={styles.input}
+						/>
+					</Field>
+				)}
+				<Field label='Contact phone'>
+					<input
+						type='tel'
+						name='contactPhone'
+						defaultValue={values.contactPhone}
+						placeholder='555-555-0100'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Contact email'>
+					<input
+						type='email'
+						name='contactEmail'
+						defaultValue={values.contactEmail}
+						placeholder='hello@yourteam.org'
+						className={styles.input}
+					/>
+				</Field>
+				<Field label='Primary language'>
+					<input
+						type='text'
+						name='primaryLanguage'
+						defaultValue={values.primaryLanguage}
+						placeholder='English'
+						className={styles.input}
+					/>
+				</Field>
+			</Subsection>
+		</Section>
+	);
+}

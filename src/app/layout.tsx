@@ -1,11 +1,11 @@
 import type { Metadata, Viewport } from 'next';
 import { Plus_Jakarta_Sans } from 'next/font/google';
 import AppProviders from '@/app/AppProviders';
-import { CompleteProfileModal } from '@/components/CompleteProfileModal/CompleteProfileModal';
-import { CookieNotice } from '@/components/CookieNotice/CookieNotice';
-import { GoogleAnalytics } from '@/components/GoogleAnalytics/GoogleAnalytics';
-import Header from '@/components/Header/Header';
-import { Footer } from '@/components/Footer/Footer';
+import { CompleteProfileModal } from '@/components/forms/CompleteProfileModal/CompleteProfileModal';
+import { CookieNotice } from '@/components/layout/CookieNotice/CookieNotice';
+import { GoogleAnalytics } from '@/components/layout/GoogleAnalytics/GoogleAnalytics';
+import Header from '@/components/layout/Header/Header';
+import { Footer } from '@/components/layout/Footer/Footer';
 import { jsonLdScript } from '@/lib/jsonLd';
 import {
 	getSiteUrl,

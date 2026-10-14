@@ -1,4 +1,4 @@
-import type { BadgeTone } from "@/components/Badge/Badge";
+import type { BadgeTone } from "@/components/ui/Badge/Badge";
 import type { Pace } from "./types";
 
 export function toneForPace(pace: Pace): BadgeTone {

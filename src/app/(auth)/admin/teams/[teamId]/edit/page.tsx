@@ -1,13 +1,13 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { AdminTeamEdit } from '@/components/TeamForm/AdminTeamEdit';
-import TeamOwnerTransfer from '@/components/TeamOwnerTransfer/TeamOwnerTransfer';
+import { AdminTeamEdit } from '@/components/forms/TeamForm/AdminTeamEdit';
+import TeamOwnerTransfer from '@/components/team/TeamOwnerTransfer/TeamOwnerTransfer';
 import { toTeamFormValues } from '@/lib/api/teamMapper';
 import { prisma } from '@/lib/prisma';
 import { requireAdmin } from '@/services/currentUserService';
 import styles from '../../../admin.module.scss';
-import { ArrowIcon } from '@/components/ArrowIcon/ArrowIcon';
+import { ArrowIcon } from '@/components/ui/ArrowIcon/ArrowIcon';
 
 export const metadata: Metadata = {
 	title: 'Edit Group | Admin',
