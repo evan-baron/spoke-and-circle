@@ -4,7 +4,8 @@ import { stripInstagramHandle } from './instagram';
 const PERSONA_LABELS: Record<string, string> = {
 	womenOnly: 'Women Only',
 	menOnly: 'Men Only',
-	lgbtOnly: 'LGBT Only',
+	lgbtOnly: 'LGBTQ+ Only',
+	bipoc: 'BIPOC',
 };
 
 const EVENT_TYPE_FIELDS: [string, EventType][] = [
@@ -113,7 +114,8 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		racingDisciplines: values('racingDiscipline'),
 		tags: values('tag'),
 		format: text('format'),
-		virtualPlatforms: virtualPlatforms.length > 0 ? virtualPlatforms : undefined,
+		virtualPlatforms:
+			virtualPlatforms.length > 0 ? virtualPlatforms : undefined,
 		homeBase: text('homeBase'),
 		website: text('website'),
 		instagram: stripInstagramHandle(text('instagram') ?? '') || undefined,
@@ -134,7 +136,9 @@ export function buildTeamPayload(form: HTMLFormElement) {
 		waitlist: flag('waitlist'),
 		ride: ride(),
 		segmentation:
-			text('hasSegmentation') === 'yes' ? text('segmentationDescription') : undefined,
+			text('hasSegmentation') === 'yes' ?
+				text('segmentationDescription')
+			:	undefined,
 		scheduleNotes: text('scheduleNotes'),
 		additionalRideDetails: text('additionalRideDetails'),
 		routeLink: text('routeLink'),

@@ -26,7 +26,8 @@ export const SKILL_LEVELS = skillLevel.labels;
 export const PERSONA_OPTIONS = [
 	{ value: 'womenOnly', label: 'Women only' },
 	{ value: 'menOnly', label: 'Men only' },
-	{ value: 'lgbtOnly', label: 'LGBT only' },
+	{ value: 'lgbtOnly', label: 'LGBTQ+ only' },
+	{ value: 'bipoc', label: 'BIPOC' },
 	{ value: 'other', label: 'Other' },
 ];
 export const DAYS = dayOfWeek.labels;

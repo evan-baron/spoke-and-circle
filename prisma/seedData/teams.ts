@@ -348,7 +348,7 @@ export const teams: Team[] = [
     tags: ["lgbt", "inclusive", "social", "beginner-friendly"],
     missionStatement: "A safe, joyful space to ride for LGBTQ+ cyclists and allies of every level.",
     overrides: {
-      personaRestrictions: ["LGBT Only"],
+      personaRestrictions: ["LGBTQ+ Only"],
       social: { instagram: "@bayareapridepeloton" },
     },
   }),

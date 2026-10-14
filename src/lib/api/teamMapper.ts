@@ -225,7 +225,8 @@ export function toTeamCreateInput(
 const PERSONA_CODE_BY_LABEL: Record<string, string> = {
 	'Women Only': 'womenOnly',
 	'Men Only': 'menOnly',
-	'LGBT Only': 'lgbtOnly',
+	'LGBTQ+ Only': 'lgbtOnly',
+	BIPOC: 'bipoc',
 };
 
 export function toTeamFormValues(row: TeamRowWithMedia): TeamFormValues {

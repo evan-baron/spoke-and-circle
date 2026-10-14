@@ -106,8 +106,10 @@ const ENUM_TERM_CLAUSES: [string, Prisma.TeamWhereInput][] = [
 		[
 			['women', 'Women Only'],
 			['men', 'Men Only'],
-			['lgbt', 'LGBT Only'],
-			['lgbtq', 'LGBT Only'],
+			['lgbt', 'LGBTQ+ Only'],
+			['lgbtq', 'LGBTQ+ Only'],
+			['lgbtqia', 'LGBTQ+ Only'],
+			['bipoc', 'BIPOC'],
 		] as const
 	).map(
 		([term, persona]): [string, Prisma.TeamWhereInput] => [
