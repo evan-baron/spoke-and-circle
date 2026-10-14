@@ -10,6 +10,7 @@ import {
 	MEDIA_FORMATS,
 	mediaOwnerPrefix,
 } from '@/lib/media';
+import { revalidateTeams } from '@/lib/teamCache';
 import { prisma } from '@/lib/prisma';
 
 export interface MediaActor {
@@ -117,6 +118,8 @@ export async function saveTeamMedia(
 			}),
 		),
 	]);
+
+	revalidateTeams(teamId);
 
 	await Promise.all([
 		destroyImages(removed).catch((error) =>

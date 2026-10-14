@@ -1,6 +1,8 @@
+import { unstable_cache } from 'next/cache';
 import type { Prisma } from '../../generated/prisma/client';
 import { toTeam } from '@/lib/api/teamMapper';
 import { prisma } from '@/lib/prisma';
+import { TEAMS_TAG } from '@/lib/teamCache';
 import type { Team } from '@/lib/types';
 import { US_STATES } from '@/lib/usStates';
 
@@ -108,7 +110,9 @@ async function countByState(limit: number): Promise<HomeStateCount[]> {
 const countWhere = (where: Prisma.TeamWhereInput) =>
 	prisma.team.count({ where: { AND: [APPROVED, where] } });
 
-export async function getHomeData(): Promise<HomeData> {
+const HOME_CACHE_SECONDS = 600;
+
+async function loadHomeData(): Promise<HomeData> {
 	const [
 		total,
 		rideStyleCounts,
@@ -141,3 +145,8 @@ export async function getHomeData(): Promise<HomeData> {
 		recent: recentRows.map(toTeam),
 	};
 }
+
+export const getHomeData = unstable_cache(loadHomeData, ['home-data'], {
+	tags: [TEAMS_TAG],
+	revalidate: HOME_CACHE_SECONDS,
+});

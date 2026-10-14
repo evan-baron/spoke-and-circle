@@ -1,20 +1,35 @@
 import type { MetadataRoute } from 'next';
+import { unstable_cache } from 'next/cache';
 import { prisma } from '@/lib/prisma';
 import { getSiteUrl } from '@/lib/siteConfig';
+import { TEAMS_TAG } from '@/lib/teamCache';
 
 export const dynamic = 'force-dynamic';
 
 const MAX_TEAM_URLS = 45000;
+const SITEMAP_CACHE_SECONDS = 3600;
+
+const getSitemapTeams = unstable_cache(
+	async () => {
+		const teams = await prisma.team.findMany({
+			where: { status: 'Approved' },
+			select: { id: true, updatedAt: true },
+			orderBy: { updatedAt: 'desc' },
+			take: MAX_TEAM_URLS,
+		});
+		return teams.map((team) => ({
+			id: team.id,
+			updatedAt: team.updatedAt.toISOString(),
+		}));
+	},
+	['sitemap-teams'],
+	{ tags: [TEAMS_TAG], revalidate: SITEMAP_CACHE_SECONDS },
+);
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const baseUrl = getSiteUrl();
 
-	const teams = await prisma.team.findMany({
-		where: { status: 'Approved' },
-		select: { id: true, updatedAt: true },
-		orderBy: { updatedAt: 'desc' },
-		take: MAX_TEAM_URLS,
-	});
+	const teams = await getSitemapTeams();
 
 	return [
 		{
@@ -66,7 +81,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 		},
 		...teams.map((team) => ({
 			url: `${baseUrl}/teams/${team.id}`,
-			lastModified: team.updatedAt,
+			lastModified: new Date(team.updatedAt),
 			changeFrequency: 'weekly' as const,
 			priority: 0.7,
 		})),

@@ -7,6 +7,7 @@ import { syncAdditionalPlaces } from '@/services/teamLocationService';
 import { resolveCoordinates } from '@/services/placeService';
 import { sendRejectionEmail } from '@/services/rejectionEmailService';
 import { destroyTeamMedia, listTeamMediaIds } from '@/services/teamMediaService';
+import { revalidateTeams } from '@/lib/teamCache';
 import { sendTeamTransferEmail } from '@/services/teamTransferEmailService';
 
 export async function approvePendingTeam(
@@ -36,6 +37,7 @@ export async function approvePendingTeam(
 		},
 	});
 	if (result.count === 0) return null;
+	revalidateTeams(id);
 
 	try {
 		await syncAdditionalPlaces(id, input.additionalLocations ?? []);
@@ -84,6 +86,7 @@ export async function updateApprovedTeam(
 		},
 	});
 	if (result.count === 0) return false;
+	revalidateTeams(id);
 
 	try {
 		await syncAdditionalPlaces(id, input.additionalLocations ?? []);
@@ -122,6 +125,7 @@ export async function transferTeamOwnership(
 		where: { id: teamId },
 		data: { submittedById: newOwnerId },
 	});
+	revalidateTeams(teamId);
 
 	try {
 		const emailStatus = await sendTeamTransferEmail({
@@ -154,6 +158,7 @@ export async function toggleTeamVerified(id: string): Promise<boolean | null> {
 		},
 	});
 	if (result.count === 0) return null;
+	revalidateTeams(id);
 
 	return nextVerified;
 }
@@ -162,6 +167,7 @@ export async function deleteApprovedTeams(ids: string[]): Promise<number> {
 	const result = await prisma.team.deleteMany({
 		where: { id: { in: ids }, status: 'Approved' },
 	});
+	if (result.count > 0) revalidateTeams(...ids);
 	return result.count;
 }
 

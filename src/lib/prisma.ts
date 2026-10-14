@@ -10,12 +10,19 @@ if (!dbUrl) {
 	throw new Error('DATABASE_URL environment variable is not set');
 }
 
+function createPrismaClient() {
+	const adapter = new PrismaPg({ connectionString: dbUrl });
+	return new PrismaClient({
+		adapter,
+		omit: { team: { searchText: true } },
+	});
+}
+
 const globalForPrisma = globalThis as unknown as {
-	prisma: PrismaClient | undefined;
+	prisma: ReturnType<typeof createPrismaClient> | undefined;
 };
 
-const adapter = new PrismaPg({ connectionString: dbUrl });
-const prisma = globalForPrisma.prisma ?? new PrismaClient({ adapter });
+const prisma = globalForPrisma.prisma ?? createPrismaClient();
 
 if (process.env.NODE_ENV === 'development') {
 	globalForPrisma.prisma = prisma;

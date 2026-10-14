@@ -1,4 +1,4 @@
-import type { Prisma } from '../../generated/prisma/client';
+import { Prisma } from '../../generated/prisma/client';
 import { toTeam } from '@/lib/api/teamMapper';
 import { prisma } from '@/lib/prisma';
 import { DEFAULT_RADIUS_MILES, TEAMS_PAGE_SIZE } from '@/lib/searchParams';
@@ -18,6 +18,7 @@ import type {
 	CalendarRide,
 	CalendarRidesResult,
 	SearchParams,
+	Team,
 	TeamListPage,
 	TeamOption,
 } from '@/lib/types';
@@ -160,17 +161,7 @@ async function idsWithWordStartMatch(term: string): Promise<string[]> {
 	const pattern = `(^|[^[:alnum:]])${escaped}`;
 	const rows = await prisma.$queryRaw<{ id: string }[]>`
 		SELECT id FROM "Team"
-		WHERE "name" ~* ${pattern}
-			OR "missionStatement" ~* ${pattern}
-			OR "location" ~* ${pattern}
-			OR "affiliation" ~* ${pattern}
-			OR "homeBase" ~* ${pattern}
-			OR EXISTS (
-				SELECT 1 FROM unnest(
-					"tags" || "personaRestrictions" || "sponsors" || "eventTypes" || "additionalLocations"
-				) AS item
-				WHERE item ~* ${pattern}
-			)
+		WHERE status = 'Approved'::"ReviewStatus" AND "searchText" ~* ${pattern}
 	`;
 	return rows.map((row) => row.id);
 }
@@ -204,7 +195,7 @@ async function queryClause(q: string): Promise<Prisma.TeamWhereInput> {
 async function buildWhere(
 	params: SearchParams,
 	resolved: SearchLocation | null,
-): Promise<Prisma.TeamWhereInput> {
+): Promise<{ where: Prisma.TeamWhereInput; constrained: boolean }> {
 	const q = params.q?.trim() ?? '';
 	const location = params.location?.trim() ?? '';
 	const and: Prisma.TeamWhereInput[] = [{ status: 'Approved' }];
@@ -244,7 +235,7 @@ async function buildWhere(
 		});
 	}
 
-	return { AND: and };
+	return { where: { AND: and }, constrained: and.length > 1 };
 }
 
 function pageBounds(total: number, requestedPage: number) {
@@ -253,17 +244,14 @@ function pageBounds(total: number, requestedPage: number) {
 	return { page, pageCount, skip: (page - 1) * TEAMS_PAGE_SIZE };
 }
 
-async function findTeamMilesWithin(
-	point: PointLocation,
-	radius: number,
-): Promise<Map<string, number>> {
+function nearbyTeams(point: PointLocation, radius: number): Prisma.Sql {
 	const latDelta = radius / MILES_PER_DEGREE_LATITUDE;
 	const lngDelta =
 		radius /
 		(MILES_PER_DEGREE_LATITUDE *
 			Math.max(Math.cos((point.latitude * Math.PI) / 180), 0.01));
 
-	const rows = await prisma.$queryRaw<{ id: string; miles: number }[]>`
+	return Prisma.sql`
 		SELECT id, MIN(miles) AS miles FROM (
 			SELECT t.id AS id, ${EARTH_RADIUS_MILES}::float8 * 2 * asin(sqrt(least(1,
 				power(sin(radians(t.latitude - ${point.latitude}::float8) / 2), 2) +
@@ -289,38 +277,30 @@ async function findTeamMilesWithin(
 		GROUP BY id
 		HAVING MIN(miles) <= ${radius}::float8
 	`;
+}
+
+async function findTeamMilesWithin(
+	point: PointLocation,
+	radius: number,
+): Promise<Map<string, number>> {
+	const rows = await prisma.$queryRaw<{ id: string; miles: number }[]>(
+		nearbyTeams(point, radius),
+	);
 
 	return new Map(rows.map((row) => [row.id, row.miles]));
 }
 
-interface RankedMatch {
-	id: string;
-	name: string;
-	skillLevels: string[];
-}
-
-const bySkillSpecificity = (a: RankedMatch, b: RankedMatch) =>
-	a.skillLevels.length - b.skillLevels.length;
-
-async function pageFromRanked(
-	matches: RankedMatch[],
-	requestedPage: number,
-): Promise<TeamSearchPage> {
-	const { page, pageCount, skip } = pageBounds(matches.length, requestedPage);
-	const pageIds = matches.slice(skip, skip + TEAMS_PAGE_SIZE).map((m) => m.id);
-	const rows = await prisma.team.findMany({ where: { id: { in: pageIds } } });
+async function loadTeamsInOrder(ids: string[]): Promise<Team[]> {
+	const rows = await prisma.team.findMany({ where: { id: { in: ids } } });
 	const rowsById = new Map(rows.map((row) => [row.id, row]));
 
-	const teams = pageIds.flatMap((id) => {
+	return ids.flatMap((id) => {
 		const row = rowsById.get(id);
-		if (!row) return [];
-		return [toTeam(row)];
+		return row ? [toTeam(row)] : [];
 	});
-
-	return { teams, total: matches.length, page, pageCount };
 }
 
-async function searchNear(
+async function searchNearFiltered(
 	where: Prisma.TeamWhereInput,
 	point: PointLocation,
 	radius: number,
@@ -331,31 +311,87 @@ async function searchNear(
 
 	const matches = await prisma.team.findMany({
 		where: { AND: [where, { id: { in: [...miles.keys()] } }] },
-		select: { id: true, name: true, skillLevels: true },
+		select: { id: true, name: true, skillSpecificity: true },
 	});
 	matches.sort(
 		(a, b) =>
-			(rankBySkill ? bySkillSpecificity(a, b) : 0) ||
+			(rankBySkill ? a.skillSpecificity - b.skillSpecificity : 0) ||
 			(miles.get(a.id) ?? 0) - (miles.get(b.id) ?? 0) ||
 			a.name.localeCompare(b.name),
 	);
 
-	return pageFromRanked(matches, requestedPage);
+	const { page, pageCount, skip } = pageBounds(matches.length, requestedPage);
+	const pageIds = matches.slice(skip, skip + TEAMS_PAGE_SIZE).map((m) => m.id);
+
+	return {
+		teams: await loadTeamsInOrder(pageIds),
+		total: matches.length,
+		page,
+		pageCount,
+	};
 }
 
-async function searchBySkillSpecificity(
-	where: Prisma.TeamWhereInput,
-	requestedPage: number,
-): Promise<TeamSearchPage> {
-	const matches = await prisma.team.findMany({
-		where,
-		select: { id: true, name: true, skillLevels: true },
-	});
-	matches.sort(
-		(a, b) => bySkillSpecificity(a, b) || a.name.localeCompare(b.name),
+async function nearbyPageIds(
+	point: PointLocation,
+	radius: number,
+	rankBySkill: boolean,
+	skip: number,
+): Promise<{ id: string; total: number }[]> {
+	const rows = await prisma.$queryRaw<{ id: string; total: bigint }[]>(
+		Prisma.sql`
+			SELECT t.id AS id, count(*) OVER () AS total
+			FROM (${nearbyTeams(point, radius)}) n
+			JOIN "Team" t ON t.id = n.id
+			ORDER BY ${rankBySkill ? Prisma.sql`t."skillSpecificity" ASC,` : Prisma.empty}
+				n.miles ASC, t.name ASC, t.id ASC
+			LIMIT ${TEAMS_PAGE_SIZE} OFFSET ${skip}
+		`,
 	);
 
-	return pageFromRanked(matches, requestedPage);
+	return rows.map((row) => ({ id: row.id, total: Number(row.total) }));
+}
+
+async function countNearby(
+	point: PointLocation,
+	radius: number,
+): Promise<number> {
+	const rows = await prisma.$queryRaw<{ total: bigint }[]>(
+		Prisma.sql`SELECT count(*) AS total FROM (${nearbyTeams(point, radius)}) n`,
+	);
+
+	return Number(rows[0]?.total ?? 0);
+}
+
+async function searchNearUnfiltered(
+	point: PointLocation,
+	radius: number,
+	requestedPage: number,
+	rankBySkill: boolean,
+): Promise<TeamSearchPage> {
+	const requestedSkip = (requestedPage - 1) * TEAMS_PAGE_SIZE;
+	const rows = await nearbyPageIds(point, radius, rankBySkill, requestedSkip);
+	if (rows.length > 0) {
+		const total = rows[0]?.total ?? 0;
+		const { page, pageCount } = pageBounds(total, requestedPage);
+		return {
+			teams: await loadTeamsInOrder(rows.map((row) => row.id)),
+			total,
+			page,
+			pageCount,
+		};
+	}
+
+	const total = requestedPage > 1 ? await countNearby(point, radius) : 0;
+	const { page, pageCount, skip } = pageBounds(total, requestedPage);
+	if (total === 0) return { teams: [], total, page, pageCount };
+
+	const clamped = await nearbyPageIds(point, radius, rankBySkill, skip);
+	return {
+		teams: await loadTeamsInOrder(clamped.map((row) => row.id)),
+		total,
+		page,
+		pageCount,
+	};
 }
 
 export async function searchApprovedTeams(
@@ -364,26 +400,26 @@ export async function searchApprovedTeams(
 ): Promise<TeamSearchPage> {
 	const location = params.location?.trim() ?? '';
 	const resolved = location ? await resolveSearchLocation(location) : null;
-	const where = await buildWhere(params, resolved);
+	const { where, constrained } = await buildWhere(params, resolved);
 
 	if (resolved?.kind === 'point') {
-		return searchNear(
-			where,
-			resolved,
-			params.radius ?? DEFAULT_RADIUS_MILES,
-			requestedPage,
-			Boolean(params.skillLevel),
-		);
+		const radius = params.radius ?? DEFAULT_RADIUS_MILES;
+		const rankBySkill = Boolean(params.skillLevel);
+		return constrained ?
+				searchNearFiltered(where, resolved, radius, requestedPage, rankBySkill)
+			:	searchNearUnfiltered(resolved, radius, requestedPage, rankBySkill);
 	}
-
-	if (params.skillLevel) return searchBySkillSpecificity(where, requestedPage);
 
 	const total = await prisma.team.count({ where });
 	const { page, pageCount, skip } = pageBounds(total, requestedPage);
 
 	const rows = await prisma.team.findMany({
 		where,
-		orderBy: [{ name: 'asc' }, { id: 'asc' }],
+		orderBy: [
+			...(params.skillLevel ? [{ skillSpecificity: 'asc' as const }] : []),
+			{ name: 'asc' },
+			{ id: 'asc' },
+		],
 		skip,
 		take: TEAMS_PAGE_SIZE,
 	});
@@ -398,7 +434,10 @@ export async function searchApprovedRides(
 ): Promise<CalendarRidesResult> {
 	const location = params.location?.trim() ?? '';
 	const resolved = location ? await resolveSearchLocation(location) : null;
-	const where = await buildWhere({ ...params, type: 'Group Ride' }, resolved);
+	const { where } = await buildWhere(
+		{ ...params, type: 'Group Ride' },
+		resolved,
+	);
 
 	const scoped: Prisma.TeamWhereInput =
 		resolved?.kind === 'point' ?

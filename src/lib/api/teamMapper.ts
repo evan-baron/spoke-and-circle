@@ -1,6 +1,6 @@
 import { Prisma } from '../../../generated/prisma/client';
 import type {
-	Team as TeamRow,
+	Team as GeneratedTeamRow,
 	TeamMedia as TeamMediaRow,
 } from '../../../generated/prisma/client';
 import { mediaBaseUrl } from '../cloudinary';
@@ -23,7 +23,11 @@ import {
 import { stripInstagramHandle } from '../instagram';
 import { timeZoneFor } from '../timeZone';
 
-export type TeamRowWithMedia = TeamRow & { media?: TeamMediaRow[] };
+type TeamRow = Omit<GeneratedTeamRow, 'searchText'>;
+
+export type TeamRowWithMedia = TeamRow & {
+	media?: TeamMediaRow[];
+};
 
 function toMediaItems(rows: TeamMediaRow[] | undefined): TeamMediaItem[] {
 	return [...(rows ?? [])]

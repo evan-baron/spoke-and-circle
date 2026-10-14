@@ -106,6 +106,9 @@ model Team {
 
   tags String[]
 
+  skillSpecificity Int    @default(0)
+  searchText       String @default("")
+
   additionalPlaces TeamLocation[]
   claims           TeamClaim[]
   media            TeamMedia[]
@@ -113,10 +116,13 @@ model Team {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@index([status])
+  @@index([status, name, id])
+  @@index([status, createdAt])
   @@index([deleteAfter])
   @@index([bikeTypes], type: Gin)
-  @@index([location])
+  @@index([name(ops: raw("gin_trgm_ops"))], type: Gin, map: "Team_name_trgm_idx")
+  @@index([location(ops: raw("gin_trgm_ops"))], type: Gin, map: "Team_location_trgm_idx")
+  @@index([searchText(ops: raw("gin_trgm_ops"))], type: Gin, map: "Team_searchText_trgm_idx")
   @@index([latitude, longitude])
   @@index([affiliatedId])
 }

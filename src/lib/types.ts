@@ -215,11 +215,6 @@ export interface AdminTeamsResponse extends TeamListPage {
   success: boolean;
 }
 
-export interface TeamsResponse {
-  success: boolean;
-  teams: Team[];
-}
-
 export interface TeamFormValues {
   name: string;
   type: string;

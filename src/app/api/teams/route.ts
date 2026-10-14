@@ -7,7 +7,7 @@ import {
 	withPublicRateLimit,
 } from '@/lib/api';
 import { readJsonObject } from '@/lib/api/readJsonObject';
-import { toTeam, toTeamCreateInput } from '@/lib/api/teamMapper';
+import { toTeamCreateInput } from '@/lib/api/teamMapper';
 import { isAntiBotAnswerCorrect } from '@/lib/data/mathQuestions';
 import {
 	antiBotSchema,
@@ -20,22 +20,9 @@ import {
 	findUnknownLocations,
 	resolveCoordinates,
 } from '@/services/placeService';
+import { revalidateTeams } from '@/lib/teamCache';
 import { syncAdditionalPlaces } from '@/services/teamLocationService';
 import { prepareTeamMedia, saveTeamMedia } from '@/services/teamMediaService';
-
-export const GET = withPublicRateLimit('teams-read', async () => {
-	try {
-		const teams = await prisma.team.findMany({
-			where: { status: 'Approved' },
-			orderBy: { name: 'asc' },
-		});
-
-		return NextResponse.json({ success: true, teams: teams.map(toTeam) });
-	} catch (error) {
-		console.error('Error fetching teams:', error);
-		return json500('We could not load teams. Please try again.');
-	}
-});
 
 async function getSubmitter(): Promise<
 	{ id: string; isAdmin: boolean } | undefined
@@ -144,6 +131,8 @@ export const POST = withPublicRateLimit('teams-write', async (request) => {
 		} catch (error) {
 			console.error('Error saving team media:', error);
 		}
+
+		if (published) revalidateTeams(team.id);
 
 		return NextResponse.json(
 			{ success: true, published, team: { id: team.id } },

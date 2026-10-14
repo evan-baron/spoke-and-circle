@@ -4,7 +4,6 @@ import type {
 	CreateTeamResponse,
 	LocationsResponse,
 	TeamSearchResponse,
-	TeamsResponse,
 	UserOption,
 } from '@/lib/types';
 import { ApiError } from '@/services/apiError';
@@ -36,7 +35,6 @@ const apiCall = async <T = unknown>(
 };
 
 export const teamAPI = {
-	read: () => apiCall<TeamsResponse>('/api/teams', { method: 'GET' }),
 	create: (payload: unknown) =>
 		apiCall<CreateTeamResponse>('/api/teams', {
 			method: 'POST',
