@@ -37,5 +37,11 @@ export default async function NewTeamPage({
 
 	const user = await getCurrentUser();
 
-	return <NewTeamForm initialValues={initialValues} canUploadMedia={!!user} />;
+	return (
+		<NewTeamForm
+			initialValues={initialValues}
+			canUploadMedia={!!user}
+			isSignedIn={!!user}
+		/>
+	);
 }

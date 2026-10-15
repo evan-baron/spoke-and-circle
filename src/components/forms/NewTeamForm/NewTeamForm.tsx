@@ -12,11 +12,13 @@ import { ArrowIcon } from '@/components/ui/ArrowIcon/ArrowIcon';
 interface NewTeamFormProps {
 	initialValues?: TeamFormValues;
 	canUploadMedia: boolean;
+	isSignedIn: boolean;
 }
 
 export function NewTeamForm({
 	initialValues,
 	canUploadMedia,
+	isSignedIn,
 }: NewTeamFormProps) {
 	const [submitted, setSubmitted] = useState(false);
 	const [published, setPublished] = useState(false);
@@ -102,6 +104,7 @@ export function NewTeamForm({
 					initialValues={initialValues}
 					lockedToParent={!!parentId}
 					canUploadMedia={canUploadMedia}
+					isSignedIn={isSignedIn}
 					onSubmit={async (payload) => {
 						const result = await teamAPI.create(payload);
 						if (!result.published) await invalidatePendingCount();

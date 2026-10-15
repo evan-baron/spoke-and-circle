@@ -20,6 +20,7 @@ interface GenericInfoSectionProps {
 	excludeTeamId?: string;
 	lockedToParent?: boolean;
 	namePrefix?: string;
+	requireContactEmail?: boolean;
 }
 
 export function GenericInfoSection({
@@ -32,6 +33,7 @@ export function GenericInfoSection({
 	excludeTeamId,
 	lockedToParent,
 	namePrefix,
+	requireContactEmail,
 }: GenericInfoSectionProps) {
 	const [name, setName] = useState(values.name);
 	const locationId = useId();
@@ -193,10 +195,11 @@ export function GenericInfoSection({
 						className={styles.input}
 					/>
 				</Field>
-				<Field label='Contact email'>
+				<Field label='Contact email' required={requireContactEmail}>
 					<input
 						type='email'
 						name='contactEmail'
+						required={requireContactEmail}
 						defaultValue={values.contactEmail}
 						placeholder='hello@yourteam.org'
 						className={styles.input}

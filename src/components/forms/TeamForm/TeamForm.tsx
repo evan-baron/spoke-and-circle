@@ -29,6 +29,7 @@ import { RideDetailsSection } from './RideDetailsSection';
 import { SaveBar } from './SaveBar';
 import { Section } from './Section';
 import { SectionNav } from './SectionNav';
+import { SignInRequiredDialog } from './SignInRequiredDialog';
 import { StepActions } from './StepActions';
 import { SubmitActions } from './SubmitActions';
 import { SubmitErrors } from './SubmitErrors';
@@ -48,6 +49,7 @@ export interface TeamFormProps {
 	lockedToParent?: boolean;
 	cancelHref?: string;
 	canUploadMedia?: boolean;
+	isSignedIn?: boolean;
 }
 
 export function TeamForm({
@@ -62,6 +64,7 @@ export function TeamForm({
 	lockedToParent = false,
 	cancelHref,
 	canUploadMedia = true,
+	isSignedIn = true,
 }: TeamFormProps) {
 	const values = initialValues ?? DEFAULT_TEAM_FORM_VALUES;
 	const isReview = mode === 'review';
@@ -78,6 +81,7 @@ export function TeamForm({
 		[],
 	);
 	const [groupType, setGroupType] = useState(values.type);
+	const [signInPromptOpen, setSignInPromptOpen] = useState(false);
 	const showMedia = groupType !== 'Group Ride';
 	const [affiliationLabel, setAffiliationLabel] = useState(values.affiliation);
 	const [affiliatedId, setAffiliatedId] = useState(values.affiliatedId);
@@ -98,6 +102,9 @@ export function TeamForm({
 		values.segmentation,
 	);
 	const isCreate = mode === 'create';
+	const needsSignIn = isCreate && !isSignedIn && groupType === 'Group Ride';
+	const requireContactEmail =
+		isCreate && groupType === 'Group Ride' && !lockedToParent;
 	const steps = getFormSteps(groupType);
 	const lastStep = steps.length - 1;
 	const [step, setStep] = useState(0);
@@ -264,6 +271,11 @@ export function TeamForm({
 			return;
 		}
 
+		if (needsSignIn) {
+			setSignInPromptOpen(true);
+			return;
+		}
+
 		const payload = buildTeamPayload(event.currentTarget);
 		await run(() => onSubmit(payload));
 	}
@@ -272,6 +284,13 @@ export function TeamForm({
 		if (!onReject || busyRef.current) return;
 		setConfirmingReject(false);
 		await run(() => onReject(rejectionReason.trim() || undefined));
+	}
+
+	function handleGroupTypeChange(type: string) {
+		setGroupType(type);
+		if (isCreate && !isSignedIn && type === 'Group Ride') {
+			setSignInPromptOpen(true);
+		}
 	}
 
 	function handlePersonaChange(value: string) {
@@ -294,7 +313,8 @@ export function TeamForm({
 		<GenericInfoSection
 			values={values}
 			groupType={groupType}
-			onGroupTypeChange={setGroupType}
+			onGroupTypeChange={handleGroupTypeChange}
+			requireContactEmail={requireContactEmail}
 			affiliationLabel={affiliationLabel}
 			affiliatedId={affiliatedId}
 			onAffiliationChange={(label, id) => {
@@ -447,6 +467,11 @@ export function TeamForm({
 					open={guard.prompting}
 					onStay={guard.stay}
 					onLeave={guard.leave}
+				/>
+
+				<SignInRequiredDialog
+					open={signInPromptOpen}
+					onCancel={() => setSignInPromptOpen(false)}
 				/>
 			</form>
 		);

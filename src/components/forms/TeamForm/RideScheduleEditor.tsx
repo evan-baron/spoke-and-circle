@@ -76,9 +76,10 @@ export function RideScheduleEditor({ initialRide }: RideScheduleEditorProps) {
 					</select>
 				</Field>
 
-				<Field label='Start time'>
+				<Field label='Start time' required>
 					<input
 						type='time'
+						required
 						value={ride.startTime ?? ''}
 						onChange={(event) => updateRide({ startTime: event.target.value })}
 						className={formStyles.input}

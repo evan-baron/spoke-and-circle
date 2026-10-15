@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import {
 	json400,
+	json401,
 	json500,
 	jsonValidationError,
 	withPublicRateLimit,
@@ -91,8 +92,19 @@ export const POST = withPublicRateLimit('teams-write', async (request) => {
 	const resolvedName = await resolveTeamName(parsed.data);
 	if ('error' in resolvedName) return json400(resolvedName.error);
 
+	const submitter = await getSubmitter();
+
+	if (parsed.data.type === 'Group Ride') {
+		if (!submitter) return json401('Sign in to submit a group ride.');
+		if (!parsed.data.ride?.startTime) {
+			return json400('Start time is required for a group ride.');
+		}
+		if (!parsed.data.affiliatedId && !parsed.data.contactEmail) {
+			return json400('Contact email is required for a standalone group ride.');
+		}
+	}
+
 	try {
-		const submitter = await getSubmitter();
 		const published = submitter?.isAdmin === true;
 
 		const preparedMedia = await prepareTeamMedia(
