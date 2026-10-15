@@ -26,6 +26,86 @@
 	}
 }
 
+.modeGroup {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--space-xs) var(--space-md);
+	border: 0;
+	padding: 0;
+	margin: 0;
+	min-width: 0;
+}
+
+.modeLegend {
+	@include eyebrow;
+	float: left;
+	padding: 0;
+}
+
+.modeOption {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	font-size: 0.9375rem;
+	font-weight: 600;
+	cursor: pointer;
+
+	input {
+		position: absolute;
+		width: 1.4rem;
+		height: 1.4rem;
+		margin: 0;
+		opacity: 0;
+		cursor: pointer;
+	}
+}
+
+.modeRadio {
+	position: relative;
+	flex-shrink: 0;
+	width: 1rem;
+	height: 1rem;
+	box-sizing: border-box;
+	border: 2px solid var(--color-line);
+	border-radius: 50%;
+	transition: border-color 0.2s ease;
+
+	&::after {
+		content: '';
+		position: absolute;
+		inset: 2px;
+		border-radius: 50%;
+		background: var(--color-line);
+		opacity: 0;
+		transition: opacity 0.2s ease;
+	}
+
+	.modeOption:hover & {
+		border-color: var(--color-coral);
+	}
+
+	input:checked + & {
+		&::after {
+			opacity: 1;
+		}
+	}
+
+	input:focus-visible + & {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 2px;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		transition: none;
+
+		&::after {
+			transition: none;
+		}
+	}
+}
+
 .quizLink {
 	font-size: 0.8125rem;
 	font-weight: 600;
@@ -82,6 +162,16 @@ select.input {
 
 	.label {
 		color: hsl(0, 0%, 100%, 0.85);
+	}
+
+	.modeLegend,
+	.modeOption {
+		color: hsl(0, 0%, 100%, 0.9);
+	}
+
+	.modeRadio,
+	.modeOption:hover .modeRadio {
+		border-color: var(--color-paper);
 	}
 
 	.input {
