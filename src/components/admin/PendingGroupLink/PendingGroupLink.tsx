@@ -49,9 +49,15 @@ export function PendingGroupLink({
 
 	return (
 		<>
+			<Link
+				href={reviewHref}
+				className={`${styles.desktopOnly} ${linkClassName ?? ''}`}
+			>
+				{name}
+			</Link>
 			<button
 				type='button'
-				className={`${styles.trigger} ${linkClassName ?? ''}`}
+				className={`${styles.trigger} ${styles.mobileOnly} ${linkClassName ?? ''}`}
 				onClick={() => setOpen(true)}
 			>
 				{name}

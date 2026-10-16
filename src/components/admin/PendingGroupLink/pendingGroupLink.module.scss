@@ -20,6 +20,20 @@
 	}
 }
 
+.mobileOnly {
+	@include from($bp-md) {
+		display: none;
+	}
+}
+
+.desktopOnly {
+	display: none;
+
+	@include from($bp-md) {
+		display: inline;
+	}
+}
+
 .dialog {
 	@include card;
 	margin: auto;

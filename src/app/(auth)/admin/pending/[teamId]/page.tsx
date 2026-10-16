@@ -6,8 +6,6 @@ import TeamOwnerTransfer from '@/components/team/TeamOwnerTransfer/TeamOwnerTran
 import { toTeamFormValues } from '@/lib/api/teamMapper';
 import { formatSubmittedDate, formatSubmitter } from '@/lib/format';
 import { prisma } from '@/lib/prisma';
-import { PossibleDuplicates } from '@/components/admin/PossibleDuplicates/PossibleDuplicates';
-import { findPossibleDuplicates } from '@/services/duplicateService';
 import { requireAdmin } from '@/services/currentUserService';
 import styles from '../../admin.module.scss';
 import { ArrowIcon } from '@/components/ui/ArrowIcon/ArrowIcon';
@@ -36,8 +34,6 @@ export default async function AdminReviewPendingPage({
 	});
 	if (!team) notFound();
 
-	const duplicates = (await findPossibleDuplicates([team])).get(team.id) ?? [];
-
 	const submitter =
 		team.submittedBy ?
 			{
@@ -57,16 +53,6 @@ export default async function AdminReviewPendingPage({
 					Submitted {formatSubmittedDate(team.createdAt)} by{' '}
 					{formatSubmitter(team.submittedBy)}
 				</p>
-
-				{duplicates.length > 0 && (
-					<div className={styles.notice} role='status'>
-						<p>
-							<strong>Possible duplicate.</strong> This submission shares
-							details or a similar name with an existing listing:
-						</p>
-						<PossibleDuplicates matches={duplicates} />
-					</div>
-				)}
 
 				<TeamOwnerTransfer
 					teamId={team.id}
