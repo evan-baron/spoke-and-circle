@@ -387,7 +387,7 @@ export function TeamDetail({
 									value={
 										<span className={styles.rideValue}>
 											<Link
-												href={`/teams/${ride.id}`}
+												href={`/group-rides/${ride.id}`}
 												className={styles.affiliationLink}
 											>
 												{ride.name}

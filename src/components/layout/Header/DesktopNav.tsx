@@ -29,12 +29,14 @@ const DesktopNav = ({ user }: DesktopNavProps) => {
 						Welcome, {user.firstName || user.name?.split(' ')[0] || user.email}
 					</p>
 				)} */}
-				{user && user.isAdmin ?
+				{user && user.isAdmin && (
 					<AdminNavLink initialCount={user.pendingCount} />
-				:	<Link href='/dashboard' className={styles.navLink}>
+				)}
+				{user && !user.isAdmin && (
+					<Link href='/dashboard' className={styles.navLink}>
 						My Teams
 					</Link>
-				}
+				)}
 				<Link href='/about' className={styles.navLink}>
 					About
 				</Link>

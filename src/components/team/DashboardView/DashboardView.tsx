@@ -7,6 +7,7 @@ import { Badge, type BadgeTone } from '@/components/ui/Badge/Badge';
 import DeleteTeamButton from '@/components/team/DeleteTeamButton/DeleteTeamButton';
 import { TeamForm } from '@/components/forms/TeamForm/TeamForm';
 import { useInvalidatePendingTeamCount } from '@/hooks/usePendingTeamCount';
+import { teamPath } from '@/lib/teamPaths';
 import { teamAPI } from '@/services/api';
 import styles from './dashboardView.module.scss';
 
@@ -55,7 +56,7 @@ const TeamList = ({ items, emptyMessage }: TeamListProps) => {
 			{items.map((team) => (
 				<li key={team.id} className={styles.teamRow}>
 					<div className={styles.teamInfo}>
-						<Link href={`/teams/${team.id}`} className={styles.teamName}>
+						<Link href={teamPath(team)} className={styles.teamName}>
 							{team.name}
 						</Link>
 						<span className={styles.teamLocation}>{team.location}</span>
@@ -176,7 +177,7 @@ const DashboardView = ({ teams }: DashboardViewProps) => {
 									</button>
 									{published && publishedTeamId && (
 										<Link
-											href={`/teams/${publishedTeamId}`}
+											href={`/${submittedRide ? 'group-rides' : 'teams'}/${publishedTeamId}`}
 											className={styles.buttonOutline}
 										>
 											{submittedRide ? 'View group ride' : 'View team'}

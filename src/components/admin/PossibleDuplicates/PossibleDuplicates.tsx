@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { teamPath } from '@/lib/teamPaths';
 import type { PossibleDuplicate } from '@/services/duplicateService';
 import styles from './possibleDuplicates.module.scss';
 
@@ -24,7 +25,7 @@ export function PossibleDuplicates({ matches }: PossibleDuplicatesProps) {
 						href={
 							match.status === 'Pending' ?
 								`/admin/pending/${match.id}`
-							:	`/teams/${match.id}`
+							:	teamPath(match)
 						}
 						target='_blank'
 						rel='noopener noreferrer'

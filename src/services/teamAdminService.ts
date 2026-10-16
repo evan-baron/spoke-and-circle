@@ -53,6 +53,7 @@ export async function approvePendingTeam(
 			firstName: pending.submittedBy.firstName,
 			teamName: input.name,
 			teamId: id,
+			teamType: input.type,
 			sentByAdminId: adminId,
 		});
 		return { emailStatus };

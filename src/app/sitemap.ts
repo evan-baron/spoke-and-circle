@@ -1,7 +1,9 @@
 import type { MetadataRoute } from 'next';
 import { unstable_cache } from 'next/cache';
+import { clubType } from '@/lib/enums';
 import { prisma } from '@/lib/prisma';
 import { getSiteUrl } from '@/lib/siteConfig';
+import { teamPath } from '@/lib/teamPaths';
 import { TEAMS_TAG } from '@/lib/teamCache';
 
 export const dynamic = 'force-dynamic';
@@ -13,12 +15,13 @@ const getSitemapTeams = unstable_cache(
 	async () => {
 		const teams = await prisma.team.findMany({
 			where: { status: 'Approved' },
-			select: { id: true, updatedAt: true },
+			select: { id: true, type: true, updatedAt: true },
 			orderBy: { updatedAt: 'desc' },
 			take: MAX_TEAM_URLS,
 		});
 		return teams.map((team) => ({
 			id: team.id,
+			type: clubType.fromDb[team.type],
 			updatedAt: team.updatedAt.toISOString(),
 		}));
 	},
@@ -80,7 +83,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			priority: 0.2,
 		},
 		...teams.map((team) => ({
-			url: `${baseUrl}/teams/${team.id}`,
+			url: `${baseUrl}${teamPath(team)}`,
 			lastModified: new Date(team.updatedAt),
 			changeFrequency: 'weekly' as const,
 			priority: 0.7,

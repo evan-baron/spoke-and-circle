@@ -334,7 +334,7 @@ export function RideCalendar({
 									</div>
 									<div className={styles.agendaBody}>
 										<Link
-											href={`/teams/${entry.ride.id}`}
+											href={`/group-rides/${entry.ride.id}`}
 											className={styles.agendaName}
 										>
 											<span className={styles.agendaNameText}>

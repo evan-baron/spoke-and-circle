@@ -4,6 +4,7 @@ import {
 	renderEmailLayout,
 	renderParagraph,
 } from '@/lib/emailLayout';
+import { teamPath } from '@/lib/teamPaths';
 import { getSiteUrl } from '@/lib/siteConfig';
 import {
 	type EmailStatus,
@@ -16,6 +17,7 @@ interface ApprovalEmail {
 	firstName?: string | null;
 	teamName: string;
 	teamId: string;
+	teamType: string;
 	sentByAdminId: string;
 }
 
@@ -53,12 +55,13 @@ export async function sendApprovalEmail({
 	firstName,
 	teamName,
 	teamId,
+	teamType,
 	sentByAdminId,
 }: ApprovalEmail): Promise<EmailStatus> {
 	const name = firstName ? toSingleLine(firstName, 50) : '';
 	const team = toSingleLine(teamName, 100);
 	const greeting = name ? `Hi ${name},` : 'Hi,';
-	const teamUrl = `${getSiteUrl()}/teams/${encodeURIComponent(teamId)}`;
+	const teamUrl = `${getSiteUrl()}${teamPath({ id: teamId, type: teamType })}`;
 
 	const lines = [
 		greeting,

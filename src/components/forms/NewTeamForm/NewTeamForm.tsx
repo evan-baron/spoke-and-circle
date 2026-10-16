@@ -55,7 +55,7 @@ export function NewTeamForm({
 							</Link>
 							{published && publishedTeamId && (
 								<Link
-									href={`/teams/${publishedTeamId}`}
+									href={`/${submittedRide ? 'group-rides' : 'teams'}/${publishedTeamId}`}
 									className={styles.buttonOutline}
 								>
 									{submittedRide ? 'View group ride' : 'View team'}

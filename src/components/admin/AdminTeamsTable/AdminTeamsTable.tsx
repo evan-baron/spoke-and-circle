@@ -8,6 +8,7 @@ import tableStyles from '@/components/search/ResultsTable/resultsTable.module.sc
 import { describeSubmitError } from '@/components/forms/TeamForm/describeSubmitError';
 import { useAdminTeams, useInvalidateAdminTeams } from '@/hooks/useAdminTeams';
 import { formatSkillLevelLines } from '@/lib/format';
+import { teamPath } from '@/lib/teamPaths';
 import type { RawSearchParams } from '@/lib/searchParams';
 import {
 	toneForCompetitiveOrCasual,
@@ -206,7 +207,7 @@ export function AdminTeamsTable({
 										onChange={() => toggleOne(team.id)}
 									/>
 									<Link
-										href={`/teams/${team.id}`}
+										href={teamPath(team)}
 										className={`${tableStyles.cardLink} ${styles.cardLink}`}
 									>
 										<div className={tableStyles.cardHeader}>
@@ -307,7 +308,7 @@ export function AdminTeamsTable({
 									</td>
 									<td>
 										<Link
-											href={`/teams/${team.id}`}
+											href={teamPath(team)}
 											className={tableStyles.rowLink}
 										>
 											{team.name}

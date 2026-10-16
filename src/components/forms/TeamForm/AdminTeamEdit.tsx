@@ -1,6 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import { teamPath } from '@/lib/teamPaths';
 import type { TeamFormValues } from '@/lib/types';
 import { adminAPI } from '@/services/api';
 import { TeamForm } from './TeamForm';
@@ -24,10 +25,10 @@ export function AdminTeamEdit({
 			initialValues={initialValues}
 			initialVerified={initialVerified}
 			excludeTeamId={teamId}
-			cancelHref={`/teams/${teamId}`}
+			cancelHref={teamPath({ id: teamId, type: initialValues.type })}
 			onSubmit={async (payload) => {
 				await adminAPI.updateTeam(teamId, payload);
-				router.push(`/teams/${teamId}`);
+				router.push(teamPath({ id: teamId, type: initialValues.type }));
 				router.refresh();
 			}}
 		/>

@@ -5,6 +5,7 @@ import Crank from '@/components/ui/Graphics/Crank';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { SITE_NAME } from '@/lib/siteConfig';
 import { formatRideRecurrence } from '@/lib/format';
+import { teamPath } from '@/lib/teamPaths';
 import type { Team } from '@/lib/types';
 import { RIDE_STYLES, getHomeData } from '@/services/homeService';
 import styles from './page.module.scss';
@@ -133,7 +134,7 @@ export default async function HomePage() {
 									{data.recent.map((team) => (
 										<li key={team.id}>
 											<Link
-												href={`/teams/${team.id}`}
+												href={teamPath(team)}
 												className={styles.recentRow}
 											>
 												<span className={styles.recentMain}>
