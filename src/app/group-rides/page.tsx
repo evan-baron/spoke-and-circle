@@ -35,10 +35,10 @@ export default async function GroupRidesPage({
 		month,
 		...parsed
 	} = parseSearchParams({ ...rawParams, type: 'Group Ride' });
-	const usingDefaultLocation = !parsed.location;
+	const usingDefaultLocation = rawParams.location === undefined;
 	const params = {
 		...parsed,
-		location: parsed.location || DEFAULT_LOCATION,
+		location: usingDefaultLocation ? DEFAULT_LOCATION : parsed.location,
 	};
 	const isCalendarView = view === 'calendar';
 	const includeOffSeason = rawParams.offSeason === 'true';
@@ -79,8 +79,10 @@ export default async function GroupRidesPage({
 				{!calendar && (
 					<div className={styles.status}>
 						<p className={styles.count}>
-							{total} {total === 1 ? 'ride' : 'rides'} within {params.radius}{' '}
-							miles of {params.location}
+							{total} {total === 1 ? 'ride' : 'rides'}
+							{params.location ?
+								` within ${params.radius} miles of ${params.location}`
+							:	''}
 						</p>
 
 						{list && (

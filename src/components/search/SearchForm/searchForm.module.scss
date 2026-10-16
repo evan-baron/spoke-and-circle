@@ -177,6 +177,7 @@ select.input {
 
 	&:disabled {
 		opacity: 1;
+		color: hsla(281, 8%, 42%, 0.75);
 		cursor: not-allowed;
 	}
 }
