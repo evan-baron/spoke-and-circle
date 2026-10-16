@@ -1,9 +1,11 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { clubType } from '@/lib/enums';
 import { formatSubmittedDate, formatSubmitter } from '@/lib/format';
 import { prisma } from '@/lib/prisma';
 import { Badge } from '@/components/ui/Badge/Badge';
 import { PossibleDuplicates } from '@/components/admin/PossibleDuplicates/PossibleDuplicates';
+import { PendingGroupLink } from '@/components/admin/PendingGroupLink/PendingGroupLink';
 import {
 	DUPLICATE_CHECK_SELECT,
 	findPossibleDuplicates,
@@ -54,6 +56,7 @@ export default async function AdminPendingPage({
 			select: {
 				...DUPLICATE_CHECK_SELECT,
 				name: true,
+				location: true,
 				createdAt: true,
 				submittedBy: {
 					select: { firstName: true, lastName: true, email: true },
@@ -92,23 +95,29 @@ export default async function AdminPendingPage({
 									<th>Name</th>
 									<th>Submitted</th>
 									<th>Submitted by</th>
-									<th>Possible duplicates</th>
+									<th className={styles.duplicatesCol}>Possible duplicates</th>
 								</tr>
 							</thead>
 							<tbody>
 								{teams.map((team) => (
 									<tr key={team.id}>
 										<td className={styles.nameCell}>
-											<Link href={`/admin/pending/${team.id}`} className={styles.nameLink}>
-												{team.name}
-											</Link>
+											<PendingGroupLink
+												teamId={team.id}
+												name={team.name}
+												typeLabel={clubType.fromDb[team.type]}
+												location={team.location}
+												submittedBy={formatSubmitter(team.submittedBy)}
+												submittedOn={formatSubmittedDate(team.createdAt)}
+												matches={duplicates.get(team.id) ?? []}
+												linkClassName={styles.nameLink}
+											/>
 											{duplicates.has(team.id) && (
-												<>
-													{' '}
+												<span className={styles.nameBadge}>
 													{duplicates.get(team.id)?.some((match) => !match.nameOnly) ?
 														<Badge tone='rust'>Possible duplicate</Badge>
 													:	<Badge tone='gold'>Similar name</Badge>}
-												</>
+												</span>
 											)}
 										</td>
 										<td>
@@ -117,7 +126,7 @@ export default async function AdminPendingPage({
 											</time>
 										</td>
 										<td>{formatSubmitter(team.submittedBy)}</td>
-										<td>
+										<td className={styles.duplicatesCol}>
 											{duplicates.has(team.id) && (
 												<PossibleDuplicates matches={duplicates.get(team.id) ?? []} />
 											)}

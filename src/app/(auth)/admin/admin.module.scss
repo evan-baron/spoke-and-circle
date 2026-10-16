@@ -127,7 +127,7 @@
 		padding: 0.75rem var(--space-xs);
 		border-bottom: 1px solid var(--color-line);
 		font-size: 0.9375rem;
-		vertical-align: middle;
+		vertical-align: top;
 	}
 
 	tbody tr {
@@ -136,6 +136,25 @@
 		&:hover {
 			background: var(--color-paper-raised);
 		}
+	}
+}
+
+.duplicatesCol {
+	display: none;
+
+	@include from($bp-md) {
+		display: table-cell;
+	}
+}
+
+.nameBadge {
+	display: block;
+	margin-top: 0.4rem;
+
+	@include from($bp-md) {
+		display: inline-block;
+		margin-top: 0;
+		margin-left: 0.5rem;
 	}
 }
 

@@ -1,0 +1,98 @@
+@use '@/styles/mixins' as *;
+
+.trigger {
+	padding: 0;
+	border: 0;
+	background: none;
+	font: inherit;
+	font-weight: inherit;
+	color: inherit;
+	text-align: left;
+	cursor: pointer;
+
+	&:hover {
+		color: var(--color-coral);
+	}
+
+	&:focus-visible {
+		outline: 2px solid var(--color-primary);
+		outline-offset: 2px;
+	}
+}
+
+.dialog {
+	@include card;
+	margin: auto;
+	padding: var(--space-md);
+	width: min(32rem, calc(100% - 2rem));
+	max-height: min(36rem, calc(100dvh - 2rem));
+	overflow: hidden;
+	color: var(--color-ink);
+
+	&::backdrop {
+		background: hsl(291, 25%, 15%, 0.5);
+	}
+
+	&[open] {
+		display: flex;
+		flex-direction: column;
+		gap: var(--space-sm);
+	}
+}
+
+.scroll {
+	display: flex;
+	flex-direction: column;
+	gap: var(--space-sm);
+	flex: 1;
+	min-height: 0;
+	overflow-y: auto;
+	overscroll-behavior: contain;
+}
+
+.title {
+	font-size: 1.25rem;
+}
+
+.eyebrow {
+	@include eyebrow;
+	margin-bottom: 0.35rem;
+}
+
+.submitted {
+	display: flex;
+	flex-direction: column;
+	gap: 0.15rem;
+}
+
+.submittedName {
+	font-size: 1.0625rem;
+	font-weight: 700;
+}
+
+.meta {
+	font-size: 0.8125rem;
+	color: var(--color-ink-soft);
+}
+
+.divider {
+	width: 100%;
+	margin: 0;
+	border: 0;
+	border-top: 1px solid var(--color-line);
+}
+
+.actions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: flex-end;
+	gap: var(--space-xs);
+}
+
+.buttonOutline {
+	@include button-outline;
+}
+
+.buttonSolid {
+	@include button-solid;
+}
