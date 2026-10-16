@@ -21,7 +21,7 @@ import {
 	findUnknownLocations,
 	resolveCoordinates,
 } from '@/services/placeService';
-import { revalidateTeams } from '@/lib/teamCache';
+import { revalidateDuplicateCandidates, revalidateTeams } from '@/lib/teamCache';
 import { syncAdditionalPlaces } from '@/services/teamLocationService';
 import { prepareTeamMedia, saveTeamMedia } from '@/services/teamMediaService';
 
@@ -145,6 +145,7 @@ export const POST = withPublicRateLimit('teams-write', async (request) => {
 		}
 
 		if (published) revalidateTeams(team.id);
+		else revalidateDuplicateCandidates();
 
 		return NextResponse.json(
 			{ success: true, published, team: { id: team.id } },

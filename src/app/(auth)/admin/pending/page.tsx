@@ -2,6 +2,12 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { formatSubmittedDate, formatSubmitter } from '@/lib/format';
 import { prisma } from '@/lib/prisma';
+import { Badge } from '@/components/ui/Badge/Badge';
+import { PossibleDuplicates } from '@/components/admin/PossibleDuplicates/PossibleDuplicates';
+import {
+	DUPLICATE_CHECK_SELECT,
+	findPossibleDuplicates,
+} from '@/services/duplicateService';
 import { requireAdmin } from '@/services/currentUserService';
 import styles from '../admin.module.scss';
 import { ArrowIcon } from '@/components/ui/ArrowIcon/ArrowIcon';
@@ -46,7 +52,7 @@ export default async function AdminPendingPage({
 			orderBy: { createdAt: 'asc' },
 			take: MAX_ROWS,
 			select: {
-				id: true,
+				...DUPLICATE_CHECK_SELECT,
 				name: true,
 				createdAt: true,
 				submittedBy: {
@@ -56,6 +62,7 @@ export default async function AdminPendingPage({
 		}),
 		prisma.team.count({ where }),
 	]);
+	const duplicates = await findPossibleDuplicates(teams);
 
 	return (
 		<div className={styles.subPage}>
@@ -85,6 +92,7 @@ export default async function AdminPendingPage({
 									<th>Name</th>
 									<th>Submitted</th>
 									<th>Submitted by</th>
+									<th>Possible duplicates</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -94,6 +102,14 @@ export default async function AdminPendingPage({
 											<Link href={`/admin/pending/${team.id}`} className={styles.nameLink}>
 												{team.name}
 											</Link>
+											{duplicates.has(team.id) && (
+												<>
+													{' '}
+													{duplicates.get(team.id)?.some((match) => !match.nameOnly) ?
+														<Badge tone='rust'>Possible duplicate</Badge>
+													:	<Badge tone='gold'>Similar name</Badge>}
+												</>
+											)}
 										</td>
 										<td>
 											<time dateTime={team.createdAt.toISOString()}>
@@ -101,6 +117,11 @@ export default async function AdminPendingPage({
 											</time>
 										</td>
 										<td>{formatSubmitter(team.submittedBy)}</td>
+										<td>
+											{duplicates.has(team.id) && (
+												<PossibleDuplicates matches={duplicates.get(team.id) ?? []} />
+											)}
+										</td>
 									</tr>
 								))}
 							</tbody>
