@@ -27,7 +27,7 @@ export function OffSeasonNotice({
 	offSeasonCount,
 	includeOffSeason,
 }: OffSeasonNoticeProps) {
-	if (!includeOffSeason && offSeasonCount === 0) return null;
+	if (offSeasonCount === 0) return null;
 
 	return (
 		<p className={styles.notice}>

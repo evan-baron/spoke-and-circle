@@ -431,6 +431,16 @@ export async function searchApprovedTeams(
 
 export const CALENDAR_RIDE_CAP = 500;
 
+interface RideSeasonOptions {
+	month: number;
+	includeOffSeason: boolean;
+}
+
+function isRideInSeason(rides: unknown, month: number): boolean {
+	const ride = Array.isArray(rides) ? (rides[0] as Ride | undefined) : undefined;
+	return !ride || inSeason(ride, month);
+}
+
 export async function searchApprovedRides(
 	params: SearchParams,
 ): Promise<CalendarRidesResult> {
@@ -491,11 +501,6 @@ export async function searchApprovedRides(
 	return { rides, total, truncated: total > CALENDAR_RIDE_CAP };
 }
 
-interface RideSeasonOptions {
-	month: number;
-	includeOffSeason: boolean;
-}
-
 export async function searchApprovedRideTeams(
 	params: SearchParams,
 	requestedPage: number,
@@ -522,11 +527,7 @@ export async function searchApprovedRideTeams(
 		take: CALENDAR_RIDE_CAP,
 	});
 
-	const rideInSeason = (rides: unknown) => {
-		const ride = Array.isArray(rides) ? (rides[0] as Ride | undefined) : undefined;
-		return !ride || inSeason(ride, month);
-	};
-	const inSeasonRows = rows.filter((row) => rideInSeason(row.rides));
+	const inSeasonRows = rows.filter((row) => isRideInSeason(row.rides, month));
 	const matches = includeOffSeason ? rows : inSeasonRows;
 	const rankBySkill = Boolean(params.skillLevel);
 

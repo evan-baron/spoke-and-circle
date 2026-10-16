@@ -45,13 +45,11 @@ export default async function GroupRidesPage({
 
 	const todayIso = new Date().toISOString().slice(0, 10);
 	const currentMonth = Number(todayIso.slice(5, 7));
+	const season = { month: currentMonth, includeOffSeason };
 	const calendar = isCalendarView ? await searchApprovedRides(params) : null;
 	const list =
 		isCalendarView ? null : (
-			await searchApprovedRideTeams(params, requestedPage, {
-				month: currentMonth,
-				includeOffSeason,
-			})
+			await searchApprovedRideTeams(params, requestedPage, season)
 		);
 	const total = calendar?.total ?? list?.total ?? 0;
 
@@ -76,23 +74,25 @@ export default async function GroupRidesPage({
 					defaultDiscipline={params.bikeTypes[0] ?? ''}
 				/>
 
-				<div className={styles.status}>
-					<p className={styles.count}>
-						{total} {total === 1 ? 'ride' : 'rides'} within {params.radius}{' '}
-						miles of {params.location}
-					</p>
-
-					{list && (
-						<OffSeasonNotice
-							basePath={BASE_PATH}
-							searchParams={rawParams}
-							offSeasonCount={list.offSeasonCount}
-							includeOffSeason={includeOffSeason}
-						/>
-					)}
-				</div>
-
 				<ViewToggle basePath={BASE_PATH} searchParams={rawParams} view={view} />
+
+				{!calendar && (
+					<div className={styles.status}>
+						<p className={styles.count}>
+							{total} {total === 1 ? 'ride' : 'rides'} within {params.radius}{' '}
+							miles of {params.location}
+						</p>
+
+						{list && (
+							<OffSeasonNotice
+								basePath={BASE_PATH}
+								searchParams={rawParams}
+								offSeasonCount={list.offSeasonCount}
+								includeOffSeason={includeOffSeason}
+							/>
+						)}
+					</div>
+				)}
 
 				{calendar ?
 					<RideCalendar

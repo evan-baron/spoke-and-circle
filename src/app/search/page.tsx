@@ -66,14 +66,12 @@ export default async function SearchPage({
 	const isCalendarView = view === 'calendar';
 
 	const todayIso = new Date().toISOString().slice(0, 10);
-	const calendar = isCalendarView ? await searchApprovedRides(params) : null;
 	const includeOffSeason = rawParams.offSeason === 'true';
+	const season = { month: Number(todayIso.slice(5, 7)), includeOffSeason };
+	const calendar = isCalendarView ? await searchApprovedRides(params) : null;
 	const rideList =
 		!isCalendarView && isGroupRideSearch ?
-			await searchApprovedRideTeams(params, requestedPage, {
-				month: Number(todayIso.slice(5, 7)),
-				includeOffSeason,
-			})
+			await searchApprovedRideTeams(params, requestedPage, season)
 		:	null;
 	const list =
 		isCalendarView ? null : (
@@ -103,32 +101,34 @@ export default async function SearchPage({
 					defaultView={view}
 				/>
 
-				<div className={styles.status}>
-					<p className={styles.count}>
-						{total} {total === 1 ? 'result' : 'results'}
-						{params.q && <> for &ldquo;{params.q}&rdquo;</>}
-						{params.location && <> near &ldquo;{params.location}&rdquo;</>}
-						{params.bikeTypes.length > 1 && (
-							<> riding {params.bikeTypes.join(', ')}</>
-						)}
-					</p>
-
-					{rideList && (
-						<OffSeasonNotice
-							basePath='/search'
-							searchParams={rawParams}
-							offSeasonCount={rideList.offSeasonCount}
-							includeOffSeason={includeOffSeason}
-						/>
-					)}
-				</div>
-
 				{isGroupRideSearch && (
 					<ViewToggle
 						basePath='/search'
 						searchParams={rawParams}
 						view={view}
 					/>
+				)}
+
+				{!calendar && (
+					<div className={styles.status}>
+						<p className={styles.count}>
+							{total} {total === 1 ? 'result' : 'results'}
+							{params.q && <> for &ldquo;{params.q}&rdquo;</>}
+							{params.location && <> near &ldquo;{params.location}&rdquo;</>}
+							{params.bikeTypes.length > 1 && (
+								<> riding {params.bikeTypes.join(', ')}</>
+							)}
+						</p>
+
+						{rideList && (
+							<OffSeasonNotice
+								basePath='/search'
+								searchParams={rawParams}
+								offSeasonCount={rideList.offSeasonCount}
+								includeOffSeason={includeOffSeason}
+							/>
+						)}
+					</div>
 				)}
 
 				{calendar ?
