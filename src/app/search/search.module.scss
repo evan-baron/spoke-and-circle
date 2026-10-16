@@ -17,3 +17,16 @@
 	font-weight: 600;
 	color: var(--color-ink-soft);
 }
+
+.status {
+	display: flex;
+	flex-direction: column;
+	gap: 0.25rem;
+
+	@include from($bp-md) {
+		flex-direction: row;
+		flex-wrap: wrap;
+		align-items: baseline;
+		gap: 0.25rem 0.5rem;
+	}
+}

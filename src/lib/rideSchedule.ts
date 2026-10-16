@@ -32,7 +32,7 @@ function mondayOfWeek(dayNumber: number): number {
 	return dayNumber - ((weekday + 6) % 7);
 }
 
-function inSeason(ride: Ride, month: number): boolean {
+export function inSeason(ride: Ride, month: number): boolean {
 	const { monthFrom, monthTo } = ride;
 	if (!monthFrom || !monthTo) return true;
 	return monthFrom <= monthTo ?

@@ -1,0 +1,27 @@
+@use '@/styles/mixins' as *;
+
+.notice {
+	font-size: 0.8125rem;
+	font-weight: 600;
+	color: var(--color-ink-soft);
+
+	@include from($bp-md) {
+		&::before {
+			content: '·';
+			margin-right: 0.5rem;
+		}
+	}
+}
+
+.link {
+	font-weight: 700;
+	color: var(--color-coral);
+	text-decoration: underline;
+	text-underline-offset: 0.15em;
+
+	@media (hover: hover) {
+		&:hover {
+			color: var(--color-logo);
+		}
+	}
+}

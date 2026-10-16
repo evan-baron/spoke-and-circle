@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { OffSeasonNotice } from '@/components/search/OffSeasonNotice/OffSeasonNotice';
 import { FilterBar } from '@/components/search/FilterBar/FilterBar';
 import { Pagination } from '@/components/ui/Pagination/Pagination';
 import { ResultsTable } from '@/components/search/ResultsTable/ResultsTable';
@@ -8,6 +9,7 @@ import { ViewToggle } from '@/components/search/ViewToggle/ViewToggle';
 import { parseSearchParams, type RawSearchParams } from '@/lib/searchParams';
 import {
 	searchApprovedRides,
+	searchApprovedRideTeams,
 	searchApprovedTeams,
 } from '@/services/teamSearchService';
 import styles from './search.module.scss';
@@ -65,8 +67,18 @@ export default async function SearchPage({
 
 	const todayIso = new Date().toISOString().slice(0, 10);
 	const calendar = isCalendarView ? await searchApprovedRides(params) : null;
+	const includeOffSeason = rawParams.offSeason === 'true';
+	const rideList =
+		!isCalendarView && isGroupRideSearch ?
+			await searchApprovedRideTeams(params, requestedPage, {
+				month: Number(todayIso.slice(5, 7)),
+				includeOffSeason,
+			})
+		:	null;
 	const list =
-		isCalendarView ? null : await searchApprovedTeams(params, requestedPage);
+		isCalendarView ? null : (
+			(rideList ?? (await searchApprovedTeams(params, requestedPage)))
+		);
 	const total = calendar?.total ?? list?.total ?? 0;
 
 	return (
@@ -91,14 +103,25 @@ export default async function SearchPage({
 					defaultView={view}
 				/>
 
-				<p className={styles.count}>
-					{total} {total === 1 ? 'result' : 'results'}
-					{params.q && <> for &ldquo;{params.q}&rdquo;</>}
-					{params.location && <> near &ldquo;{params.location}&rdquo;</>}
-					{params.bikeTypes.length > 1 && (
-						<> riding {params.bikeTypes.join(', ')}</>
+				<div className={styles.status}>
+					<p className={styles.count}>
+						{total} {total === 1 ? 'result' : 'results'}
+						{params.q && <> for &ldquo;{params.q}&rdquo;</>}
+						{params.location && <> near &ldquo;{params.location}&rdquo;</>}
+						{params.bikeTypes.length > 1 && (
+							<> riding {params.bikeTypes.join(', ')}</>
+						)}
+					</p>
+
+					{rideList && (
+						<OffSeasonNotice
+							basePath='/search'
+							searchParams={rawParams}
+							offSeasonCount={rideList.offSeasonCount}
+							includeOffSeason={includeOffSeason}
+						/>
 					)}
-				</p>
+				</div>
 
 				{isGroupRideSearch && (
 					<ViewToggle

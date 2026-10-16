@@ -17,6 +17,9 @@ interface SearchFormProps {
 	defaultMode?: SearchMode;
 	defaultRadius?: number;
 	defaultDiscipline?: string;
+	action?: string;
+	lockMode?: SearchMode;
+	formName?: string;
 	onGradient?: boolean;
 }
 
@@ -30,47 +33,52 @@ export function SearchForm({
 	defaultMode = 'groups',
 	defaultRadius = DEFAULT_RADIUS_MILES,
 	defaultDiscipline = '',
+	action = '/search',
+	lockMode,
+	formName = 'home_search',
 	onGradient = false,
 }: SearchFormProps) {
-	const [mode, setMode] = useState<SearchMode>(defaultMode);
+	const [mode, setMode] = useState<SearchMode>(lockMode ?? defaultMode);
 
 	return (
 		<form
-			action='/search'
+			action={action}
 			method='GET'
 			onSubmit={() =>
 				trackEvent('search_submit', {
-					form: 'home_search',
+					form: formName,
 					search_mode: mode === 'rides' ? 'group_ride' : 'team_club',
 				})
 			}
 			className={`${styles.form} ${onGradient ? styles.onGradient : ''}`}
 		>
-			<fieldset className={styles.modeGroup}>
-				<legend className={styles.modeLegend}>
-					I&rsquo;m looking for a&hellip;
-				</legend>
-				<label className={styles.modeOption}>
-					<input
-						type='radio'
-						value='groups'
-						checked={mode === 'groups'}
-						onChange={() => setMode('groups')}
-					/>
-					<span className={styles.modeRadio} />
-					Team, Club, or something similar
-				</label>
-				<label className={styles.modeOption}>
-					<input
-						type='radio'
-						value='rides'
-						checked={mode === 'rides'}
-						onChange={() => setMode('rides')}
-					/>
-					<span className={styles.modeRadio} />
-					Group ride
-				</label>
-			</fieldset>
+			{!lockMode && (
+				<fieldset className={styles.modeGroup}>
+					<legend className={styles.modeLegend}>
+						I&rsquo;m looking for a&hellip;
+					</legend>
+					<label className={styles.modeOption}>
+						<input
+							type='radio'
+							value='groups'
+							checked={mode === 'groups'}
+							onChange={() => setMode('groups')}
+						/>
+						<span className={styles.modeRadio} />
+						Team, Club, or something similar
+					</label>
+					<label className={styles.modeOption}>
+						<input
+							type='radio'
+							value='rides'
+							checked={mode === 'rides'}
+							onChange={() => setMode('rides')}
+						/>
+						<span className={styles.modeRadio} />
+						Group ride
+					</label>
+				</fieldset>
+			)}
 			{mode === 'rides' && (
 				<input type='hidden' name='type' value='Group Ride' />
 			)}
@@ -165,9 +173,11 @@ export function SearchForm({
 					Search
 				</button>
 			</div>
-			<Link href='/get-started' className={styles.quizLink}>
-				Not sure where to start? Take our 30-second quiz &rarr;
-			</Link>
+			{!lockMode && (
+				<Link href='/get-started' className={styles.quizLink}>
+					Not sure where to start? Take our 30-second quiz &rarr;
+				</Link>
+			)}
 		</form>
 	);
 }

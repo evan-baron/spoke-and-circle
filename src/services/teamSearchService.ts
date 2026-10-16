@@ -1,6 +1,7 @@
 import { Prisma } from '../../generated/prisma/client';
 import { toTeam } from '@/lib/api/teamMapper';
 import { prisma } from '@/lib/prisma';
+import { inSeason } from '@/lib/rideSchedule';
 import { DEFAULT_RADIUS_MILES, TEAMS_PAGE_SIZE } from '@/lib/searchParams';
 import {
 	bikeType,
@@ -17,6 +18,7 @@ import {
 import type {
 	CalendarRide,
 	CalendarRidesResult,
+	Ride,
 	SearchParams,
 	Team,
 	TeamListPage,
@@ -487,4 +489,63 @@ export async function searchApprovedRides(
 	});
 
 	return { rides, total, truncated: total > CALENDAR_RIDE_CAP };
+}
+
+interface RideSeasonOptions {
+	month: number;
+	includeOffSeason: boolean;
+}
+
+export async function searchApprovedRideTeams(
+	params: SearchParams,
+	requestedPage: number,
+	{ month, includeOffSeason }: RideSeasonOptions,
+): Promise<TeamSearchPage & { offSeasonCount: number }> {
+	const location = params.location?.trim() ?? '';
+	const resolved = location ? await resolveSearchLocation(location) : null;
+	const { where } = await buildWhere(
+		{ ...params, type: 'Group Ride' },
+		resolved,
+	);
+
+	const miles =
+		resolved?.kind === 'point' ?
+			await findTeamMilesWithin(
+				resolved,
+				params.radius ?? DEFAULT_RADIUS_MILES,
+			)
+		:	null;
+
+	const rows = await prisma.team.findMany({
+		where: miles ? { AND: [where, { id: { in: [...miles.keys()] } }] } : where,
+		select: { id: true, name: true, skillSpecificity: true, rides: true },
+		take: CALENDAR_RIDE_CAP,
+	});
+
+	const rideInSeason = (rides: unknown) => {
+		const ride = Array.isArray(rides) ? (rides[0] as Ride | undefined) : undefined;
+		return !ride || inSeason(ride, month);
+	};
+	const inSeasonRows = rows.filter((row) => rideInSeason(row.rides));
+	const matches = includeOffSeason ? rows : inSeasonRows;
+	const rankBySkill = Boolean(params.skillLevel);
+
+	matches.sort(
+		(a, b) =>
+			(rankBySkill ? a.skillSpecificity - b.skillSpecificity : 0) ||
+			(miles ? (miles.get(a.id) ?? 0) - (miles.get(b.id) ?? 0) : 0) ||
+			a.name.localeCompare(b.name) ||
+			a.id.localeCompare(b.id),
+	);
+
+	const { page, pageCount, skip } = pageBounds(matches.length, requestedPage);
+	const pageIds = matches.slice(skip, skip + TEAMS_PAGE_SIZE).map((m) => m.id);
+
+	return {
+		teams: await loadTeamsInOrder(pageIds),
+		total: matches.length,
+		page,
+		pageCount,
+		offSeasonCount: rows.length - inSeasonRows.length,
+	};
 }
