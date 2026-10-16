@@ -23,6 +23,7 @@ interface LocationInputProps {
 	allowFreeText?: boolean;
 	inputClassName?: string;
 	onSelect?: (item: LocationOption) => void;
+	onValueChange?: (value: string) => void;
 }
 
 function itemToString(item: LocationOption | null) {
@@ -40,6 +41,7 @@ export function LocationInput({
 	allowFreeText,
 	inputClassName,
 	onSelect,
+	onValueChange,
 }: LocationInputProps) {
 	const [inputValue, setInputValue] = useState(defaultValue ?? '');
 	const [selectedItem, setSelectedItem] = useState<LocationOption | null>(
@@ -93,6 +95,10 @@ export function LocationInput({
 				setInputValue(next.label);
 			},
 		});
+
+	useEffect(() => {
+		onValueChange?.(inputValue);
+	}, [inputValue, onValueChange]);
 
 	useEffect(() => {
 		const term = inputValue.trim();

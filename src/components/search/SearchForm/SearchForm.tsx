@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { LocationInput } from '@/components/ui/LocationInput/LocationInput';
 import { trackEvent } from '@/lib/analytics';
 import { bikeType, clubType } from '@/lib/enums';
@@ -23,6 +23,7 @@ interface SearchFormProps {
 	onGradient?: boolean;
 }
 
+const RADIUS_HINT_MS = 3000;
 const TYPE_OPTIONS = clubType.labels.filter((label) => label !== 'Group Ride');
 const DISCIPLINE_OPTIONS = bikeType.labels;
 
@@ -39,6 +40,15 @@ export function SearchForm({
 	onGradient = false,
 }: SearchFormProps) {
 	const [mode, setMode] = useState<SearchMode>(lockMode ?? defaultMode);
+	const [location, setLocation] = useState(defaultLocation);
+	const [radiusHintOpen, setRadiusHintOpen] = useState(false);
+	const radiusDisabled = !location.trim();
+
+	useEffect(() => {
+		if (!radiusHintOpen) return;
+		const timer = setTimeout(() => setRadiusHintOpen(false), RADIUS_HINT_MS);
+		return () => clearTimeout(timer);
+	}, [radiusHintOpen]);
 
 	return (
 		<form
@@ -106,6 +116,7 @@ export function SearchForm({
 						id='location'
 						name='location'
 						defaultValue={defaultLocation}
+						onValueChange={setLocation}
 						placeholder='City or ZIP code'
 						includeZip
 						allowFreeText
@@ -117,18 +128,33 @@ export function SearchForm({
 						<label htmlFor='radius' className={styles.label}>
 							Distance
 						</label>
-						<select
-							id='radius'
-							name='radius'
-							defaultValue={String(defaultRadius)}
-							className={styles.input}
-						>
-							{RADIUS_OPTIONS.map((option) => (
-								<option key={option} value={option}>
-									Within {option} miles
-								</option>
-							))}
-						</select>
+						<div className={styles.selectWrap}>
+							<select
+								id='radius'
+								name='radius'
+								defaultValue={String(defaultRadius)}
+								disabled={radiusDisabled}
+								className={styles.input}
+							>
+								{RADIUS_OPTIONS.map((option) => (
+									<option key={option} value={option}>
+										Within {option} miles
+									</option>
+								))}
+							</select>
+							{radiusDisabled && (
+								<span
+									aria-hidden='true'
+									className={styles.disabledOverlay}
+									onClick={() => setRadiusHintOpen(true)}
+								/>
+							)}
+							{radiusDisabled && radiusHintOpen && (
+								<span role='status' className={styles.hint}>
+									Please enter a location first
+								</span>
+							)}
+						</div>
 					</div>
 				:	<div className={styles.field}>
 						<label htmlFor='type' className={styles.label}>

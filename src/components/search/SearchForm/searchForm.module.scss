@@ -138,8 +138,47 @@
 	@include field-input;
 }
 
+.selectWrap {
+	position: relative;
+}
+
+.disabledOverlay {
+	position: absolute;
+	inset: 0;
+	cursor: not-allowed;
+}
+
+.hint {
+	position: absolute;
+	top: calc(100% + 0.5rem);
+	left: 0;
+	z-index: 5;
+	padding: 0.45rem 0.75rem;
+	border-radius: var(--radius-sm);
+	background: var(--color-ink);
+	color: var(--color-paper);
+	font-size: 0.8125rem;
+	font-weight: 600;
+	white-space: nowrap;
+	box-shadow: var(--shadow-md);
+
+	&::before {
+		content: '';
+		position: absolute;
+		bottom: 100%;
+		left: 1rem;
+		border: 0.4rem solid transparent;
+		border-bottom-color: var(--color-ink);
+	}
+}
+
 select.input {
 	@include select-field;
+
+	&:disabled {
+		opacity: 1;
+		cursor: not-allowed;
+	}
 }
 
 .submit {
