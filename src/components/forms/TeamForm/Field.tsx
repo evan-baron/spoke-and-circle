@@ -47,12 +47,16 @@ export function Field({
 				{required && <RequiredMark />}
 			</span>
 			{children}
-			{maxLength !== undefined && (
-				<span className={styles.fieldCount} aria-live='off'>
-					{(maxLength - length).toLocaleString('en-US')} characters remaining
+			{maxLength !== undefined ?
+				<span className={styles.fieldFooter}>
+					{hint && <span className={styles.fieldHint}>{hint}</span>}
+					<span className={styles.fieldCount} aria-live='off'>
+						{(maxLength - length).toLocaleString('en-US')} characters remaining
+					</span>
 				</span>
-			)}
-			{hint && <span className={styles.fieldHint}>{hint}</span>}
+			: hint ?
+				<span className={styles.fieldHint}>{hint}</span>
+			:	null}
 		</label>
 	);
 }

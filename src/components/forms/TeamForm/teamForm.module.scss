@@ -277,11 +277,31 @@
 	text-wrap: pretty;
 }
 
+.fieldFooter {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+
+	@include from($bp-md) {
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: flex-start;
+		gap: var(--space-md);
+	}
+}
+
 .fieldCount {
 	align-self: flex-end;
+	flex-shrink: 0;
+	white-space: nowrap;
 	font-size: 0.8125rem;
 	color: var(--color-ink-soft);
 	font-variant-numeric: tabular-nums;
+
+	@include from($bp-md) {
+		align-self: flex-start;
+		margin-left: auto;
+	}
 }
 
 .routeStatus {
