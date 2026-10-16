@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { LocationInput } from '@/components/ui/LocationInput/LocationInput';
 import { trackEvent } from '@/lib/analytics';
-import { clubType } from '@/lib/enums';
+import { bikeType, clubType } from '@/lib/enums';
 import { DEFAULT_RADIUS_MILES, RADIUS_OPTIONS } from '@/lib/searchParams';
 import styles from './searchForm.module.scss';
 
@@ -16,10 +16,12 @@ interface SearchFormProps {
 	defaultType?: string;
 	defaultMode?: SearchMode;
 	defaultRadius?: number;
+	defaultDiscipline?: string;
 	onGradient?: boolean;
 }
 
 const TYPE_OPTIONS = clubType.labels.filter((label) => label !== 'Group Ride');
+const DISCIPLINE_OPTIONS = bikeType.labels;
 
 export function SearchForm({
 	defaultQ = '',
@@ -27,6 +29,7 @@ export function SearchForm({
 	defaultType = '',
 	defaultMode = 'groups',
 	defaultRadius = DEFAULT_RADIUS_MILES,
+	defaultDiscipline = '',
 	onGradient = false,
 }: SearchFormProps) {
 	const [mode, setMode] = useState<SearchMode>(defaultMode);
@@ -72,19 +75,21 @@ export function SearchForm({
 				<input type='hidden' name='type' value='Group Ride' />
 			)}
 			<div className={styles['search-fields']}>
-				<div className={`${styles.field} ${styles.fieldWide}`}>
-					<label htmlFor='q' className={styles.label}>
-						Keyword
-					</label>
-					<input
-						id='q'
-						name='q'
-						type='text'
-						defaultValue={defaultQ}
-						placeholder='e.g. Gravel, Women Only, No-drop&hellip;'
-						className={styles.input}
-					/>
-				</div>
+				{mode === 'groups' && (
+					<div className={`${styles.field} ${styles.fieldWide}`}>
+						<label htmlFor='q' className={styles.label}>
+							Keyword
+						</label>
+						<input
+							id='q'
+							name='q'
+							type='text'
+							defaultValue={defaultQ}
+							placeholder='e.g. Gravel, Women Only, No-drop&hellip;'
+							className={styles.input}
+						/>
+					</div>
+				)}
 				<div className={styles.field}>
 					<label htmlFor='location' className={styles.label}>
 						Location
@@ -136,6 +141,26 @@ export function SearchForm({
 						</select>
 					</div>
 				}
+				{mode === 'rides' && (
+					<div className={styles.field}>
+						<label htmlFor='bikeType' className={styles.label}>
+							Cycling Discipline
+						</label>
+						<select
+							id='bikeType'
+							name='bikeType'
+							defaultValue={defaultDiscipline}
+							className={styles.input}
+						>
+							<option value=''>Any discipline</option>
+							{DISCIPLINE_OPTIONS.map((option) => (
+								<option key={option} value={option}>
+									{option}
+								</option>
+							))}
+						</select>
+					</div>
+				)}
 				<button type='submit' className={styles.submit}>
 					Search
 				</button>
