@@ -20,7 +20,7 @@ export const metadata: Metadata = {
 	title: 'Find a Group Ride Near You',
 	description:
 		'Find group rides near you by location, distance, and cycling discipline.',
-	robots: { index: false, follow: false },
+	robots: { index: true, follow: true },
 };
 
 export default async function GroupRidesPage({
