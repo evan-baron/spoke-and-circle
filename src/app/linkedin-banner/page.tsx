@@ -35,6 +35,22 @@ export default function LinkedInBannerPage() {
 						<br />
 						actually <span className={styles.mark}>sign off on.</span>
 					</h1>
+					<p className={styles.proof}>
+						<span>
+							<strong className={styles.proofStrong}>10+ yrs</strong> enterprise
+							SaaS
+						</span>
+						<span className={styles.separator} />
+						<span>
+							<strong className={styles.proofStrong}>$250K+</strong> ARR deals
+						</span>
+						<span className={styles.separator} />
+						<span>
+							Multiple{' '}
+							<strong className={styles.proofStrong}>President's Club</strong>{' '}
+							recipient
+						</span>
+					</p>
 				</div>
 			</div>
 		</main>
