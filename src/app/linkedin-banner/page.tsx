@@ -13,7 +13,7 @@ export default function LinkedInBannerPage() {
 				1584 × 396. In Chrome: right-click the banner, Inspect, then
 				Ctrl+Shift+P and run &quot;Capture node screenshot&quot;.
 			</p>
-			<div className={styles.banner} id="banner">
+			<div className={styles.banner} id='banner'>
 				<div className={styles.glowOne} />
 				<div className={styles.glowTwo} />
 				<div className={styles.glowThree} />
@@ -25,17 +25,16 @@ export default function LinkedInBannerPage() {
 				<span className={`${styles.corner} ${styles.cornerTop}`} />
 				<span className={`${styles.corner} ${styles.cornerBottom}`} />
 				<div className={styles.content}>
-					<p className={styles.eyebrow}>Evan Baron / Enterprise Account Executive</p>
+					<p className={styles.eyebrow}>
+						<span className={styles.name}>Evan Baron</span>
+						<span className={styles.separator} />
+						<span>Enterprise Account Executive</span>
+					</p>
 					<h1 className={styles.tagline}>
 						I close deals engineers
 						<br />
 						actually <span className={styles.mark}>sign off on.</span>
 					</h1>
-					<p className={styles.contact}>
-						<span>egbaron@gmail.com</span>
-						<span className={styles.divider} />
-						<span>(303) 588-3117</span>
-					</p>
 				</div>
 			</div>
 		</main>

@@ -161,11 +161,25 @@
 }
 
 .eyebrow {
-	font-size: 17px;
-	font-weight: 700;
-	letter-spacing: 0.32em;
+	display: flex;
+	align-items: center;
+	gap: 18px;
+	font-size: 22px;
+	font-weight: 500;
+	letter-spacing: 0.1em;
 	text-transform: uppercase;
 	color: #a9adb5;
+}
+
+.name {
+	font-weight: 700;
+	color: #fff;
+}
+
+.separator {
+	width: 2px;
+	height: 22px;
+	background: rgba(255, 255, 255, 0.45);
 }
 
 .tagline {
@@ -173,22 +187,6 @@
 	font-weight: 800;
 	line-height: 1.12;
 	letter-spacing: -0.035em;
-}
-
-.contact {
-	display: flex;
-	align-items: center;
-	gap: 20px;
-	font-size: 22px;
-	font-weight: 600;
-	letter-spacing: 0.04em;
-	color: #c9ccd2;
-}
-
-.divider {
-	width: 1px;
-	height: 22px;
-	background: rgba(255, 255, 255, 0.35);
 }
 
 .mark {
