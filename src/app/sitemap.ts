@@ -5,6 +5,8 @@ import { prisma } from '@/lib/prisma';
 import { getSiteUrl } from '@/lib/siteConfig';
 import { teamPath } from '@/lib/teamPaths';
 import { TEAMS_TAG } from '@/lib/teamCache';
+import { stateSlug, US_STATES } from '@/lib/usStates';
+import { getStatesWithListings } from '@/services/stateLandingService';
 
 export const dynamic = 'force-dynamic';
 
@@ -32,7 +34,25 @@ const getSitemapTeams = unstable_cache(
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const baseUrl = getSiteUrl();
 
-	const teams = await getSitemapTeams();
+	const [teams, statesWithListings] = await Promise.all([
+		getSitemapTeams(),
+		getStatesWithListings(),
+	]);
+
+	const stateEntries = (
+		[
+			['teams', '/teams/in'],
+			['rides', '/group-rides/in'],
+		] as const
+	).flatMap(([kind, basePath]) =>
+		US_STATES.filter((state) => statesWithListings[kind].includes(state.abbr)).map(
+			(state) => ({
+				url: `${baseUrl}${basePath}/${stateSlug(state)}`,
+				changeFrequency: 'weekly' as const,
+				priority: 0.8,
+			}),
+		),
+	);
 
 	return [
 		{
@@ -88,6 +108,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 			changeFrequency: 'yearly',
 			priority: 0.2,
 		},
+		...stateEntries,
 		...teams.map((team) => ({
 			url: `${baseUrl}${teamPath(team)}`,
 			lastModified: new Date(team.updatedAt),

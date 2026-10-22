@@ -63,6 +63,14 @@ export function findStateByName(name: string): UsState | undefined {
 	return US_STATES.find((state) => state.name.toLowerCase() === needle);
 }
 
+export function stateSlug(state: UsState): string {
+	return state.name.toLowerCase().replace(/\s+/g, '-');
+}
+
+export function findStateBySlug(slug: string): UsState | undefined {
+	return US_STATES.find((state) => stateSlug(state) === slug);
+}
+
 export function findStateByAbbrOrName(value: string): UsState | undefined {
 	const needle = value.trim().toLowerCase();
 	return US_STATES.find(

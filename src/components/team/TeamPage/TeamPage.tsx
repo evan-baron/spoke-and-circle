@@ -7,7 +7,8 @@ import DeleteTeamButton from '@/components/team/DeleteTeamButton/DeleteTeamButto
 import { GroupRideDetail } from '@/components/team/GroupRideDetail/GroupRideDetail';
 import { TeamDetail } from '@/components/team/TeamDetail/TeamDetail';
 import { jsonLdScript } from '@/lib/jsonLd';
-import { getSiteUrl, OG_IMAGE_PATH, SITE_NAME } from '@/lib/siteConfig';
+import { OG_IMAGE_PATH, SITE_NAME } from '@/lib/siteConfig';
+import { buildRideEventJsonLd, buildTeamJsonLd } from '@/lib/structuredData';
 import { teamPath, teamRoute, type TeamRoute } from '@/lib/teamPaths';
 import { getCurrentUser } from '@/services/currentUserService';
 import { getClaimState } from '@/services/teamClaimService';
@@ -104,17 +105,10 @@ export async function TeamPage({ id, route }: { id: string; route: TeamRoute }) 
 	const canAddGroupRide =
 		team.type !== 'Group Ride' && (currentUser?.isAdmin || isOwner);
 
-	const structuredData = {
-		'@context': 'https://schema.org',
-		'@type': 'SportsOrganization',
-		name: team.name,
-		sport: 'Cycling',
-		url: `${getSiteUrl()}${teamPath(team)}`,
-		description: team.missionStatement,
-		location: { '@type': 'Place', name: team.location },
-		...(team.founded > 0 ? { foundingDate: String(team.founded) } : {}),
-		...(team.website ? { sameAs: [team.website] } : {}),
-	};
+	const structuredData =
+		team.type === 'Group Ride' ?
+			buildRideEventJsonLd(team)
+		:	buildTeamJsonLd(team);
 
 	return (
 		<div className={styles.page}>
