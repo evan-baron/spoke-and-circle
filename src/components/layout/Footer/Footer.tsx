@@ -30,6 +30,16 @@ export function Footer() {
 					</a>
 					).
 				</p>
+				<p className={styles.credit}>
+					Website by{' '}
+					<a
+						href='https://www.retconconsulting.com'
+						target='_blank'
+						rel='noopener'
+					>
+						Retcon Consulting
+					</a>
+				</p>
 			</div>
 		</footer>
 	);
